@@ -1,0 +1,21 @@
+{
+  "name": "era-engine-client",
+  "version": "1.0.0",
+  "description": "",
+  "author": "Shaneel Sharan",
+  "license": "UNLICENSED",
+  "private": true,
+  "main": "index.js",
+  "scripts": {
+    "build": "browserify main/main.js -o main/bundle.js -d",
+    "watch": "watchify main/main.js -o main/bundle.js -d -v",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "browserify": "^14.0.0",
+    "watchify": "^3.9.0"
+  },
+  "devDependencies": {
+    "jasmine": "^2.5.3"
+  }
+}

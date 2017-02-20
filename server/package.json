@@ -1,0 +1,26 @@
+{
+  "name": "era-engine-server",
+  "version": "1.0.0",
+  "description": "",
+  "author": "Shaneel Sharan",
+  "license": "UNLICENSED",
+  "private": true,
+  "main": "./main/app.js",
+  "scripts": {
+    "start": "node ./main/app.js",
+    "dev": "nodemon ./main/app.js",
+    "test": "node ./integration-test/test-app.js ./integration-test/router/"
+  },
+  "dependencies": {
+    "async": "^2.1.4",
+    "express": "^4.14.0",
+    "mongoose": "^4.7.8",
+    "request": "^2.79.0"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.2.0",
+    "nodemon": "^1.11.0",
+    "proxyquire": "^1.7.11"
+  }
+}

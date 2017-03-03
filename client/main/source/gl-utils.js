@@ -1,4 +1,4 @@
-const gl = require('./gl');
+const gl = require('./gl').context;
 
 function createVertexShader(vertexShaderSourceCode) {
     return createShader(gl.VERTEX_SHADER, vertexShaderSourceCode);

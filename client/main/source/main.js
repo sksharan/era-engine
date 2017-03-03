@@ -1,4 +1,4 @@
-const gl = require('./gl');
+const gl = require('./gl').context;
 
 if (!gl) {
     throw new Error('WebGL is unavailable');

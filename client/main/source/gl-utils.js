@@ -14,7 +14,8 @@ function createShader(type, shaderSourceCode) {
     if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
         const info = gl.getShaderInfoLog(shader);
         gl.deleteShader(shader);
-        throw new Error('Error compiling shader:n\n' + info);
+        const typeName = (type == gl.VERTEX_SHADER) ? 'vertex' : 'fragment';
+        throw new Error('Error compiling ' + typeName + ' shader:n\n' + info);
     }
     return shader;
 }

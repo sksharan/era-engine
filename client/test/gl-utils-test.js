@@ -1,10 +1,13 @@
-/* Setup GL context and gl-utils */
-const glUtilsInjector = require('inject-loader!../main/source/gl-utils');
+/* Setup WebGL */
 document.body.insertAdjacentHTML('beforeend',
         '<canvas id="canvas" height="720" width="1080"></canvas>');
+const gl = document.getElementById('canvas').getContext('webgl');
+
+/* Setup gl-utils */
+const glUtilsInjector = require('inject-loader!../main/source/gl-utils');
 const glUtils = glUtilsInjector({
     './gl': {
-        context: document.getElementById('canvas').getContext('webgl')
+        context: gl
     }
 });
 
@@ -22,7 +25,8 @@ describe('gl-utils#createProgram', function() {
             void main() {
                 gl_FragColor = vec4(1, 0, 0.5, 1);
             }`;
-        assert.isDefined(glUtils.createProgram(vertexShader, fragmentShader));
+        let program = glUtils.createProgram(vertexShader, fragmentShader);
+        assert.isTrue(gl.isProgram(program));
     });
     it('should throw an error given an invalid vertex shader', function() {
         // 'gl_Pos' should be 'gl_Position'
@@ -37,7 +41,7 @@ describe('gl-utils#createProgram', function() {
                 gl_FragColor = vec4(1, 0, 0.5, 1);
             }`;
         let fn = function() { glUtils.createProgram(vertexShader, fragmentShader); }
-        assert.throws(fn, Error, /Error compiling shader/);
+        assert.throws(fn, Error, /Error compiling vertex shader/);
     });
     it('should throw an error given an invalid fragment shader', function() {
         let vertexShader =
@@ -52,6 +56,6 @@ describe('gl-utils#createProgram', function() {
                 gl_Frag = vec4(1, 0, 0.5, 1);
             }`;
         let fn = function() { glUtils.createProgram(vertexShader, fragmentShader); }
-        assert.throws(fn, Error, /Error compiling shader/);
+        assert.throws(fn, Error, /Error compiling fragment shader/);
     });
 });

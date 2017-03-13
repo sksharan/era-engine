@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports =
     `attribute vec4 position;
 

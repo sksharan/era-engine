@@ -1,8 +1,12 @@
-const gl = require('./gl').context;
+'use strict';
 
+const gl = require('./gl').context;
 if (!gl) {
     throw new Error('WebGL is unavailable');
 }
+
+// Init React component
+require('./title');
 
 const glUtils = require('./gl-utils');
 const program = glUtils.createProgram(require('./shader/main.vert'), require('./shader/main.frag'));

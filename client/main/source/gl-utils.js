@@ -1,3 +1,5 @@
+'use strict';
+
 const gl = require('./gl').context;
 
 function createVertexShader(vertexShaderSourceCode) {

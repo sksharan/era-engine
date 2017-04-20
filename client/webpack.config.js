@@ -5,7 +5,7 @@ module.exports = {
     output: {
         filename: './main/public/bundle.js'
     },
-    devtool: 'source-map',
+    watch: true,
     plugins: [
         new HtmlWebpackPlugin({
             filename: 'main/public/index.html',

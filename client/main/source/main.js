@@ -25,10 +25,25 @@ var positionAttribLoc = gl.getAttribLocation(program, 'position');
 var viewMatrixUniLoc = gl.getUniformLocation(program, 'viewMatrix');
 var projectionMatrixUniLoc = gl.getUniformLocation(program, 'projectionMatrix');
 
+// Get test region data
+const regionUtils = require('./region-utils');
+let tiles = [];
+for (let i = 0; i < 10; i++) {
+    for (let j = 0; j < 10; j++) {
+        tiles.push({ loc: { x: i, y: j } });
+    }
+}
+let hexRadius = 5;
+let data = regionUtils.getVertices(tiles, hexRadius);
+
 // Init buffer data
 var positionBuffer = gl.createBuffer();
 gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([0, 0, -3, 0, 5, -3, 7, 0, -3]), gl.STATIC_DRAW);
+gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(data.vertices), gl.STATIC_DRAW);
+
+var indexBuffer = gl.createBuffer();
+gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
+gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(data.indices), gl.STATIC_DRAW);
 
 function render() {
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
@@ -41,6 +56,8 @@ function render() {
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
     gl.vertexAttribPointer(positionAttribLoc, 3, gl.FLOAT, false, 0, 0);
 
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
+
     keyboardHandler.processKeys();
 
     gl.uniformMatrix4fv(viewMatrixUniLoc, gl.FALSE, camera.getViewMatrix());
@@ -48,7 +65,7 @@ function render() {
     gl.uniformMatrix4fv(projectionMatrixUniLoc, gl.FALSE,
         mat4.perspective(mat4.create(), glMatrix.toRadian(45.0), gl.drawingBufferWidth / gl.drawingBufferHeight, 0.0, 100.0));
 
-    gl.drawArrays(gl.TRIANGLES, 0, 3);
+    gl.drawElements(gl.LINE_STRIP, data.indices.length, gl.UNSIGNED_SHORT, 0);
 }
 
 function mainLoop() {

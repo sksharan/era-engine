@@ -30,7 +30,7 @@ const regionUtils = require('./region-utils');
 let tiles = [];
 for (let i = 0; i < 10; i++) {
     for (let j = 0; j < 10; j++) {
-        tiles.push({ loc: { x: i, y: j } });
+        tiles.push({ loc: { x: i, y: 0, z: j } });
     }
 }
 let hexRadius = 5;
@@ -47,7 +47,7 @@ gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(data.indices), gl.STATIC_
 
 function render() {
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-    gl.clearColor(0.7, 0.7, 0.7, 1);
+    gl.clearColor(0.85, 0.85, 0.85, 1);
     gl.clear(gl.COLOR_BUFFER_BIT);
 
     gl.useProgram(program);

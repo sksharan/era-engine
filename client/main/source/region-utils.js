@@ -43,6 +43,7 @@ module.exports = {
       return an object of the form:
       {
           vertices: <array of float>,
+          normal: <array of float>,
           indices: <array of short>
       }
 
@@ -56,6 +57,10 @@ module.exports = {
       so if vertices=[1.0, 1.0, 0.0, 2.0, 2.0, 5.0], we have data for two vertices
       (1.0, 1.0, 0.0) and (2.0, 2.0, 5.0).
 
+      The 'normals' are the normals for 'vertices', and just like 'vertices',
+      each normal is represented as a triple of adjacent floats. The n-th normal
+      in 'normal' is the normal for the n-th vertex in 'vertices'.
+
       The 'indices' are indices into 'vertices', specifically the x-component
       for each vertex. If we have an index *n*, then *n* refers to the
       x-component of the n-th vertex in 'vertices'. Using the 'vertices'
@@ -66,9 +71,10 @@ module.exports = {
         /* To create the hexagonal tile, we use 7 vertices: one for the center, and one
            for the each of the 6 corners of the hexagon. We can draw the hexagon using
            6 triangles, each starting from the center vertex and including two of the corner vertices.
-           In addition, we add 6 'base' vertices that are directly below the 6 corner
+
+           In addition, we need 6 'base' vertices that are directly below the 6 corner
            vertices. The 'base' vertices are on ground-level and can be connected to
-           the tile. By doing so, a tile that has with a larger y-component will appear
+           the tile corners. By doing so, a tile that has with a larger y-component will appear
            as a hexagonal tower instead of just floating in the air.
            ---
            To do the calculations for the x and z components of the tile:
@@ -104,7 +110,10 @@ module.exports = {
         */
 
         let vertices = [];
+        let normals = [];
         let indices = [];
+        // Number of indices generated per tile, including the base
+        const numIndices = 31;
 
         for (let i = 0; i < tiles.length; i++) {
             let tile = tiles[i];
@@ -114,60 +123,78 @@ module.exports = {
                     tile.loc.x * (hexRadius * 1.5),
                     tile.loc.y,
                     tile.loc.z * (hexRadius * 0.866 * 2));
-
             if (tile.loc.x % 2 == 1) {
                 center[2] += (hexRadius * 0.866);
             }
-
-            vertices.push(center[0]);
-            vertices.push(center[1]);
-            vertices.push(center[2]);
+            vertices.push(center[0]); vertices.push(center[1]); vertices.push(center[2]);
+            // Add normal for center - always facing upward
+            normals.push(0); normals.push(1); normals.push(0);
 
             // Add the 6 corner vertices for this tile - working in counter-clockwise order
             let corner = vec3.fromValues(center[0] + hexRadius, center[1], center[2]);
             for (let j = 0; j < 6; j++) {
-                vertices.push(corner[0]);
-                vertices.push(corner[1]);
-                vertices.push(corner[2]);
+                vertices.push(corner[0]); vertices.push(corner[1]); vertices.push(corner[2]);
 
-                // Add the corresponding 'base' vertex as well
-                vertices.push(corner[0]);
-                vertices.push(0);
-                vertices.push(corner[2]);
+                // Add normal for corner - always facing upward
+                normals.push(0); normals.push(1); normals.push(0);
 
                 corner = vec3.rotateY(vec3.create(), corner, center, glMatrix.toRadian(-60.0));
             }
 
             // Add indices for this tile
-            indices.push(13 * i); indices.push(13 * i + 1); indices.push(13 * i + 3);
-            indices.push(13 * i); indices.push(13 * i + 3); indices.push(13 * i + 5);
-            indices.push(13 * i); indices.push(13 * i + 5); indices.push(13 * i + 7);
-            indices.push(13 * i); indices.push(13 * i + 7); indices.push(13 * i + 9);
-            indices.push(13 * i); indices.push(13 * i + 9); indices.push(13 * i + 11);
-            indices.push(13 * i); indices.push(13 * i + 11); indices.push(13 * i + 1);
+            indices.push(numIndices * i); indices.push(numIndices * i + 1); indices.push(numIndices * i + 2);
+            indices.push(numIndices * i); indices.push(numIndices * i + 2); indices.push(numIndices * i + 3);
+            indices.push(numIndices * i); indices.push(numIndices * i + 3); indices.push(numIndices * i + 4);
+            indices.push(numIndices * i); indices.push(numIndices * i + 4); indices.push(numIndices * i + 5);
+            indices.push(numIndices * i); indices.push(numIndices * i + 5); indices.push(numIndices * i + 6);
+            indices.push(numIndices * i); indices.push(numIndices * i + 6); indices.push(numIndices * i + 1);
 
-            // Add indices to attach the 'base' to the tile
-            indices.push(13 * i + 1); indices.push(13 * i + 2); indices.push(13 * i + 3);
-            indices.push(13 * i + 3); indices.push(13 * i + 2); indices.push(13 * i + 4);
+            // Add the 'base' vertices for this tile - once again working in counter-clockwise order
+            let base = vec3.fromValues(center[0] + hexRadius, center[1], center[2]);
+            let baseNormal = vec3.fromValues(1, 0, 0);
+            for (let j = 0; j < 6; j++) {
+                // Add duplicated corner vertex - we need to reuse it but with a different normal
+                vertices.push(base[0]); vertices.push(base[1]); vertices.push(base[2]);
+                normals.push(baseNormal[0]); normals.push(baseNormal[1]); normals.push(baseNormal[2]);
 
-            indices.push(13 * i + 3); indices.push(13 * i + 4); indices.push(13 * i + 5);
-            indices.push(13 * i + 5); indices.push(13 * i + 4); indices.push(13 * i + 6);
+                // Add base vertex correspoding the corner vertex - the base has y-component = 0
+                vertices.push(base[0]); vertices.push(0); vertices.push(base[2]);
+                normals.push(baseNormal[0]); normals.push(baseNormal[1]); normals.push(baseNormal[2]);
 
-            indices.push(13 * i + 5); indices.push(13 * i + 6); indices.push(13 * i + 7);
-            indices.push(13 * i + 7); indices.push(13 * i + 6); indices.push(13 * i + 8);
+                base = vec3.rotateY(vec3.create(), base, center, glMatrix.toRadian(-60.0));
+                baseNormal = vec3.rotateY(vec3.create(), baseNormal, vec3.fromValues(0, 1, 0), glMatrix.toRadian(-60.0));
+                baseNormal = vec3.normalize(vec3.create(), baseNormal);
 
-            indices.push(13 * i + 7); indices.push(13 * i + 8); indices.push(13 * i + 9);
-            indices.push(13 * i + 9); indices.push(13 * i + 8); indices.push(13 * i + 10);
+                // Add base and corner vertices again, but now with updated normals
+                vertices.push(base[0]); vertices.push(base[1]); vertices.push(base[2]);
+                normals.push(baseNormal[0]); normals.push(baseNormal[1]); normals.push(baseNormal[2]);
+                vertices.push(base[0]); vertices.push(0); vertices.push(base[2]);
+                normals.push(baseNormal[0]); normals.push(baseNormal[1]); normals.push(baseNormal[2]);
+            }
 
-            indices.push(13 * i + 9); indices.push(13 * i + 10); indices.push(13 * i + 11);
-            indices.push(13 * i + 11); indices.push(13 * i + 10); indices.push(13 * i + 12);
+            // Add indices for the 'base' of the tile
+            indices.push(numIndices * i + 7); indices.push(numIndices * i + 8); indices.push(numIndices * i + 9);
+            indices.push(numIndices * i + 9); indices.push(numIndices * i + 8); indices.push(numIndices * i + 10);
 
-            indices.push(13 * i + 11); indices.push(13 * i + 12); indices.push(13 * i + 1);
-            indices.push(13 * i + 1); indices.push(13 * i + 12); indices.push(13 * i + 2);
+            indices.push(numIndices * i + 11); indices.push(numIndices * i + 12); indices.push(numIndices * i + 13);
+            indices.push(numIndices * i + 13); indices.push(numIndices * i + 12); indices.push(numIndices * i + 14);
+
+            indices.push(numIndices * i + 15); indices.push(numIndices * i + 16); indices.push(numIndices * i + 17);
+            indices.push(numIndices * i + 17); indices.push(numIndices * i + 16); indices.push(numIndices * i + 18);
+
+            indices.push(numIndices * i + 19); indices.push(numIndices * i + 20); indices.push(numIndices * i + 21);
+            indices.push(numIndices * i + 21); indices.push(numIndices * i + 20); indices.push(numIndices * i + 22);
+
+            indices.push(numIndices * i + 23); indices.push(numIndices * i + 24); indices.push(numIndices * i + 25);
+            indices.push(numIndices * i + 25); indices.push(numIndices * i + 24); indices.push(numIndices * i + 26);
+
+            indices.push(numIndices * i + 27); indices.push(numIndices * i + 28); indices.push(numIndices * i + 29);
+            indices.push(numIndices * i + 29); indices.push(numIndices * i + 28); indices.push(numIndices * i + 30);
         }
 
         return {
             vertices: vertices,
+            normals: normals,
             indices: indices
         }
     }

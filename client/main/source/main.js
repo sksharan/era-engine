@@ -30,11 +30,11 @@ const regionUtils = require('./region-utils');
 let tiles = [];
 for (let i = 0; i < 10; i++) {
     for (let j = 0; j < 10; j++) {
-        tiles.push({ loc: { x: i, y: 0, z: j } });
+        tiles.push({ loc: { x: i, y: i+j+1, z: j } });
     }
 }
 let hexRadius = 5;
-let data = regionUtils.getVertices(tiles, hexRadius);
+let data = regionUtils.getRenderData(tiles, hexRadius);
 
 // Init buffer data
 var positionBuffer = gl.createBuffer();

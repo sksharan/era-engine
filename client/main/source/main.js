@@ -27,15 +27,15 @@ var viewMatrixUniLoc = gl.getUniformLocation(program, 'viewMatrix');
 var projectionMatrixUniLoc = gl.getUniformLocation(program, 'projectionMatrix');
 
 // Get test region data
-const regionUtils = require('./region-utils');
+const regionUtils = require('./mesh/region');
 let tiles = [];
 for (let i = 0; i < 10; i++) {
     for (let j = 0; j < 10; j++) {
-        tiles.push({ loc: { x: i, y: i+j+1, z: j } });
+        tiles.push({ loc: { x: i, y: 10*Math.random(), z: j } });
     }
 }
 let hexRadius = 5;
-let data = regionUtils.getRenderData(tiles, hexRadius);
+let data = regionUtils.getMesh(tiles, hexRadius);
 
 // Init buffer data
 var positionBuffer = gl.createBuffer();

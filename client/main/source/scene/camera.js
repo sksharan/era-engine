@@ -25,7 +25,7 @@ function Camera() {
     this.lookAroundSpeed = 0.1;
 
     /* Camera movement speed */
-    this.movementSpeed = 0.2;
+    this.movementSpeed = 0.6;
 }
 
 /* Given the number of pixels the mouse has moved in the x and y
@@ -52,6 +52,7 @@ Camera.prototype.updateDirection = function(movementX, movementY) {
 
     // Recompute right vecotr since direction was updated
     this.right = vec3.cross(vec3.create(), this.direction, this.up);
+    this.right = vec3.normalize(vec3.create(), this.right);
 }
 
 // Camera movement functions

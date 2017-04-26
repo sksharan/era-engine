@@ -1,6 +1,6 @@
 'use strict';
 
-const Mesh = require('../../main/source/mesh/mesh-base');
+const Mesh = require('../../../main/source/render/mesh/mesh-base');
 const assert = require('chai').assert;
 
 describe('Creating a mesh', function() {

@@ -1,6 +1,6 @@
 'use strict';
 
-const camera = require('../scene/camera');
+const camera = require('../render/camera/camera');
 const mouseHandler = require('./mouse-handler');
 const $ = require('jquery');
 

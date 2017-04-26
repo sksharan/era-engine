@@ -1,6 +1,6 @@
 'use strict';
 
-const region = require('../../main/source/mesh/region');
+const region = require('../../../main/source/render/mesh/region');
 const assert = require('chai').assert;
 
 /* 6 indices used to draw each side (each side made up of 2 triangles),

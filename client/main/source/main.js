@@ -11,7 +11,7 @@ mouseHandler.init();
 const keyboardHandler = require('./input/keyboard-handler');
 keyboardHandler.init();
 
-const camera = require('./scene/camera');
+const camera = require('./render/camera/camera');
 const glUtils = require('./gl-utils');
 const glMatrix = require('gl-matrix').glMatrix;
 const mat4 = require('gl-matrix').mat4;
@@ -20,21 +20,21 @@ const vec3 = require('gl-matrix').vec3;
 // Init React component (TODO)
 require('./title');
 
-const program = glUtils.createProgram(require('./shader/main.vert'), require('./shader/main.frag'));
+const program = glUtils.createProgram(require('./render/shader/main.vert'), require('./render/shader/main.frag'));
 var positionAttribLoc = gl.getAttribLocation(program, 'position');
 var normalAttribLoc = gl.getAttribLocation(program, 'normal');
 var viewMatrixUniLoc = gl.getUniformLocation(program, 'viewMatrix');
 var projectionMatrixUniLoc = gl.getUniformLocation(program, 'projectionMatrix');
 
 // Get test region data
-const regionUtils = require('./mesh/region');
+const regionUtils = require('./render/mesh/region');
 let tiles = [];
 for (let i = 0; i < 10; i++) {
     for (let j = 0; j < 10; j++) {
-        tiles.push({ loc: { x: i, y: 10*Math.random(), z: j } });
+        tiles.push({ loc: { x: i, y: 1.5*Math.random(), z: j } });
     }
 }
-let hexRadius = 5;
+let hexRadius = 10;
 let data = regionUtils.getMesh(tiles, hexRadius);
 
 // Init buffer data
@@ -74,7 +74,7 @@ function render() {
     gl.uniformMatrix4fv(viewMatrixUniLoc, gl.FALSE, camera.getViewMatrix());
 
     gl.uniformMatrix4fv(projectionMatrixUniLoc, gl.FALSE,
-        mat4.perspective(mat4.create(), glMatrix.toRadian(45.0), gl.drawingBufferWidth / gl.drawingBufferHeight, 0.1, 200.0));
+        mat4.perspective(mat4.create(), glMatrix.toRadian(45.0), gl.drawingBufferWidth / gl.drawingBufferHeight, 0.1, 500.0));
 
     gl.drawElements(gl.TRIANGLES, data.indices.length, gl.UNSIGNED_SHORT, 0);
 }

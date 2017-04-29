@@ -1,5 +1,6 @@
 'use strict';
 
+// Init WebGL or quit if not supported
 const gl = require('./gl').context;
 if (!gl) {
     throw new Error('WebGL is unavailable');
@@ -11,76 +12,29 @@ mouseHandler.init();
 const keyboardHandler = require('./input/keyboard-handler');
 keyboardHandler.init();
 
-const camera = require('./render/camera/camera');
+// Setup default material
 const glUtils = require('./gl-utils');
-const glMatrix = require('gl-matrix').glMatrix;
-const mat4 = require('gl-matrix').mat4;
-const vec3 = require('gl-matrix').vec3;
+const Material = require('./render/material');
+const defaultMaterial = new Material(
+    glUtils.createProgram(require('./shader/main.vert'), require('./shader/main.frag')));
 
-// Init React component (TODO)
-require('./title');
-
-const program = glUtils.createProgram(require('./render/shader/main.vert'), require('./render/shader/main.frag'));
-var positionAttribLoc = gl.getAttribLocation(program, 'position');
-var normalAttribLoc = gl.getAttribLocation(program, 'normal');
-var viewMatrixUniLoc = gl.getUniformLocation(program, 'viewMatrix');
-var projectionMatrixUniLoc = gl.getUniformLocation(program, 'projectionMatrix');
-
-// Get test region data
-const regionUtils = require('./render/mesh/region');
-let tiles = [];
+// Build a scene graph from test tile data
+const tileService = require('./service/tile-service');
+const hexRadius = 10;
+const SceneNode = require('./render/scene-node');
+const root = new SceneNode();
 for (let i = 0; i < 10; i++) {
     for (let j = 0; j < 10; j++) {
-        tiles.push({ loc: { x: i, y: 1.5*Math.random(), z: j } });
+        const tile = { loc: { x: i, y: 10*(Math.random()), z: j } };
+        const renderData = tileService.getRenderData(tile, hexRadius);
+        root.addChild(new SceneNode(renderData.transform, renderData.mesh, defaultMaterial));
     }
 }
-let hexRadius = 10;
-let data = regionUtils.getMesh(tiles, hexRadius);
 
-// Init buffer data
-var positionBuffer = gl.createBuffer();
-gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(data.vertices), gl.STATIC_DRAW);
-
-var normalBuffer = gl.createBuffer();
-gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
-gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(data.normals), gl.STATIC_DRAW);
-
-var indexBuffer = gl.createBuffer();
-gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
-gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(data.indices), gl.STATIC_DRAW);
-
-function render() {
-    gl.enable(gl.DEPTH_TEST);
-    gl.depthFunc(gl.LESS);
-    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-    gl.clearColor(0.85, 0.85, 0.85, 1);
-    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
-
-    gl.useProgram(program);
-
-    gl.enableVertexAttribArray(positionAttribLoc);
-    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-    gl.vertexAttribPointer(positionAttribLoc, 3, gl.FLOAT, false, 0, 0);
-
-    gl.enableVertexAttribArray(normalAttribLoc);
-    gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
-    gl.vertexAttribPointer(normalAttribLoc, 3, gl.FLOAT, false, 0, 0);
-
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
-
-    keyboardHandler.processKeys();
-
-    gl.uniformMatrix4fv(viewMatrixUniLoc, gl.FALSE, camera.getViewMatrix());
-
-    gl.uniformMatrix4fv(projectionMatrixUniLoc, gl.FALSE,
-        mat4.perspective(mat4.create(), glMatrix.toRadian(45.0), gl.drawingBufferWidth / gl.drawingBufferHeight, 0.1, 500.0));
-
-    gl.drawElements(gl.TRIANGLES, data.indices.length, gl.UNSIGNED_SHORT, 0);
-}
+const renderer = require('./render/renderer');
 
 function mainLoop() {
-    render();
+    renderer.render(root);
     requestAnimationFrame(mainLoop);
 }
 

@@ -5,7 +5,7 @@
  */
 
 const canvas = require('../gl').canvas;
-const camera = require('../render/camera/camera');
+const camera = require('../render/camera');
 const $ = require('jquery');
 
 canvas.requestPointerLock = canvas.requestPointerLock || canvas.mozRequestPointerLock;

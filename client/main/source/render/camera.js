@@ -25,7 +25,7 @@ function Camera() {
     this.lookAroundSpeed = 0.1;
 
     /* Camera movement speed */
-    this.movementSpeed = 0.6;
+    this.movementSpeed = 0.01;
 }
 
 /* Given the number of pixels the mouse has moved in the x and y

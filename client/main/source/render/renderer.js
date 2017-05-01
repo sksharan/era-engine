@@ -47,7 +47,7 @@ function renderNode(sceneNode) {
         gl.uniformMatrix4fv(material.programUniforms.viewMatrix, gl.FALSE, camera.getViewMatrix());
 
         gl.uniformMatrix4fv(material.programUniforms.projectionMatrix, gl.FALSE,
-            mat4.perspective(mat4.create(), glMatrix.toRadian(45.0), gl.drawingBufferWidth / gl.drawingBufferHeight, 0.1, 1000.0));
+            mat4.perspective(mat4.create(), glMatrix.toRadian(45.0), gl.drawingBufferWidth / gl.drawingBufferHeight, 0.1, 1500.0));
 
         gl.drawElements(gl.TRIANGLES, mesh.indices.length, gl.UNSIGNED_SHORT, 0);
     }

@@ -23,19 +23,37 @@ const tileService = require('./service/tile-service');
 const hexRadius = 10;
 const SceneNode = require('./render/scene-node');
 const root = new SceneNode();
-for (let i = 0; i < 10; i++) {
-    for (let j = 0; j < 10; j++) {
-        const tile = { loc: { x: i, y: 10*(Math.random()), z: j } };
+for (let i = 0; i < 100; i++) {
+    for (let j = 0; j < 100; j++) {
+        const tile = { loc: { x: i, y: 2.5*(i+j), z: j } };
         const renderData = tileService.getRenderData(tile, hexRadius);
         root.addChild(new SceneNode(renderData.transform, renderData.mesh, defaultMaterial));
     }
 }
 
+// Rendering
 const renderer = require('./render/renderer');
 
-function mainLoop() {
-    renderer.render(root);
-    requestAnimationFrame(mainLoop);
+// FPS counter
+let prevTime = Date.now();
+let frames = 0;
+function updateFPS() {
+    const currTime = Date.now();
+    const millisElapsed = currTime - prevTime;
+    frames++;
+    if (millisElapsed > 1000) { // Update FPS every second
+        // Note: display as ms/frame instead with console.log(millisElapsed / frames)
+        // Do (ms/s)/(ms/frame) to get FPS, and there are 1000ms in a second
+        console.log(1000 / (millisElapsed / frames));
+        frames = 0;
+        prevTime = currTime;
+    }
 }
 
+// Main loop
+function mainLoop() {
+    renderer.render(root);
+    updateFPS();
+    requestAnimationFrame(mainLoop);
+}
 requestAnimationFrame(mainLoop);

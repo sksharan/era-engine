@@ -23,9 +23,9 @@ const tileService = require('./service/tile-service');
 const hexRadius = 10;
 const SceneNode = require('./render/scene-node');
 const root = new SceneNode();
-for (let i = 0; i < 100; i++) {
-    for (let j = 0; j < 100; j++) {
-        const tile = { loc: { x: i, y: 2.5*(i+j), z: j } };
+for (let i = 0; i < 10; i++) {
+    for (let j = 0; j < 10; j++) {
+        const tile = { loc: { x: i, y: 10*Math.random(), z: j } };
         const renderData = tileService.getRenderData(tile, hexRadius);
         root.addChild(new SceneNode(renderData.transform, renderData.mesh, defaultMaterial));
     }

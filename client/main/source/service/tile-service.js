@@ -59,26 +59,26 @@ module.exports = {
         */
 
         let baseCorner = vec3.fromValues(hexRadius, 0, 0); // Start at same corner as before
-        let baseNormal = vec3.fromValues(1, 0, 0);  // Starting with the base that faces +x direction
+        let baseNormal = vec3.fromValues(0.866, 0, 0.5);  // Starting with the base that faces +x/+z direction
         for (let j = 0; j < 6; j++) {
             // Add the corner vertex
             vertices.push(baseCorner[0]); vertices.push(baseCorner[1]); vertices.push(baseCorner[2]);
-            normals.push(baseNormal[0]); normals.push(baseNormal[1]); normals.push(baseNormal[2]);
             // Add the vertex below the corner vertex
             vertices.push(baseCorner[0]); vertices.push(-tile.loc.y); vertices.push(baseCorner[2]);
-            normals.push(baseNormal[0]); normals.push(baseNormal[1]); normals.push(baseNormal[2]);
 
-            // Both vertices will be used twice but with different normals, so we do this rotation early
             baseCorner = vec3.rotateY(vec3.create(), baseCorner, center, glMatrix.toRadian(-60.0));
-            baseNormal = vec3.rotateY(vec3.create(), baseNormal, vec3.fromValues(0, 1, 0), glMatrix.toRadian(-60.0));
-            baseNormal = vec3.normalize(vec3.create(), baseNormal);
 
             // Add the new corner vertex
             vertices.push(baseCorner[0]); vertices.push(baseCorner[1]); vertices.push(baseCorner[2]);
-            normals.push(baseNormal[0]); normals.push(baseNormal[1]); normals.push(baseNormal[2]);
             // Add the vertex below the new corner vertex
             vertices.push(baseCorner[0]); vertices.push(-tile.loc.y); vertices.push(baseCorner[2]);
-            normals.push(baseNormal[0]); normals.push(baseNormal[1]); normals.push(baseNormal[2]);
+
+            // Add the normals for this side of the base - they all face the same direction
+            for (let k = 0; k < 4; k++) {
+                normals.push(baseNormal[0]); normals.push(baseNormal[1]); normals.push(baseNormal[2]);
+            }
+            baseNormal = vec3.rotateY(vec3.create(), baseNormal, vec3.fromValues(0, 1, 0), glMatrix.toRadian(-60.0));
+            baseNormal = vec3.normalize(vec3.create(), baseNormal);
         }
 
         // Add indices for the first side of base

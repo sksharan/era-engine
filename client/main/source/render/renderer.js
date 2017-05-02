@@ -19,6 +19,11 @@ function render(sceneNode) {
 function initRender() {
     gl.enable(gl.DEPTH_TEST);
     gl.depthFunc(gl.LESS);
+
+    gl.frontFace(gl.CCW);
+    gl.enable(gl.CULL_FACE);
+    gl.cullFace(gl.BACK);
+
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
     gl.clearColor(0.85, 0.85, 0.85, 1);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);

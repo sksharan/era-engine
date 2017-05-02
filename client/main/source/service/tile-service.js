@@ -40,7 +40,7 @@ module.exports = {
         for (let j = 0; j < 6; j++) {
             vertices.push(corner[0]); vertices.push(corner[1]); vertices.push(corner[2]);
             normals.push(0); normals.push(1); normals.push(0); // Normal faces upward
-            corner = vec3.rotateY(vec3.create(), corner, center, glMatrix.toRadian(-60.0));
+            corner = vec3.rotateY(vec3.create(), corner, center, glMatrix.toRadian(60.0));
         }
 
         // Add indices
@@ -82,28 +82,28 @@ module.exports = {
         }
 
         // Add indices for the first side of base
-        indices.push(7); indices.push(8); indices.push(9);
-        indices.push(9); indices.push(8); indices.push(10);
+        indices.push(7); indices.push(9); indices.push(8);
+        indices.push(9); indices.push(10); indices.push(8);
 
         // Add indices for the second side of base
-        indices.push(11); indices.push(12); indices.push(13);
-        indices.push(13); indices.push(12); indices.push(14);
+        indices.push(11); indices.push(13); indices.push(12);
+        indices.push(13); indices.push(14); indices.push(12);
 
         // Add indices for the third side of base
-        indices.push(15); indices.push(16); indices.push(17);
-        indices.push(17); indices.push(16); indices.push(18);
+        indices.push(15); indices.push(17); indices.push(16);
+        indices.push(17); indices.push(18); indices.push(16);
 
         // Add indices for the fourth side of base
-        indices.push(19); indices.push(20); indices.push(21);
-        indices.push(21); indices.push(20); indices.push(22);
+        indices.push(19); indices.push(21); indices.push(20);
+        indices.push(21); indices.push(22); indices.push(20);
 
         // Add indices for the fifth side of base
-        indices.push(23); indices.push(24); indices.push(25);
-        indices.push(25); indices.push(24); indices.push(26);
+        indices.push(23); indices.push(25); indices.push(24);
+        indices.push(25); indices.push(26); indices.push(24);
 
         // Add indices for the sixth side of base
-        indices.push(27); indices.push(28); indices.push(29);
-        indices.push(29); indices.push(28); indices.push(30);
+        indices.push(27); indices.push(29); indices.push(28);
+        indices.push(29); indices.push(30); indices.push(28);
 
         /* Finally, calculate the transformation for this tile. The transformation is defined
            by the loc values in 'tile' as well as the 'hexRadius'.

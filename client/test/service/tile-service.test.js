@@ -32,26 +32,26 @@ function assertCorrectVertices(tile, hexRadius, data) {
 
     assertCorrectVertex(data, index++, expected.center);
     assertCorrectVertex(data, index++, expected.right);
-    assertCorrectVertex(data, index++, expected.lowerRight);
-
-    assertCorrectVertex(data, index++, expected.center);
-    assertCorrectVertex(data, index++, expected.lowerRight);
-    assertCorrectVertex(data, index++, expected.lowerLeft);
-
-    assertCorrectVertex(data, index++, expected.center);
-    assertCorrectVertex(data, index++, expected.lowerLeft);
-    assertCorrectVertex(data, index++, expected.left);
-
-    assertCorrectVertex(data, index++, expected.center);
-    assertCorrectVertex(data, index++, expected.left);
-    assertCorrectVertex(data, index++, expected.upperLeft);
-
-    assertCorrectVertex(data, index++, expected.center);
-    assertCorrectVertex(data, index++, expected.upperLeft);
     assertCorrectVertex(data, index++, expected.upperRight);
 
     assertCorrectVertex(data, index++, expected.center);
     assertCorrectVertex(data, index++, expected.upperRight);
+    assertCorrectVertex(data, index++, expected.upperLeft);
+
+    assertCorrectVertex(data, index++, expected.center);
+    assertCorrectVertex(data, index++, expected.upperLeft);
+    assertCorrectVertex(data, index++, expected.left);
+
+    assertCorrectVertex(data, index++, expected.center);
+    assertCorrectVertex(data, index++, expected.left);
+    assertCorrectVertex(data, index++, expected.lowerLeft);
+
+    assertCorrectVertex(data, index++, expected.center);
+    assertCorrectVertex(data, index++, expected.lowerLeft);
+    assertCorrectVertex(data, index++, expected.lowerRight);
+
+    assertCorrectVertex(data, index++, expected.center);
+    assertCorrectVertex(data, index++, expected.lowerRight);
     assertCorrectVertex(data, index++, expected.right);
 
     assertCorrectBase(data, index, expected.right, expected.rightBase, expected.lowerRight, expected.lowerRightBase);
@@ -74,11 +74,11 @@ function assertCorrectVertices(tile, hexRadius, data) {
 
 function assertCorrectBase(data, index, corner1, base1, corner2, base2) {
     assertCorrectVertex(data, index++, corner1);
-    assertCorrectVertex(data, index++, base1);
-    assertCorrectVertex(data, index++, corner2);
     assertCorrectVertex(data, index++, corner2);
     assertCorrectVertex(data, index++, base1);
+    assertCorrectVertex(data, index++, corner2);
     assertCorrectVertex(data, index++, base2);
+    assertCorrectVertex(data, index++, base1);
 }
 
 function assertCorrectVertex(data, index, vertex) {

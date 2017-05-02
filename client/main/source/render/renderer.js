@@ -8,6 +8,9 @@ const camera = require('./camera');
 const glMatrix = require('gl-matrix').glMatrix;
 const mat4 = require('gl-matrix').mat4;
 
+// The last program used to render a node
+let lastProgram = undefined;
+
 function render(sceneNode) {
     initRender();
     renderNode(sceneNode);
@@ -26,7 +29,10 @@ function renderNode(sceneNode) {
     const material = sceneNode.material;
 
     if (mesh && material) {
-        gl.useProgram(material.program);
+        if (material.program !== lastProgram) {
+            gl.useProgram(material.program);
+            lastProgram = material.program;
+        }
 
         gl.enableVertexAttribArray(material.programAttributes.position);
         gl.bindBuffer(gl.ARRAY_BUFFER, mesh.positionBuffer);
@@ -47,7 +53,7 @@ function renderNode(sceneNode) {
         gl.uniformMatrix4fv(material.programUniforms.viewMatrix, gl.FALSE, camera.getViewMatrix());
 
         gl.uniformMatrix4fv(material.programUniforms.projectionMatrix, gl.FALSE,
-            mat4.perspective(mat4.create(), glMatrix.toRadian(45.0), gl.drawingBufferWidth / gl.drawingBufferHeight, 0.1, 1500.0));
+            mat4.perspective(mat4.create(), glMatrix.toRadian(45.0), gl.drawingBufferWidth / gl.drawingBufferHeight, 0.1, 2500.0));
 
         gl.drawElements(gl.TRIANGLES, mesh.indices.length, gl.UNSIGNED_SHORT, 0);
     }

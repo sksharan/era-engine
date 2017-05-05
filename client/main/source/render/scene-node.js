@@ -24,6 +24,9 @@ var SceneNode = function(localMatrix, mesh, material) {
 }
 
 SceneNode.prototype.addChild = function(child) {
+    if (child === this) {
+        throw new Error("A scene node cannot add itself as a child");
+    }
     this.children.push(child);
 }
 

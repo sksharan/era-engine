@@ -3,7 +3,6 @@
 /* The renderer traverses and renders each node in a scene graph. */
 
 const gl = require('../gl').context;
-const keyboardHandler = require('../input/keyboard-handler');
 const camera = require('./camera');
 const glMatrix = require('gl-matrix').glMatrix;
 const mat4 = require('gl-matrix').mat4;
@@ -50,8 +49,6 @@ function renderNode(sceneNode) {
             gl.FLOAT, false, 0, 0);
 
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, mesh.indexBuffer);
-
-        keyboardHandler.processKeys();
 
         gl.uniformMatrix4fv(material.programUniforms.modelMatrix, gl.FALSE, sceneNode.localMatrix);
 

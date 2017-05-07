@@ -52,6 +52,7 @@ function updateFPS() {
 
 // Main loop
 function mainLoop() {
+    keyboardHandler.processKeys();
     renderer.render(root);
     updateFPS();
     requestAnimationFrame(mainLoop);

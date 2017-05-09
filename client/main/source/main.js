@@ -15,17 +15,18 @@ keyboardHandler.init();
 // Setup default material
 const glUtils = require('./gl-utils');
 const Material = require('./render/material');
-const defaultMaterial = new Material(
-    glUtils.createProgram(require('./shader/main.vert'), require('./shader/main.frag')));
+const program = glUtils.createProgram(require('./shader/main.vert'), require('./shader/main.frag'));
+const debugImageSrc = 'textures/debug.png';
+const defaultMaterial = new Material(program, debugImageSrc);
 
 // Build a scene graph from test tile data
 const tileService = require('./service/tile-service');
 const hexRadius = 10;
 const SceneNode = require('./render/scene-node');
 const root = new SceneNode();
-for (let i = 0; i < 100; i++) {
-    for (let j = 0; j < 100; j++) {
-        const tile = { loc: { x: i, y: (i+j), z: j } };
+for (let i = 0; i < 10; i++) {
+    for (let j = 0; j < 10; j++) {
+        const tile = { loc: { x: i, y: (i+j)*3, z: j } };
         const renderData = tileService.getRenderData(tile, hexRadius);
         root.addChild(new SceneNode(renderData.transform, renderData.mesh, defaultMaterial));
     }

@@ -23,6 +23,7 @@ module.exports = {
     getRenderData: function(tile, hexRadius) {
         let vertices = [];
         let normals = [];
+        let texcoords = [];
         let indices = [];
 
         /* Start with the top of the tile. Using 7 vertices (a 'center'
@@ -42,6 +43,15 @@ module.exports = {
             normals.push(0); normals.push(1); normals.push(0); // Normal faces upward
             corner = vec3.rotateY(vec3.create(), corner, center, glMatrix.toRadian(60.0));
         }
+
+        // Add texcoords
+        texcoords.push(0.5); texcoords.push(0.5); // Middle of image for center of tile
+        texcoords.push(1.0); texcoords.push(0.5);
+        texcoords.push(0.75); texcoords.push(1.0);
+        texcoords.push(0.25); texcoords.push(1.0);
+        texcoords.push(0); texcoords.push(0.5);
+        texcoords.push(0.25); texcoords.push(0);
+        texcoords.push(0.75); texcoords.push(0);
 
         // Add indices
         indices.push(0); indices.push(1); indices.push(2);
@@ -79,6 +89,12 @@ module.exports = {
             }
             baseNormal = vec3.rotateY(vec3.create(), baseNormal, vec3.fromValues(0, 1, 0), glMatrix.toRadian(-60.0));
             baseNormal = vec3.normalize(vec3.create(), baseNormal);
+
+            // Add texcoords for the base, same for each iteration of the loop
+            texcoords.push(0.75); texcoords.push(1.0);
+            texcoords.push(0.75); texcoords.push(0.0);
+            texcoords.push(0.25); texcoords.push(1.0);
+            texcoords.push(0.25); texcoords.push(0.0);
         }
 
         // Add indices for the first side of base
@@ -105,7 +121,7 @@ module.exports = {
         indices.push(27); indices.push(29); indices.push(28);
         indices.push(29); indices.push(30); indices.push(28);
 
-        /* Finally, calculate the transformation for this tile. The transformation is defined
+        /* Calculate the transformation for this tile. The transformation is defined
            by the loc values in 'tile' as well as the 'hexRadius'.
         */
 
@@ -123,7 +139,7 @@ module.exports = {
         }
 
         return {
-            mesh: new Mesh(vertices, 3, normals, 3, indices),
+            mesh: new Mesh(vertices, 3, normals, 3, texcoords, 2, indices),
             transform: mat4.fromTranslation(mat4.create(), transform)
         }
     }

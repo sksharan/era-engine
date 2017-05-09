@@ -9,6 +9,7 @@ const renderer = rendererInjector({
         context: {
             canvas: { width: 0, height: 0 },
             bindBuffer: function() {},
+            bindTexture: function() {},
             clear: function() {},
             clearColor: function() {},
             cullFace: function() {},
@@ -22,9 +23,6 @@ const renderer = rendererInjector({
             vertexAttribPointer: function() {},
             viewport: function() {}
         }
-    },
-    '../input/keyboard-handler': {
-        processKeys: function() {}
     }
 });
 

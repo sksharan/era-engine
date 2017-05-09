@@ -48,6 +48,11 @@ function renderNode(sceneNode) {
         gl.vertexAttribPointer(material.programAttributes.normal, mesh.floatsPerNormal,
             gl.FLOAT, false, 0, 0);
 
+        gl.enableVertexAttribArray(material.programAttributes.texcoord);
+        gl.bindBuffer(gl.ARRAY_BUFFER, mesh.texcoordBuffer);
+        gl.vertexAttribPointer(material.programAttributes.texcoord, mesh.floatsPerTexcoord,
+            gl.FLOAT, false, 0, 0);
+
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, mesh.indexBuffer);
 
         gl.uniformMatrix4fv(material.programUniforms.modelMatrix, gl.FALSE, sceneNode.localMatrix);
@@ -56,6 +61,8 @@ function renderNode(sceneNode) {
 
         gl.uniformMatrix4fv(material.programUniforms.projectionMatrix, gl.FALSE,
             mat4.perspective(mat4.create(), glMatrix.toRadian(45.0), gl.drawingBufferWidth / gl.drawingBufferHeight, 0.1, 2500.0));
+
+        gl.bindTexture(gl.TEXTURE_2D, material.texture);
 
         gl.drawElements(gl.TRIANGLES, mesh.indices.length, gl.UNSIGNED_SHORT, 0);
     }

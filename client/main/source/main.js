@@ -78,7 +78,7 @@ const Main = React.createClass({
             const currTime = Date.now();
             const millisElapsed = currTime - self.state.prevTime;
             self.setState((prevState, props) => ({
-                frames: self.state.frames + 1
+                frames: prevState.frames + 1
             }));
             if (millisElapsed > 1000) { // Update FPS every second
                 self.setState((prevState, props) => ({
@@ -86,7 +86,7 @@ const Main = React.createClass({
                     frames: 0,
                     // Note: display as ms/frame instead with console.log(millisElapsed / frames)
                     // Do (ms/s)/(ms/frame) to get FPS, and there are 1000ms in a second
-                    fps: 1000 / (millisElapsed / self.state.frames)
+                    fps: 1000 / (millisElapsed / prevState.frames)
                 }));
             }
         }

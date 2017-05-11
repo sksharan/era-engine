@@ -2,6 +2,7 @@
 
 const SceneNode = require('../../main/source/render/scene-node');
 const mat4 = require('gl-matrix').mat4;
+const vec3 = require('gl-matrix').vec3;
 const assert = require('chai').assert;
 
 describe("Scene node", function() {
@@ -62,6 +63,34 @@ describe("Scene node", function() {
         it("should not work if a node tries to add itself as a child", function() {
             const node = new SceneNode();
             assert.throws(function() {node.addChild(node)});
+        });
+
+        it("should update the child world matrices", function() {
+            const root = new SceneNode();
+
+            const localMatrix1 = mat4.fromTranslation(mat4.create(), vec3.fromValues(0, 1, 0));
+            const node1 = new SceneNode(localMatrix1);
+
+            const localMatrix2 = mat4.fromTranslation(mat4.create(), vec3.fromValues(0, 5, 0));
+            const node2 = new SceneNode(localMatrix2);
+
+            const localMatrix3 = mat4.fromTranslation(mat4.create(), vec3.fromValues(0, 3, 0));
+            const node3 = new SceneNode(localMatrix3);
+
+            root.addChild(node1);
+            node1.addChild(node2);
+            root.addChild(node3);
+
+            assert.isTrue(mat4.exactEquals(root.worldMatrix, mat4.create()));
+
+            assert.isTrue(mat4.exactEquals(node1.worldMatrix,
+                mat4.fromTranslation(mat4.create(), vec3.fromValues(0, 1, 0))));
+
+            assert.isTrue(mat4.exactEquals(node2.worldMatrix,
+                mat4.fromTranslation(mat4.create(), vec3.fromValues(0, (5+1), 0))));
+
+            assert.isTrue(mat4.exactEquals(node3.worldMatrix,
+                mat4.fromTranslation(mat4.create(), vec3.fromValues(0, 3, 0))));
         })
     });
 

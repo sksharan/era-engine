@@ -57,7 +57,7 @@ function renderNode(sceneNode) {
 
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, mesh.indexBuffer);
 
-        gl.uniformMatrix4fv(material.programUniforms.modelMatrix, gl.FALSE, sceneNode.localMatrix);
+        gl.uniformMatrix4fv(material.programUniforms.modelMatrix, gl.FALSE, sceneNode.worldMatrix);
 
         gl.uniformMatrix4fv(material.programUniforms.viewMatrix, gl.FALSE, camera.getViewMatrix());
 

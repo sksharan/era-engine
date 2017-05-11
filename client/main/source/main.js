@@ -42,6 +42,8 @@ const Main = React.createClass({
     },
     componentDidMount: function() {
         const gl = require('./gl').context;
+        const mat4 = require('gl-matrix').mat4;
+        const vec3 = require('gl-matrix').vec3;
 
         // Setup mouse and keyboard handlers
         const mouseHandler = require('./input/mouse-handler');
@@ -63,9 +65,18 @@ const Main = React.createClass({
         const root = new SceneNode();
         for (let i = 0; i < 10; i++) {
             for (let j = 0; j < 10; j++) {
-                const tile = { loc: { x: i, y: (i+j)*2+1, z: j } };
+                const tile = { loc: { x: i, y: (i+j)+1, z: j } };
                 const renderData = tileService.getRenderData(tile, hexRadius);
-                root.addChild(new SceneNode(renderData.transform, renderData.mesh, defaultMaterial));
+
+                const child = new SceneNode(renderData.transform, renderData.mesh, defaultMaterial);
+                root.addChild(child);
+
+                if (i < 2 && j < 2) {
+                    child.addChild(new SceneNode(mat4.fromTranslation(mat4.create(), vec3.fromValues(0, 10, 0)),
+                        renderData.mesh, defaultMaterial));
+                    child.addChild(new SceneNode(mat4.fromTranslation(mat4.create(), vec3.fromValues(0, -10, 0)),
+                        renderData.mesh, defaultMaterial));
+                }
             }
         }
 

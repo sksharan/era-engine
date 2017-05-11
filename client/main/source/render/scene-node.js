@@ -28,6 +28,14 @@ SceneNode.prototype.addChild = function(child) {
         throw new Error("A scene node cannot add itself as a child");
     }
     this.children.push(child);
+    updateWorldMatrix(child, this.worldMatrix);
+}
+
+function updateWorldMatrix(node, parentWorldMatrix) {
+    node.worldMatrix = mat4.multiply(mat4.create(), parentWorldMatrix, node.localMatrix);
+    node.children.forEach(function(child) {
+        updateWorldMatrix(child, node.worldMatrix);
+    });
 }
 
 module.exports = SceneNode;

@@ -7,12 +7,14 @@ const camera = require('./camera');
 const glMatrix = require('gl-matrix').glMatrix;
 const mat4 = require('gl-matrix').mat4;
 
-// The last program used to render a node
-let lastProgram = undefined;
+function Renderer() {
+    // The last program used to render a node
+    this.lastProgram = undefined;
+}
 
-function render(sceneNode) {
+Renderer.prototype.render = function(sceneNode) {
     initRender();
-    renderNode(sceneNode);
+    renderNode.call(this, sceneNode);
 }
 
 function initRender() {
@@ -33,9 +35,9 @@ function renderNode(sceneNode) {
     const material = sceneNode.material;
 
     if (mesh && material) {
-        if (material.program !== lastProgram) {
+        if (material.program !== this.lastProgram) {
             gl.useProgram(material.program);
-            lastProgram = material.program;
+            this.lastProgram = material.program;
         }
 
         gl.enableVertexAttribArray(material.programAttributes.position);
@@ -67,9 +69,7 @@ function renderNode(sceneNode) {
         gl.drawElements(gl.TRIANGLES, mesh.indices.length, gl.UNSIGNED_SHORT, 0);
     }
 
-    sceneNode.children.forEach(renderNode);
+    sceneNode.children.forEach(renderNode, this);
 }
 
-module.exports = {
-    render: render
-}
+module.exports = new Renderer();

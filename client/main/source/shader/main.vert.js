@@ -10,12 +10,14 @@ module.exports =
     uniform mat4 viewMatrix;
     uniform mat4 projectionMatrix;
 
-    varying vec3 vNormal;
+    varying vec4 vPositionWorld;
+    varying vec3 vNormalWorld;
     varying vec2 vTexcoord;
 
     void main() {
-        gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(position, 1);
-        vNormal = normal;
+        vPositionWorld = modelMatrix * vec4(position, 1.0);
+        gl_Position = projectionMatrix * viewMatrix * vPositionWorld;
+        vNormalWorld = normal; // TODO need to compute normal matrix on CPU
         vTexcoord = texcoord;
     }
     `;

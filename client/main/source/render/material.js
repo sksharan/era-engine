@@ -19,7 +19,8 @@ function Material(program, imageSrc) {
     this.programUniforms = {
         modelMatrix: gl.getUniformLocation(this.program, 'modelMatrix'),
         viewMatrix: gl.getUniformLocation(this.program, 'viewMatrix'),
-        projectionMatrix: gl.getUniformLocation(this.program, 'projectionMatrix')
+        projectionMatrix: gl.getUniformLocation(this.program, 'projectionMatrix'),
+        cameraPosition: gl.getUniformLocation(this.program, 'cameraPosition')
     }
 
     this.texture = glUtils.loadTextureAsync(imageSrc);

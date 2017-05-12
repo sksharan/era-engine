@@ -65,7 +65,7 @@ const Main = React.createClass({
         const root = new SceneNode();
         for (let i = 0; i < 10; i++) {
             for (let j = 0; j < 10; j++) {
-                const tile = { loc: { x: i, y: (i+j)+1, z: j } };
+                const tile = { loc: { x: i, y: 1, z: j } };
                 const renderData = tileService.getRenderData(tile, hexRadius);
 
                 const child = new SceneNode(renderData.transform, renderData.mesh, defaultMaterial);

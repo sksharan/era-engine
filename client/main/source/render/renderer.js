@@ -64,6 +64,8 @@ function renderNode(sceneNode) {
         gl.uniformMatrix4fv(material.programUniforms.projectionMatrix, gl.FALSE,
             mat4.perspective(mat4.create(), glMatrix.toRadian(45.0), gl.drawingBufferWidth / gl.drawingBufferHeight, 0.1, 2500.0));
 
+        gl.uniformMatrix3fv(material.programUniforms.normalMatrix, gl.FALSE, sceneNode.normalMatrix);
+
         gl.uniform3fv(material.programUniforms.cameraPosition, camera.position);
 
         gl.bindTexture(gl.TEXTURE_2D, material.texture);

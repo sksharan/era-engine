@@ -1,6 +1,7 @@
 'use strict';
 
 const SceneNode = require('../../main/source/render/scene-node');
+const mat3 = require('gl-matrix').mat3;
 const mat4 = require('gl-matrix').mat4;
 const vec3 = require('gl-matrix').vec3;
 const assert = require('chai').assert;
@@ -16,6 +17,7 @@ describe("Scene node", function() {
             assert.equal(node.children.length, 0);
             assert.isTrue(mat4.equals(node.localMatrix, mat4.create()));
             assert.isTrue(mat4.equals(node.worldMatrix, mat4.create()));
+            assert.isTrue(mat3.equals(node.normalMatrix, mat3.create()));
             assert.isUndefined(node.mesh);
             assert.isUndefined(node.material);
         });
@@ -65,7 +67,7 @@ describe("Scene node", function() {
             assert.throws(function() {node.addChild(node)});
         });
 
-        it("should update the child world matrices", function() {
+        it("should update the child world and normal matrices", function() {
             const root = new SceneNode();
 
             const localMatrix1 = mat4.fromTranslation(mat4.create(), vec3.fromValues(0, 1, 0));
@@ -81,6 +83,7 @@ describe("Scene node", function() {
             node1.addChild(node2);
             root.addChild(node3);
 
+            // Check world matrices
             assert.isTrue(mat4.exactEquals(root.worldMatrix, mat4.create()));
 
             assert.isTrue(mat4.exactEquals(node1.worldMatrix,
@@ -91,6 +94,12 @@ describe("Scene node", function() {
 
             assert.isTrue(mat4.exactEquals(node3.worldMatrix,
                 mat4.fromTranslation(mat4.create(), vec3.fromValues(0, 3, 0))));
+
+            // Check normal matrices
+            assert.isTrue(mat4.exactEquals(root.normalMatrix, mat3.normalFromMat4(mat3.create(), root.worldMatrix)));
+            assert.isTrue(mat4.exactEquals(node1.normalMatrix, mat3.normalFromMat4(mat3.create(), node1.worldMatrix)));
+            assert.isTrue(mat4.exactEquals(node2.normalMatrix, mat3.normalFromMat4(mat3.create(), node2.worldMatrix)));
+            assert.isTrue(mat4.exactEquals(node3.normalMatrix, mat3.normalFromMat4(mat3.create(), node3.worldMatrix)));
         })
     });
 

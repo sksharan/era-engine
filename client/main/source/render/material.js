@@ -20,6 +20,7 @@ function Material(program, imageSrc) {
         modelMatrix: gl.getUniformLocation(this.program, 'modelMatrix'),
         viewMatrix: gl.getUniformLocation(this.program, 'viewMatrix'),
         projectionMatrix: gl.getUniformLocation(this.program, 'projectionMatrix'),
+        normalMatrix: gl.getUniformLocation(this.program, 'normalMatrix'),
         cameraPosition: gl.getUniformLocation(this.program, 'cameraPosition')
     }
 

@@ -9,6 +9,7 @@ module.exports =
     uniform mat4 modelMatrix;
     uniform mat4 viewMatrix;
     uniform mat4 projectionMatrix;
+    uniform mat3 normalMatrix;
 
     varying vec4 vPositionWorld;
     varying vec3 vNormalWorld;
@@ -17,7 +18,7 @@ module.exports =
     void main() {
         vPositionWorld = modelMatrix * vec4(position, 1.0);
         gl_Position = projectionMatrix * viewMatrix * vPositionWorld;
-        vNormalWorld = normal; // TODO need to compute normal matrix on CPU
+        vNormalWorld = normalMatrix * normal;
         vTexcoord = texcoord;
     }
     `;

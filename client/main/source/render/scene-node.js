@@ -2,6 +2,7 @@
 
 /* A node in a scene graph. */
 
+const mat3 = require('gl-matrix').mat3;
 const mat4 = require('gl-matrix').mat4;
 
 var SceneNode = function(localMatrix, mesh, material) {
@@ -15,6 +16,9 @@ var SceneNode = function(localMatrix, mesh, material) {
     /* The model matrix for this node; places the object represented by
        this node into the world. */
     this.worldMatrix = mat4.create();
+
+    /* The normal matrix for this node; the inverse-transverse of the world matrix. */
+    this.normalMatrix = mat3.create();
 
     /* (Optional) The mesh to render. */
     this.mesh = mesh;
@@ -32,7 +36,9 @@ SceneNode.prototype.addChild = function(child) {
 }
 
 function updateWorldMatrix(node, parentWorldMatrix) {
-    node.worldMatrix = mat4.multiply(mat4.create(), parentWorldMatrix, node.localMatrix);
+    mat4.multiply(node.worldMatrix, parentWorldMatrix, node.localMatrix);
+    mat3.normalFromMat4(node.normalMatrix, node.worldMatrix);
+
     node.children.forEach(function(child) {
         updateWorldMatrix(child, node.worldMatrix);
     });

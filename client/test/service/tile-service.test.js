@@ -12,7 +12,7 @@ describe('tile-service#getRenderData', function() {
         let tile = { loc: { x: 0, y: 1, z: 0 } };
         let data = service.getRenderData(tile, hexRadius);
 
-        assertTranslationMatrix(data.transform, 0, 1, 0);
+        assertTranslationMatrix(data.localMatrix, 0, 1, 0);
         assertCorrectMeshData(tile, hexRadius, data);
     });
 
@@ -22,39 +22,39 @@ describe('tile-service#getRenderData', function() {
         let tile1 = { loc: { x: 4, y: 1, z: 4 } };
         let data1 = service.getRenderData(tile1, hexRadius);
 
-        assertTranslationMatrix(data1.transform, 60, 1, 69.3);
+        assertTranslationMatrix(data1.localMatrix, 60, 1, 69.3);
         assertCorrectMeshData(tile1, hexRadius, data1);
 
         let tile2 = { loc: { x: 5, y: 2, z: 4 } };
         let data2 = service.getRenderData(tile2, hexRadius);
 
-        assertTranslationMatrix(data2.transform, 75, 2, 77.9);
+        assertTranslationMatrix(data2.localMatrix, 75, 2, 77.9);
         assertCorrectMeshData(tile2, hexRadius, data2);
     });
 });
 
-/* Assert that the transformation matrix is a translation matrix with
+/* Assert that the local matrix is a translation matrix with
  * with the given x, y, z values. */
-function assertTranslationMatrix(transformationMatrix, x, y, z) {
-    assert.equal(transformationMatrix[0], 1);
-    assert.equal(transformationMatrix[1], 0);
-    assert.equal(transformationMatrix[2], 0);
-    assert.equal(transformationMatrix[3], 0);
+function assertTranslationMatrix(localMatrix, x, y, z) {
+    assert.equal(localMatrix[0], 1);
+    assert.equal(localMatrix[1], 0);
+    assert.equal(localMatrix[2], 0);
+    assert.equal(localMatrix[3], 0);
 
-    assert.equal(transformationMatrix[4], 0);
-    assert.equal(transformationMatrix[5], 1);
-    assert.equal(transformationMatrix[6], 0);
-    assert.equal(transformationMatrix[7], 0);
+    assert.equal(localMatrix[4], 0);
+    assert.equal(localMatrix[5], 1);
+    assert.equal(localMatrix[6], 0);
+    assert.equal(localMatrix[7], 0);
 
-    assert.equal(transformationMatrix[8], 0);
-    assert.equal(transformationMatrix[9], 0);
-    assert.equal(transformationMatrix[10], 1);
-    assert.equal(transformationMatrix[11], 0);
+    assert.equal(localMatrix[8], 0);
+    assert.equal(localMatrix[9], 0);
+    assert.equal(localMatrix[10], 1);
+    assert.equal(localMatrix[11], 0);
 
-    assert.approximately(transformationMatrix[12], x, delta);
-    assert.approximately(transformationMatrix[13], y, delta);
-    assert.approximately(transformationMatrix[14], z, delta);
-    assert.equal(transformationMatrix[15], 1);
+    assert.approximately(localMatrix[12], x, delta);
+    assert.approximately(localMatrix[13], y, delta);
+    assert.approximately(localMatrix[14], z, delta);
+    assert.equal(localMatrix[15], 1);
 }
 
 /* Assert that the tile with the given hexRadius has the correct mesh data. */
@@ -127,7 +127,7 @@ function assertCorrectVertex(data, index, vertex, normal, texcoords) {
         data.mesh.vertices[3 * data.mesh.indices[index]],
         data.mesh.vertices[3 * data.mesh.indices[index] + 1],
         data.mesh.vertices[3 * data.mesh.indices[index] + 2]);
-    actualVertex = vec3.transformMat4(vec3.create(), actualVertex, data.transform);
+    actualVertex = vec3.transformMat4(vec3.create(), actualVertex, data.localMatrix);
 
     assert.approximately(actualVertex[0], vertex[0], delta);
     assert.approximately(actualVertex[1], vertex[1], delta);

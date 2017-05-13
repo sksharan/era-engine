@@ -13,7 +13,7 @@ module.exports = {
            { loc: { x: <float>, y: <float>, z: <float> } }
        and a number 'hexRadius' that specifies the radius of
        the tile, returns an object of the form
-           { mesh: <Mesh>, transform: <glMatrix-mat4> }
+           { mesh: <Mesh>, localMatrix: <glMatrix-mat4> }
 
        The 'tile' loc values are not world coordinates but are
        rather values that specify where the tile is in relation
@@ -127,7 +127,7 @@ module.exports = {
 
         // These calculations can be derived from the unit circle
         // Note sin(60-degrees) = 0.866, cos(60-degrees) = 0.5
-        let transform = vec3.fromValues(
+        let localMatrix = vec3.fromValues(
                 tile.loc.x * (hexRadius * 1.5),
                 tile.loc.y, // This will also shift the bottom of the base to y = 0
                 tile.loc.z * (hexRadius * 0.866 * 2));
@@ -135,12 +135,12 @@ module.exports = {
         // Apply an offset to the z-value so that adjacent tiles on the x-axis will
         // appear in a 'zig-zag' formation
         if (tile.loc.x % 2 == 1) {
-            transform[2] += (hexRadius * 0.866);
+            localMatrix[2] += (hexRadius * 0.866);
         }
 
         return {
             mesh: new Mesh(vertices, 3, normals, 3, texcoords, 2, indices),
-            transform: mat4.fromTranslation(mat4.create(), transform)
+            localMatrix: mat4.fromTranslation(mat4.create(), localMatrix)
         }
     }
 }

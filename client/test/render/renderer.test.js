@@ -18,6 +18,7 @@ const renderer = rendererInjector({
             enable: function() {},
             enableVertexAttribArray: function() {},
             frontFace: function() {},
+            uniform3fv: function() {},
             uniformMatrix4fv: function() {},
             useProgram: function() { numTimesProgramCalled++; },
             vertexAttribPointer: function() {},

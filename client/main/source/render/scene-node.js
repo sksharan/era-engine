@@ -11,7 +11,7 @@ var SceneNode = function(localMatrix, mesh, material) {
 
     /* Transformation that defines the position/scale/etc. of this node in
        relation to its parent. */
-    this.localMatrix = (typeof localMatrix != 'undefined') ? localMatrix : mat4.create();
+    this.localMatrix = (localMatrix === null || localMatrix === undefined) ? mat4.create() : localMatrix;
 
     /* The model matrix for this node; places the object represented by
        this node into the world. */
@@ -25,6 +25,36 @@ var SceneNode = function(localMatrix, mesh, material) {
 
     /* (Optional) The material to associate with the mesh. */
     this.material = material;
+}
+
+SceneNode.prototype.getChildren = function() {
+    return this.children;
+}
+
+SceneNode.prototype.getLocalMatrix = function() {
+    return this.localMatrix;
+}
+
+SceneNode.prototype.getWorldMatrix = function() {
+    return this.worldMatrix;
+}
+
+SceneNode.prototype.getNormalMatrix = function() {
+    return this.normalMatrix;
+}
+
+SceneNode.prototype.hasMesh = function() {
+    return this.mesh !== undefined && this.mesh !== null;
+}
+SceneNode.prototype.getMesh = function() {
+    return this.mesh;
+}
+
+SceneNode.prototype.hasMaterial = function() {
+    return this.material !== undefined && this.material !== null;
+}
+SceneNode.prototype.getMaterial = function() {
+    return this.material;
 }
 
 SceneNode.prototype.addChild = function(child) {

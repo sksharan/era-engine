@@ -9,7 +9,7 @@ const mat4 = require('gl-matrix').mat4;
 
 function Renderer() {
     // The last program used to render a node
-    this.lastProgram = undefined;
+    this.lastProgram = null;
 }
 
 Renderer.prototype.render = function(sceneNode) {
@@ -31,57 +31,56 @@ function initRender() {
 }
 
 function renderNode(sceneNode) {
-    const mesh = sceneNode.mesh;
-    const material = sceneNode.material;
+    if (sceneNode.hasMesh() && sceneNode.hasMaterial()) {
+        const mesh = sceneNode.getMesh();
+        const material = sceneNode.getMaterial();
 
-    if (mesh && material) {
-        if (material.programData.getProgram() !== this.lastProgram) {
-            gl.useProgram(material.programData.getProgram());
-            this.lastProgram = material.programData.getProgram();
+        if (material.getProgramData().getProgram() !== this.lastProgram) {
+            gl.useProgram(material.getProgramData().getProgram());
+            this.lastProgram = material.getProgramData().getProgram();
         }
 
-        if (material.programData.hasPositionAttributeLocation()) {
-            gl.enableVertexAttribArray(material.programData.getPositionAttributeLocation());
-            gl.bindBuffer(gl.ARRAY_BUFFER, mesh.positionBuffer);
-            gl.vertexAttribPointer(material.programData.getPositionAttributeLocation(), mesh.floatsPerVertex,
+        if (material.getProgramData().hasPositionAttributeLocation()) {
+            gl.enableVertexAttribArray(material.getProgramData().getPositionAttributeLocation());
+            gl.bindBuffer(gl.ARRAY_BUFFER, mesh.getPositionBuffer());
+            gl.vertexAttribPointer(material.getProgramData().getPositionAttributeLocation(), mesh.getFloatsPerVertex(),
                 gl.FLOAT, false, 0, 0);
         }
-        if (material.programData.hasNormalAttributeLocation()) {
-            gl.enableVertexAttribArray(material.programData.getNormalAttributeLocation());
-            gl.bindBuffer(gl.ARRAY_BUFFER, mesh.normalBuffer);
-            gl.vertexAttribPointer(material.programData.getNormalAttributeLocation(), mesh.floatsPerNormal,
+        if (material.getProgramData().hasNormalAttributeLocation()) {
+            gl.enableVertexAttribArray(material.getProgramData().getNormalAttributeLocation());
+            gl.bindBuffer(gl.ARRAY_BUFFER, mesh.getNormalBuffer());
+            gl.vertexAttribPointer(material.getProgramData().getNormalAttributeLocation(), mesh.getFloatsPerNormal(),
                 gl.FLOAT, false, 0, 0);
         }
-        if (material.programData.hasTexcoordAttributeLocation()) {
-            gl.enableVertexAttribArray(material.programData.getTexcoordAttributeLocation());
-            gl.bindBuffer(gl.ARRAY_BUFFER, mesh.texcoordBuffer);
-            gl.vertexAttribPointer(material.programData.getTexcoordAttributeLocation(), mesh.floatsPerTexcoord,
+        if (material.getProgramData().hasTexcoordAttributeLocation()) {
+            gl.enableVertexAttribArray(material.getProgramData().getTexcoordAttributeLocation());
+            gl.bindBuffer(gl.ARRAY_BUFFER, mesh.getTexcoordBuffer());
+            gl.vertexAttribPointer(material.getProgramData().getTexcoordAttributeLocation(), mesh.getFloatsPerTexcoord(),
                 gl.FLOAT, false, 0, 0);
         }
 
-        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, mesh.indexBuffer);
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, mesh.getIndexBuffer());
 
-        if (material.programData.hasModelMatrixUniformLocation()) {
-            gl.uniformMatrix4fv(material.programData.getModelMatrixUniformLocation(), gl.FALSE, sceneNode.worldMatrix);
+        if (material.getProgramData().hasModelMatrixUniformLocation()) {
+            gl.uniformMatrix4fv(material.getProgramData().getModelMatrixUniformLocation(), gl.FALSE, sceneNode.getWorldMatrix());
         }
-        if (material.programData.hasViewMatrixUniformLocation()) {
-            gl.uniformMatrix4fv(material.programData.getViewMatrixUniformLocation(), gl.FALSE, camera.getViewMatrix());
+        if (material.getProgramData().hasViewMatrixUniformLocation()) {
+            gl.uniformMatrix4fv(material.getProgramData().getViewMatrixUniformLocation(), gl.FALSE, camera.getViewMatrix());
         }
-        if (material.programData.hasProjectionMatrixUniformLocation()) {
-            gl.uniformMatrix4fv(material.programData.getProjectionMatrixUniformLocation(), gl.FALSE,
-                    mat4.perspective(mat4.create(), glMatrix.toRadian(45.0),
-                            gl.drawingBufferWidth / gl.drawingBufferHeight, 0.1, 2500.0));
+        if (material.getProgramData().hasProjectionMatrixUniformLocation()) {
+            gl.uniformMatrix4fv(material.getProgramData().getProjectionMatrixUniformLocation(), gl.FALSE,
+                    mat4.perspective(mat4.create(), glMatrix.toRadian(45.0), gl.drawingBufferWidth / gl.drawingBufferHeight, 0.1, 2500.0));
         }
-        if (material.programData.hasNormalMatrixUniformLocation()) {
-            gl.uniformMatrix3fv(material.programData.getNormalMatrixUniformLocation(), gl.FALSE, sceneNode.normalMatrix);
+        if (material.getProgramData().hasNormalMatrixUniformLocation()) {
+            gl.uniformMatrix3fv(material.getProgramData().getNormalMatrixUniformLocation(), gl.FALSE, sceneNode.getNormalMatrix());
         }
-        if (material.programData.hasCameraPositionUniformLocation()) {
-            gl.uniform3fv(material.programData.getCameraPositionUniformLocation(), camera.position);
+        if (material.getProgramData().hasCameraPositionUniformLocation()) {
+            gl.uniform3fv(material.getProgramData().getCameraPositionUniformLocation(), camera.getPosition());
         }
 
-        gl.bindTexture(gl.TEXTURE_2D, material.texture);
+        gl.bindTexture(gl.TEXTURE_2D, material.getTexture());
 
-        gl.drawElements(gl.TRIANGLES, mesh.indices.length, gl.UNSIGNED_SHORT, 0);
+        gl.drawElements(gl.TRIANGLES, mesh.getIndices().length, gl.UNSIGNED_SHORT, 0);
     }
 
     sceneNode.children.forEach(renderNode, this);

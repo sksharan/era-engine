@@ -31,4 +31,53 @@ function Mesh(vertices, floatsPerVertex, normals, floatsPerNormal, texcoords, fl
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.indices), gl.STATIC_DRAW);
 }
 
+Mesh.prototype.getVertices = function() {
+    return this.vertices;
+}
+Mesh.prototype.getVertex = function(index) {
+    return this.vertices[index];
+}
+Mesh.prototype.getFloatsPerVertex = function() {
+    return this.floatsPerVertex;
+}
+Mesh.prototype.getPositionBuffer = function() {
+    return this.positionBuffer;
+}
+
+Mesh.prototype.getNormals = function() {
+    return this.normals;
+}
+Mesh.prototype.getNormal = function(index) {
+    return this.normals[index];
+}
+Mesh.prototype.getFloatsPerNormal = function() {
+    return this.floatsPerNormal;
+}
+Mesh.prototype.getNormalBuffer = function() {
+    return this.normalBuffer;
+}
+
+Mesh.prototype.getTexcoords = function() {
+    return this.texcoords;
+}
+Mesh.prototype.getTexcoord = function(index) {
+    return this.texcoords[index];
+}
+Mesh.prototype.getFloatsPerTexcoord = function() {
+    return this.floatsPerTexcoord;
+}
+Mesh.prototype.getTexcoordBuffer = function() {
+    return this.texcoordBuffer;
+}
+
+Mesh.prototype.getIndices = function() {
+    return this.indices;
+}
+Mesh.prototype.getIndex = function(index) {
+    return this.indices[index];
+}
+Mesh.prototype.getIndexBuffer = function() {
+    return this.indexBuffer;
+}
+
 module.exports = Mesh;

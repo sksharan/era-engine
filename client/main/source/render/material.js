@@ -11,4 +11,11 @@ function Material(programData, imageSrc) {
     this.texture = glUtils.loadTextureAsync(imageSrc);
 }
 
+Material.prototype.getProgramData = function() {
+    return this.programData;
+}
+Material.prototype.getTexture = function() {
+    return this.texture;
+}
+
 module.exports = Material;

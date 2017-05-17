@@ -26,6 +26,8 @@ let baseDepsMock = {
 
 const rendererInjector = require('inject-loader!../../main/source/render/renderer');
 const SceneNode = require('../../main/source/render/scene-node');
+const Mesh = require('../../main/source/render/mesh');
+const Material = require('../../main/source/render/material');
 const ProgramData = require('../../main/source/gl/program-data');
 const mat4 = require('gl-matrix').mat4;
 const assert = require('chai').assert;
@@ -33,23 +35,17 @@ const assert = require('chai').assert;
 describe("render", function() {
 
     let renderer;
-    let mockMesh;
-    let mockMaterial1, mockMaterial2;
+    let mesh;
+    let material1, material2;
 
     beforeEach(function() {
-        mockMesh = {
-            indices: []
-        };
+        mesh = new Mesh(null, null, null, null, null, null, []);
 
-        mockMaterial1 = {
-            programData: new ProgramData()
-        };
-        mockMaterial1.programData.setProgram(1);
+        material1 = new Material(new ProgramData(), null);
+        material1.getProgramData().setProgram(1);
 
-        mockMaterial2 = {
-            programData: new ProgramData()
-        };
-        mockMaterial2.programData.setProgram(2);
+        material2 = new Material(new ProgramData(), null);
+        material2.getProgramData().setProgram(2);
     })
 
 
@@ -63,14 +59,11 @@ describe("render", function() {
         }
         renderer = rendererInjector(modifiedDepsMock);
 
-        const material1 = mockMaterial1;
-        const material2 = mockMaterial2;
-
         const root = new SceneNode();
-        const node1 = new SceneNode(mat4.create(), mockMesh, material1);
-        const node2 = new SceneNode(mat4.create(), mockMesh, material1);
-        const node3 = new SceneNode(mat4.create(), mockMesh, material2);
-        const node4 = new SceneNode(mat4.create(), mockMesh, material2);
+        const node1 = new SceneNode(mat4.create(), mesh, material1);
+        const node2 = new SceneNode(mat4.create(), mesh, material1);
+        const node3 = new SceneNode(mat4.create(), mesh, material2);
+        const node4 = new SceneNode(mat4.create(), mesh, material2);
         root.addChild(node1);
         root.addChild(node2);
         root.addChild(node3);

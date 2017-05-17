@@ -28,6 +28,10 @@ function Camera() {
     this.movementSpeed = 2.0;
 }
 
+Camera.prototype.getPosition = function() {
+    return this.position;
+}
+
 /* Given the number of pixels the mouse has moved in the x and y
  * directions, updates the direction of the camera. */
 Camera.prototype.updateDirection = function(movementX, movementY) {

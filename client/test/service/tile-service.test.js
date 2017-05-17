@@ -124,9 +124,9 @@ function assertCorrectBase(data, index, corner1, base1, corner2, base2, normal) 
 function assertCorrectVertex(data, index, vertex, normal, texcoords) {
     // Apply the transformation to the vertex before doing the comparison
     let actualVertex = vec3.fromValues(
-        data.mesh.vertices[3 * data.mesh.indices[index]],
-        data.mesh.vertices[3 * data.mesh.indices[index] + 1],
-        data.mesh.vertices[3 * data.mesh.indices[index] + 2]);
+        data.mesh.getVertex(3 * data.mesh.getIndex(index)),
+        data.mesh.getVertex(3 * data.mesh.getIndex(index) + 1),
+        data.mesh.getVertex(3 * data.mesh.getIndex(index) + 2));
     actualVertex = vec3.transformMat4(vec3.create(), actualVertex, data.localMatrix);
 
     assert.approximately(actualVertex[0], vertex[0], delta);
@@ -134,17 +134,17 @@ function assertCorrectVertex(data, index, vertex, normal, texcoords) {
     assert.approximately(actualVertex[2], vertex[2], delta);
 
     let actualNormal = vec3.fromValues(
-        data.mesh.normals[3 * data.mesh.indices[index]],
-        data.mesh.normals[3 * data.mesh.indices[index] + 1],
-        data.mesh.normals[3 * data.mesh.indices[index] + 2]);
+        data.mesh.getNormal(3 * data.mesh.getIndex(index)),
+        data.mesh.getNormal(3 * data.mesh.getIndex(index) + 1),
+        data.mesh.getNormal(3 * data.mesh.getIndex(index) + 2));
 
     assert.approximately(actualNormal[0], normal[0], delta);
     assert.approximately(actualNormal[1], normal[1], delta);
     assert.approximately(actualNormal[2], normal[2], delta);
 
-    let actualTexcoords = vec3.fromValues(
-        data.mesh.texcoords[2 * data.mesh.indices[index]],
-        data.mesh.texcoords[2 * data.mesh.indices[index] + 1]);
+    let actualTexcoords = vec2.fromValues(
+        data.mesh.getTexcoord(2 * data.mesh.getIndex(index)),
+        data.mesh.getTexcoord(2 * data.mesh.getIndex(index) + 1));
 
     assert.approximately(actualTexcoords[0], texcoords[0], delta);
     assert.approximately(actualTexcoords[1], texcoords[1], delta);

@@ -35,38 +35,49 @@ function renderNode(sceneNode) {
     const material = sceneNode.material;
 
     if (mesh && material) {
-        if (material.program !== this.lastProgram) {
-            gl.useProgram(material.program);
-            this.lastProgram = material.program;
+        if (material.programData.getProgram() !== this.lastProgram) {
+            gl.useProgram(material.programData.getProgram());
+            this.lastProgram = material.programData.getProgram();
         }
 
-        gl.enableVertexAttribArray(material.programAttributes.position);
-        gl.bindBuffer(gl.ARRAY_BUFFER, mesh.positionBuffer);
-        gl.vertexAttribPointer(material.programAttributes.position, mesh.floatsPerVertex,
-            gl.FLOAT, false, 0, 0);
-
-        gl.enableVertexAttribArray(material.programAttributes.normal);
-        gl.bindBuffer(gl.ARRAY_BUFFER, mesh.normalBuffer);
-        gl.vertexAttribPointer(material.programAttributes.normal, mesh.floatsPerNormal,
-            gl.FLOAT, false, 0, 0);
-
-        gl.enableVertexAttribArray(material.programAttributes.texcoord);
-        gl.bindBuffer(gl.ARRAY_BUFFER, mesh.texcoordBuffer);
-        gl.vertexAttribPointer(material.programAttributes.texcoord, mesh.floatsPerTexcoord,
-            gl.FLOAT, false, 0, 0);
+        if (material.programData.hasPositionAttributeLocation()) {
+            gl.enableVertexAttribArray(material.programData.getPositionAttributeLocation());
+            gl.bindBuffer(gl.ARRAY_BUFFER, mesh.positionBuffer);
+            gl.vertexAttribPointer(material.programData.getPositionAttributeLocation(), mesh.floatsPerVertex,
+                gl.FLOAT, false, 0, 0);
+        }
+        if (material.programData.hasNormalAttributeLocation()) {
+            gl.enableVertexAttribArray(material.programData.getNormalAttributeLocation());
+            gl.bindBuffer(gl.ARRAY_BUFFER, mesh.normalBuffer);
+            gl.vertexAttribPointer(material.programData.getNormalAttributeLocation(), mesh.floatsPerNormal,
+                gl.FLOAT, false, 0, 0);
+        }
+        if (material.programData.hasTexcoordAttributeLocation()) {
+            gl.enableVertexAttribArray(material.programData.getTexcoordAttributeLocation());
+            gl.bindBuffer(gl.ARRAY_BUFFER, mesh.texcoordBuffer);
+            gl.vertexAttribPointer(material.programData.getTexcoordAttributeLocation(), mesh.floatsPerTexcoord,
+                gl.FLOAT, false, 0, 0);
+        }
 
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, mesh.indexBuffer);
 
-        gl.uniformMatrix4fv(material.programUniforms.modelMatrix, gl.FALSE, sceneNode.worldMatrix);
-
-        gl.uniformMatrix4fv(material.programUniforms.viewMatrix, gl.FALSE, camera.getViewMatrix());
-
-        gl.uniformMatrix4fv(material.programUniforms.projectionMatrix, gl.FALSE,
-            mat4.perspective(mat4.create(), glMatrix.toRadian(45.0), gl.drawingBufferWidth / gl.drawingBufferHeight, 0.1, 2500.0));
-
-        gl.uniformMatrix3fv(material.programUniforms.normalMatrix, gl.FALSE, sceneNode.normalMatrix);
-
-        gl.uniform3fv(material.programUniforms.cameraPosition, camera.position);
+        if (material.programData.hasModelMatrixUniformLocation()) {
+            gl.uniformMatrix4fv(material.programData.getModelMatrixUniformLocation(), gl.FALSE, sceneNode.worldMatrix);
+        }
+        if (material.programData.hasViewMatrixUniformLocation()) {
+            gl.uniformMatrix4fv(material.programData.getViewMatrixUniformLocation(), gl.FALSE, camera.getViewMatrix());
+        }
+        if (material.programData.hasProjectionMatrixUniformLocation()) {
+            gl.uniformMatrix4fv(material.programData.getProjectionMatrixUniformLocation(), gl.FALSE,
+                    mat4.perspective(mat4.create(), glMatrix.toRadian(45.0),
+                            gl.drawingBufferWidth / gl.drawingBufferHeight, 0.1, 2500.0));
+        }
+        if (material.programData.hasNormalMatrixUniformLocation()) {
+            gl.uniformMatrix3fv(material.programData.getNormalMatrixUniformLocation(), gl.FALSE, sceneNode.normalMatrix);
+        }
+        if (material.programData.hasCameraPositionUniformLocation()) {
+            gl.uniform3fv(material.programData.getCameraPositionUniformLocation(), camera.position);
+        }
 
         gl.bindTexture(gl.TEXTURE_2D, material.texture);
 

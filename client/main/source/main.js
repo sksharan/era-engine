@@ -54,9 +54,15 @@ const Main = React.createClass({
         // Setup default material
         const glUtils = require('./gl-utils');
         const Material = require('./render/material');
-        const program = glUtils.createProgram(require('./shader/main.vert'), require('./shader/main.frag'));
+        const ProgramBuilder = require('./gl/program-builder');
+        const programData = new ProgramBuilder()
+                .addPosition()
+                .addNormal()
+                //.addTexcoord()
+                .addPhongLighting()
+                .build();
         const debugImageSrc = 'textures/debug.png';
-        const defaultMaterial = new Material(program, debugImageSrc);
+        const defaultMaterial = new Material(programData, debugImageSrc);
 
         // Build a scene graph from test tile data
         const tileService = require('./service/tile-service');

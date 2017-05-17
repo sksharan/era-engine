@@ -6,24 +6,8 @@
 const gl = require('../gl').context;
 const glUtils = require('../gl-utils');
 
-function Material(program, imageSrc) {
-    /* The WebGL program to use when rendering the mesh. */
-    this.program = program;
-
-    this.programAttributes = {
-        position: gl.getAttribLocation(this.program, 'position'),
-        normal: gl.getAttribLocation(this.program, 'normal'),
-        texcoord: gl.getAttribLocation(this.program, 'texcoord')
-    };
-
-    this.programUniforms = {
-        modelMatrix: gl.getUniformLocation(this.program, 'modelMatrix'),
-        viewMatrix: gl.getUniformLocation(this.program, 'viewMatrix'),
-        projectionMatrix: gl.getUniformLocation(this.program, 'projectionMatrix'),
-        normalMatrix: gl.getUniformLocation(this.program, 'normalMatrix'),
-        cameraPosition: gl.getUniformLocation(this.program, 'cameraPosition')
-    }
-
+function Material(programData, imageSrc) {
+    this.programData = programData;
     this.texture = glUtils.loadTextureAsync(imageSrc);
 }
 

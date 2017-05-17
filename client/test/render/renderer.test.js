@@ -1,10 +1,6 @@
 'use strict';
 
-let numTimesProgramCalled = 0;
-
-/* Setup renderer with mocks */
-const rendererInjector = require('inject-loader!../../main/source/render/renderer');
-const renderer = rendererInjector({
+let baseDepsMock = {
     '../gl': {
         context: {
             canvas: { width: 0, height: 0 },
@@ -21,44 +17,60 @@ const renderer = rendererInjector({
             uniform3fv: function() {},
             uniformMatrix3fv: function() {},
             uniformMatrix4fv: function() {},
-            useProgram: function() { numTimesProgramCalled++; },
+            useProgram: function() {},
             vertexAttribPointer: function() {},
             viewport: function() {}
         }
     }
-});
-
-function getMockMesh() {
-    return {
-        indices: []
-    };
-}
-function getMockMaterial() {
-    return {
-        program: 0,
-        programAttributes: {},
-        programUniforms: {}
-    }
 }
 
+const rendererInjector = require('inject-loader!../../main/source/render/renderer');
 const SceneNode = require('../../main/source/render/scene-node');
+const ProgramData = require('../../main/source/gl/program-data');
 const mat4 = require('gl-matrix').mat4;
 const assert = require('chai').assert;
 
 describe("render", function() {
 
-    it("should not call gl.useProgram for a node if last node used same program", function() {
-        numTimesProgramCalled = 0;
+    let renderer;
+    let mockMesh;
+    let mockMaterial1, mockMaterial2;
 
-        const material1 = getMockMaterial();
-        const material2 = getMockMaterial();
-        material2.program = 1;
+    beforeEach(function() {
+        mockMesh = {
+            indices: []
+        };
+
+        mockMaterial1 = {
+            programData: new ProgramData()
+        };
+        mockMaterial1.programData.setProgram(1);
+
+        mockMaterial2 = {
+            programData: new ProgramData()
+        };
+        mockMaterial2.programData.setProgram(2);
+    })
+
+
+    it("should not call gl.useProgram for a node if last node used same program", function() {
+        let numTimesProgramCalled = 0;
+
+        // Override base mock to increment 'numTimesProgramCalled' when gl.useProgram is called
+        let modifiedDepsMock = Object.assign({}, baseDepsMock);
+        modifiedDepsMock['../gl'].context.useProgram = function() {
+            numTimesProgramCalled++;
+        }
+        renderer = rendererInjector(modifiedDepsMock);
+
+        const material1 = mockMaterial1;
+        const material2 = mockMaterial2;
 
         const root = new SceneNode();
-        const node1 = new SceneNode(mat4.create(), getMockMesh(), material1);
-        const node2 = new SceneNode(mat4.create(), getMockMesh(), material1);
-        const node3 = new SceneNode(mat4.create(), getMockMesh(), material2);
-        const node4 = new SceneNode(mat4.create(), getMockMesh(), material2);
+        const node1 = new SceneNode(mat4.create(), mockMesh, material1);
+        const node2 = new SceneNode(mat4.create(), mockMesh, material1);
+        const node3 = new SceneNode(mat4.create(), mockMesh, material2);
+        const node4 = new SceneNode(mat4.create(), mockMesh, material2);
         root.addChild(node1);
         root.addChild(node2);
         root.addChild(node3);

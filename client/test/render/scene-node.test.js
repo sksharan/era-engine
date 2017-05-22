@@ -1,10 +1,6 @@
-'use strict';
-
-const SceneNode = require('../../main/source/render/scene-node');
-const mat3 = require('gl-matrix').mat3;
-const mat4 = require('gl-matrix').mat4;
-const vec3 = require('gl-matrix').vec3;
-const assert = require('chai').assert;
+import SceneNode from '../../main/source/render/scene-node'
+import {mat3, mat4, vec3} from 'gl-matrix'
+import {assert} from 'chai'
 
 describe("Scene node", function() {
 

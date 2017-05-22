@@ -1,8 +1,6 @@
-'use strict';
-
-const camera = require('../render/camera');
-const mouseHandler = require('./mouse-handler');
-const $ = require('jquery');
+import camera from '../render/camera'
+import mouseHandler from './mouse-handler'
+import $ from 'jquery'
 
 // Maps key codes to boolean values indicating if key is pressed
 const pressedKeys = {};
@@ -38,12 +36,10 @@ function processKeys() {
     }
 }
 
-module.exports = {
-    /* Set up listener to act on user keyboard input. */
-    init: function() {
-        $(document).on('keydown', handleKeyDown);
-        $(document).on('keyup', handleKeyUp);
-    },
-    /* Act on currently pressed keys. */
-    processKeys: processKeys
+/* Set up listener to act on user keyboard input. */
+function init() {
+    $(document).on('keydown', handleKeyDown);
+    $(document).on('keyup', handleKeyUp);
 }
+
+export default {processKeys, init};

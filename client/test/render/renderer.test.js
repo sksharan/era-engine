@@ -1,8 +1,14 @@
-'use strict';
+import rendererInjector from 'inject-loader!../../main/source/render/renderer'
+import SceneNode from '../../main/source/render/scene-node'
+import Mesh from '../../main/source/render/mesh'
+import Material from '../../main/source/render/material'
+import ProgramData from '../../main/source/gl/program-data'
+import {mat4} from 'gl-matrix'
+import {assert} from 'chai'
 
 let baseDepsMock = {
     '../gl': {
-        context: {
+        gl: {
             canvas: { width: 0, height: 0 },
             bindBuffer: function() {},
             bindTexture: function() {},
@@ -23,14 +29,6 @@ let baseDepsMock = {
         }
     }
 }
-
-const rendererInjector = require('inject-loader!../../main/source/render/renderer');
-const SceneNode = require('../../main/source/render/scene-node');
-const Mesh = require('../../main/source/render/mesh');
-const Material = require('../../main/source/render/material');
-const ProgramData = require('../../main/source/gl/program-data');
-const mat4 = require('gl-matrix').mat4;
-const assert = require('chai').assert;
 
 describe("render", function() {
 
@@ -54,10 +52,10 @@ describe("render", function() {
 
         // Override base mock to increment 'numTimesProgramCalled' when gl.useProgram is called
         let modifiedDepsMock = Object.assign({}, baseDepsMock);
-        modifiedDepsMock['../gl'].context.useProgram = function() {
+        modifiedDepsMock['../gl'].gl.useProgram = function() {
             numTimesProgramCalled++;
         }
-        renderer = rendererInjector(modifiedDepsMock);
+        renderer = rendererInjector(modifiedDepsMock).default;
 
         const root = new SceneNode();
         const node1 = new SceneNode(mat4.create(), mesh, material1);

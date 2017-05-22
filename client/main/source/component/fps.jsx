@@ -1,9 +1,7 @@
-'use strict';
+import React from 'react'
 
-const React = require('react');
-
-module.exports = React.createClass({
-    render: function() {
-        return (<h2>{this.props.fps.toFixed(0)} FPS</h2>);
+export default class FPS extends React.Component {
+    render() {
+        return <h2>{this.props.fps.toFixed(0)} FPS</h2>;
     }
-});
+}

@@ -1,21 +1,6 @@
-'use strict';
-
-/* The renderer traverses and renders each node in a scene graph. */
-
-const gl = require('../gl').context;
-const camera = require('./camera');
-const glMatrix = require('gl-matrix').glMatrix;
-const mat4 = require('gl-matrix').mat4;
-
-function Renderer() {
-    // The last program used to render a node
-    this.lastProgram = null;
-}
-
-Renderer.prototype.render = function(sceneNode) {
-    initRender();
-    renderNode.call(this, sceneNode);
-}
+import camera from './camera'
+import {gl} from '../gl'
+import {glMatrix, mat4} from 'gl-matrix'
 
 function initRender() {
     gl.enable(gl.DEPTH_TEST);
@@ -86,4 +71,16 @@ function renderNode(sceneNode) {
     sceneNode.children.forEach(renderNode, this);
 }
 
-module.exports = new Renderer();
+class Renderer {
+    constructor() {
+        // The last program used to render a node
+        this.lastProgram = null;
+    }
+
+    render(sceneNode) {
+        initRender();
+        renderNode.call(this, sceneNode);
+    }
+}
+
+export default new Renderer();

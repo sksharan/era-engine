@@ -1,14 +1,10 @@
-'use strict';
-
 /* A 'tile' is a 3D hexagon that can be placed onto a hexagonal
    grid with other tiles to form a 'region'. */
 
-const Mesh = require('../render/mesh')
-const glMatrix = require('gl-matrix').glMatrix;
-const vec3 = require('gl-matrix').vec3;
-const mat4 = require('gl-matrix').mat4;
+import Mesh from '../render/mesh'
+import {glMatrix, mat4, vec3} from 'gl-matrix'
 
-module.exports = {
+export default {
     /* Given a 'tile' object of the form
            { loc: { x: <float>, y: <float>, z: <float> } }
        and a number 'hexRadius' that specifies the radius of

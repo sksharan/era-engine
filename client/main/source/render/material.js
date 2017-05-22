@@ -1,21 +1,20 @@
-'use strict';
-
 /* Material that can associated with a mesh that determines
    the renderable properties of that mesh. */
 
-const gl = require('../gl').context;
-const glUtils = require('../gl-utils');
+import {gl} from '../gl'
+import {loadTextureAsync} from '../gl-utils'
 
-function Material(programData, imageSrc) {
-    this.programData = programData;
-    this.texture = glUtils.loadTextureAsync(imageSrc);
-}
+export default class Material {
+    constructor(programData, imageSrc) {
+        this.programData = programData;
+        this.texture = loadTextureAsync(imageSrc);
+    }
 
-Material.prototype.getProgramData = function() {
-    return this.programData;
-}
-Material.prototype.getTexture = function() {
-    return this.texture;
-}
+    getProgramData() {
+        return this.programData;
+    }
 
-module.exports = Material;
+    getTexture() {
+        return this.texture;
+    }
+}

@@ -1,9 +1,7 @@
-'use strict';
+import service from '../../main/source/service/tile-service'
+import {vec2, vec3} from 'gl-matrix'
+import {assert} from 'chai'
 
-const service = require('../../main/source/service/tile-service');
-const vec2 = require('gl-matrix').vec2;
-const vec3 = require('gl-matrix').vec3;
-const assert = require('chai').assert;
 const delta = 0.05;
 
 describe('tile-service#getRenderData', function() {

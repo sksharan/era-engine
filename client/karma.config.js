@@ -1,9 +1,14 @@
 // Karma configuration
 
+// Use the same webpack config as the main app, but 'entry'
+// needs to be undefined
+const webpackConfig = require('./webpack.config.js');
+delete webpackConfig.entry;
+
 module.exports = function(config) {
   config.set({
     // https://github.com/webpack-contrib/karma-webpack
-    webpack: {},
+    webpack: webpackConfig,
 
     // base path that will be used to resolve all patterns (eg. files, exclude)
     basePath: '',
@@ -50,7 +55,7 @@ module.exports = function(config) {
 
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits
-    singleRun: true,
+    singleRun: false,
 
     // Concurrency level
     // how many browser should be started simultaneous

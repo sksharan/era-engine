@@ -1,17 +1,16 @@
-'use strict';
+import ProgramBuilderInjector from 'inject-loader!../../main/source/gl/program-builder'
+import {assert} from 'chai'
 
 // Setup WebGL
 document.body.insertAdjacentHTML('beforeend',
         '<canvas id="canvas" height="720" width="1080"></canvas>');
 const gl = document.getElementById('canvas').getContext('webgl');
 
-const ProgramBuilderInjector = require('inject-loader!../../main/source/gl/program-builder');
 const ProgramBuilder = ProgramBuilderInjector({
     '../gl': {
-        context: gl
+        gl: gl
     }
-});
-const assert = require('chai').assert;
+}).default;
 
 describe('Program builder build', function() {
 

@@ -1,6 +1,4 @@
-'use strict';
+const canvas = document.getElementById('canvas');
+const gl = canvas.getContext('webgl');
 
-module.exports = {
-    canvas: document.getElementById('canvas'),
-    context: document.getElementById('canvas').getContext('webgl')
-}
+export {canvas, gl};

@@ -1,7 +1,5 @@
-'use strict';
-
-const ShaderBuilder = require('../../main/source/gl/shader-builder');
-const assert = require('chai').assert;
+import ShaderBuilder from '../../main/source/gl/shader-builder'
+import {assert} from 'chai'
 
 describe('Shader builder build', function() {
 

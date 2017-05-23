@@ -12,13 +12,13 @@ function updateWorldMatrix(node, parentWorldMatrix) {
 }
 
 export default class SceneNode {
-    constructor(localMatrix, mesh, material) {
+    constructor(localMatrix = mat4.create(), mesh, material) {
         /* Children of this node. */
         this.children = [];
 
         /* Transformation that defines the position/scale/etc. of this node in
            relation to its parent. */
-        this.localMatrix = (localMatrix === null || localMatrix === undefined) ? mat4.create() : localMatrix;
+        this.localMatrix = localMatrix;
 
         /* The model matrix for this node; places the object represented by
            this node into the world. */

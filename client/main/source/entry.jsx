@@ -2,6 +2,10 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import FPS from './component/fps'
 
+// Init Bootstrap CSS and JS globally
+require('bootstrap/dist/css/bootstrap.css');
+require('bootstrap');
+
 // Component for initializing the canvas and WebGL
 class Canvas extends React.Component {
     render() {

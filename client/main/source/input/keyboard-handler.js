@@ -1,6 +1,5 @@
 import camera from '../render/camera'
 import mouseHandler from './mouse-handler'
-import $ from 'jquery'
 
 // Maps key codes to boolean values indicating if key is pressed
 const pressedKeys = {};

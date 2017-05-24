@@ -3,6 +3,9 @@ import {gl} from '../gl'
 import {glMatrix, mat4} from 'gl-matrix'
 
 function initRender() {
+    resizeCanvas();
+    gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+
     gl.enable(gl.DEPTH_TEST);
     gl.depthFunc(gl.LESS);
 
@@ -10,9 +13,19 @@ function initRender() {
     gl.enable(gl.CULL_FACE);
     gl.cullFace(gl.BACK);
 
-    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
     gl.clearColor(0.85, 0.85, 0.85, 1);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+}
+
+// Based on https://webglfundamentals.org/webgl/lessons/webgl-resizing-the-canvas.html
+function resizeCanvas() {
+    const displayWidth = gl.canvas.clientWidth;
+    const displayHeight = gl.canvas.clientHeight;
+
+    if (gl.canvas.width !== displayWidth || gl.canvas.height !== displayHeight) {
+        gl.canvas.width = displayWidth;
+        gl.canvas.height = displayHeight;
+    }
 }
 
 function renderNode(sceneNode) {

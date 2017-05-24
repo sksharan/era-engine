@@ -1,6 +1,7 @@
 const webpack = require('webpack');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
     entry: './main/source/entry.jsx',
@@ -13,6 +14,7 @@ module.exports = {
             filename: 'main/public/index.html',
             template: 'main/template/index.html.template'
         }),
+        new ExtractTextPlugin('styles.css'),
         // Required for Bootstrap 4 which depends on jQuery and Tether globals
         new webpack.ProvidePlugin({
            $: 'jquery',
@@ -34,8 +36,21 @@ module.exports = {
                 }
             },
             {
-                loaders: ['style-loader', 'css-loader'],
-                test: /\.css$/
+                loader: ExtractTextPlugin.extract({
+                    fallback: 'style-loader',
+                    use:  [
+                        {
+                            loader: 'css-loader',
+                            options: {
+                                localIdentName: '[name]-[local]___[hash:base64:5]'
+                            }
+                        },
+                        {
+                            loader: 'sass-loader'
+                        }
+                    ]
+                }),
+                test: /\.(css|scss)$/
             }
         ]
     }

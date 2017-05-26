@@ -3,6 +3,11 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
+const extractSass = new ExtractTextPlugin({
+    filename: "styles.css",
+    disable: process.env.NODE_ENV !== "production"
+});
+
 module.exports = {
     entry: './main/source/entry.jsx',
     output: {
@@ -14,7 +19,7 @@ module.exports = {
             filename: 'main/public/index.html',
             template: 'main/template/index.html.template'
         }),
-        new ExtractTextPlugin('styles.css'),
+        extractSass,
         // Required for Bootstrap 4 which depends on jQuery and Tether globals
         new webpack.ProvidePlugin({
            $: 'jquery',
@@ -36,9 +41,8 @@ module.exports = {
                 }
             },
             {
-                loader: ExtractTextPlugin.extract({
-                    fallback: 'style-loader',
-                    use:  [
+                loader: extractSass.extract({
+                    use: [
                         {
                             loader: 'css-loader',
                             options: {
@@ -48,7 +52,9 @@ module.exports = {
                         {
                             loader: 'sass-loader'
                         }
-                    ]
+                    ],
+                    // Use style-loader in development
+                    fallback: 'style-loader',
                 }),
                 test: /\.(css|scss)$/
             }

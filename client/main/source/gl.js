@@ -1,2 +1,2 @@
-const gl = canvas.getContext('webgl');
+const gl = document.getElementById('canvas').getContext('webgl');
 export {gl};

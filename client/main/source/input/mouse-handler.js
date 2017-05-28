@@ -6,7 +6,7 @@ import camera from '../render/camera'
 import {gl} from '../gl'
 import $ from 'jquery'
 
-canvas.requestPointerLock = canvas.requestPointerLock || canvas.mozRequestPointerLock;
+gl.canvas.requestPointerLock = gl.canvas.requestPointerLock || gl.canvas.mozRequestPointerLock;
 document.exitPointerLock = document.exitPointerLock || document.mozExitPointerLock;
 
 function handleLockChange() {
@@ -24,12 +24,12 @@ function handleMouseMovement(e) {
 
 /* Returns true if the pointer is currently locked. */
 export function isPointerLocked() {
-    return document.pointerLockElement === canvas || document.mozPointerLockElement === canvas;
+    return document.pointerLockElement === gl.canvas || document.mozPointerLockElement === gl.canvas;
 }
 
 /* Clicking the canvas will lock the pointer (press ESC to show the pointer again).
  * Listeners are applied to check when the pointer is locked/unlocked. */
-export function init() {
+export function initMouseHandler() {
     gl.canvas.onclick = function() {
         gl.canvas.requestPointerLock();
     }
@@ -37,4 +37,4 @@ export function init() {
     $(document).on('mozpointerlockchange', handleLockChange);
 }
 
-export default {isPointerLocked, init};
+export default {isPointerLocked, initMouseHandler};

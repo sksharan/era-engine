@@ -19,7 +19,7 @@ class Canvas extends React.Component {
             throw new Error('WebGL is unavailable');
         }
     }
-    shouldComponentUpdate(nextProps, nextState) {
+    shouldComponentUpdate() {
         // Canvas should never be re-rendered after initialization
         return false;
     }

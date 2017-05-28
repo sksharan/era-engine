@@ -1,12 +1,12 @@
 import camera from '../render/camera'
-import mouseHandler from './mouse-handler'
+import {isPointerLocked} from './mouse-handler'
 
 // Maps key codes to boolean values indicating if key is pressed
 const pressedKeys = {};
 
 function handleKeyDown(e) {
     // Take no action on keypress if pointer lock is not active
-    if (!mouseHandler.isPointerLocked()) {
+    if (!isPointerLocked()) {
         return;
     }
     pressedKeys[e.which] = true;

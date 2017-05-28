@@ -1,9 +1,7 @@
-// WebGL (assuming it is already initialized)
-import {gl} from './gl'
 // glMatrix
 import {mat4, vec3} from 'gl-matrix'
 // Event handling
-import MouseHandler from './input/mouse-handler'
+import {initMouseHandler} from './input/mouse-handler'
 import KeyboardHandler from './input/keyboard-handler'
 // Material creation
 import Material from './render/material'
@@ -16,7 +14,7 @@ import Renderer from './render/renderer'
 
 export function begin(MainComponent) {
     // Setup mouse and keyboard handlers
-    MouseHandler.init();
+    initMouseHandler();
     KeyboardHandler.init();
 
     // Setup default material
@@ -52,11 +50,11 @@ export function begin(MainComponent) {
     function updateFPS() {
         const currTime = Date.now();
         const millisElapsed = currTime - MainComponent.state.prevTime;
-        MainComponent.setState((prevState, props) => ({
+        MainComponent.setState((prevState) => ({
             frames: prevState.frames + 1
         }));
         if (millisElapsed >= 1000) { // Update FPS approximately every second
-            MainComponent.setState((prevState, props) => ({
+            MainComponent.setState((prevState) => ({
                 prevTime: currTime,
                 frames: 0,
                 // Note: display as ms/frame instead with console.log(millisElapsed / frames)

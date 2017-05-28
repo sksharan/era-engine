@@ -33,6 +33,12 @@ module.exports = {
     module: {
         loaders: [
             {
+                enforce: 'pre',
+                loader: 'eslint-loader',
+                test: /\.jsx?$/,
+                exclude: /node_modules/
+            },
+            {
                 loader: 'babel-loader',
                 test: /\.jsx?$/,
                 exclude: /node_modules/,

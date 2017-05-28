@@ -1,7 +1,6 @@
 /* Material that can associated with a mesh that determines
    the renderable properties of that mesh. */
 
-import {gl} from '../gl'
 import {loadTextureAsync} from '../gl-utils'
 
 export default class Material {

@@ -16,7 +16,7 @@ function handleKeyUp(e) {
     pressedKeys[e.which] = false;
 }
 
-function processKeys() {
+export function processKeys() {
     // "W"
     if (pressedKeys[87]) {
         camera.moveForward();
@@ -36,9 +36,7 @@ function processKeys() {
 }
 
 /* Set up listener to act on user keyboard input. */
-function init() {
+export function init() {
     $(document).on('keydown', handleKeyDown);
     $(document).on('keyup', handleKeyUp);
 }
-
-export default {processKeys, init};

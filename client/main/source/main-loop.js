@@ -1,8 +1,8 @@
 // glMatrix
 import {mat4, vec3} from 'gl-matrix'
 // Event handling
-import {initMouseHandler} from './input/mouse-handler'
-import KeyboardHandler from './input/keyboard-handler'
+import * as MouseHandler from './input/mouse-handler'
+import * as KeyboardHandler from './input/keyboard-handler'
 // Material creation
 import Material from './render/material'
 import ProgramBuilder from './gl/program-builder'
@@ -14,7 +14,7 @@ import Renderer from './render/renderer'
 
 export function begin(MainComponent) {
     // Setup mouse and keyboard handlers
-    initMouseHandler();
+    MouseHandler.init();
     KeyboardHandler.init();
 
     // Setup default material

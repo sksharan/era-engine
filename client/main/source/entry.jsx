@@ -1,7 +1,10 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import {Provider} from 'react-redux'
 import FPS from './component/fps'
+import {view as Lights} from './lights/index'
 import css from './main.scss'
+import store from './store'
 
 // Init Bootstrap CSS and JS globally
 require('bootstrap/dist/css/bootstrap.css');
@@ -56,7 +59,7 @@ class Main extends React.Component {
                         <Canvas/>
                     </div>
                     <div className='col-md-4'>
-                        <span>TODO</span>
+                        {this.state.glInitialized ? <Lights/> : ""}
                     </div>
                 </div>
             </div>
@@ -79,4 +82,8 @@ class Main extends React.Component {
     }
 }
 
-ReactDOM.render(<Main/>, document.getElementById('main'));
+ReactDOM.render(
+    <Provider store={store}>
+        <Main/>
+    </Provider>,
+    document.getElementById('main'));

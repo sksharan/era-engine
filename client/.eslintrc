@@ -9,7 +9,8 @@
         "ecmaVersion": 6,
         "sourceType": "module",
         "ecmaFeatures": {
-            "jsx": true
+            "jsx": true,
+            "modules": true
         }
     },
     "env": {
@@ -27,6 +28,7 @@
         }
     },
     "rules": {
+        "no-console": ["error", { allow: ["warn", "error"] }],
         "import/no-extraneous-dependencies": [
             "error",
             {
@@ -35,6 +37,6 @@
                 "peerDependencies": ["test/**"]
             }
         ],
-        "import/namespace": ["off"]
+        "react/prop-types": ["warn"]
     }
 }

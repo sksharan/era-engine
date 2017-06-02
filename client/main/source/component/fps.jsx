@@ -8,5 +8,5 @@ export default class FPS extends React.Component {
 }
 
 FPS.propTypes = {
-    fps: PropTypes.number
+    fps: PropTypes.number.isRequired
 };

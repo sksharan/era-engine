@@ -1,4 +1,4 @@
-import ProgramBuilderInjector from 'inject-loader!../../main/source/gl/program-builder'
+import ProgramBuilderInjector from 'inject-loader!../program-builder'
 import {assert} from 'chai'
 
 // Setup WebGL

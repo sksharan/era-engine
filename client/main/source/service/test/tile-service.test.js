@@ -1,4 +1,4 @@
-import service from '../../main/source/service/tile-service'
+import service from '../tile-service'
 import {vec2, vec3} from 'gl-matrix'
 import {assert} from 'chai'
 

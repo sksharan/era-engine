@@ -1,4 +1,4 @@
-import ShaderBuilder from '../../main/source/gl/shader-builder'
+import ShaderBuilder from '../shader-builder'
 import {assert} from 'chai'
 
 describe('Shader builder build', function() {

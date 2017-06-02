@@ -32,9 +32,9 @@
         "import/no-extraneous-dependencies": [
             "error",
             {
-                "devDependencies": ["test/**"],
-                "optionalDependencies": ["test/**"],
-                "peerDependencies": ["test/**"]
+                "devDependencies": ["main/**/**.test.js"],
+                "optionalDependencies": ["main/**/**.test.js"],
+                "peerDependencies": ["main/**/**.test.js"]
             }
         ],
         "react/prop-types": ["warn"]

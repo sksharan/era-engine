@@ -1,8 +1,8 @@
-import rendererInjector from 'inject-loader!../../main/source/render/renderer'
-import SceneNode from '../../main/source/render/scene-node'
-import Mesh from '../../main/source/render/mesh'
-import Material from '../../main/source/render/material'
-import ProgramData from '../../main/source/gl/program-data'
+import rendererInjector from 'inject-loader!../renderer'
+import SceneNode from '../scene-node'
+import Mesh from '../mesh'
+import Material from '../material'
+import ProgramData from '../../gl/program-data'
 import {mat4} from 'gl-matrix'
 import {assert} from 'chai'
 

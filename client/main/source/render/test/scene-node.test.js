@@ -1,4 +1,4 @@
-import SceneNode from '../../main/source/render/scene-node'
+import SceneNode from '../scene-node'
 import {mat3, mat4, vec3} from 'gl-matrix'
 import {assert} from 'chai'
 

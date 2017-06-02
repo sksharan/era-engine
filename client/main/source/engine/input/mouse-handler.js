@@ -2,7 +2,7 @@
  * https://developer.mozilla.org/en-US/docs/Web/API/Pointer_Lock_API
  */
 
-import camera from '../render/camera'
+import camera from '../camera/camera'
 import {gl} from '../gl'
 import $ from 'jquery'
 

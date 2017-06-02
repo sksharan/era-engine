@@ -1,10 +1,10 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import {Provider} from 'react-redux'
-import FPS from './component/fps'
-import {view as Lights} from './lights/index'
+import FPS from './interface/fps/fps'
+import {view as Lights} from './interface/lights/index'
+import store from './interface/store'
 import css from './main.scss'
-import store from './store'
 
 // Init Bootstrap CSS and JS globally
 require('bootstrap/dist/css/bootstrap.css');
@@ -17,7 +17,7 @@ class Canvas extends React.Component {
     }
     componentDidMount() {
         // With the canvas now rendered, init WebGL by requiring it
-        const gl = require('./gl').gl;
+        const gl = require('./engine/gl').gl;
         if (!gl) {
             throw new Error('WebGL is unavailable');
         }

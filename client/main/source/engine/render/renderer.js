@@ -1,4 +1,4 @@
-import camera from './camera'
+import camera from '../camera/camera'
 import {gl} from '../gl'
 import {glMatrix, mat4} from 'gl-matrix'
 

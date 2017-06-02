@@ -1,4 +1,4 @@
-import camera from '../render/camera'
+import camera from '../camera/camera'
 import {isPointerLocked} from './mouse-handler'
 
 // Maps key codes to boolean values indicating if key is pressed

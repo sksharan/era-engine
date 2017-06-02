@@ -1,16 +1,16 @@
 // glMatrix
 import {mat4, vec3} from 'gl-matrix'
 // Event handling
-import * as MouseHandler from './input/mouse-handler'
-import * as KeyboardHandler from './input/keyboard-handler'
+import * as MouseHandler from './engine/input/mouse-handler'
+import * as KeyboardHandler from './engine/input/keyboard-handler'
 // Material creation
-import Material from './render/material'
-import ProgramBuilder from './gl/program-builder'
+import Material from './engine/render/material'
+import ProgramBuilder from './engine/shader/program-builder'
 // Scene graph setup
 import TileService from './service/tile-service'
-import SceneNode from './render/scene-node'
+import SceneNode from './engine/render/scene-node'
 // Rendering
-import Renderer from './render/renderer'
+import Renderer from './engine/render/renderer'
 
 export function begin(MainComponent) {
     // Setup mouse and keyboard handlers

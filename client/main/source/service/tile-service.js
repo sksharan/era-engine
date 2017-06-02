@@ -1,7 +1,7 @@
 /* A 'tile' is a 3D hexagon that can be placed onto a hexagonal
    grid with other tiles to form a 'region'. */
 
-import Mesh from '../render/mesh'
+import Mesh from '../engine/render/mesh'
 import {glMatrix, mat4, vec3} from 'gl-matrix'
 
 export default {

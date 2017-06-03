@@ -1,14 +1,13 @@
 import React from 'react'
-import {connect} from 'react-redux'
 import ImmutablePropTypes from 'react-immutable-proptypes'
 import FontAwesome from 'react-fontawesome'
 import Light from './light'
-import LightForm from './light-form'
+import LightFormContainer from './light-form-container'
 import css from './light-list.scss'
 
 const idBase = 'lights_view_light-list';
 
-class LightList extends React.Component {
+export default class LightList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -28,7 +27,7 @@ class LightList extends React.Component {
                 </div>
                 <div id={`${idBase}-collapse`} className="collapse">
                     <ul className="list-group list-group-flush">
-                        <LightForm />
+                        <LightFormContainer />
                         {this.props.lights.map((val) => <Light key={val.getId()} light={val} />)}
                     </ul>
                 </div>
@@ -44,11 +43,3 @@ class LightList extends React.Component {
 LightList.propTypes = {
     lights: ImmutablePropTypes.list.isRequired
 };
-
-const mapStateToProps = (state) => {
-    return {
-        lights: state.lights
-    }
-};
-
-export default connect(mapStateToProps)(LightList);

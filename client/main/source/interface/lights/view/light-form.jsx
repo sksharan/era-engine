@@ -1,11 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {connect} from 'react-redux'
 import FontAwesome from 'react-fontawesome'
-import {createLight} from '../actions'
 import css from './light-form.scss'
 
-class LightForm extends React.Component {
+export default class LightForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -39,13 +37,3 @@ class LightForm extends React.Component {
 LightForm.propTypes = {
     createLight: PropTypes.func.isRequired
 }
-
-const mapDispatchToProps = (dispatch) => {
-    return {
-        createLight: (name) => {
-            dispatch(createLight(name, 'POINT'));
-        }
-    }
-};
-
-export default connect(null, mapDispatchToProps)(LightForm);

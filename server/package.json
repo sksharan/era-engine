@@ -7,20 +7,24 @@
   "private": true,
   "main": "./main/app.js",
   "scripts": {
-    "start": "node ./main/app.js",
-    "dev": "nodemon ./main/app.js",
-    "test": "node ./integration-test/test-app.js ./integration-test/router/"
+    "start": "nodemon ./main/app.js --exec babel-node --presets es2015,stage-2",
+    "test": "cross-env NODE_ENV=test mocha --require babel-register main/**/**.test.js",
+    "lint": "eslint main/**"
   },
   "dependencies": {
-    "async": "^2.1.4",
     "express": "^4.14.0",
-    "mongoose": "^4.7.8",
-    "request": "^2.79.0"
+    "mongoose": "^4.7.8"
   },
   "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1",
     "chai": "^3.5.0",
+    "cross-env": "^5.0.1",
+    "eslint": "^3.19.0",
+    "eslint-plugin-import": "^2.3.0",
     "mocha": "^3.2.0",
     "nodemon": "^1.11.0",
-    "proxyquire": "^1.7.11"
+    "supertest": "^3.0.0"
   }
 }

@@ -1,6 +1,8 @@
+const isTest = process.env.NODE_ENV === 'test';
+
 module.exports = {
-    port: 8080,
+    port: isTest ? 3001 : 3000,
     database: {
-        url: 'mongodb://localhost/app'
+        url: isTest ? 'mongodb://localhost/test' : 'mongodb://localhost/app'
     }
 };

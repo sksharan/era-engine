@@ -1,6 +1,7 @@
-const express = require('express');
+import express from 'express';
+import Region from '../model/region';
+
 const router = express.Router();
-const Region = require('../model/region');
 
 router.get('/', (req, res) => {
     Region.find((err, regions) => {

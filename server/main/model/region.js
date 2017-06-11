@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
-const regionSchema = require('./schema/region-schema');
+import mongoose from 'mongoose';
+import regionSchema from './schema/region-schema';
 
 module.exports = mongoose.model('Region', regionSchema);

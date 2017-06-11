@@ -1,0 +1,28 @@
+{
+    "extends": [
+        "eslint:recommended",
+        "plugin:import/errors",
+        "plugin:import/warnings"
+    ],
+    "parserOptions": {
+        "ecmaVersion": 6,
+        "sourceType": "module"
+    },
+    "env": {
+        "node": true,
+        "es6": true,
+        "mocha": true
+    },
+    "rules": {
+        "no-console": 0,
+        "import/default": 0,
+        "import/no-extraneous-dependencies": [
+            "error",
+            {
+                "devDependencies": ["main/**/**.test.js"],
+                "optionalDependencies": ["main/**/**.test.js"],
+                "peerDependencies": ["main/**/**.test.js"]
+            }
+        ]
+    }
+}

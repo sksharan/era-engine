@@ -1,6 +1,8 @@
 import express from 'express';
 import mongoose from 'mongoose';
+import graphQLHTTP from 'express-graphql';
 import config from './config';
+import schema from './schema/index'
 
 const app = express();
 
@@ -17,11 +19,14 @@ db.on('error', (err) => {
 db.once('open', () => {
     console.log('Connected to database ' + config.database.url);
 
-    app.use('/regions', require('./router/region-router'));
+    app.use('/graphql', graphQLHTTP({
+        schema,
+        graphiql: true
+    }));
 
     app.listen(config.port, () => {
         console.log('Started server on port ' + config.port);
     });
 });
 
-module.exports = app;
+export default app;

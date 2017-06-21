@@ -33,5 +33,5 @@ export default mongoose.Schema({
         b: Number,
         a: Number
     },
-    attenuation: Number
+    intensity: Number
 });

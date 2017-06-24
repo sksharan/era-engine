@@ -1,55 +1,69 @@
 export default class Light {
-    constructor(id, name, type, worldPosition, ambient, diffuse, specular) {
-        this.id = id;
-        this.name = name;
-        this.type = type;
-        this.worldPosition = worldPosition;
-        this.ambient = ambient;
-        this.diffuse = diffuse;
-        this.specular = specular;
+    constructor({id, name, type, position, direction, ambient, diffuse, specular, intensity}) {
+        this._id = id;
+        this._name = name;
+        this._type = type;
+        this._position = position;
+        this._direction = direction;
+        this._ambient = ambient;
+        this._diffuse = diffuse;
+        this._specular = specular;
+        this._intensity = intensity;
     }
 
-    getId() {
-        return this.id;
+    get id() {
+        return this._id;
     }
-    getName() {
-        return this.name;
+    get name() {
+        return this._name;
     }
-    getType() {
-        return this.type;
+    get type() {
+        return this._type;
     }
-    getWorldPosition() {
-        return this.worldPosition;
+    get position() {
+        return this._position;
     }
-    getAmbient() {
-        return this.ambient;
+    get direction() {
+        return this._direction;
     }
-    getDiffuse() {
-        return this.diffuse;
+    get ambient() {
+        return this._ambient;
     }
-    getSpecular() {
-        return this.specular;
+    get diffuse() {
+        return this._diffuse;
+    }
+    get specular() {
+        return this._specular;
+    }
+    get intensity() {
+        return this._intensity;
     }
 
-    setId(id) {
-        this.id = id;
+    set id(id) {
+        this._id = id;
     }
-    setName(name) {
-        this.name = name;
+    set name(name) {
+        this._name = name;
     }
-    setType(type) {
-        this.type = type;
+    set type(type) {
+        this._type = type;
     }
-    setWorldPosition(worldPosition) {
-        this.worldPosition = worldPosition;
+    set position(position) {
+        this._position = position;
     }
-    setAmbient(ambient) {
-        this.ambient = ambient;
+    set direction(direction) {
+        this._direction = direction;
     }
-    setDiffuse(diffuse) {
-        this.diffuse = diffuse;
+    set ambient(ambient) {
+        this._ambient = ambient;
     }
-    setSpecular(specular) {
-        this.specular = specular;
+    set diffuse(diffuse) {
+        this._diffuse = diffuse;
+    }
+    set specular(specular) {
+        this._specular = specular;
+    }
+    set intensity(intensity) {
+        this._intensity = intensity;
     }
 }

@@ -1,6 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {Provider} from 'react-redux'
+import {createNetworkInterface} from 'apollo-client'
+import {ApolloClient, ApolloProvider, addTypename} from 'react-apollo'
+import {graphqlEndpoint} from './config'
 import FPS from './interface/fps/fps'
 import {view as Lights} from './interface/lights/index'
 import store from './interface/store'
@@ -82,8 +84,13 @@ class Main extends React.Component {
     }
 }
 
+const client = new ApolloClient({
+    networkInterface: createNetworkInterface({uri: graphqlEndpoint}),
+    queryTransformer: addTypename
+});
+
 ReactDOM.render(
-    <Provider store={store}>
+    <ApolloProvider store={store} client={client}>
         <Main/>
-    </Provider>,
+    </ApolloProvider>,
     document.getElementById('main'));

@@ -3,7 +3,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {CustomPicker, SketchPicker} from 'react-color'
-import css from './small-color-picker.scss'
+import css from './styles/small-color-picker.scss'
 
 class SmallColorPicker extends React.Component {
     constructor(props) {
@@ -11,9 +11,9 @@ class SmallColorPicker extends React.Component {
         this.state = {
             displayColorPicker: false,
             color: {
-                r: props.color.r,
-                g: props.color.g,
-                b: props.color.b,
+                r: (props.color.r * 255.0).toFixed(0),
+                g: (props.color.g * 255.0).toFixed(0),
+                b: (props.color.b * 255.0).toFixed(0),
                 a: props.color.a
             }
         };

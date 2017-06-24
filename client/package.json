@@ -12,12 +12,14 @@
     "test": "karma start karma.config.js"
   },
   "dependencies": {
+    "apollo-client": "^1.4.2",
     "bootstrap": "^4.0.0-alpha.6",
     "gl-matrix": "^2.3.2",
     "immutable": "^3.8.1",
     "jquery": "^3.2.1",
     "prop-types": "^15.5.10",
     "react": "^15.5.4",
+    "react-apollo": "^1.4.2",
     "react-color": "^2.12.0",
     "react-dom": "^15.5.4",
     "react-fontawesome": "^1.6.1",

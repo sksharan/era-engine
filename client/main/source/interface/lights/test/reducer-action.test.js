@@ -17,9 +17,9 @@ describe('reducer', () => {
         assert.equal(nextState.size, 1);
 
         const light = nextState.get(0);
-        assert.isTrue(light.getId() > 0);
-        assert.equal(light.getName(), 'Name');
-        assert.equal(light.getType(), 'POINT');
+        assert.isTrue(light.id > 0);
+        assert.equal(light.name, 'Name');
+        assert.equal(light.type, 'POINT');
     });
 
     it('should not modify the current state with the CREATE_LIGHT action', () => {

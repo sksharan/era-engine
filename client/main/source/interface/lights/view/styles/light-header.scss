@@ -1,0 +1,13 @@
+:local(.header) {
+    background-color: #e4e4e4 !important;
+    padding: 0.1rem 0.25rem !important;
+    font-size: 0.7rem !important;
+}
+
+:local(.item) {
+    flex-basis: 100%;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
+}

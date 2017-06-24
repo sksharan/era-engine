@@ -1,17 +1,15 @@
 // See https://casesandberg.github.io/react-color/#examples
 
 :local(.color) {
-    width: 36px;
-    height: 14px;
+    width: 24px;
+    height: 12px;
     border-radius: 2px;
-    // Specify 'background' in component
 }
 
 :local(.swatch) {
-    padding: 0px;  // Modified from 5px
-    background: #fff;
-    border-radius: 1px;
-    box-shadow: 0 0 0 1px rgba(0,0,0,.1);
+    padding: 1px;
+    background: #b7b7b7;
+    border-radius: 2px;
     display: inline-block;
     cursor: pointer;
 }

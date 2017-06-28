@@ -5,15 +5,15 @@ import {loadTextureAsync} from '../gl-utils'
 
 export default class Material {
     constructor(programData, imageSrc) {
-        this.programData = programData;
-        this.texture = loadTextureAsync(imageSrc);
+        this._programData = programData;
+        this._texture = loadTextureAsync(imageSrc);
     }
 
-    getProgramData() {
-        return this.programData;
+    get programData() {
+        return this._programData;
     }
 
-    getTexture() {
-        return this.texture;
+    get texture() {
+        return this._texture;
     }
 }

@@ -14,63 +14,61 @@ function updateWorldMatrix(node, parentWorldMatrix) {
 export default class SceneNode {
     constructor(localMatrix = mat4.create(), mesh, material) {
         /* Children of this node. */
-        this.children = [];
+        this._children = [];
 
         /* Transformation that defines the position/scale/etc. of this node in
            relation to its parent. */
-        this.localMatrix = localMatrix;
+        this._localMatrix = localMatrix;
 
         /* The model matrix for this node; places the object represented by
            this node into the world. */
-        this.worldMatrix = mat4.create();
+        this._worldMatrix = mat4.create();
 
         /* The normal matrix for this node; the inverse-transverse of the world matrix. */
-        this.normalMatrix = mat3.create();
+        this._normalMatrix = mat3.create();
 
         /* (Optional) The mesh to render. */
-        this.mesh = mesh;
+        this._mesh = mesh;
 
         /* (Optional) The material to associate with the mesh. */
-        this.material = material;
+        this._material = material;
     }
 
-    getChildren() {
-        return this.children;
+    get children() {
+        return this._children;
     }
 
-    getLocalMatrix() {
-        return this.localMatrix;
+    get localMatrix() {
+        return this._localMatrix;
     }
 
-    getWorldMatrix() {
-        return this.worldMatrix;
+    get worldMatrix() {
+        return this._worldMatrix;
     }
 
-    getNormalMatrix() {
-        return this.normalMatrix;
+    get normalMatrix() {
+        return this._normalMatrix;
     }
 
     hasMesh() {
-        return this.mesh !== undefined && this.mesh !== null;
+        return this._mesh !== undefined && this._mesh !== null;
     }
-
-    getMesh() {
-        return this.mesh;
+    get mesh() {
+        return this._mesh;
     }
 
     hasMaterial() {
-        return this.material !== undefined && this.material !== null;
+        return this._material !== undefined && this._material !== null;
     }
-
-    getMaterial() {
-        return this.material;
+    get material() {
+        return this._material;
     }
 
     addChild(child) {
         if (child === this) {
             throw new Error("A scene node cannot add itself as a child");
         }
-        this.children.push(child);
-        updateWorldMatrix(child, this.worldMatrix);
+        this._children.push(child);
+        updateWorldMatrix(child, this._worldMatrix);
     }
 }

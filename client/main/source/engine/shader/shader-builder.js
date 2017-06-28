@@ -1,59 +1,59 @@
 export default class ShaderBuilder {
     constructor() {
-        this.precision = '';
-        this.attributes = [];
-        this.uniforms = [];
-        this.varyings = [];
-        this.variables = [];
-        this.main = [];
+        this._precision = '';
+        this._attributes = [];
+        this._uniforms = [];
+        this._varyings = [];
+        this._variables = [];
+        this._main = [];
     }
 
     setPrecisionLine(precisionLine) {
-        this.precision = precisionLine;
+        this._precision = precisionLine;
         return this;
     }
     addAttributeLine(attributeLine) {
-        this.attributes.push(attributeLine);
+        this._attributes.push(attributeLine);
         return this;
     }
     addUniformLine(uniformLine) {
-        this.uniforms.push(uniformLine);
+        this._uniforms.push(uniformLine);
         return this;
     }
     addVaryingLine(varyingLine) {
-        this.varyings.push(varyingLine);
+        this._varyings.push(varyingLine);
         return this;
     }
     addVariableLine(variableLine) {
-        this.variables.push(variableLine);
+        this._variables.push(variableLine);
         return this;
     }
     addMainFunctionLine(mainFunctionLine) {
-        this.main.push(mainFunctionLine);
+        this._main.push(mainFunctionLine);
         return this;
     }
 
     build() {
         let shaderString = '';
 
-        shaderString += this.precision + '\n';
+        shaderString += this._precision + '\n';
 
-        for (let i = 0; i < this.attributes.length; i++) {
-            shaderString += this.attributes[i] + '\n';
+        for (let i = 0; i < this._attributes.length; i++) {
+            shaderString += this._attributes[i] + '\n';
         }
-        for (let i = 0; i < this.uniforms.length; i++) {
-            shaderString += this.uniforms[i] + '\n';
+        for (let i = 0; i < this._uniforms.length; i++) {
+            shaderString += this._uniforms[i] + '\n';
         }
-        for (let i = 0; i < this.varyings.length; i++) {
-            shaderString += this.varyings[i] + '\n';
+        for (let i = 0; i < this._varyings.length; i++) {
+            shaderString += this._varyings[i] + '\n';
         }
-        for (let i = 0; i < this.variables.length; i++) {
-            shaderString += this.variables[i] + '\n';
+        for (let i = 0; i < this._variables.length; i++) {
+            shaderString += this._variables[i] + '\n';
         }
 
         shaderString += 'void main() {\n'
-        for (let i = 0; i < this.main.length; i++) {
-            shaderString += '\t' + this.main[i] + '\n';
+        for (let i = 0; i < this._main.length; i++) {
+            shaderString += '\t' + this._main[i] + '\n';
         }
         shaderString += '}\n';
 

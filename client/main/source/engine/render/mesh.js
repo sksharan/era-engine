@@ -5,77 +5,77 @@ import {gl} from '../gl'
 
 export default class Mesh {
     constructor(vertices, floatsPerVertex, normals, floatsPerNormal, texcoords, floatsPerTexcoord, indices) {
-        this.vertices = vertices;
-        this.floatsPerVertex = floatsPerVertex;
-        this.normals = normals;
-        this.floatsPerNormal = floatsPerNormal;
-        this.texcoords = texcoords;
-        this.floatsPerTexcoord = floatsPerTexcoord;
-        this.indices = indices;
+        this._vertices = vertices;
+        this._floatsPerVertex = floatsPerVertex;
+        this._normals = normals;
+        this._floatsPerNormal = floatsPerNormal;
+        this._texcoords = texcoords;
+        this._floatsPerTexcoord = floatsPerTexcoord;
+        this._indices = indices;
 
-        this.positionBuffer = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.positionBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.vertices), gl.STATIC_DRAW);
+        this._positionBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, this._positionBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this._vertices), gl.STATIC_DRAW);
 
-        this.normalBuffer = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.normalBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.normals), gl.STATIC_DRAW);
+        this._normalBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, this._normalBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this._normals), gl.STATIC_DRAW);
 
-        this.texcoordBuffer = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.texcoordBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.texcoords), gl.STATIC_DRAW);
+        this._texcoordBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, this._texcoordBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this._texcoords), gl.STATIC_DRAW);
 
-        this.indexBuffer = gl.createBuffer();
-        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer);
-        gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.indices), gl.STATIC_DRAW);
+        this._indexBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this._indexBuffer);
+        gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this._indices), gl.STATIC_DRAW);
     }
 
     getVertices() {
-        return this.vertices;
+        return this._vertices;
     }
     getVertex(index) {
-        return this.vertices[index];
+        return this._vertices[index];
     }
     getFloatsPerVertex() {
-        return this.floatsPerVertex;
+        return this._floatsPerVertex;
     }
     getPositionBuffer() {
-        return this.positionBuffer;
+        return this._positionBuffer;
     }
 
     getNormals() {
-        return this.normals;
+        return this._normals;
     }
     getNormal(index) {
-        return this.normals[index];
+        return this._normals[index];
     }
     getFloatsPerNormal() {
-        return this.floatsPerNormal;
+        return this._floatsPerNormal;
     }
     getNormalBuffer() {
-        return this.normalBuffer;
+        return this._normalBuffer;
     }
 
     getTexcoords() {
-        return this.texcoords;
+        return this._texcoords;
     }
     getTexcoord(index) {
-        return this.texcoords[index];
+        return this._texcoords[index];
     }
     getFloatsPerTexcoord() {
-        return this.floatsPerTexcoord;
+        return this._floatsPerTexcoord;
     }
     getTexcoordBuffer() {
-        return this.texcoordBuffer;
+        return this._texcoordBuffer;
     }
 
     getIndices() {
-        return this.indices;
+        return this._indices;
     }
     getIndex(index) {
-        return this.indices[index];
+        return this._indices[index];
     }
     getIndexBuffer() {
-        return this.indexBuffer;
+        return this._indexBuffer;
     }
 }

@@ -30,8 +30,8 @@ export function begin(MainComponent) {
     // Build a scene graph from test tile data
     const hexRadius = 10;
     const root = new SceneNode();
-    for (let i = 0; i < 10; i++) {
-        for (let j = 0; j < 10; j++) {
+    for (let i = 0; i < 50; i++) {
+        for (let j = 0; j < 50; j++) {
             const tile = { loc: { x: i, y: i+j+1, z: j } };
             const renderData = TileService.getRenderData(tile, hexRadius);
             const child = new SceneNode(renderData.localMatrix, renderData.mesh, defaultMaterial);

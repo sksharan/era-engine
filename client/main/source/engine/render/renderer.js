@@ -30,53 +30,53 @@ function resizeCanvas() {
 
 function renderNode(sceneNode) {
     if (sceneNode.hasMesh() && sceneNode.hasMaterial()) {
-        const mesh = sceneNode.getMesh();
-        const material = sceneNode.getMaterial();
+        const mesh = sceneNode.mesh;
+        const material = sceneNode.material;
 
-        if (material.getProgramData().getProgram() !== this.lastProgram) {
-            gl.useProgram(material.getProgramData().getProgram());
-            this.lastProgram = material.getProgramData().getProgram();
+        if (material.programData.program !== this._lastProgram) {
+            gl.useProgram(material.programData.program);
+            this.lastProgram = material.programData.program;
         }
 
-        if (material.getProgramData().hasPositionAttributeLocation()) {
-            gl.enableVertexAttribArray(material.getProgramData().getPositionAttributeLocation());
+        if (material.programData.hasPositionAttributeLocation()) {
+            gl.enableVertexAttribArray(material.programData.positionAttributeLocation);
             gl.bindBuffer(gl.ARRAY_BUFFER, mesh.getPositionBuffer());
-            gl.vertexAttribPointer(material.getProgramData().getPositionAttributeLocation(), mesh.getFloatsPerVertex(),
+            gl.vertexAttribPointer(material.programData.positionAttributeLocation, mesh.getFloatsPerVertex(),
                 gl.FLOAT, false, 0, 0);
         }
-        if (material.getProgramData().hasNormalAttributeLocation()) {
-            gl.enableVertexAttribArray(material.getProgramData().getNormalAttributeLocation());
+        if (material.programData.hasNormalAttributeLocation()) {
+            gl.enableVertexAttribArray(material.programData.normalAttributeLocation);
             gl.bindBuffer(gl.ARRAY_BUFFER, mesh.getNormalBuffer());
-            gl.vertexAttribPointer(material.getProgramData().getNormalAttributeLocation(), mesh.getFloatsPerNormal(),
+            gl.vertexAttribPointer(material.programData.normalAttributeLocation, mesh.getFloatsPerNormal(),
                 gl.FLOAT, false, 0, 0);
         }
-        if (material.getProgramData().hasTexcoordAttributeLocation()) {
-            gl.enableVertexAttribArray(material.getProgramData().getTexcoordAttributeLocation());
+        if (material.programData.hasTexcoordAttributeLocation()) {
+            gl.enableVertexAttribArray(material.programData.texcoordAttributeLocation);
             gl.bindBuffer(gl.ARRAY_BUFFER, mesh.getTexcoordBuffer());
-            gl.vertexAttribPointer(material.getProgramData().getTexcoordAttributeLocation(), mesh.getFloatsPerTexcoord(),
+            gl.vertexAttribPointer(material.programData.texcoordAttributeLocation, mesh.getFloatsPerTexcoord(),
                 gl.FLOAT, false, 0, 0);
         }
 
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, mesh.getIndexBuffer());
 
-        if (material.getProgramData().hasModelMatrixUniformLocation()) {
-            gl.uniformMatrix4fv(material.getProgramData().getModelMatrixUniformLocation(), gl.FALSE, sceneNode.getWorldMatrix());
+        if (material.programData.hasModelMatrixUniformLocation()) {
+            gl.uniformMatrix4fv(material.programData.modelMatrixUniformLocation, gl.FALSE, sceneNode.worldMatrix);
         }
-        if (material.getProgramData().hasViewMatrixUniformLocation()) {
-            gl.uniformMatrix4fv(material.getProgramData().getViewMatrixUniformLocation(), gl.FALSE, camera.getViewMatrix());
+        if (material.programData.hasViewMatrixUniformLocation()) {
+            gl.uniformMatrix4fv(material.programData.viewMatrixUniformLocation, gl.FALSE, camera.getViewMatrix());
         }
-        if (material.getProgramData().hasProjectionMatrixUniformLocation()) {
-            gl.uniformMatrix4fv(material.getProgramData().getProjectionMatrixUniformLocation(), gl.FALSE,
+        if (material.programData.hasProjectionMatrixUniformLocation()) {
+            gl.uniformMatrix4fv(material.programData.projectionMatrixUniformLocation, gl.FALSE,
                     mat4.perspective(mat4.create(), glMatrix.toRadian(45.0), gl.drawingBufferWidth / gl.drawingBufferHeight, 0.1, 2500.0));
         }
-        if (material.getProgramData().hasNormalMatrixUniformLocation()) {
-            gl.uniformMatrix3fv(material.getProgramData().getNormalMatrixUniformLocation(), gl.FALSE, sceneNode.getNormalMatrix());
+        if (material.programData.hasNormalMatrixUniformLocation()) {
+            gl.uniformMatrix3fv(material.programData.normalMatrixUniformLocation, gl.FALSE, sceneNode.normalMatrix);
         }
-        if (material.getProgramData().hasCameraPositionUniformLocation()) {
-            gl.uniform3fv(material.getProgramData().getCameraPositionUniformLocation(), camera.getPosition());
+        if (material.programData.hasCameraPositionUniformLocation()) {
+            gl.uniform3fv(material.programData.cameraPositionUniformLocation, camera.getPosition());
         }
 
-        gl.bindTexture(gl.TEXTURE_2D, material.getTexture());
+        gl.bindTexture(gl.TEXTURE_2D, material.texture);
 
         gl.drawElements(gl.TRIANGLES, mesh.getIndices().length, gl.UNSIGNED_SHORT, 0);
     }
@@ -87,7 +87,7 @@ function renderNode(sceneNode) {
 class Renderer {
     constructor() {
         // The last program used to render a node
-        this.lastProgram = null;
+        this._lastProgram = null;
     }
 
     render(sceneNode) {

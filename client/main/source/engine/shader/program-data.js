@@ -4,103 +4,103 @@ function isValidLocation(location) {
 
 export default class ProgramData {
     constructor() {
-        this.program = null;
+        this._program = null;
 
-        this.positionAttributeLocation = null;
-        this.normalAttributeLocation = null;
-        this.texcoordAttributeLocation = null;
+        this._positionAttributeLocation = null;
+        this._normalAttributeLocation = null;
+        this._texcoordAttributeLocation = null;
 
-        this.modelMatrixUniformLocation = null;
-        this.viewMatrixUniformLocation = null;
-        this.projectionMatrixUniformLocation = null;
-        this.normalMatrixUniformLocation = null;
-        this.cameraPositionUniformLocation = null;
+        this._modelMatrixUniformLocation = null;
+        this._viewMatrixUniformLocation = null;
+        this._projectionMatrixUniformLocation = null;
+        this._normalMatrixUniformLocation = null;
+        this._cameraPositionUniformLocation = null;
     }
 
-    getProgram() {
-        return this.program;
+    get program() {
+        return this._program;
     }
-    setProgram(program) {
-        this.program = program;
+    set program(program) {
+        this._program = program;
     }
 
     hasPositionAttributeLocation() {
-        return isValidLocation(this.positionAttributeLocation);
+        return isValidLocation(this._positionAttributeLocation);
     }
-    getPositionAttributeLocation() {
-        return this.positionAttributeLocation;
+    get positionAttributeLocation() {
+        return this._positionAttributeLocation;
     }
-    setPositionAttributeLocation(location) {
-        this.positionAttributeLocation = location;
+    set positionAttributeLocation(location) {
+        this._positionAttributeLocation = location;
     }
 
     hasNormalAttributeLocation() {
-        return isValidLocation(this.normalAttributeLocation);
+        return isValidLocation(this._normalAttributeLocation);
     }
-    getNormalAttributeLocation() {
-        return this.normalAttributeLocation;
+    get normalAttributeLocation() {
+        return this._normalAttributeLocation;
     }
-    setNormalAttributeLocation(location) {
-        this.normalAttributeLocation = location;
+    set normalAttributeLocation(location) {
+        this._normalAttributeLocation = location;
     }
 
     hasTexcoordAttributeLocation() {
-        return isValidLocation(this.texcoordAttributeLocation);
+        return isValidLocation(this._texcoordAttributeLocation);
     }
-    getTexcoordAttributeLocation() {
-        return this.texcoordAttributeLocation;
+    get texcoordAttributeLocation() {
+        return this._texcoordAttributeLocation;
     }
-    setTexcoordAttributeLocation(location) {
-        this.texcoordAttributeLocation = location;
+    set texcoordAttributeLocation(location) {
+        this._texcoordAttributeLocation = location;
     }
 
     hasModelMatrixUniformLocation() {
-        return isValidLocation(this.modelMatrixUniformLocation);
+        return isValidLocation(this._modelMatrixUniformLocation);
     }
-    getModelMatrixUniformLocation() {
-        return this.modelMatrixUniformLocation;
+    get modelMatrixUniformLocation() {
+        return this._modelMatrixUniformLocation;
     }
-    setModelMatrixUniformLocation(location) {
-        this.modelMatrixUniformLocation = location;
+    set modelMatrixUniformLocation(location) {
+        this._modelMatrixUniformLocation = location;
     }
 
     hasViewMatrixUniformLocation() {
-        return isValidLocation(this.viewMatrixUniformLocation);
+        return isValidLocation(this._viewMatrixUniformLocation);
     }
-    getViewMatrixUniformLocation() {
-        return this.viewMatrixUniformLocation;
+    get viewMatrixUniformLocation() {
+        return this._viewMatrixUniformLocation;
     }
-    setViewMatrixUniformLocation(location) {
-        this.viewMatrixUniformLocation = location;
+    set viewMatrixUniformLocation(location) {
+        this._viewMatrixUniformLocation = location;
     }
 
     hasProjectionMatrixUniformLocation() {
-        return isValidLocation(this.projectionMatrixUniformLocation);
+        return isValidLocation(this._projectionMatrixUniformLocation);
     }
-    getProjectionMatrixUniformLocation() {
-        return this.projectionMatrixUniformLocation;
+    get projectionMatrixUniformLocation() {
+        return this._projectionMatrixUniformLocation;
     }
-    setProjectionMatrixUniformLocation(location) {
-        this.projectionMatrixUniformLocation = location;
+    set projectionMatrixUniformLocation(location) {
+        this._projectionMatrixUniformLocation = location;
     }
 
     hasNormalMatrixUniformLocation() {
-        return isValidLocation(this.normalMatrixUniformLocation);
+        return isValidLocation(this._normalMatrixUniformLocation);
     }
-    getNormalMatrixUniformLocation() {
-        return this.normalMatrixUniformLocation;
+    get normalMatrixUniformLocation() {
+        return this._normalMatrixUniformLocation;
     }
-    setNormalMatrixUniformLocation(location) {
-        this.normalMatrixUniformLocation = location;
+    set normalMatrixUniformLocation(location) {
+        this._normalMatrixUniformLocation = location;
     }
 
     hasCameraPositionUniformLocation() {
-        return isValidLocation(this.cameraPositionUniformLocation);
+        return isValidLocation(this._cameraPositionUniformLocation);
     }
-    getCameraPositionUniformLocation() {
-        return this.cameraPositionUniformLocation;
+    get cameraPositionUniformLocation() {
+        return this._cameraPositionUniformLocation;
     }
-    setCameraPositionUniformLocation(location) {
-        this.cameraPositionUniformLocation = location;
+    set cameraPositionUniformLocation(location) {
+        this._cameraPositionUniformLocation = location;
     }
 }

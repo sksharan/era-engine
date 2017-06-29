@@ -5,8 +5,7 @@ import {assert} from 'chai'
 describe("Scene node", function() {
 
     describe("creation", function() {
-        /* This would the case for the root node of the scene graph which has
-         * no associated geometry to render. */
+
         it("should work with zero constructor arguments", function() {
             const node = new SceneNode();
             assert.isArray(node.children);
@@ -14,8 +13,6 @@ describe("Scene node", function() {
             assert.isTrue(mat4.equals(node.localMatrix, mat4.create()));
             assert.isTrue(mat4.equals(node.worldMatrix, mat4.create()));
             assert.isTrue(mat3.equals(node.normalMatrix, mat3.create()));
-            assert.isUndefined(node.mesh);
-            assert.isUndefined(node.material);
         });
 
         it("should accept a custom local matrix", function() {
@@ -24,21 +21,6 @@ describe("Scene node", function() {
             assert.isTrue(mat4.equals(node.localMatrix, localMatrix));
         });
 
-        it("should accept a Mesh object", function() {
-            const mesh = { /* Mesh properties here */ };
-            const node = new SceneNode(mat4.create(), mesh);
-            assert.isObject(node.mesh);
-            assert.strictEqual(node.mesh, mesh);
-            assert.isUndefined(node.material);
-        });
-
-        it("should accept a Material object", function() {
-            const material = { /* Material properties here */ };
-            const node = new SceneNode(mat4.create(), undefined, material);
-            assert.isObject(node.material);
-            assert.strictEqual(node.material, material);
-            assert.isUndefined(node.mesh);
-        });
     });
 
     describe("adding child nodes", function() {

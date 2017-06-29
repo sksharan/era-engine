@@ -29,7 +29,7 @@ function resizeCanvas() {
 }
 
 function renderNode(sceneNode) {
-    if (sceneNode.hasMesh() && sceneNode.hasMaterial()) {
+    if (sceneNode.nodeType === "GEOMETRY") {
         const mesh = sceneNode.mesh;
         const material = sceneNode.material;
 

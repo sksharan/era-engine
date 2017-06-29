@@ -8,7 +8,8 @@ import Material from './engine/render/material'
 import ProgramBuilder from './engine/shader/program-builder'
 // Scene graph setup
 import TileService from './service/tile-service'
-import SceneNode from './engine/render/scene-node'
+import SceneNode from './engine/render/node/scene-node'
+import GeometryNode from './engine/render/node/geometry-node'
 // Rendering
 import Renderer from './engine/render/renderer'
 
@@ -34,14 +35,14 @@ export function begin(MainComponent) {
         for (let j = 0; j < 50; j++) {
             const tile = { loc: { x: i, y: i+j+1, z: j } };
             const renderData = TileService.getRenderData(tile, hexRadius);
-            const child = new SceneNode(renderData.localMatrix, renderData.mesh, defaultMaterial);
+            const child = new GeometryNode(renderData.localMatrix, {mesh: renderData.mesh, material: defaultMaterial});
             root.addChild(child);
 
             if (i < 2 && j < 2) {
-                child.addChild(new SceneNode(mat4.fromTranslation(mat4.create(), vec3.fromValues(0, 10, 0)),
-                    renderData.mesh, defaultMaterial));
-                child.addChild(new SceneNode(mat4.fromTranslation(mat4.create(), vec3.fromValues(0, -10, 0)),
-                    renderData.mesh, defaultMaterial));
+                child.addChild(new GeometryNode(mat4.fromTranslation(mat4.create(), vec3.fromValues(0, 10, 0)),
+                    {mesh: renderData.mesh, material: defaultMaterial}));
+                child.addChild(new GeometryNode(mat4.fromTranslation(mat4.create(), vec3.fromValues(0, -10, 0)),
+                    {mesh: renderData.mesh, material: defaultMaterial}));
             }
         }
     }

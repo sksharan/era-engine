@@ -11,7 +11,6 @@ export default class LightHeader extends React.Component {
                     <div className={`${css.item}`}><strong>Ambient</strong></div>
                     <div className={`${css.item}`}><strong>Diffuse</strong></div>
                     <div className={`${css.item}`}><strong>Specular</strong></div>
-                    <div className={`${css.item}`}><strong>Intensity</strong></div>
                     <div className={`${css.item}`}><strong>Action</strong></div>
                 </div>
             </li>

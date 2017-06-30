@@ -38,7 +38,13 @@ export const InputLightType = new GraphQLInputObjectType({
         specular: {
             type: new GraphQLNonNull(InputColorType)
         },
-        intensity: {
+        quadraticAttenuation: {
+            type: new GraphQLNonNull(GraphQLFloat)
+        },
+        linearAttenuation: {
+            type: new GraphQLNonNull(GraphQLFloat)
+        },
+        constantAttenuation: {
             type: new GraphQLNonNull(GraphQLFloat)
         }
     })
@@ -81,9 +87,17 @@ export const OutputLightType = new GraphQLObjectType({
             type: OutputColorType,
             resolve: (light) => light.specular
         },
-        intensity: {
+        quadraticAttenuation: {
             type: GraphQLFloat,
-            resolve: (light) => light.intensity
+            resolve: (light) => light.quadraticAttenuation
+        },
+        linearAttenuation: {
+            type: GraphQLFloat,
+            resolve: (light) => light.linearAttenuation
+        },
+        constantAttenuation: {
+            type: GraphQLFloat,
+            resolve: (light) => light.constantAttenuation
         }
     })
 });

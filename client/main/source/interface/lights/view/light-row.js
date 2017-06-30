@@ -14,14 +14,12 @@ class LightRow extends React.Component {
             name: this.props.light.name,
             ambient: this.props.light.ambient,
             diffuse: this.props.light.diffuse,
-            specular: this.props.light.specular,
-            intensity: this.props.light.intensity
+            specular: this.props.light.specular
         }
         this.handleNameChange = this.handleNameChange.bind(this);
         this.handleAmbientChangeComplete = this.handleAmbientChangeComplete.bind(this);
         this.handleDiffuseChangeComplete = this.handleDiffuseChangeComplete.bind(this);
         this.handleSpecularChangeComplete = this.handleSpecularChangeComplete.bind(this);
-        this.handleIntensityChange = this.handleIntensityChange.bind(this);
         this.updateLight = this.updateLight.bind(this);
         this.deleteLight = this.deleteLight.bind(this);
     }
@@ -43,10 +41,6 @@ class LightRow extends React.Component {
         return {r: color.r/255.0, g: color.g/255.0, b: color.b/255.0, a: color.a};
     }
 
-    handleIntensityChange(event) {
-        this.setState({intensity: event.target.value}, () => this.updateLight());
-    }
-
     updateLight() {
         this.props.saveLight({
             id: this.props.light.id,
@@ -57,7 +51,9 @@ class LightRow extends React.Component {
             ambient: this.getObjectForUpdate(this.state.ambient),
             diffuse: this.getObjectForUpdate(this.state.diffuse),
             specular: this.getObjectForUpdate(this.state.specular),
-            intensity: this.state.intensity
+            quadraticAttenuation: this.props.light.quadraticAttenuation,
+            linearAttenuation: this.props.light.linearAttenuation,
+            constantAttenuation: this.props.light.constantAttenuation
         });
     }
     getObjectForUpdate(obj) {
@@ -92,10 +88,6 @@ class LightRow extends React.Component {
                     <div className={`${css.item}`}>
                         <SmallColorPicker color={this.props.light.specular}
                                 onChangeComplete={this.handleSpecularChangeComplete} />
-                    </div>
-                    <div className={`${css.item}`}>
-                        <input className="form-control form-control-sm" type="number"
-                                value={this.state.intensity} onChange={this.handleIntensityChange}  />
                     </div>
                     <div className={`${css.item}`}>
                         <button type='button' className={`btn btn-danger btn-sm ${css.deleteLightButton}`} onClick={() => this.deleteLight()}>

@@ -7,5 +7,7 @@ export default `
     ambient { r g b a }
     diffuse { r g b a }
     specular { r g b a }
-    intensity
+    quadraticAttenuation
+    linearAttenuation
+    constantAttenuation
 `;

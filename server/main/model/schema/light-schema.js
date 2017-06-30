@@ -33,6 +33,7 @@ export default mongoose.Schema({
         b: Number,
         a: Number
     },
+    specularTerm: Number,
     quadraticAttenuation: Number,
     linearAttenuation: Number,
     constantAttenuation: Number

@@ -52,6 +52,7 @@ const saveLightMutation = gql`
             ambient: {r: 0.87, g: 0.87, b: 0.87, a: 1},
             diffuse: {r: 0.95, g: 0.95, b: 0.6, a: 1},
             specular: {r: 1, g: 1, b: 1, a: 1},
+            specularTerm: 100,
             quadraticAttenuation: 1,
             linearAttenuation: 1,
             constantAttenuation: 1}) {

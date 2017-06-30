@@ -51,6 +51,7 @@ class LightRow extends React.Component {
             ambient: this.getObjectForUpdate(this.state.ambient),
             diffuse: this.getObjectForUpdate(this.state.diffuse),
             specular: this.getObjectForUpdate(this.state.specular),
+            specularTerm: this.props.light.specularTerm,
             quadraticAttenuation: this.props.light.quadraticAttenuation,
             linearAttenuation: this.props.light.linearAttenuation,
             constantAttenuation: this.props.light.constantAttenuation

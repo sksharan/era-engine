@@ -15,6 +15,7 @@ const light = {
     ambient: {r: 1, g: 0, b: 0, a: 0.25},
     diffuse: {r: 0, g: 1, b: 0, a: 0.50},
     specular: {r: 0, g: 0, b: 1, a: 0.75},
+    specularTerm: 100,
     quadraticAttenuation: 1,
     linearAttenuation: 2,
     constantAttenuation: 3
@@ -41,6 +42,7 @@ async function saveLight(light, id=null) {
                     ambient { r g b a }
                     diffuse { r g b a }
                     specular { r g b a }
+                    specularTerm
                     quadraticAttenuation
                     linearAttenuation
                     constantAttenuation
@@ -113,6 +115,7 @@ describe('Delete light mutation', () => {
                         ambient { r g b a }
                         diffuse { r g b a }
                         specular { r g b a }
+                        specularTerm
                         quadraticAttenuation
                         linearAttenuation
                         constantAttenuation

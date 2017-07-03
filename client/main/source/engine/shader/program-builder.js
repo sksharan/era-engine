@@ -99,7 +99,7 @@ export default class ProgramBuilder {
         this._fragBuilder.addFunction(
             `
             vec4 addPointLight(vec3 lightPositionWorld,
-                    vec3 lightAmbient, vec3 lightDiffuse, vec3 lightSpecular, float specularTerm,
+                    vec4 lightAmbient, vec4 lightDiffuse, vec4 lightSpecular, float specularTerm,
                     float constantAttenuation, float linearAttenuation, float quadraticAttenuation) {
 
                 vec4 fragColor = vec4(0, 0, 0, 0);
@@ -110,7 +110,7 @@ export default class ProgramBuilder {
                         linearAttenuation * distance + quadraticAttenuation * distance * distance);
 
                 // Apply ambient lighting
-                vec4 ambient = vec4(lightAmbient, 1.0) * vec4(materialAmbient, 1.0);
+                vec4 ambient = lightAmbient * vec4(materialAmbient, 1.0);
                 fragColor += ambient;
 
                 // Set up vectors for diffuse and specular calculations
@@ -119,11 +119,11 @@ export default class ProgramBuilder {
                 vec3 viewerDirection = normalize(cameraPosition - vec3(vPositionWorld));
 
                 // Apply diffuse lighting
-                vec4 diffuse = vec4(lightDiffuse, 1.0) * vec4(materialDiffuse, 1.0) * max(0.0, dot(vNormalWorld, lightDirection));
+                vec4 diffuse = lightDiffuse * vec4(materialDiffuse, 1.0) * max(0.0, dot(vNormalWorld, lightDirection));
                 fragColor += (attenuation * diffuse);
 
                 // Apply specular lighting
-                vec4 specular = vec4(lightSpecular, 1.0) * vec4(materialSpecular, 1.0) * pow(max(0.0, dot(viewerDirection, lightReflect)), specularTerm);
+                vec4 specular = lightSpecular * vec4(materialSpecular, 1.0) * pow(max(0.0, dot(viewerDirection, lightReflect)), specularTerm);
                 fragColor += (attenuation * specular);
 
                 return fragColor;
@@ -151,9 +151,9 @@ export default class ProgramBuilder {
         this._fragBuilder.addUniformLines(
             `
             uniform vec3 ${varPrefix}PositionWorld;
-            uniform vec3 ${varPrefix}Ambient;
-            uniform vec3 ${varPrefix}Diffuse;
-            uniform vec3 ${varPrefix}Specular;
+            uniform vec4 ${varPrefix}Ambient;
+            uniform vec4 ${varPrefix}Diffuse;
+            uniform vec4 ${varPrefix}Specular;
             uniform float ${varPrefix}SpecularTerm;
             uniform float ${varPrefix}ConstantAttenuation;
             uniform float ${varPrefix}LinearAttenuation;

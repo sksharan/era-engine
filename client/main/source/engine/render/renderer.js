@@ -128,16 +128,14 @@ function updateLightUniforms(program, lightNodes) {
         gl.uniform3fv(gl.getUniformLocation(program, `point${light.id}PositionWorld`),
                 mat4.getTranslation(vec3.create(), lightNode.worldMatrix));
 
-        // TODO need vec4 for ambient, diffuse, specular
+        gl.uniform4fv(gl.getUniformLocation(program, `point${light.id}Ambient`),
+            [light.ambient.r, light.ambient.g, light.ambient.b, light.ambient.a]);
 
-        gl.uniform3fv(gl.getUniformLocation(program, `point${light.id}Ambient`),
-            [light.ambient.r, light.ambient.g, light.ambient.b]);
+        gl.uniform4fv(gl.getUniformLocation(program, `point${light.id}Diffuse`),
+            [light.diffuse.r, light.diffuse.g, light.diffuse.b, light.diffuse.a]);
 
-        gl.uniform3fv(gl.getUniformLocation(program, `point${light.id}Diffuse`),
-            [light.diffuse.r, light.diffuse.g, light.diffuse.b]);
-
-        gl.uniform3fv(gl.getUniformLocation(program, `point${light.id}Specular`),
-            [light.specular.r, light.specular.g, light.specular.b]);
+        gl.uniform4fv(gl.getUniformLocation(program, `point${light.id}Specular`),
+            [light.specular.r, light.specular.g, light.specular.b, light.specular.a]);
 
         gl.uniform1f(gl.getUniformLocation(program, `point${light.id}SpecularTerm`), light.specularTerm);
         gl.uniform1f(gl.getUniformLocation(program, `point${light.id}ConstantAttenuation`), light.constantAttenuation);

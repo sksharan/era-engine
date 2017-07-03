@@ -17,6 +17,21 @@ export default class ProgramData {
         this._cameraPositionUniformLocation = null;
     }
 
+    // Copy data from the given 'programData' into this program data object
+    update(programData) {
+        this._program = programData._program;
+
+        this._positionAttributeLocation = programData._positionAttributeLocation;
+        this._normalAttributeLocation = programData._normalAttributeLocation;
+        this._texcoordAttributeLocation = programData._texcoordAttributeLocation;
+
+        this._modelMatrixUniformLocation = programData._modelMatrixUniformLocation;
+        this._viewMatrixUniformLocation = programData._viewMatrixUniformLocation;
+        this._projectionMatrixUniformLocation = programData._projectionMatrixUniformLocation;
+        this._normalMatrixUniformLocation = programData._normalMatrixUniformLocation;
+        this._cameraPositionUniformLocation = programData._cameraPositionUniformLocation;
+    }
+
     get program() {
         return this._program;
     }

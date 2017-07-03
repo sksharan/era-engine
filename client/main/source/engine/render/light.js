@@ -1,27 +1,24 @@
 export default class Light {
-    constructor({id, name, type, position, direction, ambient, diffuse, specular, intensity}) {
+    constructor({id, type, direction, ambient, diffuse, specular, specularTerm,
+        quadraticAttenuation, linearAttenuation, constantAttenuation}) {
+
         this._id = id;
-        this._name = name;
         this._type = type;
-        this._position = position;
         this._direction = direction;
         this._ambient = ambient;
         this._diffuse = diffuse;
         this._specular = specular;
-        this._intensity = intensity;
+        this._specularTerm = specularTerm;
+        this._quadraticAttenuation = quadraticAttenuation;
+        this._linearAttenuation = linearAttenuation;
+        this._constantAttenuation = constantAttenuation;
     }
 
     get id() {
         return this._id;
     }
-    get name() {
-        return this._name;
-    }
     get type() {
         return this._type;
-    }
-    get position() {
-        return this._position;
     }
     get direction() {
         return this._direction;
@@ -35,21 +32,24 @@ export default class Light {
     get specular() {
         return this._specular;
     }
-    get intensity() {
-        return this._intensity;
+    get specularTerm() {
+        return this._specularTerm;
+    }
+    get quadraticAttenuation() {
+        return this._quadraticAttenuation;
+    }
+    get linearAttenuation() {
+        return this._linearAttenuation;
+    }
+    get constantAttenuation() {
+        return this._constantAttenuation;
     }
 
     set id(id) {
         this._id = id;
     }
-    set name(name) {
-        this._name = name;
-    }
     set type(type) {
         this._type = type;
-    }
-    set position(position) {
-        this._position = position;
     }
     set direction(direction) {
         this._direction = direction;
@@ -63,7 +63,16 @@ export default class Light {
     set specular(specular) {
         this._specular = specular;
     }
-    set intensity(intensity) {
-        this._intensity = intensity;
+    set specularTerm(specularTerm) {
+        this._specularTerm = specularTerm;
+    }
+    set quadraticAttenuation(quadraticAttenuation) {
+        return this._quadraticAttenuation = quadraticAttenuation;
+    }
+    set linearAttenuation(linearAttenuation) {
+        return this._linearAttenuation = linearAttenuation;
+    }
+    set constantAttenuation(constantAttenuation) {
+        return this._constantAttenuation = constantAttenuation;
     }
 }

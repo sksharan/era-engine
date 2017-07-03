@@ -1,6 +1,7 @@
 import camera from '../camera/camera'
+import ProgramBuilder from '../shader/program-builder'
 import {gl} from '../gl'
-import {glMatrix, mat4} from 'gl-matrix'
+import {glMatrix, mat4, vec3} from 'gl-matrix'
 
 function initRender() {
     resizeCanvas();
@@ -29,15 +30,37 @@ function resizeCanvas() {
 }
 
 function renderNode(sceneNode) {
+    let lightNodes = [];
+    // http://math.hws.edu/graphicsbook/c4/s4.html - see "Moving Light"
+    getLightNodes(sceneNode, lightNodes);
+    renderGeometry.call(this, sceneNode, lightNodes);
+}
+
+// Get the light nodes that are influencing the scene
+function getLightNodes(sceneNode, lightNodes=[]) {
+    if (sceneNode.nodeType === "LIGHT") {
+        lightNodes.push(sceneNode);
+    }
+    for (let child of sceneNode.children) {
+        getLightNodes(child, lightNodes);
+    }
+}
+
+// Render the meshes, taking into account all active light nodes
+function renderGeometry(sceneNode, lightNodes) {
     if (sceneNode.nodeType === "GEOMETRY") {
         const mesh = sceneNode.mesh;
         const material = sceneNode.material;
 
-        if (material.programData.program !== this._lastProgram) {
+        // For performance, no need to attach a new program if it's the same program used the render the previous node
+        if (material.programData !== this._lastProgramData) {
+            updateProgramData(material.programData, lightNodes);
             gl.useProgram(material.programData.program);
-            this.lastProgram = material.programData.program;
+            updateLightUniforms(material.programData.program, lightNodes);
+            this._lastProgramData = material.programData;
         }
 
+        // Attribute binding
         if (material.programData.hasPositionAttributeLocation()) {
             gl.enableVertexAttribArray(material.programData.positionAttributeLocation);
             gl.bindBuffer(gl.ARRAY_BUFFER, mesh.getPositionBuffer());
@@ -56,9 +79,9 @@ function renderNode(sceneNode) {
             gl.vertexAttribPointer(material.programData.texcoordAttributeLocation, mesh.getFloatsPerTexcoord(),
                 gl.FLOAT, false, 0, 0);
         }
-
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, mesh.getIndexBuffer());
 
+        // Uniform binding
         if (material.programData.hasModelMatrixUniformLocation()) {
             gl.uniformMatrix4fv(material.programData.modelMatrixUniformLocation, gl.FALSE, sceneNode.worldMatrix);
         }
@@ -76,18 +99,56 @@ function renderNode(sceneNode) {
             gl.uniform3fv(material.programData.cameraPositionUniformLocation, camera.getPosition());
         }
 
+        // Texture binding
         gl.bindTexture(gl.TEXTURE_2D, material.texture);
 
+        // Finally, render the node
         gl.drawElements(gl.TRIANGLES, mesh.getIndices().length, gl.UNSIGNED_SHORT, 0);
     }
 
-    sceneNode.children.forEach(renderNode, this);
+    for (let child of sceneNode.children) {
+        renderGeometry.call(this, child, lightNodes);
+    }
+}
+
+function updateProgramData(programData, lightNodes) {
+    let builder = new ProgramBuilder()
+        .addPosition()
+        .addNormal()
+        .enableLighting();
+    for (let lightNode of lightNodes) {
+        builder = builder.addPointLight(lightNode.light.id);
+    }
+    programData.update(builder.build());
+}
+
+function updateLightUniforms(program, lightNodes) {
+    for (let lightNode of lightNodes) {
+        const light = lightNode.light;
+        gl.uniform3fv(gl.getUniformLocation(program, `point${light.id}PositionWorld`),
+                mat4.getTranslation(vec3.create(), lightNode.worldMatrix));
+
+        // TODO need vec4 for ambient, diffuse, specular
+
+        gl.uniform3fv(gl.getUniformLocation(program, `point${light.id}Ambient`),
+            [light.ambient.r, light.ambient.g, light.ambient.b]);
+
+        gl.uniform3fv(gl.getUniformLocation(program, `point${light.id}Diffuse`),
+            [light.diffuse.r, light.diffuse.g, light.diffuse.b]);
+
+        gl.uniform3fv(gl.getUniformLocation(program, `point${light.id}Specular`),
+            [light.specular.r, light.specular.g, light.specular.b]);
+
+        gl.uniform1f(gl.getUniformLocation(program, `point${light.id}SpecularTerm`), light.specularTerm);
+        gl.uniform1f(gl.getUniformLocation(program, `point${light.id}ConstantAttenuation`), light.constantAttenuation);
+        gl.uniform1f(gl.getUniformLocation(program, `point${light.id}LinearAttenuation`), light.linearAttenuation);
+        gl.uniform1f(gl.getUniformLocation(program, `point${light.id}QuadraticAttenuation`), light.quadraticAttenuation);
+    }
 }
 
 class Renderer {
     constructor() {
-        // The last program used to render a node
-        this._lastProgram = null;
+        this._lastProgramData = null;
     }
 
     render(sceneNode) {

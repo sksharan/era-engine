@@ -43,86 +43,133 @@ export default class ProgramBuilder {
         this._vertBuilder = new ShaderBuilder();
         this._fragBuilder = new ShaderBuilder();
 
-        this._vertBuilder.addMainFunctionLine('gl_Position = vec4(0, 0, 0, 1);');
+        this._vertBuilder.addMainFunctionLines('gl_Position = vec4(0, 0, 0, 1);');
 
-        this._fragBuilder.addMainFunctionLine('vec4 fragColor = vec4(0, 0, 0, 0);');
+        this._fragBuilder.addMainFunctionLines('vec4 fragColor = vec4(0, 0, 0, 0);');
     }
 
     addPosition() {
-        this._vertBuilder.addAttributeLine('attribute vec3 position;')
-                        .addUniformLine('uniform mat4 modelMatrix;')
-                        .addUniformLine('uniform mat4 viewMatrix;')
-                        .addUniformLine('uniform mat4 projectionMatrix;')
-                        .addVaryingLine('varying vec4 vPositionWorld;')
-                        .addMainFunctionLine('vPositionWorld = modelMatrix * vec4(position, 1.0);')
-                        .addMainFunctionLine('gl_Position = projectionMatrix * viewMatrix * vPositionWorld;');
+        this._vertBuilder.addAttributeLines('attribute vec3 position;')
+                         .addUniformLines('uniform mat4 modelMatrix;')
+                         .addUniformLines('uniform mat4 viewMatrix;')
+                         .addUniformLines('uniform mat4 projectionMatrix;')
+                         .addVaryingLines('varying vec4 vPositionWorld;')
+                         .addMainFunctionLines('vPositionWorld = modelMatrix * vec4(position, 1.0);')
+                         .addMainFunctionLines('gl_Position = projectionMatrix * viewMatrix * vPositionWorld;');
 
-        this._fragBuilder.addVaryingLine('varying vec4 vPositionWorld;');
+        this._fragBuilder.addVaryingLines('varying vec4 vPositionWorld;');
 
         return this;
     }
 
     // Requires addPosition() to be called first
     addNormal() {
-        this._vertBuilder.addAttributeLine('attribute vec3 normal;')
-                        .addUniformLine('uniform mat3 normalMatrix;')
-                        .addVaryingLine('varying vec3 vNormalWorld;')
-                        .addMainFunctionLine('vNormalWorld = normalMatrix * normal;');
+        this._vertBuilder.addAttributeLines('attribute vec3 normal;')
+                         .addUniformLines('uniform mat3 normalMatrix;')
+                         .addVaryingLines('varying vec3 vNormalWorld;')
+                         .addMainFunctionLines('vNormalWorld = normalMatrix * normal;');
 
-        this._fragBuilder.addVaryingLine('varying vec3 vNormalWorld;');
+        this._fragBuilder.addVaryingLines('varying vec3 vNormalWorld;');
 
         return this;
     }
 
     // Requires addPosition() to be called first
     addTexcoord() {
-        this._vertBuilder.addAttributeLine('attribute vec2 texcoord;')
-                        .addVaryingLine('varying vec2 vTexcoord;')
-                        .addMainFunctionLine('vTexcoord = texcoord;');
+        this._vertBuilder.addAttributeLines('attribute vec2 texcoord;')
+                         .addVaryingLines('varying vec2 vTexcoord;')
+                         .addMainFunctionLines('vTexcoord = texcoord;');
 
-        this._fragBuilder.addUniformLine('uniform sampler2D texture;')
-                        .addVaryingLine('varying vec2 vTexcoord;')
-                        .addMainFunctionLine('fragColor += texture2D(texture, vTexcoord);');
+        this._fragBuilder.addUniformLines('uniform sampler2D texture;')
+                         .addVaryingLines('varying vec2 vTexcoord;')
+                         .addMainFunctionLines('fragColor += texture2D(texture, vTexcoord);');
 
         return this;
     }
 
     // Requires addPosition() and addNormal() to be called first
-    addPhongLighting() {
-        this._fragBuilder.addUniformLine('uniform vec3 cameraPosition;');
-        this._fragBuilder.addVariableLine(
-            `vec3 lightPositionWorld = vec3(60, 20, 60);
-            vec3 lightAmbient = vec3(0.1, 0.1, 0.1);
-            vec3 lightDiffuse = vec3(0.8, 0.8, 0.8);
-            vec3 lightSpecular = vec3(0.8, 0.6, 0.6);
-            float specularTerm = 100.0;
-            vec3 materialAmbient = vec3(0.1, 0.1, 0.1);
-            vec3 materialDiffuse = vec3(0.5, 0.5, 0.5);
-            vec3 materialSpecular = vec3(0.8, 0.8, 0.8);`);
-        this._fragBuilder.addMainFunctionLine(
+    enableLighting() {
+        this._fragBuilder.addUniformLines('uniform vec3 cameraPosition;');
+        this._fragBuilder.addVariableLines(
             `
-            // Apply ambient lighting
-            fragColor += vec4(lightAmbient, 1.0) * vec4(materialAmbient, 1.0);
+            vec3 materialAmbient = vec3(0.5, 0.5, 0.5);
+            vec3 materialDiffuse = vec3(0.5, 0.5, 0.5);
+            vec3 materialSpecular = vec3(0.8, 0.8, 0.8);
+            `);
+        this._fragBuilder.addFunction(
+            `
+            vec4 addPointLight(vec3 lightPositionWorld,
+                    vec3 lightAmbient, vec3 lightDiffuse, vec3 lightSpecular, float specularTerm,
+                    float constantAttenuation, float linearAttenuation, float quadraticAttenuation) {
 
-            // Set up vectors for diffuse and specular calculations
-            vec3 lightDirection = normalize(lightPositionWorld - vec3(vPositionWorld));
-            vec3 lightReflect = reflect(-lightDirection, vNormalWorld);
-            vec3 viewerDirection = normalize(cameraPosition - vec3(vPositionWorld));
+                vec4 fragColor = vec4(0, 0, 0, 0);
 
-            // Apply diffuse lighting
-            fragColor += vec4(lightDiffuse, 1.0) * vec4(materialDiffuse, 1.0)
-                        * max(0.0, dot(vNormalWorld, lightDirection));
+                // Compute attenuation
+                float distance = length(lightPositionWorld - vec3(vPositionWorld));
+                float attenuation = 1.0 / (constantAttenuation +
+                        linearAttenuation * distance + quadraticAttenuation * distance * distance);
 
-            // Apply specular lighting
-            fragColor += vec4(lightSpecular, 1.0) * vec4(materialSpecular, 1.0)
-                        * pow(max(0.0, dot(viewerDirection, lightReflect)), specularTerm);`);
+                // Apply ambient lighting
+                vec4 ambient = vec4(lightAmbient, 1.0) * vec4(materialAmbient, 1.0);
+                fragColor += ambient;
 
-            return this;
+                // Set up vectors for diffuse and specular calculations
+                vec3 lightDirection = normalize(lightPositionWorld - vec3(vPositionWorld));
+                vec3 lightReflect = reflect(-lightDirection, vNormalWorld);
+                vec3 viewerDirection = normalize(cameraPosition - vec3(vPositionWorld));
+
+                // Apply diffuse lighting
+                vec4 diffuse = vec4(lightDiffuse, 1.0) * vec4(materialDiffuse, 1.0) * max(0.0, dot(vNormalWorld, lightDirection));
+                fragColor += (attenuation * diffuse);
+
+                // Apply specular lighting
+                vec4 specular = vec4(lightSpecular, 1.0) * vec4(materialSpecular, 1.0) * pow(max(0.0, dot(viewerDirection, lightReflect)), specularTerm);
+                fragColor += (attenuation * specular);
+
+                return fragColor;
+            }
+            `
+        );
+
+        return this;
+    }
+
+    /* Requires enableLighting() to be called first.
+       Generates the uniforms:
+           point${name}PositionWorld
+           point${name}Ambient
+           point${name}Diffuse
+           point${name}Specular
+           point${name}SpecularTerm
+           point${name}ConstantAttenuation
+           point${name}LinearAttenuation
+           point${name}QuadraticAttenuation
+    */
+    addPointLight(name) {
+        const varPrefix = `point${name}`;
+
+        this._fragBuilder.addUniformLines(
+            `
+            uniform vec3 ${varPrefix}PositionWorld;
+            uniform vec3 ${varPrefix}Ambient;
+            uniform vec3 ${varPrefix}Diffuse;
+            uniform vec3 ${varPrefix}Specular;
+            uniform float ${varPrefix}SpecularTerm;
+            uniform float ${varPrefix}ConstantAttenuation;
+            uniform float ${varPrefix}LinearAttenuation;
+            uniform float ${varPrefix}QuadraticAttenuation;
+            `);
+        this._fragBuilder.addMainFunctionLines(
+            `fragColor += addPointLight(${varPrefix}PositionWorld,
+                    ${varPrefix}Ambient, ${varPrefix}Diffuse, ${varPrefix}Specular, ${varPrefix}SpecularTerm,
+                    ${varPrefix}ConstantAttenuation, ${varPrefix}LinearAttenuation, ${varPrefix}QuadraticAttenuation);`);
+
+        return this;
     }
 
     build() {
         this._fragBuilder.setPrecisionLine('precision mediump float;');
-        this._fragBuilder.addMainFunctionLine('gl_FragColor = fragColor;');
+        this._fragBuilder.addMainFunctionLines('gl_FragColor = fragColor;');
 
         const program = createProgram(this._vertBuilder.build(), this._fragBuilder.build());
         this._programData.program = program;

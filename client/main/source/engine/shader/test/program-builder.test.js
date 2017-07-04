@@ -1,4 +1,5 @@
 import ProgramBuilderInjector from 'inject-loader!../program-builder'
+import {assert} from 'chai'
 
 // Setup WebGL
 document.body.insertAdjacentHTML('beforeend',
@@ -46,6 +47,22 @@ describe('Program builder build', function() {
                .addPointLight('light1')
                .addPointLight('light2')
                .build();
+    });
+
+    it('should build program data with billboard enabled if addBillboardPosition() is called', function() {
+        assert.isTrue(builder.addBillboardPosition().build().billboardEnabled);
+    });
+
+    it('should not build program data with billboard enabled if addBillboardPosition() is never called', function() {
+        assert.isFalse(builder.addBillboardPosition().build().billboardEnabled);
+    });
+
+    it('should build program data with light enabled if enableLighting() is called', function() {
+        assert.isTrue(builder.addPosition().addNormal().enableLighting().build().lightEnabled);
+    });
+
+    it('should not build program data with light enabled if enableLighting() is never called', function() {
+        assert.isFalse(builder.build().lightEnabled);
     });
 
 });

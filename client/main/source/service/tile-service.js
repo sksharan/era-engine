@@ -1,7 +1,7 @@
 /* A 'tile' is a 3D hexagon that can be placed onto a hexagonal
    grid with other tiles to form a 'region'. */
 
-import Mesh from '../engine/render/mesh'
+import Mesh from '../engine/render/mesh/mesh'
 import {glMatrix, mat4, vec3} from 'gl-matrix'
 
 export default {
@@ -135,7 +135,15 @@ export default {
         }
 
         return {
-            mesh: new Mesh(vertices, 3, normals, 3, texcoords, 2, indices),
+            mesh: new Mesh({
+                vertices,
+                floatsPerVertex: 3,
+                normals,
+                floatsPerNormal: 3,
+                texcoords,
+                floatsPerTexcoord: 2,
+                indices
+            }),
             localMatrix: mat4.fromTranslation(mat4.create(), localMatrix)
         }
     }

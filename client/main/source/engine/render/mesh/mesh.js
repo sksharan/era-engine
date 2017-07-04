@@ -1,10 +1,7 @@
-/* A Mesh is a collection of vertices, normals, texture coordinates, and indices
-   that form a renderable object. */
-
-import {gl} from '../gl'
+import {gl} from '../../gl'
 
 export default class Mesh {
-    constructor(vertices, floatsPerVertex, normals, floatsPerNormal, texcoords, floatsPerTexcoord, indices) {
+    constructor({vertices, floatsPerVertex, normals, floatsPerNormal, texcoords, floatsPerTexcoord, indices}) {
         this._vertices = vertices;
         this._floatsPerVertex = floatsPerVertex;
         this._normals = normals;
@@ -25,9 +22,11 @@ export default class Mesh {
         gl.bindBuffer(gl.ARRAY_BUFFER, this._texcoordBuffer);
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this._texcoords), gl.STATIC_DRAW);
 
-        this._indexBuffer = gl.createBuffer();
-        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this._indexBuffer);
-        gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this._indices), gl.STATIC_DRAW);
+        if (indices) {
+            this._indexBuffer = gl.createBuffer();
+            gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this._indexBuffer);
+            gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this._indices), gl.STATIC_DRAW);
+        }
     }
 
     getVertices() {
@@ -69,6 +68,9 @@ export default class Mesh {
         return this._texcoordBuffer;
     }
 
+    hasIndices() {
+        return this._indices !== null && this._indices !== undefined;
+    }
     getIndices() {
         return this._indices;
     }

@@ -15,6 +15,11 @@ export default class ProgramData {
         this._projectionMatrixUniformLocation = null;
         this._normalMatrixUniformLocation = null;
         this._cameraPositionUniformLocation = null;
+        // Center position of a billboard
+        this._centerPositionUniformLocation = null;
+
+        this._lightEnabled = false;
+        this._billboardEnabled = false;
     }
 
     // Copy data from the given 'programData' into this program data object
@@ -30,6 +35,10 @@ export default class ProgramData {
         this._projectionMatrixUniformLocation = programData._projectionMatrixUniformLocation;
         this._normalMatrixUniformLocation = programData._normalMatrixUniformLocation;
         this._cameraPositionUniformLocation = programData._cameraPositionUniformLocation;
+        this._centerPositionUniformLocation = programData._centerPositionUniformLocation;
+
+        this._lightEnabled = programData._lightEnabled;
+        this._billboardEnabled = programData._billboardEnabled;
     }
 
     get program() {
@@ -117,5 +126,29 @@ export default class ProgramData {
     }
     set cameraPositionUniformLocation(location) {
         this._cameraPositionUniformLocation = location;
+    }
+
+    hasCenterPositionUniformLocation() {
+        return isValidLocation(this._centerPositionUniformLocation);
+    }
+    get centerPositionUniformLocation() {
+        return this._centerPositionUniformLocation;
+    }
+    set centerPositionUniformLocation(centerPositionUniformLocation) {
+        this._centerPositionUniformLocation = centerPositionUniformLocation;
+    }
+
+    get lightEnabled() {
+        return this._lightEnabled;
+    }
+    set lightEnabled(lightEnabled) {
+        this._lightEnabled = lightEnabled;
+    }
+
+    get billboardEnabled() {
+        return this._billboardEnabled;
+    }
+    set billboardEnabled(billboardEnabled) {
+        this._billboardEnabled = billboardEnabled;
     }
 }

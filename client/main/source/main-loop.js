@@ -13,6 +13,7 @@ import TileService from './service/tile-service'
 import SceneNode from './engine/render/node/scene-node'
 import GeometryNode from './engine/render/node/geometry-node'
 import LightNode from './engine/render/node/light-node'
+import FlatQuad from './engine/render/mesh/flat-quad'
 // Rendering
 import Renderer from './engine/render/renderer'
 
@@ -21,10 +22,13 @@ export function begin(MainComponent) {
     MouseHandler.init();
     KeyboardHandler.init();
 
-    // Setup default material
-    const programData = new ProgramBuilder().build();
     const debugImageSrc = 'textures/debug.png';
-    const defaultMaterial = new Material(programData, debugImageSrc);
+
+    const programData = new ProgramBuilder().addPosition().addNormal().enableLighting().build();
+    const defaultMaterial = new Material({programData: programData, imageSrc: debugImageSrc});
+
+    const lightIconProgramData = new ProgramBuilder().addBillboardPosition().addNormal().build();
+    const lightIconMaterial = new Material({programData: lightIconProgramData, imageSrc: debugImageSrc});
 
     // Build a scene graph from test tile data
     const hexRadius = 10;
@@ -53,6 +57,8 @@ export function begin(MainComponent) {
                 constantAttenuation: 1
             })
         );
+    lightNode1.addChild(new GeometryNode(mat4.create(), {mesh: new FlatQuad(), material: lightIconMaterial}));
+    lightNode2.addChild(new GeometryNode(mat4.create(), {mesh: new FlatQuad(), material: lightIconMaterial}));
     rootNode.addChild(lightNode1);
     rootNode.addChild(lightNode2);
     for (let i = 0; i < 50; i++) {

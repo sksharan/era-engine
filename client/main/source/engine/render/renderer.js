@@ -11,7 +11,7 @@ function initRender() {
     gl.depthFunc(gl.LESS);
 
     gl.frontFace(gl.CCW);
-    gl.enable(gl.CULL_FACE);
+    //gl.enable(gl.CULL_FACE);
     gl.cullFace(gl.BACK);
 
     gl.clearColor(0.85, 0.85, 0.85, 1);
@@ -54,9 +54,9 @@ function renderGeometry(sceneNode, lightNodes) {
 
         // For performance, no need to attach a new program if it's the same program used the render the previous node
         if (material.programData !== this._lastProgramData) {
-            updateProgramData(material.programData, lightNodes);
+            updateProgramDataLights(material.programData, lightNodes);
             gl.useProgram(material.programData.program);
-            updateLightUniforms(material.programData.program, lightNodes);
+            updateLightUniforms(material.programData, lightNodes);
             this._lastProgramData = material.programData;
         }
 
@@ -79,7 +79,10 @@ function renderGeometry(sceneNode, lightNodes) {
             gl.vertexAttribPointer(material.programData.texcoordAttributeLocation, mesh.getFloatsPerTexcoord(),
                 gl.FLOAT, false, 0, 0);
         }
-        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, mesh.getIndexBuffer());
+
+        if (mesh.hasIndices()) {
+            gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, mesh.getIndexBuffer());
+        }
 
         // Uniform binding
         if (material.programData.hasModelMatrixUniformLocation()) {
@@ -89,8 +92,12 @@ function renderGeometry(sceneNode, lightNodes) {
             gl.uniformMatrix4fv(material.programData.viewMatrixUniformLocation, gl.FALSE, camera.getViewMatrix());
         }
         if (material.programData.hasProjectionMatrixUniformLocation()) {
-            gl.uniformMatrix4fv(material.programData.projectionMatrixUniformLocation, gl.FALSE,
-                    mat4.perspective(mat4.create(), glMatrix.toRadian(45.0), gl.drawingBufferWidth / gl.drawingBufferHeight, 0.1, 2500.0));
+            const fovy = glMatrix.toRadian(45.0);
+            const aspectRatio = gl.drawingBufferWidth / gl.drawingBufferHeight;
+            const near = 0.1;
+            const far = 2500.0;
+            const projectionMatrix = mat4.perspective(mat4.create(), fovy, aspectRatio, near, far);
+            gl.uniformMatrix4fv(material.programData.projectionMatrixUniformLocation, gl.FALSE, projectionMatrix);
         }
         if (material.programData.hasNormalMatrixUniformLocation()) {
             gl.uniformMatrix3fv(material.programData.normalMatrixUniformLocation, gl.FALSE, sceneNode.normalMatrix);
@@ -98,12 +105,20 @@ function renderGeometry(sceneNode, lightNodes) {
         if (material.programData.hasCameraPositionUniformLocation()) {
             gl.uniform3fv(material.programData.cameraPositionUniformLocation, camera.getPosition());
         }
+        if (material.programData.hasCenterPositionUniformLocation()) {
+            gl.uniform3fv(material.programData.centerPositionUniformLocation,
+                vec3.transformMat4(vec3.create(), vec3.create(), sceneNode.worldMatrix));
+        }
 
         // Texture binding
         gl.bindTexture(gl.TEXTURE_2D, material.texture);
 
         // Finally, render the node
-        gl.drawElements(gl.TRIANGLES, mesh.getIndices().length, gl.UNSIGNED_SHORT, 0);
+        if (mesh.hasIndices()) {
+            gl.drawElements(gl.TRIANGLES, mesh.getIndices().length, gl.UNSIGNED_SHORT, 0);
+        } else {
+            gl.drawArrays(gl.TRIANGLES, 0, mesh.getVertices().length / 3);
+        }
     }
 
     for (let child of sceneNode.children) {
@@ -111,18 +126,31 @@ function renderGeometry(sceneNode, lightNodes) {
     }
 }
 
-function updateProgramData(programData, lightNodes) {
-    let builder = new ProgramBuilder()
-        .addPosition()
-        .addNormal()
-        .enableLighting();
+function updateProgramDataLights(programData, lightNodes) {
+    if (!programData.lightEnabled) {
+        return;
+    }
+
+    let builder = new ProgramBuilder();
+    if (programData.billboardEnabled) {
+        builder = builder.addBillboardPosition();
+    } else {
+        builder = builder.addPosition();
+    }
+    builder = builder.addNormal().enableLighting();
+
     for (let lightNode of lightNodes) {
         builder = builder.addPointLight(lightNode.light.id);
     }
     programData.update(builder.build());
 }
 
-function updateLightUniforms(program, lightNodes) {
+function updateLightUniforms(programData, lightNodes) {
+    if (!programData.lightEnabled) {
+        return;
+    }
+    const program = programData.program;
+
     for (let lightNode of lightNodes) {
         const light = lightNode.light;
         gl.uniform3fv(gl.getUniformLocation(program, `point${light.id}PositionWorld`),

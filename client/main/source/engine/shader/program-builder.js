@@ -42,6 +42,8 @@ export default class ProgramBuilder {
         this._programData = new ProgramData();
         this._vertBuilder = new ShaderBuilder();
         this._fragBuilder = new ShaderBuilder();
+        this._lightEnabled = false;
+        this._billboardEnabled = false;
 
         this._vertBuilder.addMainFunctionLines('gl_Position = vec4(0, 0, 0, 1);');
 
@@ -54,15 +56,38 @@ export default class ProgramBuilder {
                          .addUniformLines('uniform mat4 viewMatrix;')
                          .addUniformLines('uniform mat4 projectionMatrix;')
                          .addVaryingLines('varying vec4 vPositionWorld;')
-                         .addMainFunctionLines('vPositionWorld = modelMatrix * vec4(position, 1.0);')
-                         .addMainFunctionLines('gl_Position = projectionMatrix * viewMatrix * vPositionWorld;');
+                         .addMainFunctionLines(`
+                             vPositionWorld = modelMatrix * vec4(position, 1.0);
+                             gl_Position = projectionMatrix * viewMatrix * vPositionWorld;
+                         `);
 
         this._fragBuilder.addVaryingLines('varying vec4 vPositionWorld;');
 
         return this;
     }
 
-    // Requires addPosition() to be called first
+    addBillboardPosition() {
+        //http://www.opengl-tutorial.org/intermediate-tutorials/billboards-particles/billboards/
+        this._vertBuilder.addAttributeLines('attribute vec3 position;')
+                         .addUniformLines('uniform mat4 modelMatrix;')
+                         .addUniformLines('uniform mat4 viewMatrix;')
+                         .addUniformLines('uniform mat4 projectionMatrix;')
+                         .addUniformLines('uniform vec3 centerPosition;')
+                         .addVaryingLines('varying vec4 vPositionWorld;')
+                         .addMainFunctionLines(`
+                             vec3 cameraRightWorld = vec3(viewMatrix[0][0], viewMatrix[1][0], viewMatrix[2][0]);
+                             vec3 cameraUpWorld = vec3(viewMatrix[0][1], viewMatrix[1][1], viewMatrix[2][1]);
+                             vPositionWorld = vec4(centerPosition + cameraRightWorld * position.x + cameraUpWorld * position.y, 1.0);
+                             gl_Position = projectionMatrix * viewMatrix * vPositionWorld;
+                         `);
+
+        this._fragBuilder.addVaryingLines('varying vec4 vPositionWorld;');
+
+        this._billboardEnabled = true;
+        return this;
+    }
+
+    // Requires add*Position() to be called first
     addNormal() {
         this._vertBuilder.addAttributeLines('attribute vec3 normal;')
                          .addUniformLines('uniform mat3 normalMatrix;')
@@ -74,7 +99,7 @@ export default class ProgramBuilder {
         return this;
     }
 
-    // Requires addPosition() to be called first
+    // Requires add*Position() to be called first
     addTexcoord() {
         this._vertBuilder.addAttributeLines('attribute vec2 texcoord;')
                          .addVaryingLines('varying vec2 vTexcoord;')
@@ -87,7 +112,7 @@ export default class ProgramBuilder {
         return this;
     }
 
-    // Requires addPosition() and addNormal() to be called first
+    // Requires add*Position() and addNormal() to be called first
     enableLighting() {
         this._fragBuilder.addUniformLines('uniform vec3 cameraPosition;');
         this._fragBuilder.addVariableLines(
@@ -131,6 +156,7 @@ export default class ProgramBuilder {
             `
         );
 
+        this._lightEnabled = true;
         return this;
     }
 
@@ -183,6 +209,10 @@ export default class ProgramBuilder {
         this._programData.projectionMatrixUniformLocation = gl.getUniformLocation(program, 'projectionMatrix');
         this._programData.normalMatrixUniformLocation = gl.getUniformLocation(program, 'normalMatrix');
         this._programData.cameraPositionUniformLocation = gl.getUniformLocation(program, 'cameraPosition');
+        this._programData.centerPositionUniformLocation = gl.getUniformLocation(program, 'centerPosition');
+
+        this._programData.lightEnabled = this._lightEnabled;
+        this._programData.billboardEnabled = this._billboardEnabled;
 
         return this._programData;
     }

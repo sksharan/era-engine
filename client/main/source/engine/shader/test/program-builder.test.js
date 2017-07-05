@@ -54,7 +54,7 @@ describe('Program builder build', function() {
     });
 
     it('should not build program data with billboard enabled if addBillboardPosition() is never called', function() {
-        assert.isFalse(builder.addBillboardPosition().build().billboardEnabled);
+        assert.isFalse(builder.build().billboardEnabled);
     });
 
     it('should build program data with light enabled if enableLighting() is called', function() {

@@ -24,9 +24,11 @@ export default class FlatQuad extends Mesh {
             floatsPerNormal: 3,
 
             texcoords: [
+                1.0, 1.0,
                 0.0, 0.0,
-                0.0, 0.0,
-                0.0, 0.0,
+                1.0, 0.0,
+                1.0, 1.0,
+                0.0, 1.0,
                 0.0, 0.0,
             ],
             floatsPerTexcoord:2

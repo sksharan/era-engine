@@ -22,13 +22,11 @@ export function begin(MainComponent) {
     MouseHandler.init();
     KeyboardHandler.init();
 
-    const debugImageSrc = 'textures/debug.png';
-
     const programData = new ProgramBuilder().addPosition().addNormal().enableLighting().build();
-    const defaultMaterial = new Material({programData: programData, imageSrc: debugImageSrc});
+    const defaultMaterial = new Material({programData: programData, imageSrc: 'public/textures/debug.png'});
 
-    const lightIconProgramData = new ProgramBuilder().addBillboardPosition().addNormal().build();
-    const lightIconMaterial = new Material({programData: lightIconProgramData, imageSrc: debugImageSrc});
+    const lightIconProgramData = new ProgramBuilder().addBillboardPosition().addTexcoord().addNormal().build();
+    const lightIconMaterial = new Material({programData: lightIconProgramData, imageSrc: 'public/textures/light.png'});
 
     // Build a scene graph from test tile data
     const hexRadius = 10;

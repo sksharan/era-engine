@@ -11,7 +11,7 @@ function initRender() {
     gl.depthFunc(gl.LESS);
 
     gl.frontFace(gl.CCW);
-    //gl.enable(gl.CULL_FACE);
+    gl.enable(gl.CULL_FACE);
     gl.cullFace(gl.BACK);
 
     gl.clearColor(0.85, 0.85, 0.85, 1);

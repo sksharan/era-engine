@@ -107,7 +107,12 @@ export default class ProgramBuilder {
 
         this._fragBuilder.addUniformLines('uniform sampler2D texture;')
                          .addVaryingLines('varying vec2 vTexcoord;')
-                         .addMainFunctionLines('fragColor += texture2D(texture, vTexcoord);');
+                         .addMainFunctionLines(`
+                             fragColor += texture2D(texture, vTexcoord);
+                             if (fragColor.a < 0.8) {
+                                 discard;
+                             }
+                         `);
 
         return this;
     }

@@ -22,17 +22,23 @@ function handleMouseMovement(e) {
     camera.updateDirection(e.originalEvent.movementX, e.originalEvent.movementY);
 }
 
-/* Returns true if the pointer is currently locked. */
-export function isPointerLocked() {
+function isPointerLocked() {
     return document.pointerLockElement === gl.canvas || document.mozPointerLockElement === gl.canvas;
 }
 
-/* Clicking the canvas will lock the pointer (press ESC to show the pointer again).
- * Listeners are applied to check when the pointer is locked/unlocked. */
-export function init() {
-    gl.canvas.onclick = function() {
-        gl.canvas.requestPointerLock();
+export default {
+    /* Clicking the canvas will lock the pointer (press ESC to show the pointer again).
+     * Listeners are applied to check when the pointer is locked/unlocked. */
+    init() {
+        gl.canvas.onclick = function() {
+            gl.canvas.requestPointerLock();
+        }
+        $(document).on('pointerlockchange', handleLockChange);
+        $(document).on('mozpointerlockchange', handleLockChange);
+    },
+
+    /* Returns true if the pointer is currently locked. */
+    isPointerLocked() {
+        return isPointerLocked();
     }
-    $(document).on('pointerlockchange', handleLockChange);
-    $(document).on('mozpointerlockchange', handleLockChange);
 }

@@ -1,21 +1,18 @@
-// glMatrix
-import {mat4, vec3} from 'gl-matrix'
-// Event handling
-import * as MouseHandler from './engine/input/mouse-handler'
-import * as KeyboardHandler from './engine/input/keyboard-handler'
-// Material creation
-import Material from './engine/render/material'
-import ProgramBuilder from './engine/shader/program-builder'
-// Lighting
-import Light from './engine/render/light'
-// Scene graph setup
+import {
+    KeyboardHandler,
+    MouseHandler,
+    FlatQuad,
+    SceneNode,
+    GeometryNode,
+    LightNode,
+    Material,
+    Light,
+    Renderer,
+    ProgramBuilder
+} from './engine/index'
+
 import TileService from './service/tile-service'
-import SceneNode from './engine/render/node/scene-node'
-import GeometryNode from './engine/render/node/geometry-node'
-import LightNode from './engine/render/node/light-node'
-import FlatQuad from './engine/render/mesh/flat-quad'
-// Rendering
-import Renderer from './engine/render/renderer'
+import {mat4, vec3} from 'gl-matrix'
 
 export function begin(MainComponent) {
     // Setup mouse and keyboard handlers

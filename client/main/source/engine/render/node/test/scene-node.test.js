@@ -2,11 +2,11 @@ import SceneNode from '../scene-node'
 import {mat3, mat4, vec3} from 'gl-matrix'
 import {assert} from 'chai'
 
-describe("Scene node", function() {
+describe("Scene node", () => {
 
-    describe("creation", function() {
+    describe("creation", () => {
 
-        it("should work with zero constructor arguments", function() {
+        it("should work with zero constructor arguments", () => {
             const node = new SceneNode();
             assert.isArray(node.children);
             assert.equal(node.children.length, 0);
@@ -15,7 +15,7 @@ describe("Scene node", function() {
             assert.isTrue(mat3.equals(node.normalMatrix, mat3.create()));
         });
 
-        it("should accept a custom local matrix", function() {
+        it("should accept a custom local matrix", () => {
             const localMatrix = mat4.add(mat4.create(), mat4.create(), mat4.create());
             const node = new SceneNode(localMatrix);
             assert.isTrue(mat4.equals(node.localMatrix, localMatrix));
@@ -23,8 +23,8 @@ describe("Scene node", function() {
 
     });
 
-    describe("adding child nodes", function() {
-        it("should be successful if the nodes form a valid n-ary tree", function() {
+    describe("adding child nodes", () => {
+        it("should be successful if the nodes form a valid n-ary tree", () => {
             const node1 = new SceneNode();
             const node2 = new SceneNode();
             const node3 = new SceneNode();
@@ -40,12 +40,20 @@ describe("Scene node", function() {
             assert.sameMembers(node4.children, []);
         });
 
-        it("should not work if a node tries to add itself as a child", function() {
+        it("should fail if a node tries to add itself as a child", () => {
             const node = new SceneNode();
-            assert.throws(function() {node.addChild(node)});
+            assert.throws(() => node.addChild(node));
         });
 
-        it("should update the child world and normal matrices", function() {
+        it("should fail if the child already has a parent", () => {
+            const parent1 = new SceneNode();
+            const parent2 = new SceneNode();
+            const child = new SceneNode();
+            parent1.addChild(child);
+            assert.throws(() => parent2.addChild(child));
+        });
+
+        it("should update the child world and normal matrices", () => {
             const root = new SceneNode();
 
             const localMatrix1 = mat4.fromTranslation(mat4.create(), vec3.fromValues(0, 1, 0));
@@ -79,6 +87,49 @@ describe("Scene node", function() {
             assert.isTrue(mat4.exactEquals(node2.normalMatrix, mat3.normalFromMat4(mat3.create(), node2.worldMatrix)));
             assert.isTrue(mat4.exactEquals(node3.normalMatrix, mat3.normalFromMat4(mat3.create(), node3.worldMatrix)));
         })
+    });
+
+    describe('removing all children', () => {
+
+        it('should be successful', () => {
+            const parent = new SceneNode();
+            const child1 = new SceneNode();
+            const child2 = new SceneNode();
+
+            parent.addChild(child1);
+            parent.addChild(child2);
+            assert.equal(parent.children.length, 2);
+
+            parent.removeAllChildren();
+            assert.equal(parent.children.length, 0);
+
+            // Should be able to insert children
+            parent.addChild(child1);
+            parent.addChild(child2);
+            assert.equal(parent.children.length, 2);
+        });
+
+    });
+
+    describe('removing parent node', () => {
+
+        it('should be successful if node has a parent', () => {
+            const parent = new SceneNode();
+            const child = new SceneNode();
+
+            assert.equal(parent.children.length, 0);
+
+            parent.addChild(child);
+            assert.equal(parent.children.length, 1);
+
+            child.removeParent();
+            assert.equal(parent.children.length, 0);
+        });
+
+        it('should fail if the node does not have a parent', () => {
+            assert.throws(() => new SceneNode().removeParent());
+        })
+
     });
 
 });

@@ -4,7 +4,6 @@ import {createNetworkInterface} from 'apollo-client'
 import {ApolloClient, ApolloProvider, addTypename} from 'react-apollo'
 import {graphqlEndpoint} from './config'
 import FPS from './interface/fps/fps'
-import {view as Lights} from './interface/lights/index'
 import store from './interface/store'
 import css from './main.scss'
 
@@ -58,14 +57,18 @@ class Main extends React.Component {
                 </div>
                 <div className='row'>
                     <div className='col-md-8'>
-                        <Canvas/>
+                        <Canvas />
                     </div>
                     <div className='col-md-4'>
-                        {this.state.glInitialized ? <Lights/> : ""}
+                        {this.state.glInitialized ? this.getLightsView() : ""}
                     </div>
                 </div>
             </div>
         );
+    }
+    getLightsView() {
+        const Lights = require('./interface/lights/index').view;
+        return <Lights/>;
     }
     componentDidMount() {
         // At this point, canvas has been rendered so WebGL is initialized

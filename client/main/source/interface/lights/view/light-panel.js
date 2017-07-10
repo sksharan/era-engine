@@ -6,9 +6,14 @@ import {LightRowContainer as LightRow} from './light-row'
 import {LightFormContainer as LightForm} from './light-form'
 import LightHeader from './light-header'
 import FetchLightsQuery from '../query/fetch-lights'
+import {RootSceneNode, SceneNode} from '../../../engine/index'
 import css from './styles/light-panel.scss'
 
 const idBase = 'lights_view_light-list';
+
+// Parent scene node for all lights managed by the light panel
+const lightPanelNode = new SceneNode();
+RootSceneNode.addChild(lightPanelNode);
 
 class LightPanel extends React.Component {
     constructor(props) {
@@ -35,12 +40,16 @@ class LightPanel extends React.Component {
                         {
                             (this.props.data.loading)
                                 ? <div>Loading lights...</div>
-                                : this.props.data.light.map((val) => <LightRow key={val.id} light={val} />)
+                                : this.props.data.light.map((val) => <LightRow key={val.id} light={val} parentSceneNode={lightPanelNode} />)
                         }
                     </ul>
                 </div>
             </div>
         );
+    }
+
+    componentWillUpdate() {
+        //lightPanelNode.removeAllChildren();
     }
 
     toggleCollapse() {

@@ -5,17 +5,48 @@ import {gql, graphql, compose} from 'react-apollo'
 import FetchLightsQuery from '../query/fetch-lights'
 import LightSelect from '../query/light-select'
 import SmallColorPicker from '../../common/component/small-color-picker'
+import {
+    FlatQuad,
+    GeometryNode,
+    LightNode,
+    Material,
+    ProgramBuilder
+} from '../../../engine/index'
+import {mat4, vec3} from 'gl-matrix'
 import css from './styles/light-row.scss'
+
+const programData = new ProgramBuilder()
+        .addBillboardPosition()
+        .addTexcoord()
+        .addNormal()
+        .build();
+
+const material = new Material({
+    programData,
+    imageSrc: 'public/textures/light.png'
+});
+
+function getLightNode(light) {
+    const lightNode = new LightNode(
+        mat4.fromTranslation(
+            mat4.create(),
+            vec3.fromValues(light.position.x, light.position.y, light.position.z)),
+        light);
+
+    lightNode.addChild(new GeometryNode(mat4.create(), {mesh: new FlatQuad(), material}));
+    return lightNode;
+}
 
 class LightRow extends React.Component {
     constructor(props) {
         super(props);
+
         this.state = {
-            name: this.props.light.name,
-            ambient: this.props.light.ambient,
-            diffuse: this.props.light.diffuse,
-            specular: this.props.light.specular
+            light: this.props.light,
+            lightNode: getLightNode(this.props.light)
         }
+        this.props.parentSceneNode.addChild(this.state.lightNode);
+
         this.handleNameChange = this.handleNameChange.bind(this);
         this.handleAmbientChangeComplete = this.handleAmbientChangeComplete.bind(this);
         this.handleDiffuseChangeComplete = this.handleDiffuseChangeComplete.bind(this);
@@ -25,17 +56,37 @@ class LightRow extends React.Component {
     }
 
     handleNameChange(event) {
-        this.setState({name: event.target.value}, () => this.updateLight());
+        this.setState(
+            {
+                light: Object.assign({}, this.state.light, {name: event.target.value})
+            },
+            () => this.updateLight()
+        );
     }
 
     handleAmbientChangeComplete(event) {
-        this.setState({ambient: this.convertColor(event.rgb)}, () => this.updateLight());
+        this.setState(
+            {
+                light: Object.assign({}, this.state.light, {ambient: this.convertColor(event.rgb)})
+            },
+            () => this.updateLight()
+        );
     }
     handleDiffuseChangeComplete(event) {
-        this.setState({diffuse: this.convertColor(event.rgb)}, () => this.updateLight());
+        this.setState(
+            {
+                light: Object.assign({}, this.state.light, {diffuse: this.convertColor(event.rgb)})
+            },
+            () => this.updateLight()
+        );
     }
     handleSpecularChangeComplete(event) {
-        this.setState({specular: this.convertColor(event.rgb)}, () => this.updateLight());
+        this.setState(
+            {
+                light: Object.assign({}, this.state.light, {specular: this.convertColor(event.rgb)})
+            },
+            () => this.updateLight()
+        );
     }
     convertColor(color) {
         return {r: color.r/255.0, g: color.g/255.0, b: color.b/255.0, a: color.a};
@@ -43,19 +94,29 @@ class LightRow extends React.Component {
 
     updateLight() {
         this.props.saveLight({
-            id: this.props.light.id,
-            name: this.state.name,
-            type: this.props.light.type,
-            position: this.getObjectForUpdate(this.props.light.position),
-            direction: this.getObjectForUpdate(this.props.light.direction),
-            ambient: this.getObjectForUpdate(this.state.ambient),
-            diffuse: this.getObjectForUpdate(this.state.diffuse),
-            specular: this.getObjectForUpdate(this.state.specular),
-            specularTerm: this.props.light.specularTerm,
-            quadraticAttenuation: this.props.light.quadraticAttenuation,
-            linearAttenuation: this.props.light.linearAttenuation,
-            constantAttenuation: this.props.light.constantAttenuation
+            id: this.state.light.id,
+            name: this.state.light.name,
+            type: this.state.light.type,
+            position: this.getObjectForUpdate(this.state.light.position),
+            direction: this.getObjectForUpdate(this.state.light.direction),
+            ambient: this.getObjectForUpdate(this.state.light.ambient),
+            diffuse: this.getObjectForUpdate(this.state.light.diffuse),
+            specular: this.getObjectForUpdate(this.state.light.specular),
+            specularTerm: this.state.light.specularTerm,
+            quadraticAttenuation: this.state.light.quadraticAttenuation,
+            linearAttenuation: this.state.light.linearAttenuation,
+            constantAttenuation: this.state.light.constantAttenuation
         });
+
+        this.state.lightNode.removeParent();
+        this.setState(
+            {
+                lightNode: getLightNode(this.state.light)
+            },
+            () => {
+                this.props.parentSceneNode.addChild(this.state.lightNode);
+            }
+        )
     }
     getObjectForUpdate(obj) {
         const copy = Object.assign({}, obj);
@@ -65,6 +126,7 @@ class LightRow extends React.Component {
 
     deleteLight() {
         this.props.deleteLight(this.props.light.id);
+        this.state.lightNode.removeParent();
     }
 
     render() {
@@ -72,22 +134,22 @@ class LightRow extends React.Component {
             <li className={`list-group-item list-group-item-action flex-column align-items-start ${css.row}`}>
                 <div className="d-flex w-100 justify-content-between">
                     <div className={`${css.item}`}>
-                        {this.props.light.type}
+                        {this.state.light.type}
                     </div>
                     <div className={`${css.item}`}>
                         <input className="form-control form-control-sm" type="text"
-                                value={this.state.name} onChange={this.handleNameChange}  />
+                                value={this.state.light.name} onChange={this.handleNameChange}  />
                     </div>
                     <div className={`${css.item}`}>
-                        <SmallColorPicker color={this.props.light.ambient}
+                        <SmallColorPicker color={this.state.light.ambient}
                                 onChangeComplete={this.handleAmbientChangeComplete} />
                     </div>
                     <div className={`${css.item}`}>
-                        <SmallColorPicker color={this.props.light.diffuse}
+                        <SmallColorPicker color={this.state.light.diffuse}
                                 onChangeComplete={this.handleDiffuseChangeComplete} />
                     </div>
                     <div className={`${css.item}`}>
-                        <SmallColorPicker color={this.props.light.specular}
+                        <SmallColorPicker color={this.state.light.specular}
                                 onChangeComplete={this.handleSpecularChangeComplete} />
                     </div>
                     <div className={`${css.item}`}>
@@ -103,6 +165,7 @@ class LightRow extends React.Component {
 
 LightRow.propTypes = {
     light: PropTypes.object.isRequired,
+    parentSceneNode: PropTypes.object.isRequired,
     deleteLight: PropTypes.func.isRequired,
     saveLight: PropTypes.func.isRequired
 };

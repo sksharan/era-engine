@@ -1,12 +1,9 @@
 import {
     KeyboardHandler,
     MouseHandler,
-    FlatQuad,
     RootSceneNode,
     GeometryNode,
-    LightNode,
     Material,
-    Light,
     Renderer,
     ProgramBuilder
 } from './engine/index'
@@ -22,39 +19,8 @@ export function begin(MainComponent) {
     const programData = new ProgramBuilder().addPosition().addNormal().enableLighting().build();
     const defaultMaterial = new Material({programData: programData, imageSrc: 'public/textures/debug.png'});
 
-    const lightIconProgramData = new ProgramBuilder().addBillboardPosition().addTexcoord().addNormal().build();
-    const lightIconMaterial = new Material({programData: lightIconProgramData, imageSrc: 'public/textures/light.png'});
-
     // Build a scene graph from test tile data
     const hexRadius = 10;
-    const lightNode1 = new LightNode(mat4.fromTranslation(mat4.create(), vec3.fromValues(60, 20, 60)),
-            new Light({id: 'light1', type: "POINT",
-                direction: {x: 0, y: -1, z: 0},
-                ambient: {r: 0.1, g: 0.1, b: 0.1, a: 1},
-                diffuse: {r: 0.8, g: 0.8, b: 0.8, a: 1},
-                specular: {r: 0.8, g: 0.6, b: 0.6, a: 1},
-                specularTerm: 100,
-                quadraticAttenuation: 0.0007,
-                linearAttenuation: 0.014,
-                constantAttenuation: 1
-            })
-        );
-    const lightNode2 = new LightNode(mat4.fromTranslation(mat4.create(), vec3.fromValues(240, 40, 240)),
-            new Light({id: 'light2', type: "POINT",
-                direction: {x: 0, y: -1, z: 0},
-                ambient: {r: 0.1, g: 0.1, b: 0.1, a: 1},
-                diffuse: {r: 0.8, g: 0.8, b: 0.8, a: 1},
-                specular: {r: 0.8, g: 0.6, b: 0.6, a: 1},
-                specularTerm: 100,
-                quadraticAttenuation: 0.0007,
-                linearAttenuation: 0.014,
-                constantAttenuation: 1
-            })
-        );
-    lightNode1.addChild(new GeometryNode(mat4.create(), {mesh: new FlatQuad(), material: lightIconMaterial}));
-    lightNode2.addChild(new GeometryNode(mat4.create(), {mesh: new FlatQuad(), material: lightIconMaterial}));
-    RootSceneNode.addChild(lightNode1);
-    RootSceneNode.addChild(lightNode2);
     for (let i = 0; i < 50; i++) {
         for (let j = 0; j < 50; j++) {
             const tile = { loc: { x: i, y: i+j+1, z: j } };

@@ -47,14 +47,14 @@ const saveLightMutation = gql`
         saveLight(light: {
             name: $name,
             type: "POINT",
-            position: {x: 1, y: 2, z: 3},
-            direction: {x: 4, y: 5, z: 6},
-            ambient: {r: 0.87, g: 0.87, b: 0.87, a: 1},
-            diffuse: {r: 0.95, g: 0.95, b: 0.6, a: 1},
-            specular: {r: 1, g: 1, b: 1, a: 1},
+            position: {x: 60, y: 20, z: 60},
+            direction: {x: 0, y: -1, z: 0},
+            ambient: {r: 0.1, g: 0.1, b: 0.1, a: 1},
+            diffuse: {r: 0.8, g: 0.8, b: 0.8, a: 1},
+            specular: {r: 0.8, g: 0.6, b: 0.6, a: 1},
             specularTerm: 100,
-            quadraticAttenuation: 1,
-            linearAttenuation: 1,
+            quadraticAttenuation: 0.0007,
+            linearAttenuation: 0.014,
             constantAttenuation: 1}) {
 
             ${LightSelect}

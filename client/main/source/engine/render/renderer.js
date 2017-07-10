@@ -52,12 +52,15 @@ function renderGeometry(sceneNode, lightNodes) {
         const mesh = sceneNode.mesh;
         const material = sceneNode.material;
 
-        // For performance, no need to attach a new program if it's the same program used the render the previous node
-        if (material.programData !== this._lastProgramData) {
+        if ((material.programData !== this._lastProgramData)
+                || (lightNodes.length !== this._lastNumLights)) {
+
             updateProgramDataLights(material.programData, lightNodes);
             gl.useProgram(material.programData.program);
             updateLightUniforms(material.programData, lightNodes);
+
             this._lastProgramData = material.programData;
+            this._lastNumLights = lightNodes.length;
         }
 
         // Attribute binding
@@ -175,6 +178,7 @@ function updateLightUniforms(programData, lightNodes) {
 class Renderer {
     constructor() {
         this._lastProgramData = null;
+        this._lastNumLights = 0;
     }
 
     render(sceneNode) {

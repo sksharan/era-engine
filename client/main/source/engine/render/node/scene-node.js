@@ -14,6 +14,8 @@ function updateWorldMatrix(node, parentWorldMatrix) {
 export default class SceneNode {
     constructor(localMatrix = mat4.create()) {
         this._nodeType = "BASE";
+        /* Parent of this node - scene nodes have at most one parent. */
+        this._parent = null;
         /* Children of this node. */
         this._children = [];
         /* Transformation that defines the position/scale/etc. of this node in
@@ -47,7 +49,31 @@ export default class SceneNode {
         if (child === this) {
             throw new Error("A scene node cannot add itself as a child");
         }
+        if (child._parent !== null) {
+            throw new Error("The child node already has a parent");
+        }
+        child._parent = this;
         this._children.push(child);
         updateWorldMatrix(child, this._worldMatrix);
+    }
+
+    removeAllChildren() {
+        for (let child of this._children) {
+            child._parent = null;
+        }
+        this._children = [];
+    }
+
+    removeParent() {
+        if (this._parent === null) {
+            throw new Error("Node does not have a parent");
+        }
+
+        const childIndex = this._parent.children.indexOf(this);
+        if (childIndex === -1) {
+            throw new Error("Parent does not have this node as a child");
+        }
+        this._parent.children.splice(childIndex, 1);
+        this._parent = null;
     }
 }

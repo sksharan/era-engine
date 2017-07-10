@@ -47,7 +47,7 @@ export default class ProgramBuilder {
 
         this._vertBuilder.addMainFunctionLines('gl_Position = vec4(0, 0, 0, 1);');
 
-        this._fragBuilder.addMainFunctionLines('vec4 fragColor = vec4(0, 0, 0, 0);');
+        this._fragBuilder.addMainFunctionLines('vec4 fragColor = vec4(0, 0, 0, 1);');
     }
 
     addPosition() {
@@ -108,10 +108,11 @@ export default class ProgramBuilder {
         this._fragBuilder.addUniformLines('uniform sampler2D texture;')
                          .addVaryingLines('varying vec2 vTexcoord;')
                          .addMainFunctionLines(`
-                             fragColor += texture2D(texture, vTexcoord);
-                             if (fragColor.a < 0.8) {
+                             vec4 texColor = texture2D(texture, vTexcoord);
+                             if (texColor.a < 0.8) {
                                  discard;
                              }
+                             fragColor += texColor;
                          `);
 
         return this;
@@ -141,7 +142,7 @@ export default class ProgramBuilder {
 
                 // Apply ambient lighting
                 vec4 ambient = lightAmbient * vec4(materialAmbient, 1.0);
-                fragColor += ambient;
+                fragColor += (attenuation * ambient);
 
                 // Set up vectors for diffuse and specular calculations
                 vec3 lightDirection = normalize(lightPositionWorld - vec3(vPositionWorld));

@@ -5,10 +5,11 @@ import {
     GeometryNode,
     Material,
     Renderer,
-    ProgramBuilder
+    ProgramBuilder,
+    TileBase,
+    TileSide
 } from './engine/index'
 
-import TileService from './service/tile-service'
 import {mat4, vec3} from 'gl-matrix'
 
 export function begin(MainComponent) {
@@ -21,19 +22,22 @@ export function begin(MainComponent) {
 
     // Build a scene graph from test tile data
     const hexRadius = 10;
+
     for (let i = 0; i < 50; i++) {
         for (let j = 0; j < 50; j++) {
-            const tile = { loc: { x: i, y: i+j+1, z: j } };
-            const renderData = TileService.getRenderData(tile, hexRadius);
-            const child = new GeometryNode(renderData.localMatrix, {mesh: renderData.mesh, material: defaultMaterial});
-            RootSceneNode.addChild(child);
+            const mesh = new TileBase(hexRadius, i % 2 === 1);
 
-            if (i < 2 && j < 2) {
-                child.addChild(new GeometryNode(mat4.fromTranslation(mat4.create(), vec3.fromValues(0, 10, 0)),
-                    {mesh: renderData.mesh, material: defaultMaterial}));
-                child.addChild(new GeometryNode(mat4.fromTranslation(mat4.create(), vec3.fromValues(0, -10, 0)),
-                    {mesh: renderData.mesh, material: defaultMaterial}));
-            }
+            const localMatrix = mat4.fromTranslation(mat4.create(), vec3.fromValues(
+                i * (hexRadius * 1.5),
+                i + j + 1,
+                j * (hexRadius * 0.866 * 2)));
+
+            const base = new GeometryNode(localMatrix, {mesh, material: defaultMaterial});
+            RootSceneNode.addChild(base);
+
+            const side = new GeometryNode(mat4.fromTranslation(mat4.create(), vec3.fromValues(0, 0, 0)),
+                    {mesh: new TileSide(hexRadius, i + j + 1, i % 2 === 1), material: defaultMaterial});
+            base.addChild(side);
         }
     }
 

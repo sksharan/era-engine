@@ -118,9 +118,9 @@ function renderGeometry(sceneNode, lightNodes) {
 
         // Finally, render the node
         if (mesh.hasIndices()) {
-            gl.drawElements(gl.TRIANGLES, mesh.getIndices().length, gl.UNSIGNED_SHORT, 0);
+            gl.drawElements(mesh.drawMode, mesh.getIndices().length, gl.UNSIGNED_SHORT, 0);
         } else {
-            gl.drawArrays(gl.TRIANGLES, 0, mesh.getVertices().length / 3);
+            gl.drawArrays(mesh.drawMode, 0, mesh.getVertices().length / 3);
         }
     }
 

@@ -1,7 +1,11 @@
 import {gl} from '../../gl'
 
 export default class Mesh {
-    constructor({vertices, floatsPerVertex, normals, floatsPerNormal, texcoords, floatsPerTexcoord, indices}) {
+    constructor({drawMode=gl.TRIANGLES, vertices, floatsPerVertex, normals, floatsPerNormal,
+         texcoords, floatsPerTexcoord, indices}) {
+
+        this._drawMode = drawMode;
+
         this._vertices = vertices;
         this._floatsPerVertex = floatsPerVertex;
         this._normals = normals;
@@ -27,6 +31,10 @@ export default class Mesh {
             gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this._indexBuffer);
             gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this._indices), gl.STATIC_DRAW);
         }
+    }
+
+    get drawMode() {
+        return this._drawMode;
     }
 
     getVertices() {

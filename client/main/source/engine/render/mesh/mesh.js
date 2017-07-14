@@ -6,30 +6,31 @@ export default class Mesh {
 
         this._drawMode = drawMode;
 
-        this._vertices = vertices;
+        // Vertices
+        this._numVertices = vertices.length;
         this._floatsPerVertex = floatsPerVertex;
-        this._normals = normals;
-        this._floatsPerNormal = floatsPerNormal;
-        this._texcoords = texcoords;
-        this._floatsPerTexcoord = floatsPerTexcoord;
-        this._indices = indices;
-
         this._positionBuffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, this._positionBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this._vertices), gl.STATIC_DRAW);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
 
+        // Normals
+        this._floatsPerNormal = floatsPerNormal;
         this._normalBuffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, this._normalBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this._normals), gl.STATIC_DRAW);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(normals), gl.STATIC_DRAW);
 
+        // Texcoords
+        this._floatsPerTexcoord = floatsPerTexcoord;
         this._texcoordBuffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, this._texcoordBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this._texcoords), gl.STATIC_DRAW);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(texcoords), gl.STATIC_DRAW);
 
+        // Indices (optional)
+        this._numIndices = indices ? indices.length : 0;
         if (indices) {
             this._indexBuffer = gl.createBuffer();
             gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this._indexBuffer);
-            gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this._indices), gl.STATIC_DRAW);
+            gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indices), gl.STATIC_DRAW);
         }
     }
 
@@ -37,55 +38,37 @@ export default class Mesh {
         return this._drawMode;
     }
 
-    getVertices() {
-        return this._vertices;
+    get numVertices() {
+        return this._numVertices;
     }
-    getVertex(index) {
-        return this._vertices[index];
-    }
-    getFloatsPerVertex() {
+    get floatsPerVertex() {
         return this._floatsPerVertex;
     }
-    getPositionBuffer() {
+    get positionBuffer() {
         return this._positionBuffer;
     }
 
-    getNormals() {
-        return this._normals;
-    }
-    getNormal(index) {
-        return this._normals[index];
-    }
-    getFloatsPerNormal() {
+    get floatsPerNormal() {
         return this._floatsPerNormal;
     }
-    getNormalBuffer() {
+    get normalBuffer() {
         return this._normalBuffer;
     }
 
-    getTexcoords() {
-        return this._texcoords;
-    }
-    getTexcoord(index) {
-        return this._texcoords[index];
-    }
-    getFloatsPerTexcoord() {
+    get floatsPerTexcoord() {
         return this._floatsPerTexcoord;
     }
-    getTexcoordBuffer() {
+    get texcoordBuffer() {
         return this._texcoordBuffer;
     }
 
-    hasIndices() {
-        return this._indices !== null && this._indices !== undefined;
+    get numIndices() {
+        return this._numIndices;
     }
-    getIndices() {
-        return this._indices;
-    }
-    getIndex(index) {
-        return this._indices[index];
-    }
-    getIndexBuffer() {
+    get indexBuffer() {
         return this._indexBuffer;
+    }
+    hasIndices() {
+        return this._numIndices !== 0;
     }
 }

@@ -66,25 +66,25 @@ function renderGeometry(sceneNode, lightNodes) {
         // Attribute binding
         if (material.programData.hasPositionAttributeLocation()) {
             gl.enableVertexAttribArray(material.programData.positionAttributeLocation);
-            gl.bindBuffer(gl.ARRAY_BUFFER, mesh.getPositionBuffer());
-            gl.vertexAttribPointer(material.programData.positionAttributeLocation, mesh.getFloatsPerVertex(),
+            gl.bindBuffer(gl.ARRAY_BUFFER, mesh.positionBuffer);
+            gl.vertexAttribPointer(material.programData.positionAttributeLocation, mesh.floatsPerVertex,
                 gl.FLOAT, false, 0, 0);
         }
         if (material.programData.hasNormalAttributeLocation()) {
             gl.enableVertexAttribArray(material.programData.normalAttributeLocation);
-            gl.bindBuffer(gl.ARRAY_BUFFER, mesh.getNormalBuffer());
-            gl.vertexAttribPointer(material.programData.normalAttributeLocation, mesh.getFloatsPerNormal(),
+            gl.bindBuffer(gl.ARRAY_BUFFER, mesh.normalBuffer);
+            gl.vertexAttribPointer(material.programData.normalAttributeLocation, mesh.floatsPerNormal,
                 gl.FLOAT, false, 0, 0);
         }
         if (material.programData.hasTexcoordAttributeLocation()) {
             gl.enableVertexAttribArray(material.programData.texcoordAttributeLocation);
-            gl.bindBuffer(gl.ARRAY_BUFFER, mesh.getTexcoordBuffer());
-            gl.vertexAttribPointer(material.programData.texcoordAttributeLocation, mesh.getFloatsPerTexcoord(),
+            gl.bindBuffer(gl.ARRAY_BUFFER, mesh.texcoordBuffer);
+            gl.vertexAttribPointer(material.programData.texcoordAttributeLocation, mesh.floatsPerTexcoord,
                 gl.FLOAT, false, 0, 0);
         }
 
         if (mesh.hasIndices()) {
-            gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, mesh.getIndexBuffer());
+            gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, mesh.indexBuffer);
         }
 
         // Uniform binding
@@ -118,9 +118,9 @@ function renderGeometry(sceneNode, lightNodes) {
 
         // Finally, render the node
         if (mesh.hasIndices()) {
-            gl.drawElements(mesh.drawMode, mesh.getIndices().length, gl.UNSIGNED_SHORT, 0);
+            gl.drawElements(mesh.drawMode, mesh.numIndices, gl.UNSIGNED_SHORT, 0);
         } else {
-            gl.drawArrays(mesh.drawMode, 0, mesh.getVertices().length / 3);
+            gl.drawArrays(mesh.drawMode, 0, mesh.numVertices / 3);
         }
     }
 

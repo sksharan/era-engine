@@ -30,14 +30,17 @@ function resizeCanvas() {
 }
 
 function renderNode(sceneNode) {
-    let lightNodes = [];
+    // Figure out which light nodes are influencing the scene
     // http://math.hws.edu/graphicsbook/c4/s4.html - see "Moving Light"
-    getLightNodes(sceneNode, lightNodes);
-    renderGeometry.call(this, sceneNode, lightNodes);
+    this._lightNodes = [];
+    getLightNodes(sceneNode, this._lightNodes);
+
+    this._programMap = {};
+
+    renderGeometry.call(this, sceneNode);
 }
 
-// Get the light nodes that are influencing the scene
-function getLightNodes(sceneNode, lightNodes=[]) {
+function getLightNodes(sceneNode, lightNodes) {
     if (sceneNode.nodeType === "LIGHT") {
         lightNodes.push(sceneNode);
     }
@@ -46,77 +49,58 @@ function getLightNodes(sceneNode, lightNodes=[]) {
     }
 }
 
-// Render the meshes, taking into account all active light nodes
-function renderGeometry(sceneNode, lightNodes) {
+function renderGeometry(sceneNode) {
     if (sceneNode.nodeType === "GEOMETRY") {
         const mesh = sceneNode.mesh;
         const material = sceneNode.material;
 
-        if ((material.programData !== this._lastProgramData)
-                || (lightNodes.length !== this._lastNumLights)) {
+        const programDataChanged = material.programData !== this._cachedProgramData;
+        const numLightsChanged = this._lightNodes.length !== this._lastNumLights;
 
-            updateProgramDataLights(material.programData, lightNodes);
-            gl.useProgram(material.programData.program);
-            updateLightUniforms(material.programData, lightNodes);
+        if (programDataChanged || numLightsChanged) {
+            this._cachedProgramData = material.programData;
+            updateProgramDataLights(this._cachedProgramData, this._lightNodes); // Changes the underlying GL program
+            gl.useProgram(this._cachedProgramData.program);
+            updateLightUniforms(this._cachedProgramData, this._lightNodes);
 
-            this._lastProgramData = material.programData;
-            this._lastNumLights = lightNodes.length;
+            updateProgramMap.call(this, this._cachedProgramData);
+            this._lastNumLights = this._lightNodes.length;
         }
 
-        // Attribute binding
+
         if (material.programData.hasPositionAttributeLocation()) {
             gl.enableVertexAttribArray(material.programData.positionAttributeLocation);
             gl.bindBuffer(gl.ARRAY_BUFFER, mesh.positionBuffer);
-            gl.vertexAttribPointer(material.programData.positionAttributeLocation, mesh.floatsPerVertex,
-                gl.FLOAT, false, 0, 0);
+            gl.vertexAttribPointer(material.programData.positionAttributeLocation, mesh.floatsPerVertex, gl.FLOAT, false, 0, 0);
         }
         if (material.programData.hasNormalAttributeLocation()) {
             gl.enableVertexAttribArray(material.programData.normalAttributeLocation);
             gl.bindBuffer(gl.ARRAY_BUFFER, mesh.normalBuffer);
-            gl.vertexAttribPointer(material.programData.normalAttributeLocation, mesh.floatsPerNormal,
-                gl.FLOAT, false, 0, 0);
+            gl.vertexAttribPointer(material.programData.normalAttributeLocation, mesh.floatsPerNormal, gl.FLOAT, false, 0, 0);
         }
         if (material.programData.hasTexcoordAttributeLocation()) {
             gl.enableVertexAttribArray(material.programData.texcoordAttributeLocation);
             gl.bindBuffer(gl.ARRAY_BUFFER, mesh.texcoordBuffer);
-            gl.vertexAttribPointer(material.programData.texcoordAttributeLocation, mesh.floatsPerTexcoord,
-                gl.FLOAT, false, 0, 0);
+            gl.vertexAttribPointer(material.programData.texcoordAttributeLocation, mesh.floatsPerTexcoord, gl.FLOAT, false, 0, 0);
         }
 
         if (mesh.hasIndices()) {
             gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, mesh.indexBuffer);
         }
 
-        // Uniform binding
         if (material.programData.hasModelMatrixUniformLocation()) {
             gl.uniformMatrix4fv(material.programData.modelMatrixUniformLocation, gl.FALSE, sceneNode.worldMatrix);
         }
-        if (material.programData.hasViewMatrixUniformLocation()) {
-            gl.uniformMatrix4fv(material.programData.viewMatrixUniformLocation, gl.FALSE, camera.getViewMatrix());
-        }
-        if (material.programData.hasProjectionMatrixUniformLocation()) {
-            const fovy = glMatrix.toRadian(45.0);
-            const aspectRatio = gl.drawingBufferWidth / gl.drawingBufferHeight;
-            const near = 0.1;
-            const far = 2500.0;
-            const projectionMatrix = mat4.perspective(mat4.create(), fovy, aspectRatio, near, far);
-            gl.uniformMatrix4fv(material.programData.projectionMatrixUniformLocation, gl.FALSE, projectionMatrix);
-        }
         if (material.programData.hasNormalMatrixUniformLocation()) {
             gl.uniformMatrix3fv(material.programData.normalMatrixUniformLocation, gl.FALSE, sceneNode.normalMatrix);
-        }
-        if (material.programData.hasCameraPositionUniformLocation()) {
-            gl.uniform3fv(material.programData.cameraPositionUniformLocation, camera.getPosition());
         }
         if (material.programData.hasCenterPositionUniformLocation()) {
             gl.uniform3fv(material.programData.centerPositionUniformLocation,
                 vec3.transformMat4(vec3.create(), vec3.create(), sceneNode.worldMatrix));
         }
 
-        // Texture binding
         gl.bindTexture(gl.TEXTURE_2D, material.texture);
 
-        // Finally, render the node
         if (mesh.hasIndices()) {
             gl.drawElements(mesh.drawMode, mesh.numIndices, gl.UNSIGNED_SHORT, 0);
         } else {
@@ -125,7 +109,24 @@ function renderGeometry(sceneNode, lightNodes) {
     }
 
     for (let child of sceneNode.children) {
-        renderGeometry.call(this, child, lightNodes);
+        renderGeometry.call(this, child);
+    }
+}
+
+function updateProgramMap(programData) {
+    if (this._programMap.hasOwnProperty(programData.id)) {
+        return;
+    }
+    this._programMap[programData.id] = {enabled:true};
+
+    if (programData.hasProjectionMatrixUniformLocation()) {
+        gl.uniformMatrix4fv(programData.projectionMatrixUniformLocation, gl.FALSE, this._projectionMatrix);
+    }
+    if (programData.hasViewMatrixUniformLocation()) {
+        gl.uniformMatrix4fv(programData.viewMatrixUniformLocation, gl.FALSE, camera.getViewMatrix());
+    }
+    if (programData.hasCameraPositionUniformLocation()) {
+        gl.uniform3fv(programData.cameraPositionUniformLocation, camera.getPosition());
     }
 }
 
@@ -177,8 +178,19 @@ function updateLightUniforms(programData, lightNodes) {
 
 class Renderer {
     constructor() {
-        this._lastProgramData = null;
+        // Cache last program data used so that we only call gl.useProgram() when necessary
+        this._cachedProgramData = null;
+        // Number of light nodes used when rendering the last frame
         this._lastNumLights = 0;
+        // Programs used for rendering this frame
+        this._programMap = {};
+
+        // Projection matrix
+        const fovy = glMatrix.toRadian(45.0);
+        const aspectRatio = gl.drawingBufferWidth / gl.drawingBufferHeight;
+        const near = 0.1;
+        const far = 2500.0;
+        this._projectionMatrix = mat4.perspective(mat4.create(), fovy, aspectRatio, near, far);
     }
 
     render(sceneNode) {

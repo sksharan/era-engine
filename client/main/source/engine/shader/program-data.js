@@ -2,8 +2,11 @@ function isValidLocation(location) {
     return location !== null && location !== undefined && location !== -1;
 }
 
+let nextId = 1;
+
 export default class ProgramData {
     constructor() {
+        this._id = nextId++;
         this._program = null;
 
         this._positionAttributeLocation = null;
@@ -39,6 +42,10 @@ export default class ProgramData {
 
         this._lightEnabled = programData._lightEnabled;
         this._billboardEnabled = programData._billboardEnabled;
+    }
+
+    get id() {
+        return this._id;
     }
 
     get program() {

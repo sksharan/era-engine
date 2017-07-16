@@ -1,4 +1,4 @@
-import {gl} from '../../gl'
+import {gl} from '../gl'
 
 export default class Mesh {
     constructor({drawMode=gl.TRIANGLES, vertices, floatsPerVertex, normals, floatsPerNormal,

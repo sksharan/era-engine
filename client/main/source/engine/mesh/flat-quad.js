@@ -1,5 +1,5 @@
 import Mesh from './mesh'
-import {gl} from '../../gl'
+import {gl} from '../gl'
 
 export default class FlatQuad extends Mesh {
     constructor(size=5.0) {

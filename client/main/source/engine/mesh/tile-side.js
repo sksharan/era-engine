@@ -1,5 +1,5 @@
 import Mesh from './mesh'
-import {gl} from '../../gl'
+import {gl} from '../gl'
 
 export default class TileSide extends Mesh {
     constructor(radius=5.0, height=5.0, offset=false) {

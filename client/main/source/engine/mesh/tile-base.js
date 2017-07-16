@@ -1,5 +1,5 @@
 import Mesh from './mesh'
-import {gl} from '../../gl'
+import {gl} from '../gl'
 
 export default class TileBase extends Mesh {
     constructor(radius=5.0, offset=false) {

@@ -1,5 +1,5 @@
-import camera from '../camera/camera'
-import ProgramBuilder from '../shader/program-builder'
+import {Camera} from '../camera/index'
+import {ProgramBuilder} from '../shader/index'
 import {gl} from '../gl'
 import {glMatrix, mat4, vec3} from 'gl-matrix'
 
@@ -123,10 +123,10 @@ function updateProgramMap(programData) {
         gl.uniformMatrix4fv(programData.projectionMatrixUniformLocation, gl.FALSE, this._projectionMatrix);
     }
     if (programData.hasViewMatrixUniformLocation()) {
-        gl.uniformMatrix4fv(programData.viewMatrixUniformLocation, gl.FALSE, camera.getViewMatrix());
+        gl.uniformMatrix4fv(programData.viewMatrixUniformLocation, gl.FALSE, Camera.getViewMatrix());
     }
     if (programData.hasCameraPositionUniformLocation()) {
-        gl.uniform3fv(programData.cameraPositionUniformLocation, camera.getPosition());
+        gl.uniform3fv(programData.cameraPositionUniformLocation, Camera.getPosition());
     }
 }
 

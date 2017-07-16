@@ -1,5 +1,5 @@
 import SceneNode from './scene-node'
-import Light from '../light'
+import {Light} from '../light/index'
 
 export default class LightNode extends SceneNode {
     constructor(localMatrix, light) {

@@ -1,7 +1,8 @@
-import {Camera} from '../camera/index'
 import {ProgramBuilder} from '../shader/index'
+import ProgramDataState from './program-data-state'
+import NodeAnalyzer from './node-analyzer'
 import {gl} from '../gl'
-import {glMatrix, mat4, vec3} from 'gl-matrix'
+import {mat4, vec3} from 'gl-matrix'
 
 function initRender() {
     resizeCanvas();
@@ -30,41 +31,30 @@ function resizeCanvas() {
 }
 
 function renderNode(sceneNode) {
-    // Figure out which light nodes are influencing the scene
-    // http://math.hws.edu/graphicsbook/c4/s4.html - see "Moving Light"
-    this._lightNodes = [];
-    getLightNodes(sceneNode, this._lightNodes);
+    this._nodeAnalyzer.analyze(sceneNode);
+    this._programDataState.clear();
 
-    this._programMap = {};
+    const lightNodes = this._nodeAnalyzer.getLightNodes();
 
-    renderGeometry.call(this, sceneNode);
+    renderGeometry.call(this, sceneNode, lightNodes);
 }
 
-function getLightNodes(sceneNode, lightNodes) {
-    if (sceneNode.nodeType === "LIGHT") {
-        lightNodes.push(sceneNode);
-    }
-    for (let child of sceneNode.children) {
-        getLightNodes(child, lightNodes);
-    }
-}
-
-function renderGeometry(sceneNode) {
+function renderGeometry(sceneNode, lightNodes) {
     if (sceneNode.nodeType === "GEOMETRY") {
         const mesh = sceneNode.mesh;
         const material = sceneNode.material;
 
         const programDataChanged = material.programData !== this._cachedProgramData;
-        const numLightsChanged = this._lightNodes.length !== this._lastNumLights;
+        const numLightsChanged = lightNodes.length !== this._lastNumLights;
 
         if (programDataChanged || numLightsChanged) {
             this._cachedProgramData = material.programData;
-            updateProgramDataLights(this._cachedProgramData, this._lightNodes); // Changes the underlying GL program
+            updateProgramDataLights(this._cachedProgramData, lightNodes); // Changes the underlying GL program
             gl.useProgram(this._cachedProgramData.program);
-            updateLightUniforms(this._cachedProgramData, this._lightNodes);
+            updateLightUniforms(this._cachedProgramData, lightNodes);
 
-            updateProgramMap.call(this, this._cachedProgramData);
-            this._lastNumLights = this._lightNodes.length;
+            this._programDataState.put(this._cachedProgramData);
+            this._lastNumLights = lightNodes.length;
         }
 
 
@@ -109,24 +99,7 @@ function renderGeometry(sceneNode) {
     }
 
     for (let child of sceneNode.children) {
-        renderGeometry.call(this, child);
-    }
-}
-
-function updateProgramMap(programData) {
-    if (this._programMap.hasOwnProperty(programData.id)) {
-        return;
-    }
-    this._programMap[programData.id] = {enabled:true};
-
-    if (programData.hasProjectionMatrixUniformLocation()) {
-        gl.uniformMatrix4fv(programData.projectionMatrixUniformLocation, gl.FALSE, this._projectionMatrix);
-    }
-    if (programData.hasViewMatrixUniformLocation()) {
-        gl.uniformMatrix4fv(programData.viewMatrixUniformLocation, gl.FALSE, Camera.getViewMatrix());
-    }
-    if (programData.hasCameraPositionUniformLocation()) {
-        gl.uniform3fv(programData.cameraPositionUniformLocation, Camera.getPosition());
+        renderGeometry.call(this, child, lightNodes);
     }
 }
 
@@ -182,15 +155,9 @@ class Renderer {
         this._cachedProgramData = null;
         // Number of light nodes used when rendering the last frame
         this._lastNumLights = 0;
-        // Programs used for rendering this frame
-        this._programMap = {};
 
-        // Projection matrix
-        const fovy = glMatrix.toRadian(45.0);
-        const aspectRatio = gl.drawingBufferWidth / gl.drawingBufferHeight;
-        const near = 0.1;
-        const far = 2500.0;
-        this._projectionMatrix = mat4.perspective(mat4.create(), fovy, aspectRatio, near, far);
+        this._programDataState = new ProgramDataState();
+        this._nodeAnalyzer = new NodeAnalyzer();
     }
 
     render(sceneNode) {

@@ -38,11 +38,11 @@ function renderNode(sceneNode) {
 
     for (let programData of allProgramData) {
         this._programDataManager.initCameraUniforms(programData);
-        if (this._lastNumLights !== lightNodes.length) {
+
+        if (this._nodeAnalyzer.lightsChanged()) {
             this._programDataManager.initLightUniforms(programData, lightNodes);
         }
     }
-    this._lastNumLights = lightNodes.length;
 
     renderGeometry.call(this, sceneNode, lightNodes);
 }
@@ -107,7 +107,6 @@ class Renderer {
         this._cachedProgramData = null;
         this._programDataManager = new ProgramDataManager();
         this._nodeAnalyzer = new NodeAnalyzer();
-        this._lastNumLights = 0;
     }
 
     render(sceneNode) {

@@ -1,8 +1,7 @@
-import {ProgramBuilder} from '../shader/index'
-import ProgramDataState from './program-data-state'
+import ProgramDataManager from './program-data-manager'
 import NodeAnalyzer from './node-analyzer'
 import {gl} from '../gl'
-import {mat4, vec3} from 'gl-matrix'
+import {vec3} from 'gl-matrix'
 
 function initRender() {
     resizeCanvas();
@@ -31,10 +30,19 @@ function resizeCanvas() {
 }
 
 function renderNode(sceneNode) {
+    this._cachedProgramData = null;
     this._nodeAnalyzer.analyze(sceneNode);
-    this._programDataState.clear();
 
-    const lightNodes = this._nodeAnalyzer.getLightNodes();
+    const lightNodes = this._nodeAnalyzer.getAllLightNodes();
+    const allProgramData = this._nodeAnalyzer.getAllProgramData();
+
+    for (let programData of allProgramData) {
+        this._programDataManager.initCameraUniforms(programData);
+        if (this._lastNumLights !== lightNodes.length) {
+            this._programDataManager.initLightUniforms(programData, lightNodes);
+        }
+    }
+    this._lastNumLights = lightNodes.length;
 
     renderGeometry.call(this, sceneNode, lightNodes);
 }
@@ -44,19 +52,10 @@ function renderGeometry(sceneNode, lightNodes) {
         const mesh = sceneNode.mesh;
         const material = sceneNode.material;
 
-        const programDataChanged = material.programData !== this._cachedProgramData;
-        const numLightsChanged = lightNodes.length !== this._lastNumLights;
-
-        if (programDataChanged || numLightsChanged) {
+        if (material.programData !== this._cachedProgramData) {
             this._cachedProgramData = material.programData;
-            updateProgramDataLights(this._cachedProgramData, lightNodes); // Changes the underlying GL program
             gl.useProgram(this._cachedProgramData.program);
-            updateLightUniforms(this._cachedProgramData, lightNodes);
-
-            this._programDataState.put(this._cachedProgramData);
-            this._lastNumLights = lightNodes.length;
         }
-
 
         if (material.programData.hasPositionAttributeLocation()) {
             gl.enableVertexAttribArray(material.programData.positionAttributeLocation);
@@ -103,61 +102,12 @@ function renderGeometry(sceneNode, lightNodes) {
     }
 }
 
-function updateProgramDataLights(programData, lightNodes) {
-    if (!programData.lightEnabled) {
-        return;
-    }
-
-    let builder = new ProgramBuilder();
-    if (programData.billboardEnabled) {
-        builder = builder.addBillboardPosition();
-    } else {
-        builder = builder.addPosition();
-    }
-    builder = builder.addNormal().enableLighting();
-
-    for (let lightNode of lightNodes) {
-        builder = builder.addPointLight(lightNode.light.id);
-    }
-    programData.update(builder.build());
-}
-
-function updateLightUniforms(programData, lightNodes) {
-    if (!programData.lightEnabled) {
-        return;
-    }
-    const program = programData.program;
-
-    for (let lightNode of lightNodes) {
-        const light = lightNode.light;
-        gl.uniform3fv(gl.getUniformLocation(program, `point${light.id}PositionWorld`),
-                mat4.getTranslation(vec3.create(), lightNode.worldMatrix));
-
-        gl.uniform4fv(gl.getUniformLocation(program, `point${light.id}Ambient`),
-            [light.ambient.r, light.ambient.g, light.ambient.b, light.ambient.a]);
-
-        gl.uniform4fv(gl.getUniformLocation(program, `point${light.id}Diffuse`),
-            [light.diffuse.r, light.diffuse.g, light.diffuse.b, light.diffuse.a]);
-
-        gl.uniform4fv(gl.getUniformLocation(program, `point${light.id}Specular`),
-            [light.specular.r, light.specular.g, light.specular.b, light.specular.a]);
-
-        gl.uniform1f(gl.getUniformLocation(program, `point${light.id}SpecularTerm`), light.specularTerm);
-        gl.uniform1f(gl.getUniformLocation(program, `point${light.id}ConstantAttenuation`), light.constantAttenuation);
-        gl.uniform1f(gl.getUniformLocation(program, `point${light.id}LinearAttenuation`), light.linearAttenuation);
-        gl.uniform1f(gl.getUniformLocation(program, `point${light.id}QuadraticAttenuation`), light.quadraticAttenuation);
-    }
-}
-
 class Renderer {
     constructor() {
-        // Cache last program data used so that we only call gl.useProgram() when necessary
         this._cachedProgramData = null;
-        // Number of light nodes used when rendering the last frame
-        this._lastNumLights = 0;
-
-        this._programDataState = new ProgramDataState();
+        this._programDataManager = new ProgramDataManager();
         this._nodeAnalyzer = new NodeAnalyzer();
+        this._lastNumLights = 0;
     }
 
     render(sceneNode) {

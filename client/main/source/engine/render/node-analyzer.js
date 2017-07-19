@@ -8,7 +8,7 @@ export default class NodeAnalyzer {
         this._prevLightNodes = null;
         this._lightsChanged = false;
 
-        this._allProgramData = {};
+        this._allProgramData = new Set();
     }
 
     // Collect data about the scene graph by traversing every node
@@ -30,7 +30,7 @@ export default class NodeAnalyzer {
 
     // Get the program data object detected by the analysis
     getAllProgramData() {
-        return Object.values(this._allProgramData);
+        return this._allProgramData.values();
     }
 }
 
@@ -38,7 +38,7 @@ export default class NodeAnalyzer {
 // here: http://math.hws.edu/graphicsbook/c4/s4.html - see "Moving Light"
 function beginAnalysis(sceneNode) {
     this._allLightNodes = [];
-    this._allProgramData = {};
+    this._allProgramData.clear();
     analyze.call(this, sceneNode);
 
     if (this._prevLightNodes.length !== this._allLightNodes.length) {
@@ -56,7 +56,7 @@ function analyze(sceneNode) {
     }
 
     if (sceneNode.nodeType === "GEOMETRY") {
-        this._allProgramData[sceneNode.material.programData.id] = sceneNode.material.programData;
+        this._allProgramData.add(sceneNode.material.programData);
     }
 
     for (let child of sceneNode.children) {

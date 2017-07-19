@@ -37,11 +37,10 @@ function renderNode(sceneNode) {
     const allProgramData = this._nodeAnalyzer.getAllProgramData();
 
     for (let programData of allProgramData) {
-        this._programDataManager.initCameraUniforms(programData);
-
         if (this._nodeAnalyzer.lightsChanged()) {
-            this._programDataManager.initLightUniforms(programData, lightNodes);
+            this._programDataManager.initLightUniforms(programData, lightNodes); // Changes GL program
         }
+        this._programDataManager.initCameraUniforms(programData);
     }
 
     renderGeometry.call(this, sceneNode, lightNodes);

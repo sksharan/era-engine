@@ -15,25 +15,27 @@ import {
 import {mat4, vec3} from 'gl-matrix'
 import css from './styles/light-row.scss'
 
-const programData = new ProgramBuilder()
-        .addBillboardPosition()
+// Data for the icon associated with the light
+const lightIconProgramData = new ProgramBuilder()
+        .addBillboardPosition() // Icon always faces the user
         .addTexcoord()
         .addNormal()
         .build();
-
-const material = new Material({
-    programData,
+const lightIconMaterial = new Material({
+    programData: lightIconProgramData,
     imageSrc: 'public/textures/light.png'
 });
 
-function getLightNode(light) {
+function createLightNode(light) {
+    // Create the actual light node
     const lightNode = new LightNode(
         mat4.fromTranslation(
             mat4.create(),
             vec3.fromValues(light.position.x, light.position.y, light.position.z)),
         light);
 
-    lightNode.addChild(new GeometryNode(mat4.create(), {mesh: new FlatQuad(), material}));
+    // Create a node for the icon that will indicate the light's position
+    lightNode.addChild(new GeometryNode(mat4.create(), {mesh: new FlatQuad(), material: lightIconMaterial}));
     return lightNode;
 }
 
@@ -42,9 +44,13 @@ class LightRow extends React.Component {
         super(props);
 
         this.state = {
+            // Actual light properties
             light: this.props.light,
-            lightNode: getLightNode(this.props.light)
+            // The node controlled by this component
+            lightNode: createLightNode(this.props.light)
         }
+
+        // This light node is a child of the node controlled by the parent component
         this.props.parentSceneNode.addChild(this.state.lightNode);
 
         this.handleNameChange = this.handleNameChange.bind(this);
@@ -108,10 +114,11 @@ class LightRow extends React.Component {
             constantAttenuation: this.state.light.constantAttenuation
         });
 
+        // When a light updates, unbind the current node and attach a new one to the parent
         this.state.lightNode.removeParent();
         this.setState(
             {
-                lightNode: getLightNode(this.state.light)
+                lightNode: createLightNode(this.state.light)
             },
             () => {
                 this.props.parentSceneNode.addChild(this.state.lightNode);
@@ -126,6 +133,7 @@ class LightRow extends React.Component {
 
     deleteLight() {
         this.props.deleteLight(this.props.light.id);
+        // Unbind the node controlled by this component
         this.state.lightNode.removeParent();
     }
 

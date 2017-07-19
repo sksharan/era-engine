@@ -48,10 +48,6 @@ class LightPanel extends React.Component {
         );
     }
 
-    componentWillUpdate() {
-        //lightPanelNode.removeAllChildren();
-    }
-
     toggleCollapse() {
         this.setState({collapsed: !this.state.collapsed});
     }

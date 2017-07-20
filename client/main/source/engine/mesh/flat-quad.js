@@ -1,34 +1,31 @@
-import Mesh from './mesh'
+import Mesh, {interleave} from './mesh'
 import {gl} from '../gl'
 
 export default class FlatQuad extends Mesh {
     constructor(size=5.0) {
+        const positions = [
+            -size,  size, 0.0,
+            -size, -size, 0.0,
+             size, -size, 0.0,
+             size,  size, 0.0,
+        ];
+        const normals = [
+            0.0, 0.0, -1.0,
+            0.0, 0.0, -1.0,
+            0.0, 0.0, -1.0,
+            0.0, 0.0, -1.0,
+        ];
+        const texcoords = [
+            0.0, 1.0,
+            0.0, 0.0,
+            1.0, 0.0,
+            1.0, 1.0,
+        ];
+
         super({
             drawMode: gl.TRIANGLE_FAN,
-
-            vertices: [
-                -size,  size, 0.0,
-                -size, -size, 0.0,
-                 size, -size, 0.0,
-                 size,  size, 0.0,
-            ],
-            floatsPerVertex: 3,
-
-            normals: [
-                0.0, 0.0, -1.0,
-                0.0, 0.0, -1.0,
-                0.0, 0.0, -1.0,
-                0.0, 0.0, -1.0,
-            ],
-            floatsPerNormal: 3,
-
-            texcoords: [
-                0.0, 1.0,
-                0.0, 0.0,
-                1.0, 0.0,
-                1.0, 1.0,
-            ],
-            floatsPerTexcoord:2
+            vertexData: interleave(positions, normals, texcoords),
+            numVertices: positions.length
         });
     }
 }

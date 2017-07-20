@@ -6,8 +6,7 @@ import {
     Material,
     Renderer,
     ProgramBuilder,
-    TileBase,
-    TileSide
+    Tile
 } from './engine/index'
 
 import {mat4, vec3} from 'gl-matrix'
@@ -25,19 +24,16 @@ export function begin(MainComponent) {
 
     for (let i = 0; i < 50; i++) {
         for (let j = 0; j < 50; j++) {
-            const mesh = new TileBase(hexRadius, i % 2 === 1);
+            const shiftFactor = i % 2 == 1 ? (hexRadius * 0.866) : 0;
+            const mesh = new Tile(hexRadius, 5, true, true);
 
             const localMatrix = mat4.fromTranslation(mat4.create(), vec3.fromValues(
                 i * (hexRadius * 1.5),
                 i + j + 1,
-                j * (hexRadius * 0.866 * 2)));
+                j * (hexRadius * 0.866 * 2) + shiftFactor));
 
-            const base = new GeometryNode(localMatrix, {mesh, material: defaultMaterial});
-            RootSceneNode.addChild(base);
-
-            const side = new GeometryNode(mat4.fromTranslation(mat4.create(), vec3.fromValues(0, 0, 0)),
-                    {mesh: new TileSide(hexRadius, i + j + 1, i % 2 === 1), material: defaultMaterial});
-            base.addChild(side);
+            const tile = new GeometryNode(localMatrix, {mesh, material: defaultMaterial});
+            RootSceneNode.addChild(tile);
         }
     }
 

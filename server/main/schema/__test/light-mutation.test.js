@@ -10,8 +10,6 @@ chai.use(chaiSubset);
 const light = {
     name: "Light",
     type: "POINT",
-    position: {x: 1, y: 2, z: 3},
-    direction: {x: 4, y: 5, z: 6},
     ambient: {r: 1, g: 0, b: 0, a: 0.25},
     diffuse: {r: 0, g: 1, b: 0, a: 0.50},
     specular: {r: 0, g: 0, b: 1, a: 0.75},
@@ -37,8 +35,6 @@ async function saveLight(light, id=null) {
                     id
                     name
                     type
-                    position { x y z }
-                    direction { x y z }
                     ambient { r g b a }
                     diffuse { r g b a }
                     specular { r g b a }
@@ -86,7 +82,6 @@ describe('Save light mutation', () => {
         await saveLight(light, id);
 
         const updatedLight = Object.assign({}, light);
-        updatedLight.direction = {x: 1, y: 0, z: -1};
         updatedLight.ambient = {r: 0, g: 1, b: 1, a: 0.30};
         updatedLight.specular = {r: 2, g: 7, b: 8, a: 0.72};
 
@@ -110,8 +105,6 @@ describe('Delete light mutation', () => {
                         id
                         name
                         type
-                        position { x y z }
-                        direction { x y z }
                         ambient { r g b a }
                         diffuse { r g b a }
                         specular { r g b a }

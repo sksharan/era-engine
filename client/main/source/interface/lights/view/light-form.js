@@ -47,8 +47,6 @@ const saveLightMutation = gql`
         saveLight(light: {
             name: $name,
             type: "POINT",
-            position: {x: 60, y: 20, z: 60},
-            direction: {x: 0, y: -1, z: 0},
             ambient: {r: 0.6, g: 0.6, b: 0.6, a: 1},
             diffuse: {r: 0.8, g: 0.8, b: 0.8, a: 1},
             specular: {r: 0.8, g: 0.8, b: 0.8, a: 1},

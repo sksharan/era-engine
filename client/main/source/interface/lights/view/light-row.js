@@ -31,7 +31,7 @@ function createLightNode(light) {
     const lightNode = new LightNode(
         mat4.fromTranslation(
             mat4.create(),
-            vec3.fromValues(light.position.x, light.position.y, light.position.z)),
+            vec3.fromValues(60, 20, 60)),
         light);
 
     // Create a node for the icon that will indicate the light's position
@@ -103,8 +103,6 @@ class LightRow extends React.Component {
             id: this.state.light.id,
             name: this.state.light.name,
             type: this.state.light.type,
-            position: this.getObjectForUpdate(this.state.light.position),
-            direction: this.getObjectForUpdate(this.state.light.direction),
             ambient: this.getObjectForUpdate(this.state.light.ambient),
             diffuse: this.getObjectForUpdate(this.state.light.diffuse),
             specular: this.getObjectForUpdate(this.state.light.specular),

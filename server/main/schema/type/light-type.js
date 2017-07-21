@@ -7,7 +7,6 @@ import {
 } from 'graphql';
 
 import {InputColorType, OutputColorType} from './color-type';
-import {InputVec3Type, OutputVec3Type} from './vec3-type';
 
 export const InputLightType = new GraphQLInputObjectType({
     name: 'LightInput',
@@ -22,12 +21,6 @@ export const InputLightType = new GraphQLInputObjectType({
         },
         type: {
             type: new GraphQLNonNull(GraphQLString)
-        },
-        position: {
-            type: new GraphQLNonNull(InputVec3Type)
-        },
-        direction: {
-            type: new GraphQLNonNull(InputVec3Type)
         },
         ambient: {
             type: new GraphQLNonNull(InputColorType)
@@ -69,14 +62,6 @@ export const OutputLightType = new GraphQLObjectType({
         type: {
             type: GraphQLString,
             resolve: (light) => light.type
-        },
-        position: {
-            type: OutputVec3Type,
-            resolve: (light) => light.position
-        },
-        direction: {
-            type: OutputVec3Type,
-            resolve: (light) => light.direction
         },
         ambient: {
             type: OutputColorType,

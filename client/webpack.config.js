@@ -14,6 +14,7 @@ module.exports = {
         filename: './main/public/bundle.js'
     },
     watch: true,
+    devtool: 'source-map',
     plugins: [
         new HtmlWebpackPlugin({
             filename: 'main/public/index.html',
@@ -25,7 +26,7 @@ module.exports = {
            $: 'jquery',
            jQuery: 'jquery',
            Tether: 'tether'
-       })
+        })
     ],
     resolve: {
         extensions: ['.js', '.jsx']

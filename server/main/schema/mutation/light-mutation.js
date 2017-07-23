@@ -3,10 +3,9 @@ import {
     GraphQLString
 } from 'graphql';
 
-import mongoose from 'mongoose';
-
 import {InputLightType, OutputLightType} from '../type/light-type';
-import {LightModel} from '../../model/index';
+import {db, LightCollection} from '../../database'
+import {ObjectId} from 'mongodb'
 
 export const saveLight = {
     type: OutputLightType,
@@ -15,9 +14,12 @@ export const saveLight = {
             type: new GraphQLNonNull(InputLightType)
         }
     },
-    resolve(root, args) {
-        return LightModel.findByIdAndUpdate(args.light.id || mongoose.Types.ObjectId(),
-                args.light, {upsert: true, new: true}).exec();
+    resolve: async (root, args) => {
+        const light = args.light;
+        light.id = light.id ? new ObjectId(light.id) : new ObjectId();
+        await db.collection(LightCollection).findOneAndUpdate(
+                {_id: light.id}, {$set: args.light}, {upsert: true, returnOriginal: false});
+        return await db.collection(LightCollection).find({_id: light.id}).next();
     }
 }
 
@@ -28,7 +30,10 @@ export const deleteLight = {
             type: GraphQLString
         }
     },
-    resolve(root, args) {
-        return LightModel.findByIdAndRemove(args.id).exec();
+    resolve: async (root, args) => {
+        const id = new ObjectId(args.id);
+        const deletedDoc = await db.collection(LightCollection).find({_id: id}).next();
+        await db.collection(LightCollection).deleteOne({_id: id});
+        return deletedDoc;
     }
 };

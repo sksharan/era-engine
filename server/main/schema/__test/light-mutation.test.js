@@ -3,7 +3,7 @@ import chaiSubset from 'chai-subset';
 import request from 'supertest';
 import stringifyObject from 'stringify-object';
 import app from '../../app';
-import {LightModel} from '../../model/index';
+import {connectDb, db, LightCollection} from '../../database';
 
 chai.use(chaiSubset);
 
@@ -56,8 +56,9 @@ async function saveLight(light, id=null) {
     }
 
     // Check that light data is in db
-    const lights = await LightModel.find({});
+    const lights = await db.collection(LightCollection).find({}).toArray();
     expect(lights).to.have.lengthOf(1);
+    lights[0].id = lights[0]._id.toString();
     expect(lights[0]).to.containSubset(light);
     expect(lights[0].id).to.be.a('string');
     if (id) {
@@ -66,9 +67,12 @@ async function saveLight(light, id=null) {
 }
 
 describe('Save light mutation', () => {
-    beforeEach(async () => {
+    before(async () => {
+        await connectDb();
+    });
+    beforeEach(function* () {
         // Remove all existing lights from the db
-        await LightModel.remove({});
+        yield db.collection(LightCollection).deleteMany({});
     });
     it('should create a new light if an id is not provided', async () => {
         await saveLight(light);
@@ -90,18 +94,22 @@ describe('Save light mutation', () => {
 });
 
 describe('Delete light mutation', () => {
-    beforeEach(async () => {
+    before(async () => {
+        await connectDb();
+    });
+    beforeEach(function* () {
         // Remove all existing lights from the db
-        await LightModel.remove({});
+        yield db.collection(LightCollection).deleteMany({});
     });
     it('should successfully delete a light', async () => {
-        const doc = await new LightModel(light).save();
+        const lightCopy = Object.assign({}, light); // Need a copy to avoid adding _id to original light
+        await db.collection(LightCollection).insertOne(lightCopy);
 
         const response = await request(app)
             .post('/graphql')
             .send({'query': `
                 mutation {
-                    deleteLight(id: "${doc.id}") {
+                    deleteLight(id: "${lightCopy._id.toString()}") {
                         id
                         name
                         type
@@ -121,10 +129,10 @@ describe('Delete light mutation', () => {
         const data = JSON.parse(response.text).data;
         expect(data.deleteLight).to.containSubset(light);
         expect(data.deleteLight.id).to.be.a('string');
-        expect(data.deleteLight.id).to.equal(doc.id);
+        expect(data.deleteLight.id).to.equal(lightCopy._id.toString());
 
         // Check that no more lights are in the db
-        const lights = await LightModel.find({});
+        const lights = await db.collection(LightCollection).find({}).toArray();
         expect(lights).to.have.lengthOf(0);
     });
 });

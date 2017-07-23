@@ -53,7 +53,7 @@ export const OutputLightType = new GraphQLObjectType({
     fields: () => ({
         id: {
             type: GraphQLString,
-            resolve: (light) => light.id
+            resolve: (light) => light._id.toString()
         },
         name: {
             type: GraphQLString,

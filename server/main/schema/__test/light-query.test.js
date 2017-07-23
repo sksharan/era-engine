@@ -2,7 +2,7 @@ import {default as chai, expect} from 'chai';
 import chaiSubset from 'chai-subset';
 import request from 'supertest';
 import app from '../../app';
-import {LightModel} from '../../model/index';
+import {connectDb, db, LightCollection} from '../../database'
 
 chai.use(chaiSubset);
 
@@ -20,10 +20,14 @@ describe('Light query', () => {
         constantAttenuation: 3
     };
 
-    beforeEach(async () => {
-        // Remove all existing lights from the db, then add a test light
-        await LightModel.remove({});
-        await new LightModel(light).save();
+    before(async () => {
+        await connectDb();
+    });
+    beforeEach(function* () {
+        // Remove all existing lights from the db
+        yield db.collection(LightCollection).deleteMany({});
+        // Add a test light - use copy so original object isn't modified
+        yield db.collection(LightCollection).insertOne(Object.assign({}, light));
     });
 
     it('should return correct light values', async () => {

@@ -2,12 +2,12 @@ import {
     GraphQLList
 } from 'graphql';
 
-import {OutputLightType} from '../type/light-type';
-import {LightModel} from '../../model/index';
+import {OutputLightType} from '../type/light-type'
+import {db, LightCollection} from '../../database'
 
 export default {
     type: new GraphQLList(OutputLightType),
-    resolve: (root, args) => {
-        return LightModel.find(args).exec();
+    resolve() {
+        return db.collection(LightCollection).find({}).toArray();
     }
 }

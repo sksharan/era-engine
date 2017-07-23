@@ -10,7 +10,7 @@
     "start": "nodemon main/app.js --exec babel-node",
     "build": "babel main -d dist",
     "serve": "node dist/app.js",
-    "test": "cross-env NODE_ENV=test mocha --compilers js:babel-register main/**/**.test.js",
+    "test": "cross-env NODE_ENV=test mocha -r co-mocha --compilers js:babel-register main/**/**.test.js",
     "lint": "eslint main/**"
   },
   "dependencies": {
@@ -18,7 +18,7 @@
     "express": "^4.14.0",
     "express-graphql": "^0.6.6",
     "graphql": "^0.10.1",
-    "mongoose": "^4.7.8"
+    "mongodb": "^2.2.30"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",
@@ -26,6 +26,7 @@
     "babel-register": "^6.24.1",
     "chai": "^3.5.0",
     "chai-subset": "^1.5.0",
+    "co-mocha": "^1.2.0",
     "cross-env": "^5.0.1",
     "eslint": "^3.19.0",
     "eslint-plugin-import": "^2.3.0",

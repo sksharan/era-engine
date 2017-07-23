@@ -1,47 +1,21 @@
 import {default as chai, expect} from 'chai';
 import chaiSubset from 'chai-subset';
 import request from 'supertest';
-import stringifyObject from 'stringify-object';
 import app from '../../app';
 import {connectDb, db, LightCollection} from '../../database';
+import {getLight, stringifyLight, LightSelectFields} from './util/light-util';
 
 chai.use(chaiSubset);
 
-const light = {
-    name: "Light",
-    type: "POINT",
-    ambient: {r: 1, g: 0, b: 0, a: 0.25},
-    diffuse: {r: 0, g: 1, b: 0, a: 0.50},
-    specular: {r: 0, g: 0, b: 1, a: 0.75},
-    specularTerm: 100,
-    quadraticAttenuation: 1,
-    linearAttenuation: 2,
-    constantAttenuation: 3
-};
-
-async function saveLight(light, id=null) {
-    light = Object.assign({}, light);
-    if (id) {
-        light.id = id;
-    }
-    // Light object in mutation cannot have quotes around the object keys
-    const lightString = stringifyObject(light, {singleQuotes: false});
+async function saveLight(light) {
+    const lightString = stringifyLight(light);
 
     const response = await request(app)
         .post('/graphql')
         .send({'query': `
             mutation {
                 saveLight(light: ${lightString}) {
-                    id
-                    name
-                    type
-                    ambient { r g b a }
-                    diffuse { r g b a }
-                    specular { r g b a }
-                    specularTerm
-                    quadraticAttenuation
-                    linearAttenuation
-                    constantAttenuation
+                    ${LightSelectFields}
                 }
             }
         `})
@@ -51,8 +25,8 @@ async function saveLight(light, id=null) {
     const data = JSON.parse(response.text).data;
     expect(data.saveLight).to.containSubset(light);
     expect(data.saveLight.id).to.be.a('string');
-    if (id) {
-        expect(data.saveLight.id).to.equal(id);
+    if (light.id) {
+        expect(data.saveLight.id).to.equal(light.id);
     }
 
     // Check that light data is in db
@@ -61,8 +35,8 @@ async function saveLight(light, id=null) {
     lights[0].id = lights[0]._id.toString();
     expect(lights[0]).to.containSubset(light);
     expect(lights[0].id).to.be.a('string');
-    if (id) {
-        expect(lights[0].id).to.equal(id);
+    if (light.id) {
+        expect(lights[0].id).to.equal(light.id);
     }
 }
 
@@ -75,21 +49,22 @@ describe('Save light mutation', () => {
         yield db.collection(LightCollection).deleteMany({});
     });
     it('should create a new light if an id is not provided', async () => {
-        await saveLight(light);
+        await saveLight(getLight());
     });
     it('should create a new light if an unknown id is provided', async () => {
         const id = '5944c6b08b1ea228e823f354';
-        await saveLight(light, id);
+        await saveLight(getLight(id));
     });
     it("should update an existing light if an existing id is provided", async () => {
         const id = '59477ef06fee92742c47a9e4';
-        await saveLight(light, id);
+        await saveLight(getLight(id));
 
-        const updatedLight = Object.assign({}, light);
+        const updatedLight = getLight(id);
+        // Update any set of light fields
         updatedLight.ambient = {r: 0, g: 1, b: 1, a: 0.30};
         updatedLight.specular = {r: 2, g: 7, b: 8, a: 0.72};
 
-        await saveLight(updatedLight, id);
+        await saveLight(getLight(id, updatedLight));
     });
 });
 
@@ -102,24 +77,15 @@ describe('Delete light mutation', () => {
         yield db.collection(LightCollection).deleteMany({});
     });
     it('should successfully delete a light', async () => {
-        const lightCopy = Object.assign({}, light); // Need a copy to avoid adding _id to original light
-        await db.collection(LightCollection).insertOne(lightCopy);
+        const light = getLight();
+        await db.collection(LightCollection).insertOne(light);
 
         const response = await request(app)
             .post('/graphql')
             .send({'query': `
                 mutation {
-                    deleteLight(id: "${lightCopy._id.toString()}") {
-                        id
-                        name
-                        type
-                        ambient { r g b a }
-                        diffuse { r g b a }
-                        specular { r g b a }
-                        specularTerm
-                        quadraticAttenuation
-                        linearAttenuation
-                        constantAttenuation
+                    deleteLight(id: "${light._id.toString()}") {
+                        ${LightSelectFields}
                     }
                 }
             `})
@@ -127,9 +93,9 @@ describe('Delete light mutation', () => {
 
         // Check that valid light is returned in response
         const data = JSON.parse(response.text).data;
-        expect(data.deleteLight).to.containSubset(light);
+        expect(data.deleteLight).to.containSubset(getLight());
         expect(data.deleteLight.id).to.be.a('string');
-        expect(data.deleteLight.id).to.equal(lightCopy._id.toString());
+        expect(data.deleteLight.id).to.equal(light._id.toString());
 
         // Check that no more lights are in the db
         const lights = await db.collection(LightCollection).find({}).toArray();

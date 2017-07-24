@@ -3,11 +3,11 @@ import {
 } from 'graphql';
 
 import {OutputLightType} from '../type/light-type'
-import {db, LightCollection} from '../../database'
+import * as LightService from '../../service/light-service'
 
 export default {
     type: new GraphQLList(OutputLightType),
     resolve() {
-        return db.collection(LightCollection).find({}).toArray();
+        return LightService.getAllLights();
     }
 }

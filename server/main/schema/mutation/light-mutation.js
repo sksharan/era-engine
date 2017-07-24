@@ -3,9 +3,8 @@ import {
     GraphQLString
 } from 'graphql';
 
-import {InputLightType, OutputLightType} from '../type/light-type';
-import {db, LightCollection} from '../../database'
-import {ObjectId} from 'mongodb'
+import {InputLightType, OutputLightType} from '../type/light-type'
+import * as LightService from '../../service/light-service'
 
 export const saveLight = {
     type: OutputLightType,
@@ -15,11 +14,7 @@ export const saveLight = {
         }
     },
     resolve: async (root, args) => {
-        const light = args.light;
-        light.id = light.id ? new ObjectId(light.id) : new ObjectId();
-        await db.collection(LightCollection).findOneAndUpdate(
-                {_id: light.id}, {$set: args.light}, {upsert: true, returnOriginal: false});
-        return await db.collection(LightCollection).find({_id: light.id}).next();
+        return LightService.upsertLight(args.light);
     }
 }
 
@@ -31,9 +26,6 @@ export const deleteLight = {
         }
     },
     resolve: async (root, args) => {
-        const id = new ObjectId(args.id);
-        const deletedDoc = await db.collection(LightCollection).find({_id: id}).next();
-        await db.collection(LightCollection).deleteOne({_id: id});
-        return deletedDoc;
+        return LightService.deleteLight(args.id);
     }
 };

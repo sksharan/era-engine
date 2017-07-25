@@ -5,7 +5,7 @@ import {
 import Query from './query';
 import Mutation from './mutation';
 
-export default new GraphQLSchema({
+export const Schema = new GraphQLSchema({
     query: Query,
     mutation: Mutation
 });

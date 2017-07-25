@@ -3,14 +3,14 @@ import graphQLHTTP from 'express-graphql';
 import cors from 'cors';
 import config from './config';
 import {connectDb} from './database'
-import schema from './schema/index'
+import {Schema} from './graphql/index'
 
 const app = express();
 
 connectDb().then(() => {
     app.use(cors());
     app.use('/graphql', graphQLHTTP({
-        schema,
+        schema: Schema,
         graphiql: true
     }));
     app.listen(config.port, () => {

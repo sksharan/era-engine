@@ -7,6 +7,8 @@ import {
     GraphQLList
 } from 'graphql'
 
+import SceneNodeContentType from './scene-node-content-type'
+
 export const InputSceneNodeType = new GraphQLInputObjectType({
     name: 'InputSceneNode',
     description: '...',
@@ -58,6 +60,10 @@ export const OutputSceneNodeType = new GraphQLObjectType({
             // A list of 16 elements to represent a 4x4 matrix
             type: new GraphQLList(GraphQLFloat),
             resolve: (node) => node.localMatrix
+        },
+        content: {
+            type: SceneNodeContentType,
+            resolve: (node) => node.content
         }
     })
 });

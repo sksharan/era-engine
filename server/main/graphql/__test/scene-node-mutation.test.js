@@ -113,8 +113,7 @@ describe('Scene node mutation', () => {
 
     it('should allow a light node to be saved', async () => {
         const node = {name: 'a', path: '/a'};
-        let content = getLight();
-        content.id = null;
+        const content = getLight();
         const res = await request(app)
             .post('/graphql')
             .send({'query': `

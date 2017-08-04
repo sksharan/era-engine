@@ -2,7 +2,6 @@ import {
     GraphQLObjectType
 } from 'graphql';
 
-import LightField from './query/light-field';
 import SceneNodeField from './query/scene-node-field';
 
 export default new GraphQLObjectType({
@@ -10,7 +9,6 @@ export default new GraphQLObjectType({
     description: '...',
 
     fields: () => ({
-        light: LightField,
         sceneNodes: SceneNodeField
     })
 });

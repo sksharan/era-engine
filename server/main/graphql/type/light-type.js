@@ -13,9 +13,6 @@ export const InputLightType = new GraphQLInputObjectType({
     description: '...',
 
     fields: () => ({
-        id: {
-            type: GraphQLString
-        },
         name: {
             type: new GraphQLNonNull(GraphQLString)
         },
@@ -51,10 +48,6 @@ export const OutputLightType = new GraphQLObjectType({
     description: '...',
 
     fields: () => ({
-        id: {
-            type: GraphQLString,
-            resolve: (light) => light._id ? light._id.toString() : null
-        },
         name: {
             type: GraphQLString,
             resolve: (light) => light.name

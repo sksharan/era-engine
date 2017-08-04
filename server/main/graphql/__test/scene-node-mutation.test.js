@@ -3,6 +3,7 @@ import request from 'supertest'
 import app from '../../app'
 import {connectDb, db, SceneNodeCollection} from '../../database'
 import {SceneNodeSelectFields} from './util/scene-node-util'
+import {getLight, stringifyLight} from './util/light-util'
 
 function getSceneNode({id, name, path}) {
     return `{
@@ -13,7 +14,7 @@ function getSceneNode({id, name, path}) {
         path: "${path}"
     }`;
 }
-function validateSceneNode(sceneNode, {id, name, path}) {
+function validateSceneNode(sceneNode, {id, name, path}, content=null) {
     if (id) {
         expect(sceneNode.id).to.equal(id);
     } else {
@@ -23,6 +24,7 @@ function validateSceneNode(sceneNode, {id, name, path}) {
     expect(sceneNode.type).to.equal('None');
     expect(sceneNode.localMatrix).to.eql([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]);
     expect(sceneNode.path).to.equal(path);
+    expect(sceneNode.content).to.eql(content);
 }
 
 describe('Scene node mutation', () => {
@@ -107,6 +109,31 @@ describe('Scene node mutation', () => {
         const sceneNodes = await cursor.toArray();
         expect(sceneNodes).to.have.lengthOf(1);
         validateSceneNode(sceneNodes[0], node1);
+    });
+
+    it('should allow a light node to be saved', async () => {
+        const node = {name: 'a', path: '/a'};
+        let content = getLight();
+        content.id = null;
+        const res = await request(app)
+            .post('/graphql')
+            .send({'query': `
+                mutation {
+                    saveLightSceneNode(sceneNode: ${getSceneNode(node)}, content: ${stringifyLight(content)}) {
+                        ${SceneNodeSelectFields}
+                    }
+                }
+            `})
+            .expect(200);
+
+        // Validate response
+        validateSceneNode(JSON.parse(res.text).data.saveLightSceneNode, node, content);
+
+        // Validate db contents
+        const cursor = await db.collection(SceneNodeCollection).find({}).sort({path: 1});
+        const sceneNodes = await cursor.toArray();
+        expect(sceneNodes).to.have.lengthOf(1);
+        validateSceneNode(sceneNodes[0], node, content);
     });
 
     it('should allow a node and its children to be deleted', async () => {

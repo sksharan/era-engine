@@ -5,6 +5,7 @@ import {
 } from 'graphql'
 
 import {InputSceneNodeType, OutputSceneNodeType} from '../type/scene-node-type'
+import {InputLightType} from '../type/light-type'
 import * as SceneNodeService from '../../service/scene-node-service'
 
 export const saveSceneNode = {
@@ -15,10 +16,22 @@ export const saveSceneNode = {
         }
     },
     resolve: (root, args) => {
-        if (args.sceneNode.localMatrix.length !== 16) {
-            throw new Error('Local matrix must be a list of exactly 16 elements')
+        return save(args.sceneNode, null);
+    }
+}
+
+export const saveLightSceneNode = {
+    type: OutputSceneNodeType,
+    args: {
+        sceneNode: {
+            type: new GraphQLNonNull(InputSceneNodeType)
+        },
+        content: {
+            type: new GraphQLNonNull(InputLightType)
         }
-        return SceneNodeService.saveSceneNode(args.sceneNode);
+    },
+    resolve: (root, args) => {
+        return save(args.sceneNode, args.content);
     }
 }
 
@@ -32,4 +45,11 @@ export const deleteSceneNodes = {
     resolve: (root, args) => {
         return SceneNodeService.deleteSceneNodes(args.pathRegex);
     }
+}
+
+function save(sceneNode, content) {
+    if (sceneNode.localMatrix.length !== 16) {
+        throw new Error('Local matrix must be a list of exactly 16 elements')
+    }
+    return SceneNodeService.saveSceneNode(sceneNode, content);
 }

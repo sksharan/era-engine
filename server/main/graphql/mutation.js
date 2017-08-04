@@ -3,7 +3,11 @@ import {
 } from 'graphql';
 
 import {saveLight, deleteLight} from './mutation/light-mutation';
-import {saveSceneNode, deleteSceneNodes} from './mutation/scene-node-mutation';
+import {
+    deleteSceneNodes,
+    saveLightSceneNode,
+    saveSceneNode,
+} from './mutation/scene-node-mutation';
 
 export default new GraphQLObjectType({
     name: 'Mutation',
@@ -12,7 +16,8 @@ export default new GraphQLObjectType({
     fields: () => ({
         saveLight,
         deleteLight,
+        deleteSceneNodes,
+        saveLightSceneNode,
         saveSceneNode,
-        deleteSceneNodes
     })
 });

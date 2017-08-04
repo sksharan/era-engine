@@ -7,7 +7,7 @@ import {
     GraphQLList
 } from 'graphql'
 
-import SceneNodeContentType from './scene-node-content-type'
+import SceneNodeContentType from './union/scene-node-content-type'
 import SceneNodeEnumType from './enum/scene-node-enum-type';
 
 export const InputSceneNodeType = new GraphQLInputObjectType({

@@ -1,5 +1,5 @@
 import {GraphQLUnionType} from 'graphql'
-import {OutputLightType} from './light-type'
+import {OutputLightType} from '../light-type'
 
 export default new GraphQLUnionType({
     name: 'SceneNodeContentType',

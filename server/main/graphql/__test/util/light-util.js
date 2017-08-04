@@ -15,8 +15,19 @@ export const getLight = () => {
 }
 
 export const stringifyLight = (light) => {
-    // When used as a parameter to a mutation, cannot have quotes around property names
-    return stringifyObject(light, {singleQuotes: false});
+    return `
+        {
+            name: "${light.name}",
+            type: ${light.type},
+            ambient: ${stringifyObject(light.ambient, {singleQuotes: false})},
+            diffuse: ${stringifyObject(light.diffuse, {singleQuotes: false})},
+            specular: ${stringifyObject(light.specular, {singleQuotes: false})},
+            specularTerm: ${light.specularTerm},
+            quadraticAttenuation: ${light.quadraticAttenuation},
+            linearAttenuation: ${light.linearAttenuation},
+            constantAttenuation: ${light.constantAttenuation}
+        }
+    `
 }
 
 export const LightSelectFields = `

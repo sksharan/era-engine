@@ -8,6 +8,7 @@ import {
 } from 'graphql'
 
 import SceneNodeContentType from './scene-node-content-type'
+import SceneNodeEnumType from './enum/scene-node-enum-type';
 
 export const InputSceneNodeType = new GraphQLInputObjectType({
     name: 'InputSceneNode',
@@ -25,7 +26,7 @@ export const InputSceneNodeType = new GraphQLInputObjectType({
             type: new GraphQLNonNull(GraphQLString)
         },
         type: {
-            type: new GraphQLNonNull(GraphQLString)
+            type: new GraphQLNonNull(SceneNodeEnumType)
         },
         localMatrix: {
             // A list of 16 elements to represent a 4x4 matrix

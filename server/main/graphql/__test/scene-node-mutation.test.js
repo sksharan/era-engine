@@ -9,7 +9,7 @@ function getSceneNode({id, name, path}) {
     return `{
         ${id ? `id: "${id}",` : ""}
         name: "${name}",
-        type: "None",
+        type: DEFAULT,
         localMatrix: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
         path: "${path}"
     }`;
@@ -21,7 +21,7 @@ function validateSceneNode(sceneNode, {id, name, path}, content=null) {
         expect(sceneNode.id).to.not.be.null;
     }
     expect(sceneNode.name).to.equal(name);
-    expect(sceneNode.type).to.equal('None');
+    expect(sceneNode.type).to.equal('DEFAULT');
     expect(sceneNode.localMatrix).to.eql([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]);
     expect(sceneNode.path).to.equal(path);
     expect(sceneNode.content).to.eql(content);

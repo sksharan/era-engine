@@ -7,6 +7,7 @@ import {
 } from 'graphql';
 
 import {InputColorType, OutputColorType} from './color-type';
+import LightEnumType from './enum/light-enum-type';
 
 export const InputLightType = new GraphQLInputObjectType({
     name: 'LightInput',
@@ -17,7 +18,7 @@ export const InputLightType = new GraphQLInputObjectType({
             type: new GraphQLNonNull(GraphQLString)
         },
         type: {
-            type: new GraphQLNonNull(GraphQLString)
+            type: new GraphQLNonNull(LightEnumType)
         },
         ambient: {
             type: new GraphQLNonNull(InputColorType)
@@ -53,7 +54,7 @@ export const OutputLightType = new GraphQLObjectType({
             resolve: (light) => light.name
         },
         type: {
-            type: GraphQLString,
+            type: LightEnumType,
             resolve: (light) => light.type
         },
         ambient: {

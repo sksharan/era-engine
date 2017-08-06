@@ -1,0 +1,12 @@
+<span>Upload file</span>
+<form method="post" action="{{fileEndpoint}}" enctype="multipart/form-data">
+    <input type="file" name="file" />
+    <input type="submit" value="submit" />
+</form>
+<br/>
+<span>Files on server</span>
+<ul>
+    {{#files}}
+    <li><a href="{{../fileEndpoint}}/{{_id}}/content">{{filename}}</a></li>
+    {{/files}}
+</ul>

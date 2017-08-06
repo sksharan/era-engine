@@ -1,6 +1,11 @@
 import {bucket, db, FileMetadataCollection} from '../database'
 import {ObjectId} from 'mongodb'
 
+export const getAllFileMetadata = async () => {
+    const cursor = await db.collection(FileMetadataCollection).find().sort({uploadDate: -1});
+    return cursor.toArray();
+}
+
 export const getFileContentStream = (fileId) => {
     return bucket.openDownloadStream(new ObjectId(fileId));
 }

@@ -1,6 +1,10 @@
 import * as FileDao from '../dao/file-dao'
 import streamifier from 'streamifier'
 
+export const getAllFileMetadata = () => {
+    return FileDao.getAllFileMetadata();
+}
+
 export const getFileContentStream = (fileId) => {
     return FileDao.getFileContentStream(fileId);
 }

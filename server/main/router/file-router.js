@@ -1,6 +1,7 @@
 import express from 'express'
 import multer from 'multer'
 import {
+    getAllFileMetadata,
     getFileContentStream,
     getFileMetadata,
     uploadFiles
@@ -8,6 +9,19 @@ import {
 
 const router = express.Router();
 const upload = multer({});
+
+export const FileRouterEndpoint = "/files";
+export const FileRouter = router;
+
+router.get('/view', (req, res) => {
+    const promise = getAllFileMetadata();
+    promise.then((metadata) => {
+        res.render('file', {fileEndpoint: FileRouterEndpoint, files: metadata});
+    })
+    .catch(err => {
+        res.status(500).send(err);
+    })
+});
 
 router.get('/:id/content', (req, res) => {
     const promise = getFileMetadata(req.params.id);
@@ -51,6 +65,3 @@ router.post('/', upload.any(), (req, res) => {
             res.status(500).send(err);
         })
 });
-
-export const FileRouterEndpoint = "/files";
-export const FileRouter = router;

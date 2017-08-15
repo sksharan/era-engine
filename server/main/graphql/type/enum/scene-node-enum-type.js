@@ -4,6 +4,7 @@ export default new GraphQLEnumType({
     name: 'SceneNodeEnum',
     values: {
         DEFAULT: {},
-        LIGHT: {}
+        LIGHT: {},
+        OBJECT: {}
     }
 });

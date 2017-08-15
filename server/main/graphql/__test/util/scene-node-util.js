@@ -1,4 +1,5 @@
 import {LightSelectFields} from './light-util'
+import {ObjectSelectFields} from './object-util'
 
 export const SceneNodeSelectFields = `
     id
@@ -9,6 +10,9 @@ export const SceneNodeSelectFields = `
     content {
         ... on Light {
             ${LightSelectFields}
+        }
+        ... on Object {
+            ${ObjectSelectFields}
         }
     }
 `;

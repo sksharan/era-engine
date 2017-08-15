@@ -51,5 +51,6 @@ function save(sceneNode, content) {
     if (sceneNode.localMatrix.length !== 16) {
         throw new Error('Local matrix must be a list of exactly 16 elements')
     }
-    return SceneNodeService.saveSceneNode(sceneNode, content);
+    sceneNode.content = content;
+    return SceneNodeService.saveSceneNode(sceneNode);
 }

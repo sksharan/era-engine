@@ -4,8 +4,7 @@ export const getSceneNodes = (pathRegex) => {
     return SceneNodeDao.getSceneNodes(new RegExp(pathRegex));
 }
 
-export const saveSceneNode = (sceneNode, content) => {
-    sceneNode.content = content;
+export const saveSceneNode = (sceneNode) => {
     return SceneNodeDao.saveSceneNode(sceneNode);
 }
 

@@ -1,11 +1,15 @@
 import {GraphQLUnionType} from 'graphql'
+import {OutputObjectType} from '../object-type'
 import {OutputLightType} from '../light-type'
 
 export default new GraphQLUnionType({
     name: 'SceneNodeContentType',
-    types: [OutputLightType],
+    types: [OutputObjectType, OutputLightType],
     resolveType: (data) => {
-        if (data.ambient) {
+        if (data.positions) {
+            return OutputObjectType;
+        }
+        if (data.quadraticAttenuation) {
             return OutputLightType;
         }
     }

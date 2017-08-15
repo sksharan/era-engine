@@ -1,8 +1,6 @@
 import express from 'express'
 import multer from 'multer'
 import path from 'path'
-import fs from 'fs'
-import {uploadFile} from '../service/file-service'
 import {createFromZip} from '../service/object-service'
 
 const router = express.Router();
@@ -27,7 +25,11 @@ router.post('/', upload.any(), async (req, res) => {
         return;
     }
     const zipPath = path.join(req.files[0].destination, req.files[0].filename);
-    const file = await uploadFile(fs.createReadStream(zipPath), req.files[0].originalname);
-    createFromZip(zipPath);
-    res.status(201).send(file);
+    try {
+        await createFromZip(zipPath);
+        res.status(201).send('Successfully uploaded zip');
+    } catch (e) {
+        console.error(e);
+        res.status(500).send(e);
+    }
 });

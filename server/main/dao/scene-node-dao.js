@@ -1,6 +1,10 @@
 import {db, SceneNodeCollection} from '../database'
 import {ObjectId} from 'mongodb'
 
+export const getSceneNode = async (id) => {
+    return await db.collection(SceneNodeCollection).findOne({_id: new ObjectId(id)});
+}
+
 export const getSceneNodes = async (pathRegex) => {
     const cursor = db.collection(SceneNodeCollection)
             .find({path: pathRegex})

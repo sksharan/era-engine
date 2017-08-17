@@ -5,6 +5,7 @@ export default new GraphQLEnumType({
     values: {
         DEFAULT: {},
         LIGHT: {},
-        OBJECT: {}
+        OBJECT: {},
+        OBJECT_REF: {}
     }
 });

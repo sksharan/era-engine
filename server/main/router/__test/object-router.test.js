@@ -3,7 +3,7 @@ import request from 'supertest'
 import app from '../../app'
 import {ObjectRouterEndpoint} from '../object-router'
 import {ObjectSceneNodePrefix} from '../../service/object-service'
-import {SceneNodeSelectFields} from '../../graphql/__test/util/scene-node-util'
+import {SceneNodeSelectFields, getSceneNode} from '../../graphql/__test/util/scene-node-util'
 import {
     connectDb,
     db,
@@ -169,6 +169,26 @@ describe('Object router', () => {
         expect(sceneNodes[12].content.specular.b).to.equal(0);
         expect(sceneNodes[12].content.shininess).to.equal(0);
         expect(sceneNodes[12].content.textureFileId).to.be.not.null;
+    });
+
+    it('should allow object ref scene node to be created after zip is uploaded', async() => {
+        const sceneNodes = await uploadSpider();
+
+        const node = {name: 'a', path: '/a'};
+        const res = await request(app)
+            .post('/graphql')
+            .send({'query': `
+                mutation {
+                    saveObjectRefSceneNode(sceneNode: ${getSceneNode(node)},
+                            content: {objectSceneNodeId: "${sceneNodes[0].id}"}) {
+                        ${SceneNodeSelectFields}
+                    }
+                }
+            `})
+            .expect(200);
+
+        expect(JSON.parse(res.text).errors).to.be.undefined;
+        expect(JSON.parse(res.text).data.saveObjectRefSceneNode).to.be.defined;
     });
 });
 

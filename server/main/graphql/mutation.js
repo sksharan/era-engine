@@ -5,6 +5,7 @@ import {
 import {
     deleteSceneNodes,
     saveLightSceneNode,
+    saveObjectRefSceneNode,
     saveSceneNode,
 } from './mutation/scene-node-mutation';
 
@@ -15,6 +16,7 @@ export default new GraphQLObjectType({
     fields: () => ({
         deleteSceneNodes,
         saveLightSceneNode,
+        saveObjectRefSceneNode,
         saveSceneNode,
     })
 });

@@ -1,5 +1,9 @@
 import * as SceneNodeDao from '../dao/scene-node-dao'
 
+export const getSceneNode = (id) => {
+    return SceneNodeDao.getSceneNode(id);
+}
+
 export const getSceneNodes = (pathRegex) => {
     return SceneNodeDao.getSceneNodes(new RegExp(pathRegex));
 }

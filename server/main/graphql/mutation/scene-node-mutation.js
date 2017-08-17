@@ -6,7 +6,9 @@ import {
 
 import {InputSceneNodeType, OutputSceneNodeType} from '../type/scene-node-type'
 import {InputLightType} from '../type/light-type'
+import {InputObjectRefType} from '../type/object-ref-type'
 import * as SceneNodeService from '../../service/scene-node-service'
+import {ObjectSceneNodePrefix} from '../../service/object-service'
 
 export const saveSceneNode = {
     type: OutputSceneNodeType,
@@ -31,6 +33,28 @@ export const saveLightSceneNode = {
         }
     },
     resolve: (root, args) => {
+        return save(args.sceneNode, args.content);
+    }
+}
+
+export const saveObjectRefSceneNode = {
+    type: OutputSceneNodeType,
+    args: {
+        sceneNode: {
+            type: new GraphQLNonNull(InputSceneNodeType)
+        },
+        content: {
+            type: new GraphQLNonNull(InputObjectRefType)
+        }
+    },
+    resolve: async (root, args) => {
+        const doc = await SceneNodeService.getSceneNode(args.content.objectSceneNodeId);
+        if (doc === null) {
+            throw new Error("No scene node with id " + args.content.objectSceneNodeId);
+        }
+        if (!doc.path.startsWith(ObjectSceneNodePrefix)) {
+            throw new Error("Scene node detected, but is not an object scene node");
+        }
         return save(args.sceneNode, args.content);
     }
 }

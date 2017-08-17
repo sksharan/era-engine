@@ -2,18 +2,9 @@ import {expect} from 'chai'
 import request from 'supertest'
 import app from '../../app'
 import {connectDb, db, SceneNodeCollection} from '../../database'
-import {SceneNodeSelectFields} from './util/scene-node-util'
+import {SceneNodeSelectFields, getSceneNode} from './util/scene-node-util'
 import {getLight, stringifyLight} from './util/light-util'
 
-function getSceneNode({id, name, path}) {
-    return `{
-        ${id ? `id: "${id}",` : ""}
-        name: "${name}",
-        type: DEFAULT,
-        localMatrix: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
-        path: "${path}"
-    }`;
-}
 function validateSceneNode(sceneNode, {id, name, path}, content=null) {
     if (id) {
         expect(sceneNode.id).to.equal(id);
@@ -162,6 +153,45 @@ describe('Scene node mutation', () => {
         const cursor = await db.collection(SceneNodeCollection).find({}).sort({path: 1});
         const sceneNodes = await cursor.toArray();
         expect(sceneNodes).to.have.lengthOf(4);
+    });
+
+    it('should verify id exists when saving object ref scene node', async() => {
+        const node = {name: 'a', path: '/a'};
+        const res = await request(app)
+            .post('/graphql')
+            .send({'query': `
+                mutation {
+                    saveObjectRefSceneNode(sceneNode: ${getSceneNode(node)},
+                            content: {objectSceneNodeId: "59953ea7d491fa1dc07eee5c"}) {
+                        ${SceneNodeSelectFields}
+                    }
+                }
+            `})
+            .expect(200);
+
+        expect(JSON.parse(res.text).errors[0].message).to.equal(
+            'No scene node with id 59953ea7d491fa1dc07eee5c');
+    });
+
+    it('should verify id refers to object when saving object ref scene node', async() => {
+        await db.collection(SceneNodeCollection).insert({name: 'barbaz', path: '/foo'});
+        const doc = await db.collection(SceneNodeCollection).findOne({path: '/foo'});
+
+        const node = {name: 'a', path: '/a'};
+        const res = await request(app)
+            .post('/graphql')
+            .send({'query': `
+                mutation {
+                    saveObjectRefSceneNode(sceneNode: ${getSceneNode(node)},
+                            content: {objectSceneNodeId: "${doc._id}"}) {
+                        ${SceneNodeSelectFields}
+                    }
+                }
+            `})
+            .expect(200);
+
+        expect(JSON.parse(res.text).errors[0].message).to.equal(
+            'Scene node detected, but is not an object scene node');
     });
 
 });

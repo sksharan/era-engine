@@ -1,9 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {createNetworkInterface} from 'apollo-client'
-import {ApolloClient, ApolloProvider, addTypename} from 'react-apollo'
-import {graphqlEndpoint} from './config'
+import {ApolloProvider} from 'react-apollo'
 import FPS from './interface/fps/fps'
+import client from './interface/client'
 import store from './interface/store'
 import css from './main.scss'
 
@@ -60,15 +59,15 @@ class Main extends React.Component {
                         <Canvas />
                     </div>
                     <div className='col-md-4'>
-                        {this.state.glInitialized ? this.getLightsView() : ""}
+                        {this.state.glInitialized ? this.getNodesView() : ""}
                     </div>
                 </div>
             </div>
         );
     }
-    getLightsView() {
-        const Lights = require('./interface/lights/index').view;
-        return <Lights/>;
+    getNodesView() {
+        const Node = require('./interface/nodes/index').view;
+        return <Node />
     }
     componentDidMount() {
         // At this point, canvas has been rendered so WebGL is initialized
@@ -86,11 +85,6 @@ class Main extends React.Component {
         mainLoop.begin(this);
     }
 }
-
-const client = new ApolloClient({
-    networkInterface: createNetworkInterface({uri: graphqlEndpoint}),
-    queryTransformer: addTypename
-});
 
 ReactDOM.render(
     <ApolloProvider store={store} client={client}>

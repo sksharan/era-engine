@@ -1,16 +1,12 @@
 import {applyMiddleware, combineReducers, createStore} from 'redux'
 import {logger} from 'redux-logger'
-import {List} from 'immutable'
-
-// TODO: is this still needed?
+import client from './client'
 
 const reducer = combineReducers({
-    reducer(state=List()) {
-        return state;
-    }
+    apollo: client.reducer()
 });
 
-const middleware = applyMiddleware(logger);
+const middleware = applyMiddleware(client.middleware(), logger);
 
 const store = createStore(reducer, middleware);
 

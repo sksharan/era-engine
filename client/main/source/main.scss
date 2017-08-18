@@ -1,7 +1,6 @@
-$dimensions: 100%; // Test SASS works
-
 :local(.canvas) {
-    width: $dimensions;
-    height: $dimensions;
+    width: 100%;
+    height: 100%;
     display: block;
+    position: fixed;
 }

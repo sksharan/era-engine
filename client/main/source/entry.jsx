@@ -48,18 +48,20 @@ class Main extends React.Component {
     render() {
         // Render the canvas in order to init WebGL before rendering any other components
         return (
-            <div className='container-fluid'>
-                <div className='row'>
-                    <div className='col-md-12'>
-                        {this.state.glInitialized ? <FPS fps={this.state.fps}/> : ""}
+            <div>
+                <Canvas />
+                <div className='container-fluid'>
+                    <div className='row'>
+                        <div className='col-md-12'>
+                            {this.state.glInitialized ? <FPS fps={this.state.fps}/> : ""}
+                        </div>
                     </div>
-                </div>
-                <div className='row'>
-                    <div className='col-md-8'>
-                        <Canvas />
-                    </div>
-                    <div className='col-md-4'>
-                        {this.state.glInitialized ? this.getNodesView() : ""}
+                    <div className='row'>
+                        <div className='col-md-8'>
+                        </div>
+                        <div className='col-md-4'>
+                            {this.state.glInitialized ? this.getNodesView() : ""}
+                        </div>
                     </div>
                 </div>
             </div>

@@ -144,7 +144,7 @@ describe('Object router', () => {
 
     it('should create scene nodes with correct content from uploaded zip', async () => {
         const sceneNodes = await uploadSpider();
-        expect(sceneNodes[0].content).to.be.null;
+        expect(sceneNodes[0].content).to.be.not.null;
         expect(sceneNodes[12].content).to.be.not.null;
         expect(sceneNodes[12].content.positions.length).to.equal(213);
         expect(sceneNodes[12].content.positions[0]).to.equal(1.16038);

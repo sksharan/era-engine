@@ -7,14 +7,12 @@ export default new GraphQLUnionType({
     name: 'SceneNodeContentType',
     types: [OutputObjectType, OutputObjectRefType, OutputLightType],
     resolveType: (data) => {
-        if (data.positions) {
-            return OutputObjectType;
-        }
         if (data.objectSceneNodeId) {
             return OutputObjectRefType;
         }
         if (data.quadraticAttenuation) {
             return OutputLightType;
         }
+        return OutputObjectType;
     }
 });

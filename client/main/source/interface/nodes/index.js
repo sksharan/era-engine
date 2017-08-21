@@ -1,3 +1,3 @@
-import {NodePanelContainer as view} from './view/node-panel'
+import {NodePanelWithData as view} from './view/node-panel'
 
 export {view};

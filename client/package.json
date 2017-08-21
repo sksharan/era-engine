@@ -13,10 +13,11 @@
   },
   "dependencies": {
     "apollo-client": "^1.4.2",
-    "bootstrap": "^4.0.0-alpha.6",
-    "gl-matrix": "^2.3.2",
+    "bootstrap": "^4.0.0-beta",
+    "gl-matrix": "^2.4.0",
     "immutable": "^3.8.1",
     "jquery": "^3.2.1",
+    "popper.js": "^1.12.3",
     "prop-types": "^15.5.10",
     "react": "^15.5.4",
     "react-apollo": "^1.4.2",
@@ -56,7 +57,6 @@
     "react-test-renderer": "^15.5.4",
     "sass-loader": "^6.0.5",
     "style-loader": "^0.18.1",
-    "tether": "^1.4.0",
     "webpack": "^2.2.1",
     "webpack-dev-server": "^2.4.5"
   }

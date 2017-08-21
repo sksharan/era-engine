@@ -1,4 +1,6 @@
-{
+const path = require('path');
+
+module.exports = {
     "extends": [
         "eslint:recommended",
         "plugin:react/recommended",
@@ -22,12 +24,12 @@
     "settings": {
         "import/resolver": {
             "webpack": {
-                "config": "webpack.config.js"
+                "config": path.join(__dirname, 'webpack.config.js')
             }
         }
     },
     "rules": {
-        "no-console": ["error", { allow: ["warn", "error"] }],
+        "no-console": ["error", { "allow": ["warn", "error"] }],
         "import/no-extraneous-dependencies": [
             "error",
             {

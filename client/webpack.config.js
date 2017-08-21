@@ -21,11 +21,12 @@ module.exports = {
             template: 'main/template/index.html.template'
         }),
         extractSass,
-        // Required for Bootstrap 4 which depends on jQuery and Tether globals
+        // https://getbootstrap.com/docs/4.0/getting-started/webpack/
         new webpack.ProvidePlugin({
-           $: 'jquery',
-           jQuery: 'jquery',
-           Tether: 'tether'
+            $: 'jquery',
+            jQuery: 'jquery',
+            'window.jQuery': 'jquery',
+            Popper: ['popper.js', 'default']
         })
     ],
     resolve: {

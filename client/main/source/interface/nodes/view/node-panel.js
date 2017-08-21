@@ -1,7 +1,9 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import FontAwesome from 'react-fontawesome'
 import {graphql, gql} from 'react-apollo'
 import {SelectAllQuery} from '../query/scene-node-query'
+import {Node} from './node'
 import css from './styles/node-panel.scss'
 
 const idBase = 'nodeview-node-list';
@@ -26,7 +28,11 @@ export class NodePanel extends React.Component {
                 </div>
                 <div id={`${idBase}-collapse`} className='collapse show'>
                     <ul className="list-group list-group-flush">
-                        TODO
+                        {
+                            (this.props.data.loading)
+                                ? <div>Loading nodes...</div>
+                                : this.props.data.sceneNodes.map((val) => <Node key={val.id} node={val} />)
+                        }
                     </ul>
                 </div>
             </div>
@@ -41,3 +47,10 @@ export class NodePanel extends React.Component {
 export const NodePanelWithData = graphql(
     gql`${SelectAllQuery}`
 )(NodePanel);
+
+NodePanel.propTypes = {
+    data: PropTypes.shape({
+        loading: PropTypes.bool.isRequired,
+        sceneNodes: PropTypes.array
+    })
+}

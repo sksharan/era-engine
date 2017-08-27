@@ -1,3 +1,5 @@
+import {gql} from 'react-apollo'
+
 export const LightSelectFields = `
     name
     type
@@ -26,7 +28,7 @@ export const ObjectRefSelectFields = `
     objectSceneNodeId
 `;
 
-export const SelectAllQuery = `
+export const SelectAllQuery = gql`
     {
         sceneNodes(pathRegex: ".*") {
             id

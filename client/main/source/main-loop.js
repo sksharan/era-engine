@@ -16,7 +16,7 @@ export function begin(MainComponent) {
     MouseHandler.init();
     KeyboardHandler.init();
 
-    const programData = new ProgramBuilder().addPosition().addNormal().enableLighting().build();
+    const programData = new ProgramBuilder().addPosition().addNormal().addTexcoord().build();
     const defaultMaterial = new Material({programData: programData, imageSrc: 'public/textures/debug.png'});
 
     // Build a scene graph from test tile data

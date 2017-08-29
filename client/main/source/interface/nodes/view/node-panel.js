@@ -4,6 +4,7 @@ import FontAwesome from 'react-fontawesome'
 import {graphql} from 'react-apollo'
 import {SelectAllQuery} from '../query/scene-node-query'
 import {Node} from './node'
+import {RootSceneNode} from '../../../engine/index'
 import css from './styles/node-panel.scss'
 
 const idBase = 'nodeview-node-list';
@@ -32,7 +33,7 @@ export class NodePanel extends React.Component {
                             (this.props.data.loading)
                                 ? <div>Loading nodes...</div>
                                 : Object.entries(createHierarchyFromNodes(this.props.data.sceneNodes))
-                                        .map(([key, val]) => <Node key={key} val={val} depth={0} />)
+                                        .map(([key, val]) => <Node key={key} val={val} depth={0} parentRenderNode={RootSceneNode} />)
                         }
                     </ul>
                 </div>

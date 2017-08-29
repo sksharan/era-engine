@@ -93,7 +93,9 @@ function renderGeometry(sceneNode, lightNodes) {
                 vec3.transformMat4(vec3.create(), vec3.create(), sceneNode.worldMatrix));
         }
 
-        gl.bindTexture(gl.TEXTURE_2D, material.texture);
+        if (material.texture) {
+            gl.bindTexture(gl.TEXTURE_2D, material.texture);
+        }
 
         if (mesh.hasIndices()) {
             gl.drawElements(mesh.drawMode, mesh.numIndices, gl.UNSIGNED_SHORT, 0);

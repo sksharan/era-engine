@@ -56,9 +56,7 @@ class Main extends React.Component {
                             {this.state.glInitialized ? <FPS fps={this.state.fps}/> : ""}
                         </div>
                     </div>
-                    <div className='row'>
-                        <div className='col-md-8'>
-                        </div>
+                    <div className='row justify-content-end'>
                         <div className='col-md-4'>
                             {this.state.glInitialized ? this.getNodesView() : ""}
                         </div>

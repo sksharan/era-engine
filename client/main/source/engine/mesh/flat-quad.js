@@ -1,4 +1,4 @@
-import Mesh, {interleave} from './mesh'
+import Mesh from './mesh'
 import {gl} from '../gl'
 
 export default class FlatQuad extends Mesh {
@@ -24,7 +24,9 @@ export default class FlatQuad extends Mesh {
 
         super({
             drawMode: gl.TRIANGLE_FAN,
-            vertexData: interleave(positions, normals, texcoords),
+            positions,
+            normals,
+            texcoords,
             numVertices: positions.length
         });
     }

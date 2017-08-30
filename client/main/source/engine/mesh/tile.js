@@ -1,4 +1,4 @@
-import Mesh, {interleave} from './mesh'
+import Mesh from './mesh'
 import {gl} from '../gl'
 
 export default class Tile extends Mesh {
@@ -31,7 +31,9 @@ export default class Tile extends Mesh {
 
         super({
             drawMode: gl.TRIANGLE_STRIP,
-            vertexData: interleave(positions, normals, texcoords),
+            positions,
+            normals,
+            texcoords,
             numVertices: positions.length
         });
     }

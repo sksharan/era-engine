@@ -4,7 +4,7 @@ export const NumFloatsPerPosition = 3;
 export const NumFloatsPerNormal = 3;
 export const NumFloatsPerTexcoord = 2;
 
-export const interleave = (positions, normals, texcoords) => {
+function interleave(positions, normals, texcoords) {
     const interleaved = [];
 
     for (let i = 0; i < positions.length / 3; i++) {
@@ -17,7 +17,18 @@ export const interleave = (positions, normals, texcoords) => {
 }
 
 export default class Mesh {
-    constructor({drawMode=gl.TRIANGLES, vertexData, numVertices, indices}) {
+    constructor({drawMode=gl.TRIANGLES, positions, normals, texcoords, numVertices, indices}) {
+        if (!positions) {
+            throw new Error('Mesh must have positions');
+        }
+        if (!normals) {
+            throw new Error('Mesh must have normals');
+        }
+        if (!texcoords) {
+            throw new Error('Mesh must have texcoords');
+        }
+        const vertexData = interleave(positions, normals, texcoords);
+
         this._drawMode = drawMode;
 
         // Interleaves position, normals, and texcoords for each vertex

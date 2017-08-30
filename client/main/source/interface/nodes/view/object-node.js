@@ -4,7 +4,6 @@ import {mat4} from 'gl-matrix'
 import {
     GeometryNode,
     Mesh,
-    interleave,
     ProgramBuilder,
     Material
 } from '../../../engine/index'
@@ -23,11 +22,9 @@ export class ObjectNode extends React.Component {
 
     render() {
         const mesh = new Mesh({
-            vertexData: interleave(
-                this.props.node.content.positions,
-                this.props.node.content.normals,
-                this.props.node.content.texcoords
-            ),
+            positions: this.props.node.content.positions,
+            normals: this.props.node.content.normals,
+            texcoords: this.props.node.content.texcoords,
             numVertices: this.props.node.content.positions.length,
             indices: this.props.node.content.indices
         });

@@ -1,15 +1,17 @@
 import camera from '../camera/camera'
 import MouseHandler from './mouse-handler'
+import {gl} from '../gl'
 
 // Maps key codes to boolean values indicating if key is pressed
 const pressedKeys = {};
 
 function handleKeyDown(e) {
-    // Take no action on keypress if pointer lock is not active
-    if (!MouseHandler.isPointerLocked()) {
-        return;
-    }
     pressedKeys[e.which] = true;
+
+    // "m"
+    if (pressedKeys[77]) {
+        gl.canvas.requestPointerLock();
+    }
 }
 
 function handleKeyUp(e) {
@@ -23,20 +25,20 @@ export default {
     },
 
     processKeys() {
-        // "W"
-        if (pressedKeys[87]) {
+        // "w"
+        if (pressedKeys[87] && MouseHandler.isPointerLocked()) {
             camera.moveForward();
         }
-        // "A"
-        if (pressedKeys[65]) {
+        // "a"
+        if (pressedKeys[65] && MouseHandler.isPointerLocked()) {
             camera.moveLeft();
         }
-        // "S"
-        if (pressedKeys[83]) {
+        // "s"
+        if (pressedKeys[83] && MouseHandler.isPointerLocked()) {
             camera.moveBackward();
         }
-        // "D"
-        if (pressedKeys[68]) {
+        // "d"
+        if (pressedKeys[68] && MouseHandler.isPointerLocked()) {
             camera.moveRight();
         }
     }

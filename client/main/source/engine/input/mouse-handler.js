@@ -27,12 +27,7 @@ function isPointerLocked() {
 }
 
 export default {
-    /* Clicking the canvas will lock the pointer (press ESC to show the pointer again).
-     * Listeners are applied to check when the pointer is locked/unlocked. */
     init() {
-        gl.canvas.onclick = function() {
-            gl.canvas.requestPointerLock();
-        }
         $(document).on('pointerlockchange', handleLockChange);
         $(document).on('mozpointerlockchange', handleLockChange);
     },

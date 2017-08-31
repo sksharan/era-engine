@@ -4,6 +4,7 @@ import {mat4} from 'gl-matrix'
 import {
     GeometryNode,
     Mesh,
+    BoundingBox,
     ProgramBuilder,
     Material
 } from '../../../engine/index'
@@ -34,9 +35,15 @@ export class ObjectNode extends React.Component {
             imageSrc: `${filesEndpoint}/${this.props.node.content.textureFileId}/content`
         });
 
+        const obb = new GeometryNode(localMatrix, {
+            mesh: new BoundingBox(this.props.node.content.positions),
+            material
+        });
+
         const localMatrix = mat4.create();
         const renderNode = new GeometryNode(localMatrix, {mesh, material});
         this.props.parentRenderNode.addChild(renderNode);
+        renderNode.addChild(obb);
 
         return (
             <div>{this.props.node.name}</div>

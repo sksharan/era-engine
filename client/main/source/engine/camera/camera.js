@@ -80,6 +80,10 @@ class Camera {
         return mat4.lookAt(mat4.create(), this.position,
                 vec3.add(vec3.create(), this.position, this.direction), this.up);
     }
+
+    getViewMatrixInverse() {
+        return mat4.invert(mat4.create(), this.getViewMatrix());
+    }
 }
 
 export default new Camera();

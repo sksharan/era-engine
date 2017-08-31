@@ -4,7 +4,7 @@ export const NumFloatsPerPosition = 3;
 export const NumFloatsPerNormal = 3;
 export const NumFloatsPerTexcoord = 2;
 
-function interleave(positions, normals, texcoords) {
+export const interleave = (positions, normals, texcoords) => {
     const interleaved = [];
 
     for (let i = 0; i < positions.length / 3; i++) {

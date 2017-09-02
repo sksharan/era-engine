@@ -1,5 +1,5 @@
 import ProgramDataManager from './program-data-manager'
-import NodeAnalyzer from './node-analyzer'
+import {NodeAnalyzer} from '../node/index'
 import {gl} from '../gl'
 import {NumFloatsPerPosition, NumFloatsPerNormal, NumFloatsPerTexcoord} from '../mesh/index'
 import {vec3} from 'gl-matrix'

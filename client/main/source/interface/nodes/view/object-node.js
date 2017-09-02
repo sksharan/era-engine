@@ -41,7 +41,7 @@ export class ObjectNode extends React.Component {
         });
 
         const localMatrix = mat4.create();
-        const renderNode = new GeometryNode(localMatrix, {mesh, material});
+        const renderNode = new GeometryNode(this.props.node.content.positions.localMatrix, {mesh, material});
         this.props.parentRenderNode.addChild(renderNode);
         renderNode.addChild(obb);
 
@@ -54,6 +54,7 @@ export class ObjectNode extends React.Component {
 ObjectNode.propTypes = {
     node: PropTypes.shape({
         name: PropTypes.string.isRequired,
+        localMatrix: PropTypes.array.isRequired,
         content: PropTypes.shape({
             positions: PropTypes.array.isRequired,
             normals: PropTypes.array.isRequired,

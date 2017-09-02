@@ -2,11 +2,16 @@
  * Call analyze(), then call the other methods to get the
  * results of the analysis.
  */
+
+import {BoundingBox} from '../mesh/index'
+
 export default class NodeAnalyzer {
     constructor() {
         this._allLightNodes = [];
         this._prevLightNodes = null;
         this._lightsChanged = false;
+
+        this._allBoundingBoxNodes = [];
 
         this._allProgramData = new Set();
     }
@@ -23,9 +28,12 @@ export default class NodeAnalyzer {
     getAllLightNodes() {
         return this._allLightNodes;
     }
-
     lightsChanged() {
         return this._lightsChanged;
+    }
+
+    getAllBoundingBoxNodes() {
+        return this._allBoundingBoxNodes;
     }
 
     // Get the program data object detected by the analysis
@@ -38,6 +46,7 @@ export default class NodeAnalyzer {
 // here: http://math.hws.edu/graphicsbook/c4/s4.html - see "Moving Light"
 function beginAnalysis(sceneNode) {
     this._allLightNodes = [];
+    this._allBoundingBoxNodes = [];
     this._allProgramData.clear();
     analyze.call(this, sceneNode);
 
@@ -56,6 +65,9 @@ function analyze(sceneNode) {
     }
 
     if (sceneNode.nodeType === "GEOMETRY") {
+        if (sceneNode.mesh instanceof BoundingBox) {
+            this._allBoundingBoxNodes.push(sceneNode);
+        }
         this._allProgramData.add(sceneNode.material.programData);
     }
 

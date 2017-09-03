@@ -31,18 +31,23 @@ export class ObjectNode extends React.Component {
             indices: this.props.node.content.indices
         });
 
-        const material = new Material({
-            programData,
-            imageSrc: `${filesEndpoint}/${this.props.node.content.textureFileId}/content`
-        });
-
         const obb = new GeometryNode(localMatrix, {
             mesh: new BoundingBox(this.props.node.content.positions),
-            material
+            material: new Material({
+                programData,
+                imageSrc: `${filesEndpoint}/${this.props.node.content.textureFileId}/content`,
+                isVisible: false
+            })
         });
 
         const localMatrix = mat4.create();
-        const renderNode = new GeometryNode(this.props.node.content.positions.localMatrix, {mesh, material});
+        const renderNode = new GeometryNode(this.props.node.content.positions.localMatrix, {
+            mesh,
+            material: new Material({
+                programData,
+                imageSrc: `${filesEndpoint}/${this.props.node.content.textureFileId}/content`
+            })
+        });
         this.props.parentRenderNode.addChild(renderNode);
         renderNode.addChild(obb);
 

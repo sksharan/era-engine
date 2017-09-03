@@ -50,7 +50,7 @@ function renderNode(sceneNode) {
 }
 
 function renderGeometry(sceneNode, lightNodes) {
-    if (sceneNode.nodeType === "GEOMETRY") {
+    if (sceneNode.nodeType === "GEOMETRY" && sceneNode.material.isVisible) {
         const mesh = sceneNode.mesh;
         const material = sceneNode.material;
 

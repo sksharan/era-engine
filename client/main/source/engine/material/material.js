@@ -2,10 +2,11 @@ import {gl} from '../gl'
 import {vec4} from 'gl-matrix'
 
 export default class Material {
-    constructor({programData, imageSrc, color=vec4.fromValues(0, 0, 0, 0)}) {
+    constructor({programData, imageSrc, color=vec4.fromValues(0, 0, 0, 0), isVisible=true}) {
         this._programData = programData;
         this._texture = loadTextureAsync(imageSrc);
         this._color = color;
+        this._isVisible = isVisible;
     }
 
     get programData() {
@@ -21,6 +22,10 @@ export default class Material {
     }
     set color(color) {
         this._color = color;
+    }
+
+    get isVisible() {
+        return this._isVisible;
     }
 }
 

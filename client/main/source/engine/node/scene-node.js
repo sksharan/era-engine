@@ -31,7 +31,9 @@ export default class SceneNode {
     get nodeType() {
         return this._nodeType;
     }
-
+    get parent() {
+        return this._parent;
+    }
     get children() {
         return this._children;
     }

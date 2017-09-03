@@ -20,6 +20,7 @@ export default class ProgramData {
         this._cameraPositionUniformLocation = null;
         // Center position of a billboard
         this._centerPositionUniformLocation = null;
+        this._colorUniformLocation = null;
 
         this._lightEnabled = false;
         this._billboardEnabled = false;
@@ -39,6 +40,7 @@ export default class ProgramData {
         this._normalMatrixUniformLocation = programData._normalMatrixUniformLocation;
         this._cameraPositionUniformLocation = programData._cameraPositionUniformLocation;
         this._centerPositionUniformLocation = programData._centerPositionUniformLocation;
+        this._colorUniformLocation = programData._colorUniformLocation;
 
         this._lightEnabled = programData._lightEnabled;
         this._billboardEnabled = programData._billboardEnabled;
@@ -143,6 +145,16 @@ export default class ProgramData {
     }
     set centerPositionUniformLocation(centerPositionUniformLocation) {
         this._centerPositionUniformLocation = centerPositionUniformLocation;
+    }
+
+    hasColorUniformLocation() {
+        return isValidLocation(this._colorUniformLocation);
+    }
+    get colorUniformLocation() {
+        return this._colorUniformLocation;
+    }
+    set colorUniformLocation(location) {
+        this._colorUniformLocation = location;
     }
 
     get lightEnabled() {

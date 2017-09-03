@@ -14,6 +14,7 @@ const programData = new ProgramBuilder()
         .addPosition()
         .addNormal()
         .addTexcoord()
+        .addColor()
         .build();
 
 export class ObjectNode extends React.Component {

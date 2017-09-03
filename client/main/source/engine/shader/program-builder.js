@@ -118,6 +118,14 @@ export default class ProgramBuilder {
         return this;
     }
 
+    // Requires addTexcoord() to be called first
+    addColor() {
+        this._fragBuilder.addUniformLines('uniform vec4 color;')
+                         .addMainFunctionLines(`fragColor += color;`);
+
+        return this;
+    }
+
     // Requires add*Position() and addNormal() to be called first
     enableLighting() {
         this._fragBuilder.addUniformLines('uniform vec3 cameraPosition;');
@@ -216,6 +224,7 @@ export default class ProgramBuilder {
         this._programData.normalMatrixUniformLocation = gl.getUniformLocation(program, 'normalMatrix');
         this._programData.cameraPositionUniformLocation = gl.getUniformLocation(program, 'cameraPosition');
         this._programData.centerPositionUniformLocation = gl.getUniformLocation(program, 'centerPosition');
+        this._programData.colorUniformLocation = gl.getUniformLocation(program, 'color');
 
         this._programData.lightEnabled = this._lightEnabled;
         this._programData.billboardEnabled = this._billboardEnabled;

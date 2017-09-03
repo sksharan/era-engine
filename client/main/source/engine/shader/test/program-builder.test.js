@@ -36,6 +36,10 @@ describe('Program builder build', function() {
         builder.addPosition().addTexcoord().build();
     });
 
+    it('should succeed with position, texcoord, and color enabled', function() {
+        builder.addPosition().addTexcoord().addColor().build();
+    });
+
     it('should succeed with position, normal, and lighting enabled', function() {
         builder.addPosition().addNormal().enableLighting().build();
     });

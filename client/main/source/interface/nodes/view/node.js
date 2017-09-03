@@ -11,25 +11,27 @@ export class Node extends React.Component {
 
     render() {
         const renderNode = new SceneNode();
-        this.props.parentRenderNode.addChild(renderNode);
-
         return (
             <div style={{marginLeft: `${this.props.depth * 30}px`}}>
                 {
                     this.props.val.sceneNodes.map((sceneNode) => {
                         switch (sceneNode.type) {
                             case 'DEFAULT':
-                                return <DefaultNode key={sceneNode.id} node={sceneNode} parentRenderNode={renderNode} />
+                                return <DefaultNode key={sceneNode.id} node={sceneNode} parentRenderNode={this.props.parentRenderNode} />
                             case 'OBJECT':
-                                return <ObjectNode key={sceneNode.id} node={sceneNode} parentRenderNode={renderNode} />
+                                return <ObjectNode key={sceneNode.id} node={sceneNode} parentRenderNode={this.props.parentRenderNode} />
                             default:
                                 return <div>Unknown node type {sceneNode.type}</div>;
                         }
                     })
                 }
                 {
-                    Object.entries(this.props.val.hierarchy).map(([key, val]) =>
-                            <Node key={key} val={val} depth={this.props.depth + 1} parentRenderNode={renderNode} />)
+                    Object.entries(this.props.val.hierarchy).map(([key, val], index) => {
+                        if (index === 0) {
+                            this.props.parentRenderNode.addChild(renderNode);
+                        }
+                        return <Node key={key} val={val} depth={this.props.depth + 1} parentRenderNode={renderNode} />;
+                    })
                 }
             </div>
         );

@@ -92,6 +92,9 @@ function renderGeometry(sceneNode, lightNodes) {
             gl.uniform3fv(material.programData.centerPositionUniformLocation,
                 vec3.transformMat4(vec3.create(), vec3.create(), sceneNode.worldMatrix));
         }
+        if (material.programData.hasColorUniformLocation()) {
+            gl.uniform4fv(material.programData.colorUniformLocation, material.color);
+        }
 
         if (material.texture) {
             gl.bindTexture(gl.TEXTURE_2D, material.texture);

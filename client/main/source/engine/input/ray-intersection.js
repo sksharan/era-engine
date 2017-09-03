@@ -36,8 +36,9 @@ export const testBoundingBoxIntersections = (rayOrigin, rayDirection) => {
             closestSelectedNode = boundingBoxNode;
         }
     }
+    clearSelection(RootSceneNode);
     if (closestSelectedNode) {
-        console.warn(closestSelectedNode);
+        selectObject(closestSelectedNode);
     }
 }
 
@@ -135,5 +136,27 @@ function testBoundingBoxIntersection(rayOrigin, rayDirection, boundingBoxNode) {
     }
 
     return tMin; // intersection distance
+}
+
+function clearSelection(node) {
+    colorGeometryNodes(node, vec4.fromValues(0, 0, 0, 0));
+}
+
+function selectObject(boundingBoxNode) {
+    let currNode = boundingBoxNode;
+    // Find the topmost node of the object which is a default (non-geometric) scene node
+    while (currNode.nodeType !== "BASE") {
+        currNode = currNode.parent;
+    }
+    colorGeometryNodes(currNode, vec4.fromValues(0.15, 0.15, 0.15, 0));
+}
+
+function colorGeometryNodes(node, color) {
+    if (node.nodeType === "GEOMETRY") {
+        node.material.color = color;
+    }
+    if (node.children) {
+        node.children.forEach((child) => colorGeometryNodes(child, color));
+    }
 }
 

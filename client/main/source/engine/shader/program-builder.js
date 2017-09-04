@@ -77,7 +77,8 @@ export default class ProgramBuilder {
                          .addMainFunctionLines(`
                              vec3 cameraRightWorld = vec3(viewMatrix[0][0], viewMatrix[1][0], viewMatrix[2][0]);
                              vec3 cameraUpWorld = vec3(viewMatrix[0][1], viewMatrix[1][1], viewMatrix[2][1]);
-                             vPositionWorld = vec4(centerPosition + cameraRightWorld * position.x + cameraUpWorld * position.y, 1.0);
+                             vPositionWorld = modelMatrix *
+                                    vec4(centerPosition + cameraRightWorld * position.x + cameraUpWorld * position.y, 1.0);
                              gl_Position = projectionMatrix * viewMatrix * vPositionWorld;
                          `);
 

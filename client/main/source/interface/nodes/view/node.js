@@ -2,7 +2,10 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import {DefaultNode} from './default-node'
 import {ObjectNode} from './object-node'
-import {SceneNode} from '../../../engine/index'
+import {
+    generateRenderNode,
+    addChildToRenderNode,
+} from '../../engineop/index'
 
 export class Node extends React.Component {
     constructor(props) {
@@ -10,7 +13,7 @@ export class Node extends React.Component {
     }
 
     render() {
-        const renderNode = new SceneNode();
+        const renderNode = generateRenderNode();
         return (
             <div style={{marginLeft: `${this.props.depth * 30}px`}}>
                 {
@@ -28,7 +31,7 @@ export class Node extends React.Component {
                 {
                     Object.entries(this.props.val.hierarchy).map(([key, val], index) => {
                         if (index === 0) {
-                            this.props.parentRenderNode.addChild(renderNode);
+                            addChildToRenderNode(renderNode, this.props.parentRenderNode);
                         }
                         return <Node key={key} val={val} depth={this.props.depth + 1} parentRenderNode={renderNode} />;
                     })

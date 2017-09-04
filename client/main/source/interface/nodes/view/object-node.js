@@ -1,21 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {mat4} from 'gl-matrix'
-import {
-    GeometryNode,
-    Mesh,
-    BoundingBox,
-    ProgramBuilder,
-    Material
-} from '../../../engine/index'
-import {filesEndpoint} from '../../../config'
-
-const programData = new ProgramBuilder()
-        .addPosition()
-        .addNormal()
-        .addTexcoord()
-        .addColor()
-        .build();
+import {addObjectWithBoundingBox} from '../../engineop/index'
 
 export class ObjectNode extends React.Component {
     constructor(props) {
@@ -23,34 +8,7 @@ export class ObjectNode extends React.Component {
     }
 
     render() {
-        const mesh = new Mesh({
-            positions: this.props.node.content.positions,
-            normals: this.props.node.content.normals,
-            texcoords: this.props.node.content.texcoords,
-            numVertices: this.props.node.content.positions.length,
-            indices: this.props.node.content.indices
-        });
-
-        const obb = new GeometryNode(localMatrix, {
-            mesh: new BoundingBox(this.props.node.content.positions),
-            material: new Material({
-                programData,
-                imageSrc: `${filesEndpoint}/${this.props.node.content.textureFileId}/content`,
-                isVisible: false
-            })
-        });
-
-        const localMatrix = mat4.create();
-        const renderNode = new GeometryNode(this.props.node.content.positions.localMatrix, {
-            mesh,
-            material: new Material({
-                programData,
-                imageSrc: `${filesEndpoint}/${this.props.node.content.textureFileId}/content`
-            })
-        });
-        this.props.parentRenderNode.addChild(renderNode);
-        renderNode.addChild(obb);
-
+        addObjectWithBoundingBox(this.props.node, this.props.parentRenderNode);
         return (
             <div>{this.props.node.name}</div>
         );

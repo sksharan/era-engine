@@ -1,10 +1,20 @@
 import {Camera, getDefaultPerspectiveMatrixInverse} from '../camera/index'
-import {NodeAnalyzer} from '../node/index'
+import {
+    NodeAnalyzer,
+    TransformMesh,
+    TranslateXMesh,
+    TranslateYMesh,
+    TranslateZMesh,
+    createTranslateNode
+} from '../node/index'
 import {RootSceneNode} from '../index'
 import {gl} from '../gl'
 import {mat4, vec3, vec4} from 'gl-matrix'
 
 const nodeAnalyzer = new NodeAnalyzer();
+
+let currSelectedObjectBase = null;
+let currTransformNode = null;
 
 // http://antongerdelan.net/opengl/raycasting.html
 export const getWorldSpaceRay = (mouseX, mouseY) => {
@@ -32,13 +42,33 @@ export const testBoundingBoxIntersections = (rayOrigin, rayDirection) => {
 
     for (let boundingBoxNode of nodeAnalyzer.getAllBoundingBoxNodes()) {
         let distance = testBoundingBoxIntersection(rayOrigin, rayDirection, boundingBoxNode);
-        if (distance && distance < closestDistance) {
+        if (!distance) {
+            continue; // No intersection with this bounding box
+        }
+        if (boundingBoxNode.parent.mesh instanceof TransformMesh) { // Transformation special case
+            handleTransformationSelection(boundingBoxNode);
+            return;
+        }
+        if (distance < closestDistance) {
+            closestDistance = distance;
             closestSelectedNode = boundingBoxNode;
         }
     }
-    clearSelection(RootSceneNode);
+
+    colorGeometryNodes(RootSceneNode, vec4.fromValues(0, 0, 0, 0));
+
     if (closestSelectedNode) {
-        selectObject(closestSelectedNode);
+        let selectedObjectBase = getSelectedObjectBase(closestSelectedNode);
+        colorGeometryNodes(selectedObjectBase, vec4.fromValues(0.15, 0.15, 0.15, 0));
+
+        if (selectedObjectBase !== currSelectedObjectBase) {
+            clearSelection();
+            currTransformNode = createTranslateNode(selectedObjectBase.localMatrix);
+            selectedObjectBase.addChild(currTransformNode);
+            currSelectedObjectBase = selectedObjectBase;
+        }
+    } else {
+        clearSelection();
     }
 }
 
@@ -138,17 +168,20 @@ function testBoundingBoxIntersection(rayOrigin, rayDirection, boundingBoxNode) {
     return tMin; // intersection distance
 }
 
-function clearSelection(node) {
-    colorGeometryNodes(node, vec4.fromValues(0, 0, 0, 0));
+function clearSelection() {
+    if (currTransformNode) {
+        currTransformNode.removeParent();
+    }
+    currTransformNode = null;
+    currSelectedObjectBase = null;
 }
 
-function selectObject(boundingBoxNode) {
+function getSelectedObjectBase(boundingBoxNode) {
     let currNode = boundingBoxNode;
-    // Find the topmost node of the object which is a default (non-geometric) scene node
     while (currNode.nodeType !== "BASE") {
         currNode = currNode.parent;
     }
-    colorGeometryNodes(currNode, vec4.fromValues(0.15, 0.15, 0.15, 0));
+    return currNode;
 }
 
 function colorGeometryNodes(node, color) {
@@ -160,3 +193,12 @@ function colorGeometryNodes(node, color) {
     }
 }
 
+function handleTransformationSelection(boundingBoxNode) {
+    if (boundingBoxNode.parent.mesh instanceof TranslateXMesh) {
+        console.warn('translate x'); // TODO
+    } else if (boundingBoxNode.parent.mesh instanceof TranslateYMesh) {
+        console.warn('translate y'); // TODO
+    } else if (boundingBoxNode.parent.mesh instanceof TranslateZMesh) {
+        console.warn('translate z'); // TODO
+    }
+}

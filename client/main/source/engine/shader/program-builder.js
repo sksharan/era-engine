@@ -89,6 +89,12 @@ export default class ProgramBuilder {
     }
 
     // Requires add*Position() to be called first
+    addZClipZero() {
+        this._vertBuilder.addMainFunctionLines(`gl_Position.z = 0.0;`);
+        return this;
+    }
+
+    // Requires add*Position() to be called first
     addNormal() {
         this._vertBuilder.addAttributeLines('attribute vec3 normal;')
                          .addUniformLines('uniform mat3 normalMatrix;')

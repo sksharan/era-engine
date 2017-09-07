@@ -34,9 +34,9 @@ function handleMouseClick(mouseX, mouseY) {
 
 export default {
     init() {
-        gl.canvas.onclick = (e) => {
+        gl.canvas.addEventListener('click', (e) => {
             handleMouseClick(e.clientX, e.clientY);
-        }
+        });
         $(document).on('pointerlockchange', handleLockChange);
         $(document).on('mozpointerlockchange', handleLockChange);
     },

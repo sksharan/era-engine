@@ -4,11 +4,17 @@
 
 import {Camera} from '../camera/index'
 import {gl} from '../gl'
-import {getWorldSpaceRay, testBoundingBoxIntersections} from './ray-intersection'
+import {
+    getWorldSpaceRay,
+    clear,
+    testBoundingBoxIntersections,
+} from './ray-intersection'
 import $ from 'jquery'
 
 gl.canvas.requestPointerLock = gl.canvas.requestPointerLock || gl.canvas.mozRequestPointerLock;
 document.exitPointerLock = document.exitPointerLock || document.mozExitPointerLock;
+
+let isMouseDown = false;
 
 function handleLockChange() {
     if (isPointerLocked()) {
@@ -27,15 +33,29 @@ function isPointerLocked() {
     return document.pointerLockElement === gl.canvas || document.mozPointerLockElement === gl.canvas;
 }
 
-function handleMouseClick(mouseX, mouseY) {
+function handleRayIntersection(mouseX, mouseY, transformationOnly) {
     const rayWorld = getWorldSpaceRay(mouseX, mouseY);
-    testBoundingBoxIntersections(Camera.getPosition(), rayWorld);
+    testBoundingBoxIntersections({
+        rayOrigin: Camera.getPosition(),
+        rayDirection: rayWorld,
+        transformationOnly
+    });
 }
 
 export default {
     init() {
-        gl.canvas.addEventListener('click', (e) => {
-            handleMouseClick(e.clientX, e.clientY);
+        gl.canvas.addEventListener('mousedown', (e) => {
+            isMouseDown = true;
+            handleRayIntersection(e.clientX, e.clientY, false);
+        });
+        gl.canvas.addEventListener('mouseup', () => {
+            isMouseDown = false;
+            clear();
+        });
+        gl.canvas.addEventListener('mousemove', (e) => {
+            if (isMouseDown) {
+                handleRayIntersection(e.clientX, e.clientY, true);
+            }
         });
         $(document).on('pointerlockchange', handleLockChange);
         $(document).on('mozpointerlockchange', handleLockChange);

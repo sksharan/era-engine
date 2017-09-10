@@ -147,7 +147,8 @@ export class TranslateZMesh extends TranslateMesh {
     }
 }
 
-export const createTranslateNode = (localMatrix=mat4.create()) => {
+export const createTranslateNode = () => {
+    const localMatrix = mat4.create();
     const base = new SceneNode(localMatrix);
 
     const transformX = new GeometryNode(mat4.create(), {

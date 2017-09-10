@@ -15,6 +15,10 @@ const nodeAnalyzer = new NodeAnalyzer();
 
 let currSelectedObjectBase = null;
 let currTransformNode = null;
+let lastIntersection = null;
+let transformBoundingPlane = null;
+let transformBoundingBoxNode = null;
+let allowTransformBoundingReset = false;
 
 // http://antongerdelan.net/opengl/raycasting.html
 export const getWorldSpaceRay = (mouseX, mouseY) => {
@@ -34,19 +38,42 @@ export const getWorldSpaceRay = (mouseX, mouseY) => {
     return vec4.normalize(vec4.create(), rayWorld);
 }
 
-export const testBoundingBoxIntersections = (rayOrigin, rayDirection) => {
+export const clear = () => {
+    lastIntersection = null;
+    if (allowTransformBoundingReset) {
+        transformBoundingPlane = null;
+        transformBoundingBoxNode = null;
+    }
+}
+
+export const testBoundingBoxIntersections = ({rayOrigin, rayDirection, transformationOnly}) => {
     nodeAnalyzer.analyze(RootSceneNode);
+    const boundingBoxNodes = nodeAnalyzer.getAllBoundingBoxNodes();
+    if (transformBoundingPlane) {
+        boundingBoxNodes.push(transformBoundingPlane);
+    }
 
     let closestSelectedNode = null;
     let closestDistance = Number.POSITIVE_INFINITY;
 
-    for (let boundingBoxNode of nodeAnalyzer.getAllBoundingBoxNodes()) {
+    for (let boundingBoxNode of boundingBoxNodes) {
         let distance = testBoundingBoxIntersection(rayOrigin, rayDirection, boundingBoxNode);
         if (!distance) {
             continue; // No intersection with this bounding box
         }
-        if (boundingBoxNode.parent.mesh instanceof TransformMesh) { // Transformation special case
-            handleTransformationSelection(boundingBoxNode);
+        if (transformBoundingPlane && boundingBoxNode === transformBoundingPlane) {
+            const intersection = getIntersection(rayOrigin, rayDirection, distance);
+            handleTransformationSelection(transformBoundingBoxNode, intersection);
+            lastIntersection = intersection;
+            allowTransformBoundingReset = true;
+        }
+        if (transformBoundingPlane && boundingBoxNode !== transformBoundingPlane) {
+            continue;
+        }
+        if (boundingBoxNode === transformBoundingPlane || boundingBoxNode.parent.mesh instanceof TransformMesh) { // Transformation special case
+            const intersection = getIntersection(rayOrigin, rayDirection, distance);
+            handleTransformationSelection(boundingBoxNode, intersection);
+            lastIntersection = intersection;
             return;
         }
         if (distance < closestDistance) {
@@ -55,21 +82,84 @@ export const testBoundingBoxIntersections = (rayOrigin, rayDirection) => {
         }
     }
 
-    colorGeometryNodes(RootSceneNode, vec4.fromValues(0, 0, 0, 0));
+    if (transformationOnly) {
+        return; // No transformation node selected, nothing left to do
+    }
 
+    colorGeometryNodes(RootSceneNode, vec4.fromValues(0, 0, 0, 0));
     if (closestSelectedNode) {
         let selectedObjectBase = getSelectedObjectBase(closestSelectedNode);
         colorGeometryNodes(selectedObjectBase, vec4.fromValues(0.15, 0.15, 0.15, 0));
 
         if (selectedObjectBase !== currSelectedObjectBase) {
             clearSelection();
-            currTransformNode = createTranslateNode(selectedObjectBase.localMatrix);
+            currTransformNode = createTranslateNode();
             selectedObjectBase.addChild(currTransformNode);
             currSelectedObjectBase = selectedObjectBase;
         }
+        lastIntersection = getIntersection(rayOrigin, rayDirection, closestDistance);
     } else {
         clearSelection();
+        lastIntersection = null;
+        transformBoundingPlane = null;
+        transformBoundingBoxNode = null;
     }
+}
+
+function getIntersection(origin, direction, distance) {
+    return vec3.add(vec3.create(), origin, vec3.scale(vec3.create(), direction, distance));
+}
+
+function clearSelection() {
+    if (currTransformNode) {
+        currTransformNode.removeParent();
+    }
+    currTransformNode = null;
+    currSelectedObjectBase = null;
+}
+
+function getSelectedObjectBase(boundingBoxNode) {
+    let currNode = boundingBoxNode;
+    while (currNode.nodeType !== "BASE") {
+        currNode = currNode.parent;
+    }
+    return currNode;
+}
+
+function colorGeometryNodes(node, color) {
+    if (node.nodeType === "GEOMETRY") {
+        node.material.color = color;
+    }
+    if (node.children) {
+        node.children.forEach((child) => colorGeometryNodes(child, color));
+    }
+}
+
+function handleTransformationSelection(boundingBoxNode, intersection) {
+    if (!lastIntersection) {
+        return;
+    }
+    const delta = vec3.sub(vec3.create(), intersection, lastIntersection);
+    const transformMesh = boundingBoxNode.parent.mesh;
+    const objectBaseNode = boundingBoxNode.parent.parent.parent;
+
+    if (transformMesh instanceof TranslateXMesh) {
+        objectBaseNode.localMatrix = mat4.translate(
+                mat4.create(), objectBaseNode.localMatrix, vec3.fromValues(delta[0], 0, 0));
+        transformBoundingPlane = transformMesh.generateXBoundingPlaneNode(boundingBoxNode.worldMatrix);
+
+    } else if (transformMesh instanceof TranslateYMesh) {
+        objectBaseNode.localMatrix = mat4.translate(
+                mat4.create(), objectBaseNode.localMatrix, vec3.fromValues(0, delta[1], 0));
+        transformBoundingPlane = transformMesh.generateYBoundingPlaneNode(boundingBoxNode.worldMatrix);
+
+    } else if (transformMesh instanceof TranslateZMesh) {
+        objectBaseNode.localMatrix = mat4.translate(
+                mat4.create(), objectBaseNode.localMatrix, vec3.fromValues(0, 0, delta[2]));
+        transformBoundingPlane = transformMesh.generateZBoundingPlaneNode(boundingBoxNode.worldMatrix);
+    }
+
+    transformBoundingBoxNode = boundingBoxNode;
 }
 
 // http://www.opengl-tutorial.org/miscellaneous/clicking-on-objects/picking-with-custom-ray-obb-function/
@@ -166,39 +256,4 @@ function testBoundingBoxIntersection(rayOrigin, rayDirection, boundingBoxNode) {
     }
 
     return tMin; // intersection distance
-}
-
-function clearSelection() {
-    if (currTransformNode) {
-        currTransformNode.removeParent();
-    }
-    currTransformNode = null;
-    currSelectedObjectBase = null;
-}
-
-function getSelectedObjectBase(boundingBoxNode) {
-    let currNode = boundingBoxNode;
-    while (currNode.nodeType !== "BASE") {
-        currNode = currNode.parent;
-    }
-    return currNode;
-}
-
-function colorGeometryNodes(node, color) {
-    if (node.nodeType === "GEOMETRY") {
-        node.material.color = color;
-    }
-    if (node.children) {
-        node.children.forEach((child) => colorGeometryNodes(child, color));
-    }
-}
-
-function handleTransformationSelection(boundingBoxNode) {
-    if (boundingBoxNode.parent.mesh instanceof TranslateXMesh) {
-        console.warn('translate x'); // TODO
-    } else if (boundingBoxNode.parent.mesh instanceof TranslateYMesh) {
-        console.warn('translate y'); // TODO
-    } else if (boundingBoxNode.parent.mesh instanceof TranslateZMesh) {
-        console.warn('translate z'); // TODO
-    }
 }

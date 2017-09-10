@@ -47,6 +47,13 @@ export default class SceneNode {
         return this._normalMatrix;
     }
 
+    set localMatrix(localMatrix) {
+        this._localMatrix = localMatrix;
+        if (this._parent) {
+            updateWorldMatrix(this, this._parent._worldMatrix);
+        }
+    }
+
     addChild(child) {
         if (child === this) {
             throw new Error("A scene node cannot add itself as a child");

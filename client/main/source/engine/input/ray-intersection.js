@@ -66,6 +66,7 @@ export const testBoundingBoxIntersections = ({rayOrigin, rayDirection, transform
             handleTransformationSelection(transformBoundingBoxNode, intersection);
             lastIntersection = intersection;
             allowTransformBoundingReset = true;
+            return;
         }
         if (transformBoundingPlane && boundingBoxNode !== transformBoundingPlane) {
             continue;
@@ -146,19 +147,22 @@ function handleTransformationSelection(boundingBoxNode, intersection) {
     if (transformMesh instanceof TranslateXMesh) {
         objectBaseNode.localMatrix = mat4.translate(
                 mat4.create(), objectBaseNode.localMatrix, vec3.fromValues(delta[0], 0, 0));
-        transformBoundingPlane = transformMesh.generateXBoundingPlaneNode(boundingBoxNode.worldMatrix);
+        transformBoundingPlane = transformMesh.generateXBoundingPlaneNode();
 
     } else if (transformMesh instanceof TranslateYMesh) {
         objectBaseNode.localMatrix = mat4.translate(
                 mat4.create(), objectBaseNode.localMatrix, vec3.fromValues(0, delta[1], 0));
-        transformBoundingPlane = transformMesh.generateYBoundingPlaneNode(boundingBoxNode.worldMatrix);
+        transformBoundingPlane = transformMesh.generateYBoundingPlaneNode();
 
     } else if (transformMesh instanceof TranslateZMesh) {
         objectBaseNode.localMatrix = mat4.translate(
                 mat4.create(), objectBaseNode.localMatrix, vec3.fromValues(0, 0, delta[2]));
-        transformBoundingPlane = transformMesh.generateZBoundingPlaneNode(boundingBoxNode.worldMatrix);
+        transformBoundingPlane = transformMesh.generateZBoundingPlaneNode();
     }
 
+    if (transformBoundingPlane) {
+        boundingBoxNode.addChild(transformBoundingPlane);
+    }
     transformBoundingBoxNode = boundingBoxNode;
 }
 

@@ -2,19 +2,16 @@
  * https://developer.mozilla.org/en-US/docs/Web/API/Pointer_Lock_API
  */
 
+import {NoneSelectedState} from './selection/none-selected-state'
 import {Camera} from '../camera/index'
 import {gl} from '../gl'
-import {
-    getWorldSpaceRay,
-    clear,
-    testBoundingBoxIntersections,
-} from './ray-intersection'
+import {RootSceneNode} from '../index'
 import $ from 'jquery'
 
 gl.canvas.requestPointerLock = gl.canvas.requestPointerLock || gl.canvas.mozRequestPointerLock;
 document.exitPointerLock = document.exitPointerLock || document.mozExitPointerLock;
 
-let isMouseDown = false;
+let currSelectionState = new NoneSelectedState();
 
 function handleLockChange() {
     if (isPointerLocked()) {
@@ -33,29 +30,27 @@ function isPointerLocked() {
     return document.pointerLockElement === gl.canvas || document.mozPointerLockElement === gl.canvas;
 }
 
-function handleRayIntersection(mouseX, mouseY, transformationOnly) {
-    const rayWorld = getWorldSpaceRay(mouseX, mouseY);
-    testBoundingBoxIntersections({
-        rayOrigin: Camera.getPosition(),
-        rayDirection: rayWorld,
-        transformationOnly
-    });
+function handleSelectionState(nextState) {
+    if (nextState !== null) {
+        currSelectionState.onExit(RootSceneNode);
+        currSelectionState = nextState;
+        currSelectionState.onEnter(RootSceneNode);
+    }
 }
 
 export default {
     init() {
         gl.canvas.addEventListener('mousedown', (e) => {
-            isMouseDown = true;
-            handleRayIntersection(e.clientX, e.clientY, false);
+            const nextState = currSelectionState.handleMouseDown(e.clientX, e.clientY, RootSceneNode);
+            handleSelectionState(nextState);
         });
-        gl.canvas.addEventListener('mouseup', () => {
-            isMouseDown = false;
-            clear();
+        gl.canvas.addEventListener('mouseup', (e) => {
+            const nextState = currSelectionState.handleMouseUp(e.clientX, e.clientY, RootSceneNode);
+            handleSelectionState(nextState);
         });
         gl.canvas.addEventListener('mousemove', (e) => {
-            if (isMouseDown) {
-                handleRayIntersection(e.clientX, e.clientY, true);
-            }
+            const nextState = currSelectionState.handleMouseMove(e.clientX, e.clientY, RootSceneNode);
+            handleSelectionState(nextState);
         });
         $(document).on('pointerlockchange', handleLockChange);
         $(document).on('mozpointerlockchange', handleLockChange);

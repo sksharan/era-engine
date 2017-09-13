@@ -1,8 +1,12 @@
 import {gl} from '../gl'
+import {ProgramBuilder} from '../shader/index'
 import {vec4} from 'gl-matrix'
 
+const defaultProgramData = new ProgramBuilder().addPosition().build();
+
 export default class Material {
-    constructor({programData, imageSrc, color=vec4.fromValues(0, 0, 0, 0), isVisible=true}) {
+    constructor({programData=defaultProgramData, imageSrc='public/textures/debug.png',
+        color=vec4.fromValues(0, 0, 0, 0), isVisible=true} = {}) {
         this._programData = programData;
         this._texture = loadTextureAsync(imageSrc);
         this._color = color;

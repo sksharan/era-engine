@@ -1,4 +1,5 @@
 import {mat4, vec3} from 'gl-matrix'
+import {Ray} from './ray'
 import {BoundingBox} from '../../mesh/index'
 import {GeometryNode} from '../../node/index'
 
@@ -7,12 +8,9 @@ import {GeometryNode} from '../../node/index'
  * if one exists, otherwise returns null. Uses the algorithm from
  * http://www.opengl-tutorial.org/miscellaneous/clicking-on-objects/picking-with-custom-ray-obb-function/
  */
-export const testBoundingBoxIntersection = (origin, direction, boundingBoxNode) => {
-    if (!(origin instanceof Float32Array)) {
-        throw new TypeError('Origin must be a vec3');
-    }
-    if (!(direction instanceof Float32Array)) {
-        throw new TypeError('Direction must be a vec3');
+export const testBoundingBoxIntersection = (ray, boundingBoxNode) => {
+    if (!(ray instanceof Ray)) {
+        throw new TypeError('Must specify a valid Ray');
     }
     if (!(boundingBoxNode instanceof GeometryNode)) {
         throw new TypeError('Node must be a GeometryNode');
@@ -24,14 +22,14 @@ export const testBoundingBoxIntersection = (origin, direction, boundingBoxNode) 
     let tMin = 0;
     let tMax = Number.POSITIVE_INFINITY;
     const boundingBoxWorld = mat4.getTranslation(mat4.create(), boundingBoxNode.worldMatrix);
-    const delta = mat4.subtract(mat4.create(), boundingBoxWorld, origin);
+    const delta = mat4.subtract(mat4.create(), boundingBoxWorld, ray.origin);
     let e, f;
 
     // Test intersection with the 2 planes perpendicular to bounding box x-axis
     const xAxis = vec3.fromValues(boundingBoxNode.worldMatrix[0],
         boundingBoxNode.worldMatrix[1], boundingBoxNode.worldMatrix[2]);
     e = vec3.dot(xAxis, delta);
-    f = vec3.dot(direction, xAxis);
+    f = vec3.dot(ray.direction, xAxis);
     if (Math.abs(f) > 0.001) {
         let t1 = (e + boundingBoxNode.mesh.minX) / f;
         let t2 = (e + boundingBoxNode.mesh.maxX) / f;
@@ -58,7 +56,7 @@ export const testBoundingBoxIntersection = (origin, direction, boundingBoxNode) 
     const yAxis = vec3.fromValues(boundingBoxNode.worldMatrix[4],
         boundingBoxNode.worldMatrix[5], boundingBoxNode.worldMatrix[6]);
     e = vec3.dot(yAxis, delta);
-    f = vec3.dot(direction, yAxis);
+    f = vec3.dot(ray.direction, yAxis);
     if (Math.abs(f) > 0.001) {
         let t1 = (e + boundingBoxNode.mesh.minY) / f;
         let t2 = (e + boundingBoxNode.mesh.maxY) / f;
@@ -85,7 +83,7 @@ export const testBoundingBoxIntersection = (origin, direction, boundingBoxNode) 
     const zAxis = vec3.fromValues(boundingBoxNode.worldMatrix[8],
         boundingBoxNode.worldMatrix[9], boundingBoxNode.worldMatrix[10]);
     e = vec3.dot(zAxis, delta);
-    f = vec3.dot(direction, zAxis);
+    f = vec3.dot(ray.direction, zAxis);
     if (Math.abs(f) > 0.001) {
         let t1 = (e + boundingBoxNode.mesh.minZ) / f;
         let t2 = (e + boundingBoxNode.mesh.maxZ) / f;

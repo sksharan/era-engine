@@ -1,12 +1,7 @@
 import {SelectionState} from './selection-state'
 import {SelectedState} from './selected-state'
 import {findNearestBaseNodeForBoundingBoxNode} from './node-finder'
-import {
-    TranslateXMesh,
-    TranslateYMesh,
-    TranslateZMesh,
-} from '../../node/index'
-import {mat4, vec3} from 'gl-matrix'
+import {vec3} from 'gl-matrix'
 
 export class TransformingState extends SelectionState {
     constructor(selectedObjectBaseNode, transformBoundingBoxNode) {
@@ -23,7 +18,7 @@ export class TransformingState extends SelectionState {
     onEnter() {
         // Generate plane around the gizmo component so the user can manipulate
         // the object without having to keep the mouse directly on the gizmo
-        this._transformBoundingPlaneNode = this._getBoundingPlaneNode();
+        this._transformBoundingPlaneNode = this._transformGeometryNode.mesh.generateBoundingBoxNode();
         this._transformBoundingBoxNode.addChild(this._transformBoundingPlaneNode);
     }
     handleMouseDown() {
@@ -50,35 +45,10 @@ export class TransformingState extends SelectionState {
         this._transformBoundingPlaneNode.removeParent();
     }
 
-    _getBoundingPlaneNode() {
-        const mesh = this._transformGeometryNode.mesh;
-        if (mesh instanceof TranslateXMesh) {
-            return mesh.generateXBoundingPlaneNode();
-        } else if (mesh instanceof TranslateYMesh) {
-            return mesh.generateYBoundingPlaneNode();
-        } else if (mesh instanceof TranslateZMesh) {
-            return mesh.generateZBoundingPlaneNode();
-        }
-        throw new TypeError('Unexpected mesh type');
-    }
-
     _handleTransformation(intersection) {
         const mesh = this._transformGeometryNode.mesh;
         const delta = vec3.sub(vec3.create(), intersection.point, this._lastIntersectionPoint);
-
-        if (mesh instanceof TranslateXMesh) {
-            this._selectedObjectBaseNode.localMatrix = mat4.translate(mat4.create(),
-                    this._selectedObjectBaseNode.localMatrix,
-                    vec3.fromValues(delta[0], 0, 0));
-        } else if (mesh instanceof TranslateYMesh) {
-            this._selectedObjectBaseNode.localMatrix = mat4.translate(mat4.create(),
-                    this._selectedObjectBaseNode.localMatrix,
-                    vec3.fromValues(0, delta[1], 0));
-        } else if (mesh instanceof TranslateZMesh) {
-            this._selectedObjectBaseNode.localMatrix = mat4.translate(mat4.create(),
-                    this._selectedObjectBaseNode.localMatrix,
-                    vec3.fromValues(0, 0, delta[2]));
-        }
+        mesh.handleTransform(this._selectedObjectBaseNode, delta);
     }
 
     _transitionToSelectedState() {

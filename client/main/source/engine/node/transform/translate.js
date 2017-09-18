@@ -1,4 +1,4 @@
-import Transform from './transform'
+import {TransformMesh} from './transform'
 import GeometryNode from  '../geometry-node'
 import SceneNode from  '../scene-node'
 import {Material} from '../../material/index'
@@ -29,7 +29,7 @@ class TranslateBoundingBoxMaterial extends Material {
     }
 }
 
-class TranslateMesh extends Transform {
+class TranslateMesh extends TransformMesh {
     constructor(texcoord, transform) {
         const shaftLength = 75.0;
         const shaftSize = 1.0;
@@ -135,15 +135,39 @@ export class TranslateXMesh extends TranslateMesh {
     constructor() {
         super(redTexcoord, mat4.create());
     }
+    generateBoundingBoxNode() {
+        return this._generateBoundingBoxNode([this.min, 0, this.min, this.max, 0, this.max]);
+    }
+    handleTransform(baseSceneNode, delta) {
+        super.handleTransform(baseSceneNode, delta);
+        baseSceneNode.localMatrix = mat4.translate(mat4.create(),
+                baseSceneNode.localMatrix, vec3.fromValues(delta[0], 0, 0));
+    }
 }
 export class TranslateYMesh extends TranslateMesh {
     constructor() {
         super(greenTexcoord, mat4.fromRotation(mat4.create(), 3.14/2, vec3.fromValues(0, 0, 1)));
     }
+    generateBoundingBoxNode() {
+        return this._generateBoundingBoxNode([this.min, this.min, 0, this.max, this.max, 0]);
+    }
+    handleTransform(baseSceneNode, delta) {
+        super.handleTransform(baseSceneNode, delta);
+        baseSceneNode.localMatrix = mat4.translate(mat4.create(),
+                baseSceneNode.localMatrix, vec3.fromValues(0, delta[1], 0));
+    }
 }
 export class TranslateZMesh extends TranslateMesh {
     constructor() {
         super(blueTexcoord, mat4.fromRotation(mat4.create(), -3.14/2, vec3.fromValues(0, 1, 0)));
+    }
+    generateBoundingBoxNode() {
+        return this._generateBoundingBoxNode([this.min, 0, this.min, this.max, 0, this.max]);
+    }
+    handleTransform(baseSceneNode, delta) {
+        super.handleTransform(baseSceneNode, delta);
+        baseSceneNode.localMatrix = mat4.translate(mat4.create(),
+                baseSceneNode.localMatrix, vec3.fromValues(0, 0, delta[2]));
     }
 }
 

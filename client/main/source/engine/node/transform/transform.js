@@ -1,3 +1,4 @@
+import SceneNode from '../scene-node'
 import GeometryNode from  '../geometry-node'
 import {Material} from '../../material/index'
 import {Mesh, BoundingBox} from '../../mesh/index'
@@ -5,29 +6,35 @@ import {ProgramBuilder} from '../../shader/index'
 import {rgbTexture} from './rgb'
 import {mat4} from 'gl-matrix'
 
-const min = Number.NEGATIVE_INFINITY;
-const max = Number.POSITIVE_INFINITY;
-
-export default class TransformMesh extends Mesh {
-    generateXBoundingPlaneNode() {
-        return generateBoundingPlaneNode([min, 0, min, max, 0, max]);
+export class TransformMesh extends Mesh {
+    constructor(meshArgs) {
+        super(meshArgs);
+        this.min = Number.NEGATIVE_INFINITY;
+        this.max = Number.POSITIVE_INFINITY;
     }
-    generateYBoundingPlaneNode() {
-        return generateBoundingPlaneNode([min, min, 0, max, max, 0]);
+    generateBoundingBoxNode() {
+        throw new Error('No base implementation');
     }
-    generateZBoundingPlaneNode() {
-        return generateBoundingPlaneNode([min, 0, min, max, 0, max]);
+    _generateBoundingBoxNode(positions) {
+        return new GeometryNode(mat4.create(), {
+            mesh: new BoundingBox(positions),
+            material: new Material({
+                programData: new ProgramBuilder()
+                        .addPosition().addTexcoord().build(),
+                imageSrc: rgbTexture,
+                isVisible: false
+            })
+        });
     }
-}
-
-function generateBoundingPlaneNode(positions) {
-    return new GeometryNode(mat4.create(), {
-        mesh: new BoundingBox(positions),
-        material: new Material({
-            programData: new ProgramBuilder()
-                    .addPosition().addTexcoord().build(),
-            imageSrc: rgbTexture,
-            isVisible: false
-        })
-    });
+    handleTransform(baseSceneNode, delta) {
+        this._validateTransformArgs(baseSceneNode, delta);
+    }
+    _validateTransformArgs(baseSceneNode) {
+        if (!(baseSceneNode instanceof SceneNode)) {
+            throw new Error('baseSceneNode must be a SceneNode');
+        }
+        if (baseSceneNode.nodeType !== 'BASE') {
+            throw new Error('Scene node must have a type of BASE');
+        }
+    }
 }

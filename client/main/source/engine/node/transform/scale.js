@@ -3,12 +3,11 @@ import {gl} from '../../gl'
 import {redTexcoord, greenTexcoord, blueTexcoord} from './rgb'
 import {mat4, vec3} from 'gl-matrix'
 
-class TranslateMesh extends TransformMesh {
+class ScaleMesh extends TransformMesh {
     constructor(texcoord, transform) {
         const shaftLength = 75.0;
         const shaftSize = 1.0;
-        const pointerLength = 10.0;
-        const pointerSize = 2.0;
+        const pointerSize = 3.0;
 
         const positions = [
             // shaft
@@ -21,16 +20,14 @@ class TranslateMesh extends TransformMesh {
             shaftLength, -shaftSize, 0,
             shaftLength, 0, -shaftSize,
             // pointer
-            shaftLength, 0, 0,
-            shaftLength, pointerSize*1.5, 0,
-            shaftLength, pointerSize, pointerSize,
-            shaftLength, 0, pointerSize*1.5,
             shaftLength, -pointerSize, pointerSize,
-            shaftLength, -pointerSize*1.5, 0,
-            shaftLength, -pointerSize, -pointerSize,
-            shaftLength, 0, -pointerSize*1.5,
+            shaftLength, pointerSize, pointerSize,
             shaftLength, pointerSize, -pointerSize,
-            shaftLength + pointerLength, 0, 0,
+            shaftLength, -pointerSize, -pointerSize,
+            shaftLength+2*pointerSize, -pointerSize, pointerSize,
+            shaftLength+2*pointerSize, pointerSize, pointerSize,
+            shaftLength+2*pointerSize, pointerSize, -pointerSize,
+            shaftLength+2*pointerSize, -pointerSize, -pointerSize,
         ];
         for (let i = 0; i < positions.length; i+=3) {
             const transformed = vec3.transformMat4(vec3.create(),
@@ -62,31 +59,24 @@ class TranslateMesh extends TransformMesh {
             ...texcoord,
             ...texcoord,
             ...texcoord,
-            ...texcoord,
-            ...texcoord,
         ];
 
         const indices = [
             // shaft
             4, 0, 5, 1, 6, 2, 7, 3, 4, 0,
-            // pointer base
-            0, 9, // degenerate
-            9, 8, 10, 11,
-            11, 11, // degenerate
-            11, 8, 12, 13,
-            13, 13, // degenerate
-            13, 8, 14, 15,
-            15, 15, // degenerate
-            15, 8, 16, 9,
             // pointer
-            9, 10, // degenerate
-            10, 17, 9, 16,
-            16, 16, // degenerate
-            16, 17, 15, 14,
-            14, 14, // degenerate
-            14, 17, 13, 12,
-            12, 12, // degenerate
-            12, 17, 11, 10,
+            0, 8, // degenerate
+            8, 12, 9, 13,
+            13, 12, // degenerate
+            12, 15, 13, 14,
+            14, 15, // degenerate
+            15, 11, 14, 10,
+            10, 8, // degenerate
+            8, 9, 11, 10,
+            10, 9, // degnerate
+            9, 13, 10, 14,
+            14, 12, // degenerate
+            12, 8, 15, 11
         ];
 
         super({
@@ -99,13 +89,14 @@ class TranslateMesh extends TransformMesh {
         });
 
         this._positions = positions;
+        this._scaleFactor = 0.01;
     }
 
     get positions() {
         return this._positions;
     }
 }
-export class TranslateXMesh extends TranslateMesh {
+export class ScaleXMesh extends ScaleMesh {
     constructor() {
         super(redTexcoord, mat4.create());
     }
@@ -114,11 +105,11 @@ export class TranslateXMesh extends TranslateMesh {
     }
     handleTransform(baseSceneNode, delta) {
         super.handleTransform(baseSceneNode, delta);
-        baseSceneNode.localMatrix = mat4.translate(mat4.create(),
-                baseSceneNode.localMatrix, vec3.fromValues(delta[0], 0, 0));
+        baseSceneNode.localMatrix = mat4.scale(mat4.create(),
+                baseSceneNode.localMatrix, vec3.fromValues(1 + delta[0]*this._scaleFactor, 1, 1));
     }
 }
-export class TranslateYMesh extends TranslateMesh {
+export class ScaleYMesh extends ScaleMesh {
     constructor() {
         super(greenTexcoord, mat4.fromRotation(mat4.create(), 3.14/2, vec3.fromValues(0, 0, 1)));
     }
@@ -127,11 +118,11 @@ export class TranslateYMesh extends TranslateMesh {
     }
     handleTransform(baseSceneNode, delta) {
         super.handleTransform(baseSceneNode, delta);
-        baseSceneNode.localMatrix = mat4.translate(mat4.create(),
-                baseSceneNode.localMatrix, vec3.fromValues(0, delta[1], 0));
+        baseSceneNode.localMatrix = mat4.scale(mat4.create(),
+                baseSceneNode.localMatrix, vec3.fromValues(1, 1 + delta[1]*this._scaleFactor, 1));
     }
 }
-export class TranslateZMesh extends TranslateMesh {
+export class ScaleZMesh extends ScaleMesh {
     constructor() {
         super(blueTexcoord, mat4.fromRotation(mat4.create(), -3.14/2, vec3.fromValues(0, 1, 0)));
     }
@@ -140,11 +131,11 @@ export class TranslateZMesh extends TranslateMesh {
     }
     handleTransform(baseSceneNode, delta) {
         super.handleTransform(baseSceneNode, delta);
-        baseSceneNode.localMatrix = mat4.translate(mat4.create(),
-                baseSceneNode.localMatrix, vec3.fromValues(0, 0, delta[2]));
+        baseSceneNode.localMatrix = mat4.scale(mat4.create(),
+                baseSceneNode.localMatrix, vec3.fromValues(1, 1, 1 + delta[2]*this._scaleFactor));
     }
 }
 
-export const createTranslateNode = () => {
-    return createTransformNode(new TranslateXMesh(), new TranslateYMesh(), new TranslateZMesh());
+export const createScaleNode = () => {
+    return createTransformNode(new ScaleXMesh(), new ScaleYMesh(), new ScaleZMesh());
 }

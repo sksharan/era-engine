@@ -2,7 +2,6 @@ import {SelectionState} from './selection-state'
 import {SelectedState} from './selected-state'
 import {findNearestBaseNodeForBoundingBoxNode} from './node-finder'
 import {colorGeometryNodes} from './node-colorizer'
-import {createScaleNode} from '../../node/index'
 import {vec4} from 'gl-matrix'
 
 export class NoneSelectedState extends SelectionState {
@@ -31,11 +30,8 @@ export class NoneSelectedState extends SelectionState {
         const selectedObjectBaseNode = findNearestBaseNodeForBoundingBoxNode(intersection.boundingBoxNode);
         // Highlight the selected object
         colorGeometryNodes(selectedObjectBaseNode, vec4.fromValues(0.15, 0.15, 0.15, 0));
-        // Attach the transformation gizmo
-        const transformBaseNode = createScaleNode();
-        selectedObjectBaseNode.addChild(transformBaseNode);
         // Next state
-        return new SelectedState(selectedObjectBaseNode, transformBaseNode);
+        return new SelectedState(selectedObjectBaseNode);
 
     }
 }

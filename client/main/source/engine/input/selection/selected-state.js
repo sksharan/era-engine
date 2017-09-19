@@ -3,16 +3,25 @@ import {NoneSelectedState} from './none-selected-state'
 import {TransformingState} from './transforming-state'
 import {colorGeometryNodes} from './node-colorizer'
 import {findNearestBaseNodeForBoundingBoxNode} from './node-finder'
-import {vec4} from 'gl-matrix'
+import {createScaleNode} from '../../node/index'
+import {mat4, vec3, vec4} from 'gl-matrix'
 
 export class SelectedState extends SelectionState {
-    constructor(selectedObjectBaseNode, transformBaseNode) {
+    constructor(selectedObjectBaseNode) {
         super();
         this._selectedObjectBaseNode = selectedObjectBaseNode;
-        this._transformBaseNode = transformBaseNode;
+        this._transformBaseNode = null;
     }
     onEnter() {
-        // Do nothing
+        // Attach the transformation gizmo
+        this._transformBaseNode = createScaleNode();
+        this._selectedObjectBaseNode.addChild(this._transformBaseNode);
+        // The gizmo itself shouldn't be affected by any transformation applied to the object except translation
+        this._transformBaseNode.localMatrix = mat4.translate(
+            mat4.create(),
+            mat4.invert(mat4.create(), this._selectedObjectBaseNode.localMatrix), // Undo all object transformations
+            mat4.getTranslation(vec3.create(), this._selectedObjectBaseNode.localMatrix) // Then apply only object translation
+        );
     }
     handleMouseDown(mouseX, mouseY, sceneNode) {
         let intersection = null;
@@ -29,12 +38,13 @@ export class SelectedState extends SelectionState {
             const selectedObjectBaseNode = findNearestBaseNodeForBoundingBoxNode(intersection.boundingBoxNode);
             if (selectedObjectBaseNode !== this._selectedObjectBaseNode) {
                 // Selected a new object
-                return this._transitionToSelectedState(selectedObjectBaseNode)
+                return new SelectedState(selectedObjectBaseNode);
             }
             return null;
         }
-        // No intersection, so object has been deselected
-        return this._transitionToNoneSelectedState();
+        // No intersection, so object has been deselected - remove highlighting from selected object
+        colorGeometryNodes(this._selectedObjectBaseNode, vec4.fromValues(0, 0, 0, 0));
+        return new NoneSelectedState();
     }
     handleMouseUp() {
         return null;
@@ -43,23 +53,7 @@ export class SelectedState extends SelectionState {
         return null;
     }
     onExit() {
-        // Do nothing
-    }
-
-    _transitionToNoneSelectedState() {
-        // Remove highlighting from selected object
-        colorGeometryNodes(this._selectedObjectBaseNode, vec4.fromValues(0, 0, 0, 0));
-        // Detach transformation gizmo
+        // Detach the transformation gizmo
         this._transformBaseNode.removeParent();
-        // Next state
-        return new NoneSelectedState();
-    }
-
-    _transitionToSelectedState(selectedObjectBaseNode) {
-        // Move the transformation gizmo to the newly selected object
-        this._transformBaseNode.removeParent();
-        selectedObjectBaseNode.addChild(this._transformBaseNode);
-        // Next state
-        return new SelectedState(selectedObjectBaseNode, this._transformBaseNode);
     }
 }

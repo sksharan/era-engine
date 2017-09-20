@@ -1,8 +1,7 @@
-import SceneNode from '../scene-node'
-import GeometryNode from  '../geometry-node'
-import {Material} from '../../material/index'
-import {Mesh, BoundingBox} from '../../mesh/index'
-import {ProgramBuilder} from '../../shader/index'
+import {SceneNode, GeometryNode} from '../node/index'
+import {Material} from '../material/index'
+import {Mesh, BoundingBox} from '../mesh/index'
+import {ProgramBuilder} from '../shader/index'
 import {colorTexture} from './color'
 import {mat4} from 'gl-matrix'
 

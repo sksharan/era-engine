@@ -1,7 +1,7 @@
 import {TransformMesh, attachToBaseNode} from './transform'
-import SceneNode from '../scene-node'
-import {gl} from '../../gl'
 import {redTexcoord, greenTexcoord, blueTexcoord} from './color'
+import {SceneNode} from '../node/index'
+import {gl} from '../gl'
 import {mat4, vec3} from 'gl-matrix'
 
 class TranslateMesh extends TransformMesh {

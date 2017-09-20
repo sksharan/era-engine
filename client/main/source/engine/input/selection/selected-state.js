@@ -3,7 +3,7 @@ import {NoneSelectedState} from './none-selected-state'
 import {TransformingState} from './transforming-state'
 import {colorGeometryNodes} from './node-colorizer'
 import {findNearestBaseNodeForBoundingBoxNode} from './node-finder'
-import {createScaleNode} from '../../node/index'
+import {createScaleNode} from '../../transform/index'
 import {mat4, vec3, vec4} from 'gl-matrix'
 
 export class SelectedState extends SelectionState {

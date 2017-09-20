@@ -89,8 +89,8 @@ export default class ProgramBuilder {
     }
 
     // Requires add*Position() to be called first
-    addZClipZero() {
-        this._vertBuilder.addMainFunctionLines(`gl_Position.z = 0.0;`);
+    addFixedZClip(z=0) {
+        this._vertBuilder.addMainFunctionLines(`gl_Position.z = float(${z});`);
         return this;
     }
 

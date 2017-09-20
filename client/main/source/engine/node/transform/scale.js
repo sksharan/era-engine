@@ -1,14 +1,25 @@
-import {TransformMesh, createTransformNode} from './transform'
+import {TransformMesh, attachToBaseNode} from './transform'
+import SceneNode from '../scene-node'
 import {gl} from '../../gl'
-import {redTexcoord, greenTexcoord, blueTexcoord} from './rgb'
+import {whiteTexcoord, redTexcoord, greenTexcoord, blueTexcoord} from './color'
 import {mat4, vec3} from 'gl-matrix'
 
-class ScaleMesh extends TransformMesh {
+class ScaleBaseMesh extends TransformMesh {
+    constructor(meshArgs) {
+        super(meshArgs);
+        this._positions = meshArgs.positions;
+        this._scaleFactor = 0.01;
+    }
+    get positions() {
+        return this._positions;
+    }
+}
+
+class ScaleHandleMesh extends ScaleBaseMesh {
     constructor(texcoord, transform) {
         const shaftLength = 75.0;
         const shaftSize = 1.0;
         const pointerSize = 3.0;
-
         const positions = [
             // shaft
             0, shaftSize, 0,
@@ -36,10 +47,8 @@ class ScaleMesh extends TransformMesh {
             positions[i+1] = transformed[1];
             positions[i+2] = transformed[2];
         }
-
         // Normals not needed
         const normals = new Array(positions.length).fill(0);
-
         const texcoords = [
             // shaft
             ...texcoord,
@@ -60,7 +69,6 @@ class ScaleMesh extends TransformMesh {
             ...texcoord,
             ...texcoord,
         ];
-
         const indices = [
             // shaft
             4, 0, 5, 1, 6, 2, 7, 3, 4, 0,
@@ -78,7 +86,6 @@ class ScaleMesh extends TransformMesh {
             14, 12, // degenerate
             12, 8, 15, 11
         ];
-
         super({
             drawMode: gl.TRIANGLE_STRIP,
             positions,
@@ -87,16 +94,9 @@ class ScaleMesh extends TransformMesh {
             indices,
             numVertices: positions.length
         });
-
-        this._positions = positions;
-        this._scaleFactor = 0.01;
-    }
-
-    get positions() {
-        return this._positions;
     }
 }
-export class ScaleXMesh extends ScaleMesh {
+export class ScaleXMesh extends ScaleHandleMesh {
     constructor() {
         super(redTexcoord, mat4.create());
     }
@@ -109,7 +109,7 @@ export class ScaleXMesh extends ScaleMesh {
                 baseSceneNode.localMatrix, vec3.fromValues(1 + delta[0]*this._scaleFactor, 1, 1));
     }
 }
-export class ScaleYMesh extends ScaleMesh {
+export class ScaleYMesh extends ScaleHandleMesh {
     constructor() {
         super(greenTexcoord, mat4.fromRotation(mat4.create(), 3.14/2, vec3.fromValues(0, 0, 1)));
     }
@@ -122,7 +122,7 @@ export class ScaleYMesh extends ScaleMesh {
                 baseSceneNode.localMatrix, vec3.fromValues(1, 1 + delta[1]*this._scaleFactor, 1));
     }
 }
-export class ScaleZMesh extends ScaleMesh {
+export class ScaleZMesh extends ScaleHandleMesh {
     constructor() {
         super(blueTexcoord, mat4.fromRotation(mat4.create(), -3.14/2, vec3.fromValues(0, 1, 0)));
     }
@@ -136,6 +136,79 @@ export class ScaleZMesh extends ScaleMesh {
     }
 }
 
+export class ScaleCenterMesh extends ScaleBaseMesh {
+    constructor(texcoord=whiteTexcoord) {
+        const size = 5.0;
+        const positions = [
+            -size, -size,  size,
+             size, -size,  size,
+             size,  size,  size,
+            -size,  size,  size,
+            -size, -size, -size,
+             size, -size, -size,
+             size,  size, -size,
+            -size,  size, -size,
+        ];
+        // Normals not needed
+        const normals = new Array(positions.length).fill(0);
+        const texcoords = [
+            ...texcoord,
+            ...texcoord,
+            ...texcoord,
+            ...texcoord,
+            ...texcoord,
+            ...texcoord,
+            ...texcoord,
+            ...texcoord,
+        ];
+        const indices = [
+            // Side 1
+            0, 1, 2,
+            2, 3, 0,
+            // Side 2
+            1, 5, 6,
+            6, 2, 1,
+            // Side 3
+            0, 3, 4,
+            4, 3, 7,
+            // Side 4
+            7, 5, 4,
+            5, 7, 6,
+            // Side 5
+            0, 5, 1,
+            0, 4, 5,
+            // Side 6
+            3, 2, 6,
+            3, 6, 7,
+        ];
+        super({
+            drawMode: gl.TRIANGLES,
+            positions,
+            normals,
+            texcoords,
+            indices,
+            numVertices: positions.length
+        });
+    }
+    generateBoundingBoxNode() {
+        return this._generateBoundingBoxNode([this.min, this.min, 0, this.max, this.max, 0]);
+    }
+    handleTransform(baseSceneNode, delta) {
+        super.handleTransform(baseSceneNode, delta);
+        baseSceneNode.localMatrix = mat4.scale(mat4.create(),
+                baseSceneNode.localMatrix, vec3.fromValues(
+                        1 + delta[0]*this._scaleFactor,
+                        1 + delta[0]*this._scaleFactor,
+                        1 + delta[0]*this._scaleFactor));
+    }
+}
+
 export const createScaleNode = () => {
-    return createTransformNode(new ScaleXMesh(), new ScaleYMesh(), new ScaleZMesh());
+    const localMatrix = mat4.create();
+    const base = new SceneNode(localMatrix);
+    attachToBaseNode({base, mesh: new ScaleXMesh(), zClip: 0.1});
+    attachToBaseNode({base, mesh: new ScaleYMesh(), zClip: 0.1});
+    attachToBaseNode({base, mesh: new ScaleZMesh(), zClip: 0.1});
+    attachToBaseNode({base, mesh: new ScaleCenterMesh(), zClip: 0.0});
+    return base;
 }

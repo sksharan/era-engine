@@ -1,6 +1,7 @@
-import {TransformMesh, createTransformNode} from './transform'
+import {TransformMesh, attachToBaseNode} from './transform'
+import SceneNode from '../scene-node'
 import {gl} from '../../gl'
-import {redTexcoord, greenTexcoord, blueTexcoord} from './rgb'
+import {redTexcoord, greenTexcoord, blueTexcoord} from './color'
 import {mat4, vec3} from 'gl-matrix'
 
 class TranslateMesh extends TransformMesh {
@@ -146,5 +147,10 @@ export class TranslateZMesh extends TranslateMesh {
 }
 
 export const createTranslateNode = () => {
-    return createTransformNode(new TranslateXMesh(), new TranslateYMesh(), new TranslateZMesh());
+    const localMatrix = mat4.create();
+    const base = new SceneNode(localMatrix);
+    attachToBaseNode({base, mesh: new TranslateXMesh()});
+    attachToBaseNode({base, mesh: new TranslateYMesh()});
+    attachToBaseNode({base, mesh: new TranslateZMesh()});
+    return base;
 }

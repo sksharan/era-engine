@@ -32,11 +32,11 @@ describe('Program builder build', () => {
         assertPositionData(programData);
     });
 
-    it('should succeed with position and z-clip zero enabled', () => {
-        builder.addPosition().addZClipZero().build();
+    it('should succeed with position and fixed z-clip enabled', () => {
+        builder.addPosition().addFixedZClip().build();
     });
-    it('should set correct program data when position and z-clip zero enabled', () => {
-        const programData = builder.addPosition().addZClipZero().build();
+    it('should set correct program data when position and fixed z-clip enabled', () => {
+        const programData = builder.addPosition().addFixedZClip().build();
         assertPositionData(programData);
     });
 
@@ -48,11 +48,11 @@ describe('Program builder build', () => {
         assertBillboardPositionData(programData);
     });
 
-    it('should succeed with billboard position and z-clip zero enabled', () => {
-        builder.addBillboardPosition().addZClipZero().build();
+    it('should succeed with billboard position and fixed z-clip enabled', () => {
+        builder.addBillboardPosition().addFixedZClip().build();
     });
-    it('should set correct program data when billboard position and z-clip zero enabled', () => {
-        const programData = builder.addBillboardPosition().addZClipZero().build();
+    it('should set correct program data when billboard position and fixed z-clip enabled', () => {
+        const programData = builder.addBillboardPosition().addFixedZClip().build();
         assertBillboardPositionData(programData);
     });
 

@@ -20,14 +20,7 @@ module.exports = {
             filename: 'main/public/index.html',
             template: 'main/template/index.html.template'
         }),
-        extractSass,
-        // https://getbootstrap.com/docs/4.0/getting-started/webpack/
-        new webpack.ProvidePlugin({
-            $: 'jquery',
-            jQuery: 'jquery',
-            'window.jQuery': 'jquery',
-            Popper: ['popper.js', 'default']
-        })
+        extractSass
     ],
     resolve: {
         extensions: ['.js', '.jsx']
@@ -49,22 +42,35 @@ module.exports = {
                 }
             },
             {
+                // https://github.com/webpack-contrib/sass-loader
+                // https://getbootstrap.com/docs/4.0/getting-started/webpack/
                 loader: extractSass.extract({
                     use: [
                         {
-                            loader: 'css-loader',
+                            loader: 'css-loader', // translates CSS into CommonJS modules
                             options: {
                                 localIdentName: '[name]-[local]___[hash:base64:5]'
                             }
                         },
                         {
-                            loader: 'sass-loader'
+                            loader: 'postcss-loader', // Run post css actions
+                            options: {
+                                plugins: function () { // post css plugins, can be exported to postcss.config.js
+                                    return [
+                                        require('precss'),
+                                        require('autoprefixer')
+                                    ];
+                                }
+                            }
+                        },
+                        {
+                            loader: 'sass-loader' // compiles SASS to CSS
                         }
                     ],
                     // Use style-loader in development
-                    fallback: 'style-loader',
+                    fallback: 'style-loader', // inject CSS to page
                 }),
-                test: /\.(css|scss)$/
+                test: /\.(scss)$/
             }
         ]
     },

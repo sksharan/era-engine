@@ -20,8 +20,8 @@ function handleKeyUp(e) {
 
 export default {
     init() {
-        $(document).on('keydown', handleKeyDown);
-        $(document).on('keyup', handleKeyUp);
+        document.addEventListener('keydown', handleKeyDown);
+        document.addEventListener('keyup', handleKeyUp);
     },
 
     processKeys() {

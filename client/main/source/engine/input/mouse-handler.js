@@ -6,7 +6,6 @@ import {NoneSelectedState} from './selection/index'
 import {Camera} from '../camera/index'
 import {gl} from '../gl'
 import {RootSceneNode} from '../index'
-import $ from 'jquery'
 
 gl.canvas.requestPointerLock = gl.canvas.requestPointerLock || gl.canvas.mozRequestPointerLock;
 document.exitPointerLock = document.exitPointerLock || document.mozExitPointerLock;
@@ -15,15 +14,15 @@ let currSelectionState = new NoneSelectedState();
 
 function handleLockChange() {
     if (isPointerLocked()) {
-        $(document).on('mousemove', handleMouseMovement);
+        document.addEventListener('mousemove', handleMouseMovement);
     } else {
         // No need to check mouse movement when pointer lock is not active
-        $(document).off('mousemove', handleMouseMovement);
+        document.removeEventListener('mousemove', handleMouseMovement);
     }
 }
 
 function handleMouseMovement(e) {
-    Camera.updateDirection(e.originalEvent.movementX, e.originalEvent.movementY);
+    Camera.updateDirection(e.movementX, e.movementY);
 }
 
 function isPointerLocked() {
@@ -52,8 +51,8 @@ export default {
             const nextState = currSelectionState.handleMouseMove(e.clientX, e.clientY, RootSceneNode);
             handleSelectionState(nextState);
         });
-        $(document).on('pointerlockchange', handleLockChange);
-        $(document).on('mozpointerlockchange', handleLockChange);
+        document.addEventListener('pointerlockchange', handleLockChange);
+        document.addEventListener('mozpointerlockchange', handleLockChange);
     },
 
     /* Returns true if the pointer is currently locked. */

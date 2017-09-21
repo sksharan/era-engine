@@ -6,10 +6,6 @@ import client from './interface/client'
 import store from './interface/store'
 import css from './main.scss'
 
-// Init Bootstrap CSS and JS globally
-require('bootstrap/dist/css/bootstrap.css');
-require('bootstrap');
-
 // Component for initializing the canvas and WebGL
 class Canvas extends React.Component {
     render() {

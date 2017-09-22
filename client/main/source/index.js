@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import {ApolloProvider} from 'react-apollo'
+import FontAwesome from 'react-fontawesome'
 import FPS from './interface/fps/fps'
 import client from './interface/client'
 import store from './interface/store'
@@ -46,6 +47,11 @@ class Main extends React.Component {
         return (
             <div>
                 <Canvas />
+                <nav className='navbar navbar-expand-sm navbar-dark bg-dark'>
+                    <a className='navbar-brand ml-5' href="#">
+                        <FontAwesome name='gamepad' />
+                    </a>
+                </nav>
                 <div className='container-fluid'>
                     <div className='row'>
                         <div className='col-md-12'>

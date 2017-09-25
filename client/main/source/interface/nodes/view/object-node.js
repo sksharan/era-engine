@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import FontAwesome from 'react-fontawesome'
 import {addObjectWithBoundingBox} from '../../engineop/index'
 
 export class ObjectNode extends React.Component {
@@ -10,7 +11,10 @@ export class ObjectNode extends React.Component {
     render() {
         addObjectWithBoundingBox(this.props.node, this.props.parentRenderNode);
         return (
-            <div>{this.props.node.name}</div>
+            <div>
+                <FontAwesome name='cube' />
+                <span>{this.props.node.name}</span>
+            </div>
         );
     }
 }

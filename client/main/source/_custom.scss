@@ -1,2 +1,25 @@
-// Add Bootstrap overrides here: https://getbootstrap.com/docs/4.0/getting-started/webpack/
+// Bootstrap overrides: https://getbootstrap.com/docs/4.0/getting-started/webpack/
 $spacer: 0.25rem;
+$enable-rounded: false;
+
+$body-color: #e0e0e0;
+
+$card-bg: rgba(51, 51, 51, 0.75);
+$card-border-width: 0;
+$card-cap-bg: #333;
+$card-spacer-x: $spacer * 3;
+$card-spacer-y: $spacer;
+.card-body {
+    // Custom padding to override 'padding: $card-spacer-x;'
+    padding-left: $card-spacer-x !important;
+    padding-right: $card-spacer-x !important;
+    padding-top: $card-spacer-y !important;
+    padding-bottom: $card-spacer-y !important;
+}
+
+$navbar-padding-x: 1.0rem;
+
+// Font Awesome
+.fa {
+    margin-right: $spacer * 2;
+}

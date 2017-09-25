@@ -2,7 +2,6 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import {ApolloProvider} from 'react-apollo'
 import FontAwesome from 'react-fontawesome'
-import FPS from './interface/fps/fps'
 import client from './interface/client'
 import store from './interface/store'
 import css from './main.scss'
@@ -48,16 +47,11 @@ class Main extends React.Component {
             <div>
                 <Canvas />
                 <nav className='navbar navbar-expand-sm navbar-dark bg-dark'>
-                    <a className='navbar-brand ml-5' href="#">
+                    <a className='navbar-brand' href="#">
                         <FontAwesome name='gamepad' />
                     </a>
                 </nav>
-                <div className='container-fluid'>
-                    <div className='row'>
-                        <div className='col-md-12'>
-                            {this.state.glInitialized ? <FPS fps={this.state.fps}/> : ""}
-                        </div>
-                    </div>
+                <div className='container-fluid pr-0'>
                     <div className='row justify-content-end'>
                         <div className='col-md-4'>
                             {this.state.glInitialized ? this.getNodesView() : ""}

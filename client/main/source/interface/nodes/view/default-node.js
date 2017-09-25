@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import FontAwesome from 'react-fontawesome'
 import {SceneNode} from '../../../engine/index'
 
 export class DefaultNode extends React.Component {
@@ -12,7 +13,10 @@ export class DefaultNode extends React.Component {
         this.props.parentRenderNode.addChild(renderNode);
 
         return (
-            <div>{this.props.node.name}</div>
+            <div>
+                <FontAwesome name='object-group' />
+                <span>{this.props.node.name}</span>
+            </div>
         );
     }
 }

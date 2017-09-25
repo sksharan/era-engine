@@ -1,10 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {graphql} from 'react-apollo'
+import FontAwesome from 'react-fontawesome'
 import {SelectAllQuery} from '../query/scene-node-query'
 import {Node} from './node'
 import {RootSceneNode} from '../../../engine/index'
-import css from './styles/node-panel.scss'
 
 export class NodePanel extends React.Component {
     constructor(props) {
@@ -14,20 +14,19 @@ export class NodePanel extends React.Component {
     render() {
         return (
             <div className='card'>
-                <div className={`${css.title} card-header py-1`}>
+                <div className='card-header'>
                     <div className="mb-0">
+                        <FontAwesome name='sitemap' />
                         <span className='align-middle'>Nodes</span>
                     </div>
                 </div>
-                <div className='collapse show'>
-                    <ul className="list-group list-group-flush">
-                        {
-                            (this.props.data.loading)
-                                ? <div>Loading nodes...</div>
-                                : Object.entries(createHierarchyFromNodes(this.props.data.sceneNodes))
-                                        .map(([key, val]) => <Node key={key} val={val} depth={0} parentRenderNode={RootSceneNode} />)
-                        }
-                    </ul>
+                <div className='card-body'>
+                    {
+                        (this.props.data.loading)
+                            ? <div>Loading nodes...</div>
+                            : Object.entries(createHierarchyFromNodes(this.props.data.sceneNodes))
+                                    .map(([key, val]) => <Node key={key} val={val} depth={0} parentRenderNode={RootSceneNode} />)
+                    }
                 </div>
             </div>
         );

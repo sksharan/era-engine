@@ -15,10 +15,8 @@ export class NodePanel extends React.Component {
         return (
             <div className='card'>
                 <div className='card-header'>
-                    <div className="mb-0">
-                        <FontAwesome name='sitemap' />
-                        <span className='align-middle'>Nodes</span>
-                    </div>
+                    <FontAwesome name='sitemap' />
+                    <span>Nodes</span>
                 </div>
                 <div className='card-body'>
                     {

@@ -2,8 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import {ApolloProvider} from 'react-apollo'
 import FontAwesome from 'react-fontawesome'
-import client from './interface/client'
-import store from './interface/store'
+import {Client, Store} from './interface/index'
 import css from './main.scss'
 
 // Component for initializing the canvas and WebGL
@@ -51,9 +50,12 @@ class Main extends React.Component {
                         <FontAwesome name='gamepad' />
                     </a>
                 </nav>
-                <div className='container-fluid pr-0'>
-                    <div className='row justify-content-end'>
-                        <div className='col-md-4'>
+                <div className='container-fluid'>
+                    <div className='row'>
+                        <div className='col-md-8 pl-0 pr-0' id='tools'>
+                            {this.state.glInitialized ? this.getToolsView() : ""}
+                        </div>
+                        <div className='col-md-4 pl-0 pr-0'>
                             {this.state.glInitialized ? this.getNodesView() : ""}
                         </div>
                     </div>
@@ -62,8 +64,12 @@ class Main extends React.Component {
         );
     }
     getNodesView() {
-        const Node = require('./interface/nodes/index').view;
+        const Node = require('./interface/index-deferred').NodePanel;
         return <Node />
+    }
+    getToolsView() {
+        const Tool = require('./interface/index-deferred').ToolPanel;
+        return <Tool />
     }
     componentDidMount() {
         // At this point, canvas has been rendered so WebGL is initialized
@@ -83,7 +89,7 @@ class Main extends React.Component {
 }
 
 ReactDOM.render(
-    <ApolloProvider store={store} client={client}>
+    <ApolloProvider store={Store} client={Client}>
         <Main/>
     </ApolloProvider>,
     document.getElementById('main'));

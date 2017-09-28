@@ -1,2 +1,2 @@
-export {default as KeyboardHandler} from './keyboard-handler'
-export {default as MouseHandler} from './mouse-handler'
+export {KeyboardHandler} from './keyboard-handler'
+export {MouseHandler} from './mouse-handler'

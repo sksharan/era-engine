@@ -1,24 +1,18 @@
 import camera from '../camera/camera'
-import MouseHandler from './mouse-handler'
-import {gl} from '../gl'
+import {MouseHandler} from './mouse-handler'
 
 // Maps key codes to boolean values indicating if key is pressed
 const pressedKeys = {};
 
 function handleKeyDown(e) {
     pressedKeys[e.which] = true;
-
-    // "m"
-    if (pressedKeys[77]) {
-        gl.canvas.requestPointerLock();
-    }
 }
 
 function handleKeyUp(e) {
     pressedKeys[e.which] = false;
 }
 
-export default {
+export const KeyboardHandler = {
     init() {
         document.addEventListener('keydown', handleKeyDown);
         document.addEventListener('keyup', handleKeyUp);

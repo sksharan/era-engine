@@ -37,7 +37,7 @@ function handleSelectionState(nextState) {
     }
 }
 
-export default {
+export const MouseHandler = {
     init() {
         gl.canvas.addEventListener('mousedown', (e) => {
             const nextState = currSelectionState.handleMouseDown(e.clientX, e.clientY, RootSceneNode);
@@ -54,9 +54,10 @@ export default {
         document.addEventListener('pointerlockchange', handleLockChange);
         document.addEventListener('mozpointerlockchange', handleLockChange);
     },
-
-    /* Returns true if the pointer is currently locked. */
     isPointerLocked() {
         return isPointerLocked();
+    },
+    togglePointerLock() {
+        gl.canvas.requestPointerLock();
     }
 }

@@ -1,5 +1,6 @@
 import React from 'react'
 import FontAwesome from 'react-fontawesome'
+import {togglePointerLock} from '../../engineop/index'
 
 export class ToolPanel extends React.Component {
     constructor(props) {
@@ -29,7 +30,7 @@ export class ToolPanel extends React.Component {
                 <div className='card-body'>
                     <div className='row'>
                         <div className='col'>
-                            <button type='button' className='btn btn-sm btn-outline-light'>
+                            <button type='button' className='btn btn-sm btn-outline-light' onClick={togglePointerLock}>
                                 <FontAwesome name='video-camera' />
                             </button>
                         </div>

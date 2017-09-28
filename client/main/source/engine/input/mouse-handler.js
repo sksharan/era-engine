@@ -39,21 +39,27 @@ function handleSelectionState(nextState) {
 
 export const MouseHandler = {
     init() {
+        document.addEventListener('click', (e) => {
+            if (!this.isPointerLocked()) {
+                const nextState = currSelectionState.handleDocumentClick(e.clientX, e.clientY, RootSceneNode);
+                handleSelectionState(nextState);
+            }
+        });
         gl.canvas.addEventListener('mousedown', (e) => {
             if (!this.isPointerLocked()) {
-                const nextState = currSelectionState.handleMouseDown(e.clientX, e.clientY, RootSceneNode);
+                const nextState = currSelectionState.handleCanvasMouseDown(e.clientX, e.clientY, RootSceneNode);
                 handleSelectionState(nextState);
             }
         });
         gl.canvas.addEventListener('mouseup', (e) => {
             if (!this.isPointerLocked()) {
-                const nextState = currSelectionState.handleMouseUp(e.clientX, e.clientY, RootSceneNode);
+                const nextState = currSelectionState.handleCanvasMouseUp(e.clientX, e.clientY, RootSceneNode);
                 handleSelectionState(nextState);
             }
         });
         gl.canvas.addEventListener('mousemove', (e) => {
             if (!this.isPointerLocked()) {
-                const nextState = currSelectionState.handleMouseMove(e.clientX, e.clientY, RootSceneNode);
+                const nextState = currSelectionState.handleCanvasMouseMove(e.clientX, e.clientY, RootSceneNode);
                 handleSelectionState(nextState);
             }
         });

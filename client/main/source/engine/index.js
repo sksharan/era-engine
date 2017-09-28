@@ -12,3 +12,5 @@ export {Material} from './material/index'
 export {Renderer} from './render/index'
 
 export {ProgramBuilder} from './shader/index'
+
+export {CurrentTransformMode} from './transform/index'

@@ -8,17 +8,20 @@ export class NoneSelectedState extends SelectionState {
     onEnter() {
         // Do nothing
     }
-    handleMouseDown(mouseX, mouseY, sceneNode) {
+    handleDocumentClick() {
+        return null;
+    }
+    handleCanvasMouseDown(mouseX, mouseY, sceneNode) {
         const intersection = this._getNearestIntersection(mouseX, mouseY, sceneNode);
         if (intersection.boundingBoxNode) {
             return this._transitionToSelectedState(intersection);
         }
         return null;
     }
-    handleMouseUp() {
+    handleCanvasMouseUp() {
         return null;
     }
-    handleMouseMove() {
+    handleCanvasMouseMove() {
         return null;
     }
     onExit() {

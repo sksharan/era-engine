@@ -21,13 +21,16 @@ export class TransformingState extends SelectionState {
         this._transformBoundingPlaneNode = this._transformGeometryNode.mesh.generateBoundingBoxNode();
         this._transformBoundingBoxNode.addChild(this._transformBoundingPlaneNode);
     }
-    handleMouseDown() {
+    handleDocumentClick() {
         return null;
     }
-    handleMouseUp() {
+    handleCanvasMouseDown() {
+        return null;
+    }
+    handleCanvasMouseUp() {
         return this._transitionToSelectedState();
     }
-    handleMouseMove(mouseX, mouseY) {
+    handleCanvasMouseMove(mouseX, mouseY) {
         // Only consider if there's an intersection with the plane
         const intersection = this._getNearestIntersection(mouseX, mouseY, this._transformBoundingPlaneNode);
         if (intersection.boundingBoxNode) {

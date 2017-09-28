@@ -15,18 +15,23 @@ export class SelectionState {
         console.warn(`Called onEnter with sceneNode=${sceneNode}`);
     }
     // Returns the next state to transition to, otherwise returns null
-    handleMouseDown(mouseX, mouseY, sceneNode) {
-        console.warn(`Called handleMouseDown with mouseX=${mouseX}, mouseY=${mouseY}, sceneNode=${sceneNode}`);
+    handleDocumentClick(mouseX, mouseY, sceneNode) {
+        console.warn(`Called handleDocumentClick with mouseX=${mouseX}, mouseY=${mouseY}, sceneNode=${sceneNode}`);
         return null;
     }
     // Returns the next state to transition to, otherwise returns null
-    handleMouseUp(mouseX, mouseY, sceneNode) {
-        console.warn(`Called handleMouseUp with mouseX=${mouseX}, mouseY=${mouseY}, sceneNode=${sceneNode}`);
+    handleCanvasMouseDown(mouseX, mouseY, sceneNode) {
+        console.warn(`Called handleCanvasMouseDown with mouseX=${mouseX}, mouseY=${mouseY}, sceneNode=${sceneNode}`);
         return null;
     }
     // Returns the next state to transition to, otherwise returns null
-    handleMouseMove(mouseX, mouseY, sceneNode) {
-        console.warn(`Called handleMouseMove with mouseX=${mouseX}, mouseY=${mouseY}, sceneNode=${sceneNode}`);
+    handleCanvasMouseUp(mouseX, mouseY, sceneNode) {
+        console.warn(`Called handleCanvasMouseUp with mouseX=${mouseX}, mouseY=${mouseY}, sceneNode=${sceneNode}`);
+        return null;
+    }
+    // Returns the next state to transition to, otherwise returns null
+    handleCanvasMouseMove(mouseX, mouseY, sceneNode) {
+        console.warn(`Called handleCanvasMouseMove with mouseX=${mouseX}, mouseY=${mouseY}, sceneNode=${sceneNode}`);
         return null;
     }
     // Action to perform when transitioning out of this state

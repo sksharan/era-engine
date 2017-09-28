@@ -7,3 +7,9 @@ export {
     addChildToRenderNode,
     addObjectWithBoundingBox,
 } from './node-operation'
+
+export {
+    setTranslate,
+    setScale,
+    setRotate,
+} from './transform-operation'

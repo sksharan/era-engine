@@ -1,6 +1,11 @@
 import React from 'react'
 import FontAwesome from 'react-fontawesome'
-import {togglePointerLock} from '../../engineop/index'
+import {
+    togglePointerLock,
+    setTranslate,
+    setScale,
+    setRotate,
+} from '../../engineop/index'
 
 export class ToolPanel extends React.Component {
     constructor(props) {
@@ -35,13 +40,13 @@ export class ToolPanel extends React.Component {
                             </button>
                         </div>
                         <div className='col'>
-                            <button type='button' className='btn btn-sm btn-outline-light'>
+                            <button type='button' className='btn btn-sm btn-outline-light' onClick={setTranslate}>
                                 <FontAwesome name='arrows' />
                             </button>
-                            <button type='button' className='btn btn-sm btn-outline-light'>
+                            <button type='button' className='btn btn-sm btn-outline-light' onClick={setScale}>
                                 <FontAwesome name='arrows-alt' />
                             </button>
-                            <button type='button' className='btn btn-sm btn-outline-light'>
+                            <button type='button' className='btn btn-sm btn-outline-light' onClick={setRotate}>
                                 <FontAwesome name='refresh' />
                             </button>
                         </div>

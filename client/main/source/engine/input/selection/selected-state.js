@@ -6,6 +6,7 @@ import {findNearestBaseNodeForBoundingBoxNode} from './node-finder'
 import {
     createTranslateNode,
     createScaleNode,
+    createRotateNode,
     CurrentTransformMode,
     TRANSLATE, SCALE, ROTATE,
 } from '../../transform/index'
@@ -74,7 +75,7 @@ export class SelectedState extends SelectionState {
         } else if (mode === SCALE) {
             this._transformBaseNode = createScaleNode();
         } else if (mode === ROTATE) {
-            this._transformBaseNode = createScaleNode(); // TODO: replace with rotation
+            this._transformBaseNode = createRotateNode();
         } else {
             console.warn(`Unknown mode ${mode}, defaulting to translate`);
             this._transformBaseNode = createTranslateNode();

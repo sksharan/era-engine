@@ -8,9 +8,12 @@ import {mat4} from 'gl-matrix'
 export class TransformMesh extends Mesh {
     constructor(meshArgs) {
         super(meshArgs);
-        this.min = Number.NEGATIVE_INFINITY;
-        this.max = Number.POSITIVE_INFINITY;
-
+        this._positions = meshArgs.positions;
+        this._min = Number.NEGATIVE_INFINITY;
+        this._max = Number.POSITIVE_INFINITY;
+    }
+    get positions() {
+        return this._positions;
     }
     generateBoundingBoxNode() {
         throw new Error('No base implementation');
@@ -29,12 +32,15 @@ export class TransformMesh extends Mesh {
     handleTransform(baseSceneNode, delta) {
         this._validateTransformArgs(baseSceneNode, delta);
     }
-    _validateTransformArgs(baseSceneNode) {
+    _validateTransformArgs(baseSceneNode, delta) {
         if (!(baseSceneNode instanceof SceneNode)) {
             throw new Error('baseSceneNode must be a SceneNode');
         }
         if (baseSceneNode.nodeType !== 'BASE') {
             throw new Error('Scene node must have a type of BASE');
+        }
+        if (!(delta instanceof Float32Array)) {
+            throw new TypeError('Delta must be a vec3 (Float32Array)');
         }
     }
 }

@@ -6,6 +6,9 @@ import {mat4, vec3} from 'gl-matrix'
 
 class TranslateMesh extends TransformMesh {
     constructor(texcoord, transform) {
+        if (texcoord.length !== 2) {
+            throw new TypeError(`Texcoord must have length of 2, but instead has length ${texcoord.length}`);
+        }
         const shaftLength = 75.0;
         const shaftSize = 1.0;
         const pointerLength = 10.0;
@@ -98,20 +101,14 @@ class TranslateMesh extends TransformMesh {
             indices,
             numVertices: positions.length
         });
-
-        this._positions = positions;
-    }
-
-    get positions() {
-        return this._positions;
     }
 }
-export class TranslateXMesh extends TranslateMesh {
+class TranslateXMesh extends TranslateMesh {
     constructor() {
         super(redTexcoord, mat4.create());
     }
     generateBoundingBoxNode() {
-        return this._generateBoundingBoxNode([this.min, 0, this.min, this.max, 0, this.max]);
+        return this._generateBoundingBoxNode([this._min, 0, this._min, this._max, 0, this._max]);
     }
     handleTransform(baseSceneNode, delta) {
         super.handleTransform(baseSceneNode, delta);
@@ -119,12 +116,12 @@ export class TranslateXMesh extends TranslateMesh {
                 baseSceneNode.localMatrix, vec3.fromValues(delta[0], 0, 0));
     }
 }
-export class TranslateYMesh extends TranslateMesh {
+class TranslateYMesh extends TranslateMesh {
     constructor() {
         super(greenTexcoord, mat4.fromRotation(mat4.create(), 3.14/2, vec3.fromValues(0, 0, 1)));
     }
     generateBoundingBoxNode() {
-        return this._generateBoundingBoxNode([this.min, this.min, 0, this.max, this.max, 0]);
+        return this._generateBoundingBoxNode([this._min, this._min, 0, this._max, this._max, 0]);
     }
     handleTransform(baseSceneNode, delta) {
         super.handleTransform(baseSceneNode, delta);
@@ -132,12 +129,12 @@ export class TranslateYMesh extends TranslateMesh {
                 baseSceneNode.localMatrix, vec3.fromValues(0, delta[1], 0));
     }
 }
-export class TranslateZMesh extends TranslateMesh {
+class TranslateZMesh extends TranslateMesh {
     constructor() {
         super(blueTexcoord, mat4.fromRotation(mat4.create(), -3.14/2, vec3.fromValues(0, 1, 0)));
     }
     generateBoundingBoxNode() {
-        return this._generateBoundingBoxNode([this.min, 0, this.min, this.max, 0, this.max]);
+        return this._generateBoundingBoxNode([this._min, 0, this._min, this._max, 0, this._max]);
     }
     handleTransform(baseSceneNode, delta) {
         super.handleTransform(baseSceneNode, delta);

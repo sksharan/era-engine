@@ -1,7 +1,7 @@
-import {SceneNode, GeometryNode} from '../node/index'
-import {Material} from '../material/index'
-import {Mesh, BoundingBox} from '../mesh/index'
-import {ProgramBuilder} from '../shader/index'
+import {SceneNode, GeometryNode} from '../../../node/index'
+import {Material} from '../../../material/index'
+import {Mesh, BoundingBox} from '../../../mesh/index'
+import {ProgramBuilder} from '../../../shader/index'
 import {colorTexture} from './color'
 import {mat4} from 'gl-matrix'
 
@@ -15,7 +15,7 @@ export class TransformMesh extends Mesh {
     get positions() {
         return this._positions;
     }
-    generateBoundingBoxNode() {
+    generateBoundingPlaneNode() {
         throw new Error('No base implementation');
     }
     _generateBoundingBoxNode(positions) {

@@ -18,7 +18,7 @@ export class TransformingState extends SelectionState {
     onEnter() {
         // Generate plane around the gizmo component so the user can manipulate
         // the object without having to keep the mouse directly on the gizmo
-        this._transformBoundingPlaneNode = this._transformGeometryNode.mesh.generateBoundingBoxNode();
+        this._transformBoundingPlaneNode = this._transformGeometryNode.mesh.generateBoundingPlaneNode();
         this._transformBoundingBoxNode.addChild(this._transformBoundingPlaneNode);
     }
     handleDocumentClick() {

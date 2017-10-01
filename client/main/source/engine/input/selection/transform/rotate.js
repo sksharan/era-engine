@@ -1,7 +1,7 @@
 import {TransformMesh, attachToBaseNode} from './transform'
 import {redTexcoord, greenTexcoord, blueTexcoord} from './color'
-import {SceneNode} from '../node/index'
-import {gl} from '../gl'
+import {SceneNode} from '../../../node/index'
+import {gl} from '../../../gl'
 import {mat4, vec3, glMatrix} from 'gl-matrix'
 
 class RotateMesh extends TransformMesh {
@@ -111,7 +111,7 @@ export class RotateXMesh extends RotateMesh {
     constructor() {
         super(redTexcoord, mat4.fromRotation(mat4.create(), 3.14/2, vec3.fromValues(0, 0, 1)));
     }
-    generateBoundingBoxNode() {
+    generateBoundingPlaneNode() {
         return this._generateBoundingBoxNode([this._min, 0, this._min, this._max, 0, this._max]);
     }
     handleTransform(baseSceneNode, delta) {
@@ -124,7 +124,7 @@ export class RotateYMesh extends RotateMesh {
     constructor() {
         super(greenTexcoord, mat4.create());
     }
-    generateBoundingBoxNode() {
+    generateBoundingPlaneNode() {
         return this._generateBoundingBoxNode([this._min, this._min, 0, this._max, this._max, 0]);
     }
     handleTransform(baseSceneNode, delta) {
@@ -137,7 +137,7 @@ export class RotateZMesh extends RotateMesh {
     constructor() {
         super(blueTexcoord, mat4.fromRotation(mat4.create(), -3.14/2, vec3.fromValues(1, 0, 0)));
     }
-    generateBoundingBoxNode() {
+    generateBoundingPlaneNode() {
         return this._generateBoundingBoxNode([this._min, 0, this._min, this._max, 0, this._max]);
     }
     handleTransform(baseSceneNode, delta) {

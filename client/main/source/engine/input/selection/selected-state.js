@@ -9,7 +9,7 @@ import {
     createRotateNode,
     CurrentTransformMode,
     TRANSLATE, SCALE, ROTATE,
-} from '../../transform/index'
+} from './transform/index'
 import {mat4, vec3, vec4} from 'gl-matrix'
 
 export class SelectedState extends SelectionState {

@@ -1,7 +1,7 @@
 import {TransformMesh, attachToBaseNode} from './transform'
 import {whiteTexcoord, redTexcoord, greenTexcoord, blueTexcoord} from './color'
-import {SceneNode} from '../node/index'
-import {gl} from '../gl'
+import {SceneNode} from '../../../node/index'
+import {gl} from '../../../gl'
 import {mat4, vec3} from 'gl-matrix'
 
 class ScaleBaseMesh extends TransformMesh {
@@ -99,7 +99,7 @@ class ScaleXMesh extends ScaleHandleMesh {
     constructor() {
         super(redTexcoord, mat4.create());
     }
-    generateBoundingBoxNode() {
+    generateBoundingPlaneNode() {
         return this._generateBoundingBoxNode([this._min, 0, this._min, this._max, 0, this._max]);
     }
     handleTransform(baseSceneNode, delta) {
@@ -112,7 +112,7 @@ class ScaleYMesh extends ScaleHandleMesh {
     constructor() {
         super(greenTexcoord, mat4.fromRotation(mat4.create(), 3.14/2, vec3.fromValues(0, 0, 1)));
     }
-    generateBoundingBoxNode() {
+    generateBoundingPlaneNode() {
         return this._generateBoundingBoxNode([this._min, this._min, 0, this._max, this._max, 0]);
     }
     handleTransform(baseSceneNode, delta) {
@@ -125,7 +125,7 @@ class ScaleZMesh extends ScaleHandleMesh {
     constructor() {
         super(blueTexcoord, mat4.fromRotation(mat4.create(), -3.14/2, vec3.fromValues(0, 1, 0)));
     }
-    generateBoundingBoxNode() {
+    generateBoundingPlaneNode() {
         return this._generateBoundingBoxNode([this._min, 0, this._min, this._max, 0, this._max]);
     }
     handleTransform(baseSceneNode, delta) {
@@ -189,7 +189,7 @@ class ScaleCenterMesh extends ScaleBaseMesh {
             numVertices: positions.length
         });
     }
-    generateBoundingBoxNode() {
+    generateBoundingPlaneNode() {
         return this._generateBoundingBoxNode([this._min, this._min, 0, this._max, this._max, 0]);
     }
     handleTransform(baseSceneNode, delta) {

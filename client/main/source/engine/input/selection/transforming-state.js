@@ -13,6 +13,7 @@ export class TransformingState extends SelectionState {
         this._transformGeometryNode = transformBoundingBoxNode.parent;
 
         this._transformBoundingPlaneNode = null;
+        this._transformAxisLineNode = null;
         this._lastIntersectionPoint = null;
     }
     onEnter() {
@@ -20,6 +21,9 @@ export class TransformingState extends SelectionState {
         // the object without having to keep the mouse directly on the gizmo
         this._transformBoundingPlaneNode = this._transformGeometryNode.mesh.generateBoundingPlaneNode();
         this._transformBoundingBoxNode.addChild(this._transformBoundingPlaneNode);
+        // Also attach an axis-line visualization
+        this._transformAxisLineNode = this._transformGeometryNode.mesh.generateAxisLineGeometryNode();
+        this._selectedObjectBaseNode.addChild(this._transformAxisLineNode);
     }
     handleDocumentClick() {
         return null;
@@ -44,8 +48,9 @@ export class TransformingState extends SelectionState {
         return this._transitionToSelectedState();
     }
     onExit() {
-        // Detach the plane from the gizmo component
+        // Detach the plane and line from the gizmo component
         this._transformBoundingPlaneNode.removeParent();
+        this._transformAxisLineNode.removeParent();
     }
 
     _handleTransformation(intersection) {

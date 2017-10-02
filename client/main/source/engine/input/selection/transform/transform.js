@@ -2,6 +2,7 @@ import {SceneNode, GeometryNode} from '../../../node/index'
 import {Material} from '../../../material/index'
 import {Mesh, BoundingBox} from '../../../mesh/index'
 import {ProgramBuilder} from '../../../shader/index'
+import {gl} from '../../../gl'
 import {colorTexture} from './color'
 import {mat4} from 'gl-matrix'
 
@@ -9,8 +10,8 @@ export class TransformMesh extends Mesh {
     constructor(meshArgs) {
         super(meshArgs);
         this._positions = meshArgs.positions;
-        this._min = Number.NEGATIVE_INFINITY;
-        this._max = Number.POSITIVE_INFINITY;
+        this._min = -1000;
+        this._max = 1000;
     }
     get positions() {
         return this._positions;
@@ -26,6 +27,31 @@ export class TransformMesh extends Mesh {
                         .addPosition().addTexcoord().build(),
                 imageSrc: colorTexture,
                 isVisible: false
+            })
+        });
+    }
+    generateAxisLineGeometryNode() {
+        throw new Error('No base implementation');
+    }
+    _generateAxisLineGeometryNode(positions, texcoord) {
+        if (positions.length !== 6) { // 2 vertices * 3 floats per vertex
+            throw new Error(`Positions must have length 6, but has length ${positions.length}`);
+        }
+        if (texcoord.length !== 2) {
+            throw new Error(`Texcoord must have length 2, but has length ${texcoord.length}`);
+        }
+        return new GeometryNode(mat4.create(), {
+            mesh: new Mesh({
+                drawMode: gl.LINES,
+                positions,
+                normals: [0, 0, 0, 0, 0, 0],
+                texcoords: [...texcoord, ...texcoord],
+                numVertices: positions.length
+            }),
+            material: new Material({
+                programData: new ProgramBuilder()
+                        .addPosition().addTexcoord().addFixedZClip(0.1).build(),
+                imageSrc: colorTexture
             })
         });
     }

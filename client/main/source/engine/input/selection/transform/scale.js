@@ -102,6 +102,9 @@ class ScaleXMesh extends ScaleHandleMesh {
     generateBoundingPlaneNode() {
         return this._generateBoundingBoxNode([this._min, 0, this._min, this._max, 0, this._max]);
     }
+    generateAxisLineGeometryNode() {
+        return this._generateAxisLineGeometryNode([this._min, 0, 0, this._max, 0, 0], redTexcoord);
+    }
     handleTransform(baseSceneNode, delta) {
         super.handleTransform(baseSceneNode, delta);
         baseSceneNode.localMatrix = mat4.scale(mat4.create(),
@@ -115,6 +118,9 @@ class ScaleYMesh extends ScaleHandleMesh {
     generateBoundingPlaneNode() {
         return this._generateBoundingBoxNode([this._min, this._min, 0, this._max, this._max, 0]);
     }
+    generateAxisLineGeometryNode() {
+        return this._generateAxisLineGeometryNode([0, this._min, 0, 0, this._max, 0], greenTexcoord);
+    }
     handleTransform(baseSceneNode, delta) {
         super.handleTransform(baseSceneNode, delta);
         baseSceneNode.localMatrix = mat4.scale(mat4.create(),
@@ -127,6 +133,9 @@ class ScaleZMesh extends ScaleHandleMesh {
     }
     generateBoundingPlaneNode() {
         return this._generateBoundingBoxNode([this._min, 0, this._min, this._max, 0, this._max]);
+    }
+    generateAxisLineGeometryNode() {
+        return this._generateAxisLineGeometryNode([0, 0, this._min, 0, 0, this._max], blueTexcoord);
     }
     handleTransform(baseSceneNode, delta) {
         super.handleTransform(baseSceneNode, delta);
@@ -191,6 +200,13 @@ class ScaleCenterMesh extends ScaleBaseMesh {
     }
     generateBoundingPlaneNode() {
         return this._generateBoundingBoxNode([this._min, this._min, 0, this._max, this._max, 0]);
+    }
+    generateAxisLineGeometryNode() {
+        const base = new SceneNode();
+        base.addChild(this._generateAxisLineGeometryNode([this._min, 0, 0, this._max, 0, 0], redTexcoord));
+        base.addChild(this._generateAxisLineGeometryNode([0, this._min, 0, 0, this._max, 0], greenTexcoord));
+        base.addChild(this._generateAxisLineGeometryNode([0, 0, this._min, 0, 0, this._max], blueTexcoord));
+        return base;
     }
     handleTransform(baseSceneNode, delta) {
         super.handleTransform(baseSceneNode, delta);

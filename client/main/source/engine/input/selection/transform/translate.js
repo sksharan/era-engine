@@ -110,6 +110,9 @@ class TranslateXMesh extends TranslateMesh {
     generateBoundingPlaneNode() {
         return this._generateBoundingBoxNode([this._min, 0, this._min, this._max, 0, this._max]);
     }
+    generateAxisLineGeometryNode() {
+        return this._generateAxisLineGeometryNode([this._min, 0, 0, this._max, 0, 0], redTexcoord);
+    }
     handleTransform(baseSceneNode, delta) {
         super.handleTransform(baseSceneNode, delta);
         baseSceneNode.localMatrix = mat4.translate(mat4.create(),
@@ -123,6 +126,9 @@ class TranslateYMesh extends TranslateMesh {
     generateBoundingPlaneNode() {
         return this._generateBoundingBoxNode([this._min, this._min, 0, this._max, this._max, 0]);
     }
+    generateAxisLineGeometryNode() {
+        return this._generateAxisLineGeometryNode([0, this._min, 0, 0, this._max, 0], greenTexcoord);
+    }
     handleTransform(baseSceneNode, delta) {
         super.handleTransform(baseSceneNode, delta);
         baseSceneNode.localMatrix = mat4.translate(mat4.create(),
@@ -135,6 +141,9 @@ class TranslateZMesh extends TranslateMesh {
     }
     generateBoundingPlaneNode() {
         return this._generateBoundingBoxNode([this._min, 0, this._min, this._max, 0, this._max]);
+    }
+    generateAxisLineGeometryNode() {
+        return this._generateAxisLineGeometryNode([0, 0, this._min, 0, 0, this._max], blueTexcoord);
     }
     handleTransform(baseSceneNode, delta) {
         super.handleTransform(baseSceneNode, delta);

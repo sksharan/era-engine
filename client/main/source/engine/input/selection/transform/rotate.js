@@ -114,6 +114,9 @@ export class RotateXMesh extends RotateMesh {
     generateBoundingPlaneNode() {
         return this._generateBoundingBoxNode([this._min, 0, this._min, this._max, 0, this._max]);
     }
+    generateAxisLineGeometryNode() {
+        return this._generateAxisLineGeometryNode([this._min, 0, 0, this._max, 0, 0], redTexcoord);
+    }
     handleTransform(baseSceneNode, delta) {
         super.handleTransform(baseSceneNode, delta);
         baseSceneNode.localMatrix = mat4.rotateX(mat4.create(), baseSceneNode.localMatrix,
@@ -127,6 +130,9 @@ export class RotateYMesh extends RotateMesh {
     generateBoundingPlaneNode() {
         return this._generateBoundingBoxNode([this._min, this._min, 0, this._max, this._max, 0]);
     }
+    generateAxisLineGeometryNode() {
+        return this._generateAxisLineGeometryNode([0, this._min, 0, 0, this._max, 0], greenTexcoord);
+    }
     handleTransform(baseSceneNode, delta) {
         super.handleTransform(baseSceneNode, delta);
         baseSceneNode.localMatrix = mat4.rotateY(mat4.create(), baseSceneNode.localMatrix,
@@ -139,6 +145,9 @@ export class RotateZMesh extends RotateMesh {
     }
     generateBoundingPlaneNode() {
         return this._generateBoundingBoxNode([this._min, 0, this._min, this._max, 0, this._max]);
+    }
+    generateAxisLineGeometryNode() {
+        return this._generateAxisLineGeometryNode([0, 0, this._min, 0, 0, this._max], blueTexcoord);
     }
     handleTransform(baseSceneNode, delta) {
         super.handleTransform(baseSceneNode, delta);

@@ -50,7 +50,7 @@ export class TransformMesh extends Mesh {
             }),
             material: new Material({
                 programData: new ProgramBuilder()
-                        .addPosition().addTexcoord().addFixedZClip(0.1).build(),
+                        .addPosition().addTexcoord().build(),
                 imageSrc: colorTexture
             })
         });

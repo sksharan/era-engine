@@ -104,7 +104,6 @@ class RotateMesh extends TransformMesh {
             indices,
             numVertices: positions.length
         });
-        this._rotateFactor = 0.025;
     }
 }
 export class RotateXMesh extends RotateMesh {
@@ -112,15 +111,15 @@ export class RotateXMesh extends RotateMesh {
         super(redTexcoord, mat4.fromRotation(mat4.create(), 3.14/2, vec3.fromValues(0, 0, 1)));
     }
     generateBoundingPlaneNode() {
-        return this._generateBoundingBoxNode([this._min, 0, this._min, this._max, 0, this._max]);
+        return this._generateBoundingBoxNode([0, this._min, this._min, 0, this._max, this._max]);
     }
     generateAxisLineGeometryNode() {
         return this._generateAxisLineGeometryNode([this._min, 0, 0, this._max, 0, 0], redTexcoord);
     }
-    handleTransform(baseSceneNode, delta) {
-        super.handleTransform(baseSceneNode, delta);
-        baseSceneNode.localMatrix = mat4.rotateX(mat4.create(), baseSceneNode.localMatrix,
-                this._rotateFactor * delta[2]);
+    handleTransform({baseSceneNode, intersectionDelta, intersectionPoint}) {
+        super.handleTransform({baseSceneNode, intersectionDelta, intersectionPoint});
+        const rad = getRadiansForRotation({baseSceneNode, intersectionDelta, intersectionPoint}, 2, 1);
+        baseSceneNode.localMatrix = mat4.rotateX(mat4.create(), baseSceneNode.localMatrix, rad);
     }
 }
 export class RotateYMesh extends RotateMesh {
@@ -128,15 +127,15 @@ export class RotateYMesh extends RotateMesh {
         super(greenTexcoord, mat4.create());
     }
     generateBoundingPlaneNode() {
-        return this._generateBoundingBoxNode([this._min, this._min, 0, this._max, this._max, 0]);
+        return this._generateBoundingBoxNode([this._min, 0, this._min, this._max, 0, this._max]);
     }
     generateAxisLineGeometryNode() {
         return this._generateAxisLineGeometryNode([0, this._min, 0, 0, this._max, 0], greenTexcoord);
     }
-    handleTransform(baseSceneNode, delta) {
-        super.handleTransform(baseSceneNode, delta);
-        baseSceneNode.localMatrix = mat4.rotateY(mat4.create(), baseSceneNode.localMatrix,
-                this._rotateFactor * delta[1]);
+    handleTransform({baseSceneNode, intersectionDelta, intersectionPoint}) {
+        super.handleTransform({baseSceneNode, intersectionDelta, intersectionPoint});
+        const rad = getRadiansForRotation({baseSceneNode, intersectionDelta, intersectionPoint}, 0, 2);
+        baseSceneNode.localMatrix = mat4.rotateY(mat4.create(), baseSceneNode.localMatrix, rad);
     }
 }
 export class RotateZMesh extends RotateMesh {
@@ -144,16 +143,28 @@ export class RotateZMesh extends RotateMesh {
         super(blueTexcoord, mat4.fromRotation(mat4.create(), -3.14/2, vec3.fromValues(1, 0, 0)));
     }
     generateBoundingPlaneNode() {
-        return this._generateBoundingBoxNode([this._min, 0, this._min, this._max, 0, this._max]);
+        return this._generateBoundingBoxNode([this._min, this._min, 0, this._max, this._max, 0]);
     }
     generateAxisLineGeometryNode() {
         return this._generateAxisLineGeometryNode([0, 0, this._min, 0, 0, this._max], blueTexcoord);
     }
-    handleTransform(baseSceneNode, delta) {
-        super.handleTransform(baseSceneNode, delta);
-        baseSceneNode.localMatrix = mat4.rotateZ(mat4.create(), baseSceneNode.localMatrix,
-                this._rotateFactor * delta[0]);
+    handleTransform({baseSceneNode, intersectionDelta, intersectionPoint}) {
+        super.handleTransform({baseSceneNode, intersectionDelta, intersectionPoint});
+        const rad = getRadiansForRotation({baseSceneNode, intersectionDelta, intersectionPoint}, 1, 0);
+        baseSceneNode.localMatrix = mat4.rotateZ(mat4.create(), baseSceneNode.localMatrix, rad);
     }
+}
+function getRadiansForRotation({baseSceneNode, intersectionDelta, intersectionPoint}, idx1, idx2) {
+    const baseTransform = mat4.getTranslation(vec3.create(), baseSceneNode.worldMatrix);
+
+    const delta1 = vec3.subtract(vec3.create(), intersectionPoint, baseTransform);
+    const rad1 = Math.atan2(delta1[idx1], delta1[idx2]);
+
+    const lastIntersectionPoint = vec3.subtract(vec3.create(), intersectionPoint, intersectionDelta);
+    const delta2 = vec3.subtract(vec3.create(), lastIntersectionPoint, baseTransform);
+    const rad2 = Math.atan2(delta2[idx1], delta2[idx2]);
+
+    return rad1 - rad2;
 }
 
 export const createRotateNode = () => {

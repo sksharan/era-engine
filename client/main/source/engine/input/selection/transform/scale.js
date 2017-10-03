@@ -105,10 +105,10 @@ class ScaleXMesh extends ScaleHandleMesh {
     generateAxisLineGeometryNode() {
         return this._generateAxisLineGeometryNode([this._min, 0, 0, this._max, 0, 0], redTexcoord);
     }
-    handleTransform(baseSceneNode, delta) {
-        super.handleTransform(baseSceneNode, delta);
+    handleTransform({baseSceneNode, intersectionDelta}) {
+        super.handleTransform({baseSceneNode, intersectionDelta});
         baseSceneNode.localMatrix = mat4.scale(mat4.create(),
-                baseSceneNode.localMatrix, vec3.fromValues(1 + delta[0]*this._scaleFactor, 1, 1));
+                baseSceneNode.localMatrix, vec3.fromValues(1 + intersectionDelta[0]*this._scaleFactor, 1, 1));
     }
 }
 class ScaleYMesh extends ScaleHandleMesh {
@@ -121,10 +121,10 @@ class ScaleYMesh extends ScaleHandleMesh {
     generateAxisLineGeometryNode() {
         return this._generateAxisLineGeometryNode([0, this._min, 0, 0, this._max, 0], greenTexcoord);
     }
-    handleTransform(baseSceneNode, delta) {
-        super.handleTransform(baseSceneNode, delta);
+    handleTransform({baseSceneNode, intersectionDelta}) {
+        super.handleTransform({baseSceneNode, intersectionDelta});
         baseSceneNode.localMatrix = mat4.scale(mat4.create(),
-                baseSceneNode.localMatrix, vec3.fromValues(1, 1 + delta[1]*this._scaleFactor, 1));
+                baseSceneNode.localMatrix, vec3.fromValues(1, 1 + intersectionDelta[1]*this._scaleFactor, 1));
     }
 }
 class ScaleZMesh extends ScaleHandleMesh {
@@ -137,10 +137,10 @@ class ScaleZMesh extends ScaleHandleMesh {
     generateAxisLineGeometryNode() {
         return this._generateAxisLineGeometryNode([0, 0, this._min, 0, 0, this._max], blueTexcoord);
     }
-    handleTransform(baseSceneNode, delta) {
-        super.handleTransform(baseSceneNode, delta);
+    handleTransform({baseSceneNode, intersectionDelta}) {
+        super.handleTransform({baseSceneNode, intersectionDelta});
         baseSceneNode.localMatrix = mat4.scale(mat4.create(),
-                baseSceneNode.localMatrix, vec3.fromValues(1, 1, 1 + delta[2]*this._scaleFactor));
+                baseSceneNode.localMatrix, vec3.fromValues(1, 1, 1 + intersectionDelta[2]*this._scaleFactor));
     }
 }
 
@@ -208,13 +208,13 @@ class ScaleCenterMesh extends ScaleBaseMesh {
         base.addChild(this._generateAxisLineGeometryNode([0, 0, this._min, 0, 0, this._max], blueTexcoord));
         return base;
     }
-    handleTransform(baseSceneNode, delta) {
-        super.handleTransform(baseSceneNode, delta);
+    handleTransform({baseSceneNode, intersectionDelta}) {
+        super.handleTransform({baseSceneNode, intersectionDelta});
         baseSceneNode.localMatrix = mat4.scale(mat4.create(),
                 baseSceneNode.localMatrix, vec3.fromValues(
-                        1 + delta[0]*this._scaleFactor,
-                        1 + delta[0]*this._scaleFactor,
-                        1 + delta[0]*this._scaleFactor));
+                        1 + intersectionDelta[0]*this._scaleFactor,
+                        1 + intersectionDelta[0]*this._scaleFactor,
+                        1 + intersectionDelta[0]*this._scaleFactor));
     }
 }
 

@@ -113,10 +113,10 @@ class TranslateXMesh extends TranslateMesh {
     generateAxisLineGeometryNode() {
         return this._generateAxisLineGeometryNode([this._min, 0, 0, this._max, 0, 0], redTexcoord);
     }
-    handleTransform(baseSceneNode, delta) {
-        super.handleTransform(baseSceneNode, delta);
+    handleTransform({baseSceneNode, intersectionDelta}) {
+        super.handleTransform({baseSceneNode, intersectionDelta});
         baseSceneNode.localMatrix = mat4.translate(mat4.create(),
-                baseSceneNode.localMatrix, vec3.fromValues(delta[0], 0, 0));
+                baseSceneNode.localMatrix, vec3.fromValues(intersectionDelta[0], 0, 0));
     }
 }
 class TranslateYMesh extends TranslateMesh {
@@ -129,10 +129,10 @@ class TranslateYMesh extends TranslateMesh {
     generateAxisLineGeometryNode() {
         return this._generateAxisLineGeometryNode([0, this._min, 0, 0, this._max, 0], greenTexcoord);
     }
-    handleTransform(baseSceneNode, delta) {
-        super.handleTransform(baseSceneNode, delta);
+    handleTransform({baseSceneNode, intersectionDelta}) {
+        super.handleTransform({baseSceneNode, intersectionDelta});
         baseSceneNode.localMatrix = mat4.translate(mat4.create(),
-                baseSceneNode.localMatrix, vec3.fromValues(0, delta[1], 0));
+                baseSceneNode.localMatrix, vec3.fromValues(0, intersectionDelta[1], 0));
     }
 }
 class TranslateZMesh extends TranslateMesh {
@@ -145,10 +145,10 @@ class TranslateZMesh extends TranslateMesh {
     generateAxisLineGeometryNode() {
         return this._generateAxisLineGeometryNode([0, 0, this._min, 0, 0, this._max], blueTexcoord);
     }
-    handleTransform(baseSceneNode, delta) {
-        super.handleTransform(baseSceneNode, delta);
+    handleTransform({baseSceneNode, intersectionDelta}) {
+        super.handleTransform({baseSceneNode, intersectionDelta});
         baseSceneNode.localMatrix = mat4.translate(mat4.create(),
-                baseSceneNode.localMatrix, vec3.fromValues(0, 0, delta[2]));
+                baseSceneNode.localMatrix, vec3.fromValues(0, 0, intersectionDelta[2]));
     }
 }
 

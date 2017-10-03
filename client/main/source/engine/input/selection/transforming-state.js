@@ -56,7 +56,11 @@ export class TransformingState extends SelectionState {
     _handleTransformation(intersection) {
         const mesh = this._transformGeometryNode.mesh;
         const delta = vec3.sub(vec3.create(), intersection.point, this._lastIntersectionPoint);
-        mesh.handleTransform(this._selectedObjectBaseNode, delta);
+        mesh.handleTransform({
+            baseSceneNode: this._selectedObjectBaseNode,
+            intersectionDelta: delta,
+            intersectionPoint: intersection.point
+        });
     }
 
     _transitionToSelectedState() {

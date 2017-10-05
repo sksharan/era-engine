@@ -107,8 +107,8 @@ class ScaleXMesh extends ScaleHandleMesh {
     }
     handleTransform({baseSceneNode, intersectionDelta}) {
         super.handleTransform({baseSceneNode, intersectionDelta});
-        baseSceneNode.localMatrix = mat4.scale(mat4.create(),
-                baseSceneNode.localMatrix, vec3.fromValues(1 + intersectionDelta[0]*this._scaleFactor, 1, 1));
+        const scale = mat4.fromScaling(mat4.create(), vec3.fromValues(1+intersectionDelta[0]*this._scaleFactor, 1, 1));
+        baseSceneNode.applyScaling(scale);
     }
 }
 class ScaleYMesh extends ScaleHandleMesh {
@@ -123,8 +123,8 @@ class ScaleYMesh extends ScaleHandleMesh {
     }
     handleTransform({baseSceneNode, intersectionDelta}) {
         super.handleTransform({baseSceneNode, intersectionDelta});
-        baseSceneNode.localMatrix = mat4.scale(mat4.create(),
-                baseSceneNode.localMatrix, vec3.fromValues(1, 1 + intersectionDelta[1]*this._scaleFactor, 1));
+        const scale = mat4.fromScaling(mat4.create(), vec3.fromValues(1, 1+intersectionDelta[1]*this._scaleFactor, 1));
+        baseSceneNode.applyScaling(scale);
     }
 }
 class ScaleZMesh extends ScaleHandleMesh {
@@ -139,8 +139,8 @@ class ScaleZMesh extends ScaleHandleMesh {
     }
     handleTransform({baseSceneNode, intersectionDelta}) {
         super.handleTransform({baseSceneNode, intersectionDelta});
-        baseSceneNode.localMatrix = mat4.scale(mat4.create(),
-                baseSceneNode.localMatrix, vec3.fromValues(1, 1, 1 + intersectionDelta[2]*this._scaleFactor));
+        const scale = mat4.fromScaling(mat4.create(), vec3.fromValues(1, 1, 1+intersectionDelta[2]*this._scaleFactor));
+        baseSceneNode.applyScaling(scale);
     }
 }
 
@@ -210,11 +210,11 @@ class ScaleCenterMesh extends ScaleBaseMesh {
     }
     handleTransform({baseSceneNode, intersectionDelta}) {
         super.handleTransform({baseSceneNode, intersectionDelta});
-        baseSceneNode.localMatrix = mat4.scale(mat4.create(),
-                baseSceneNode.localMatrix, vec3.fromValues(
-                        1 + intersectionDelta[0]*this._scaleFactor,
-                        1 + intersectionDelta[0]*this._scaleFactor,
-                        1 + intersectionDelta[0]*this._scaleFactor));
+        const scale = mat4.fromScaling(mat4.create(), vec3.fromValues(
+                1+intersectionDelta[0]*this._scaleFactor,
+                1+intersectionDelta[0]*this._scaleFactor,
+                1+intersectionDelta[0]*this._scaleFactor));
+        baseSceneNode.applyScaling(scale);
     }
 }
 

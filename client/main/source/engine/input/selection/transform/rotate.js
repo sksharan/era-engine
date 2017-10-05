@@ -119,7 +119,8 @@ export class RotateXMesh extends RotateMesh {
     handleTransform({baseSceneNode, intersectionDelta, intersectionPoint}) {
         super.handleTransform({baseSceneNode, intersectionDelta, intersectionPoint});
         const rad = getRadiansForRotation({baseSceneNode, intersectionDelta, intersectionPoint}, 2, 1);
-        baseSceneNode.localMatrix = mat4.rotateX(mat4.create(), baseSceneNode.localMatrix, rad);
+        const rotation = mat4.fromRotation(mat4.create(), rad, vec3.fromValues(1, 0, 0));
+        baseSceneNode.applyRotation(rotation);
     }
 }
 export class RotateYMesh extends RotateMesh {
@@ -135,7 +136,8 @@ export class RotateYMesh extends RotateMesh {
     handleTransform({baseSceneNode, intersectionDelta, intersectionPoint}) {
         super.handleTransform({baseSceneNode, intersectionDelta, intersectionPoint});
         const rad = getRadiansForRotation({baseSceneNode, intersectionDelta, intersectionPoint}, 0, 2);
-        baseSceneNode.localMatrix = mat4.rotateY(mat4.create(), baseSceneNode.localMatrix, rad);
+        const rotation = mat4.fromRotation(mat4.create(), rad, vec3.fromValues(0, 1, 0));
+        baseSceneNode.applyRotation(rotation);
     }
 }
 export class RotateZMesh extends RotateMesh {
@@ -151,7 +153,8 @@ export class RotateZMesh extends RotateMesh {
     handleTransform({baseSceneNode, intersectionDelta, intersectionPoint}) {
         super.handleTransform({baseSceneNode, intersectionDelta, intersectionPoint});
         const rad = getRadiansForRotation({baseSceneNode, intersectionDelta, intersectionPoint}, 1, 0);
-        baseSceneNode.localMatrix = mat4.rotateZ(mat4.create(), baseSceneNode.localMatrix, rad);
+        const rotation = mat4.fromRotation(mat4.create(), rad, vec3.fromValues(0, 0, 1));
+        baseSceneNode.applyRotation(rotation);
     }
 }
 function getRadiansForRotation({baseSceneNode, intersectionDelta, intersectionPoint}, idx1, idx2) {

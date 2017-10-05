@@ -115,8 +115,8 @@ class TranslateXMesh extends TranslateMesh {
     }
     handleTransform({baseSceneNode, intersectionDelta}) {
         super.handleTransform({baseSceneNode, intersectionDelta});
-        baseSceneNode.localMatrix = mat4.translate(mat4.create(),
-                baseSceneNode.localMatrix, vec3.fromValues(intersectionDelta[0], 0, 0));
+        const translation = mat4.fromTranslation(mat4.create(), vec3.fromValues(intersectionDelta[0], 0, 0));
+        baseSceneNode.applyTranslation(translation);
     }
 }
 class TranslateYMesh extends TranslateMesh {
@@ -131,8 +131,8 @@ class TranslateYMesh extends TranslateMesh {
     }
     handleTransform({baseSceneNode, intersectionDelta}) {
         super.handleTransform({baseSceneNode, intersectionDelta});
-        baseSceneNode.localMatrix = mat4.translate(mat4.create(),
-                baseSceneNode.localMatrix, vec3.fromValues(0, intersectionDelta[1], 0));
+        const translation = mat4.fromTranslation(mat4.create(), vec3.fromValues(0, intersectionDelta[1], 0));
+        baseSceneNode.applyTranslation(translation);
     }
 }
 class TranslateZMesh extends TranslateMesh {
@@ -147,8 +147,8 @@ class TranslateZMesh extends TranslateMesh {
     }
     handleTransform({baseSceneNode, intersectionDelta}) {
         super.handleTransform({baseSceneNode, intersectionDelta});
-        baseSceneNode.localMatrix = mat4.translate(mat4.create(),
-                baseSceneNode.localMatrix, vec3.fromValues(0, 0, intersectionDelta[2]));
+        const translation = mat4.fromTranslation(mat4.create(), vec3.fromValues(0, 0, intersectionDelta[2]));
+        baseSceneNode.applyTranslation(translation);
     }
 }
 

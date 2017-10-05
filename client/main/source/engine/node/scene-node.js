@@ -26,6 +26,11 @@ export default class SceneNode {
         this._worldMatrix = mat4.create();
         /* The normal matrix for this node; the inverse-transverse of the world matrix. */
         this._normalMatrix = mat3.create();
+
+        /* Total amount of translation, scaling, rotation currently applied. */
+        this._translate = mat4.create();
+        this._scale = mat4.create();
+        this._rotate = mat4.create();
     }
 
     get nodeType() {
@@ -47,11 +52,32 @@ export default class SceneNode {
         return this._normalMatrix;
     }
 
+    // Set the local matrix directly
     set localMatrix(localMatrix) {
         this._localMatrix = localMatrix;
         if (this._parent) {
             updateWorldMatrix(this, this._parent._worldMatrix);
         }
+    }
+    // Change the local matrix indirectly by applying translation, scaling, rotation
+    applyTranslation(translation) {
+        this._translate = mat4.mul(mat4.create(), this._translate, translation);
+        this._updateLocalMatrix();
+    }
+    applyScaling(scaling) {
+        this._scale = mat4.mul(mat4.create(), this._scale, scaling);
+        this._updateLocalMatrix();
+    }
+    applyRotation(rotation) {
+        this._rotate = mat4.mul(mat4.create(), this._rotate, rotation);
+        this._updateLocalMatrix();
+    }
+    _updateLocalMatrix() {
+        this.localMatrix = mat4.mul(
+            mat4.create(),
+            this._translate,
+            mat4.mul(mat4.create(), this._rotate, this._scale)
+        );
     }
 
     addChild(child) {

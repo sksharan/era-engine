@@ -1,7 +1,8 @@
 import {SelectionState} from './selection-state'
 import {SelectedState} from './selected-state'
 import {findNearestBaseNodeForBoundingBoxNode} from './node-finder'
-import {vec3} from 'gl-matrix'
+import {RootSceneNode} from '../../index'
+import {mat4, vec3} from 'gl-matrix'
 
 export class TransformingState extends SelectionState {
     constructor(selectedObjectBaseNode, transformBoundingBoxNode) {
@@ -23,7 +24,9 @@ export class TransformingState extends SelectionState {
         this._transformBoundingBoxNode.addChild(this._transformBoundingPlaneNode);
         // Also attach an axis-line visualization
         this._transformAxisLineNode = this._transformGeometryNode.mesh.generateAxisLineGeometryNode();
-        this._selectedObjectBaseNode.addChild(this._transformAxisLineNode);
+        RootSceneNode.addChild(this._transformAxisLineNode);
+        this._transformAxisLineNode.localMatrix = mat4.translate(mat4.create(), mat4.create(),
+                mat4.getTranslation(mat4.create(), this._selectedObjectBaseNode.localMatrix));
     }
     handleDocumentClick() {
         return null;

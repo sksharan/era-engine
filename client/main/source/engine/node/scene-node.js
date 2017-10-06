@@ -69,14 +69,14 @@ export default class SceneNode {
         this._updateLocalMatrix();
     }
     applyRotation(rotation) {
-        this._rotate = mat4.mul(mat4.create(), this._rotate, rotation);
+        this._rotate = mat4.mul(mat4.create(), rotation, this._rotate);
         this._updateLocalMatrix();
     }
     _updateLocalMatrix() {
         this.localMatrix = mat4.mul(
             mat4.create(),
             this._translate,
-            mat4.mul(mat4.create(), this._rotate, this._scale)
+            mat4.mul(mat4.create(), this._scale, this._rotate)
         );
     }
 

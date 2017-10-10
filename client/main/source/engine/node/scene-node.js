@@ -57,6 +57,8 @@ export default class SceneNode {
         this._localMatrix = localMatrix;
         if (this._parent) {
             updateWorldMatrix(this, this._parent._worldMatrix);
+        } else {
+            updateWorldMatrix(this, mat4.create());
         }
     }
     // Change the local matrix indirectly by applying translation, scaling, rotation

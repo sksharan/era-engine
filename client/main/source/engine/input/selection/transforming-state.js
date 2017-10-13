@@ -2,6 +2,7 @@ import {SelectionState} from './selection-state'
 import {SelectedState} from './selected-state'
 import {findNearestBaseNodeForBoundingBoxNode} from './node-finder'
 import {RootSceneNode} from '../../index'
+import {CurrentTransformOrientation} from '../../global/index'
 import {mat4, vec3} from 'gl-matrix'
 
 export class TransformingState extends SelectionState {
@@ -24,9 +25,17 @@ export class TransformingState extends SelectionState {
         this._transformBoundingBoxNode.addChild(this._transformBoundingPlaneNode);
         // Also attach an axis-line visualization
         this._transformAxisLineNode = this._transformGeometryNode.mesh.generateAxisLineGeometryNode();
-        RootSceneNode.addChild(this._transformAxisLineNode);
-        this._transformAxisLineNode.localMatrix = mat4.translate(mat4.create(), mat4.create(),
-                mat4.getTranslation(mat4.create(), this._selectedObjectBaseNode.localMatrix));
+        if (CurrentTransformOrientation.isGlobal()) {
+            // Attach to root node so the axis lines are unaffected by transformations applied to the object
+            RootSceneNode.addChild(this._transformAxisLineNode);
+            this._transformAxisLineNode.localMatrix = mat4.translate(mat4.create(), mat4.create(),
+                    mat4.getTranslation(mat4.create(), this._selectedObjectBaseNode.localMatrix));
+        } else if (CurrentTransformOrientation.isLocal()) {
+            // Define the axis lines relative to the selected object local space
+            this._selectedObjectBaseNode.addChild(this._transformAxisLineNode);
+        } else {
+            console.warn('Unknown transformation orientation');
+        }
     }
     handleDocumentClick() {
         return null;

@@ -1,6 +1,7 @@
 /* A node in a scene graph. */
 
-import {mat3, mat4} from 'gl-matrix'
+import {mat3, mat4, vec3} from 'gl-matrix'
+import {CurrentTransformOrientation} from '../global/index'
 
 function updateWorldMatrix(node, parentWorldMatrix) {
     mat4.multiply(node.worldMatrix, parentWorldMatrix, node.localMatrix);
@@ -63,23 +64,41 @@ export default class SceneNode {
     }
     // Change the local matrix indirectly by applying translation, scaling, rotation
     applyTranslation(translation) {
-        this._translate = mat4.mul(mat4.create(), this._translate, translation);
+        if (CurrentTransformOrientation.isGlobal()) {
+            this._translate = mat4.mul(mat4.create(), this._translate, translation);
+        } else if (CurrentTransformOrientation.isLocal()) {
+            // https://gamedev.stackexchange.com/questions/31705/translate-along-local-axis
+            const translationVector = mat4.getTranslation(vec3.create(), translation);
+            vec3.transformMat4(translationVector, translationVector, this._rotate);
+            this._translate = mat4.mul(mat4.create(), this._translate,
+                    mat4.fromTranslation(translation, translationVector));
+        }
         this._updateLocalMatrix();
     }
     applyScaling(scaling) {
-        this._scale = mat4.mul(mat4.create(), this._scale, scaling);
+        if (CurrentTransformOrientation.isGlobal()) {
+            this._scale = mat4.mul(mat4.create(), this._scale, scaling);
+        } else if (CurrentTransformOrientation.isLocal()) {
+            this._scale = mat4.mul(mat4.create(), this._scale, scaling);
+        }
         this._updateLocalMatrix();
     }
     applyRotation(rotation) {
-        this._rotate = mat4.mul(mat4.create(), rotation, this._rotate);
+        if (CurrentTransformOrientation.isGlobal()) {
+            this._rotate = mat4.mul(mat4.create(), rotation, this._rotate);
+        } else if (CurrentTransformOrientation.isLocal()) {
+            this._rotate = mat4.mul(mat4.create(), this._rotate, rotation);
+        }
         this._updateLocalMatrix();
     }
     _updateLocalMatrix() {
-        this.localMatrix = mat4.mul(
-            mat4.create(),
-            this._translate,
-            mat4.mul(mat4.create(), this._scale, this._rotate)
-        );
+        if (CurrentTransformOrientation.isGlobal()) {
+            this.localMatrix = mat4.mul(mat4.create(),this._translate,
+                    mat4.mul(mat4.create(), this._scale, this._rotate));
+        } else if (CurrentTransformOrientation.isLocal()) {
+            this.localMatrix = mat4.mul(mat4.create(),this._translate,
+                    mat4.mul(mat4.create(), this._rotate, this._scale));
+        }
     }
 
     addChild(child) {

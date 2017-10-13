@@ -10,6 +10,7 @@ import {
     CurrentTransformMode,
     TRANSLATE, SCALE, ROTATE,
 } from './transform/index'
+import {CurrentTransformOrientation} from '../../global/index'
 import {mat4, vec3, vec4} from 'gl-matrix'
 
 export class SelectedState extends SelectionState {
@@ -18,6 +19,7 @@ export class SelectedState extends SelectionState {
         this._selectedObjectBaseNode = selectedObjectBaseNode;
         this._transformBaseNode = null;
         this._currTransformMode = null;
+        this._lastTransformOrientation = null;
     }
     onEnter() {
         this._setupTransformNode();
@@ -61,7 +63,8 @@ export class SelectedState extends SelectionState {
     }
 
     _setupTransformNode() {
-        if (CurrentTransformMode.getCurrent() === this._currTransformMode) {
+        if (CurrentTransformMode.getCurrent() === this._currTransformMode
+            && this._lastTransformOrientation === CurrentTransformOrientation.orientation) {
             return;
         }
         // Detach previous transform gizmo if one already exists
@@ -83,11 +86,22 @@ export class SelectedState extends SelectionState {
         this._currTransformMode = mode;
         // Attach gizmo to object
         this._selectedObjectBaseNode.addChild(this._transformBaseNode);
-        // The gizmo itself shouldn't be affected by any transformation applied to the object except translation
-        this._transformBaseNode.localMatrix = mat4.translate(
-            mat4.create(),
-            mat4.invert(mat4.create(), this._selectedObjectBaseNode.localMatrix), // Undo all object transformations
-            mat4.getTranslation(vec3.create(), this._selectedObjectBaseNode.localMatrix) // Then apply only object translation
-        );
+
+        if (CurrentTransformOrientation.isGlobal()) {
+            // The gizmo itself shouldn't be affected by any transformation applied to the object except translation
+            this._transformBaseNode.localMatrix = mat4.translate(
+                mat4.create(),
+                mat4.invert(mat4.create(), this._selectedObjectBaseNode.localMatrix), // Undo all object transformations
+                mat4.getTranslation(vec3.create(), this._selectedObjectBaseNode.localMatrix)); // Then apply only object translation
+        } else if (CurrentTransformOrientation.isLocal()) {
+            // The gizmo should be affected by everything except scaling
+            const scale = mat4.getScaling(vec3.create(), this._selectedObjectBaseNode.localMatrix);
+            const invertedScale = mat4.invert(mat4.create(), mat4.fromScaling(mat4.create(), scale));
+            this._transformBaseNode.localMatrix = mat4.mul(
+                mat4.create(),
+                this._transformBaseNode.localMatrix,
+                invertedScale);
+        }
+        this._lastTransformOrientation = CurrentTransformOrientation.orientation;
     }
 }

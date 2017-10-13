@@ -1,5 +1,6 @@
-import {SceneNode} from './node/index'
+export {CurrentTransformOrientation} from './global/index'
 
+import {SceneNode} from './node/index'
 export const RootSceneNode = new SceneNode();
 export {SceneNode, GeometryNode, LightNode} from './node/index'
 

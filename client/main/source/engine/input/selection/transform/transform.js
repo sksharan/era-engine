@@ -88,7 +88,7 @@ export const attachToBaseNode = ({base, mesh, zClip}) => {
 }
 function getTransformMaterial(zClip) {
     return new Material({
-        programData: new ProgramBuilder().addPosition().addFixedZClip(zClip).addTexcoord().build(),
+        programData: new ProgramBuilder().addPosition({scaleFactor: 0.003}).addFixedZClip(zClip).addTexcoord().build(),
         imageSrc: colorTexture
     });
 }

@@ -32,6 +32,14 @@ describe('Program builder build', () => {
         assertPositionData(programData);
     });
 
+    it('should succeed with position enabled, scaling applied', () => {
+        builder.addPosition({scaleFactor: 1.5}).build();
+    });
+    it('should set correct program data when position enabled, scaling applied', () => {
+        const programData = builder.addPosition({scaleFactor: 1.5}).build();
+        assertPositionData(programData);
+    });
+
     it('should succeed with position and fixed z-clip enabled', () => {
         builder.addPosition().addFixedZClip().build();
     });

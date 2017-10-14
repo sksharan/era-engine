@@ -50,16 +50,24 @@ export default class ProgramBuilder {
         this._fragBuilder.addMainFunctionLines('vec4 fragColor = vec4(0, 0, 0, 1);');
     }
 
-    addPosition() {
+    addPosition({scaleFactor=null} = {}) {
         this._vertBuilder.addAttributeLines('attribute vec3 position;')
                          .addUniformLines('uniform mat4 modelMatrix;')
                          .addUniformLines('uniform mat4 viewMatrix;')
                          .addUniformLines('uniform mat4 projectionMatrix;')
                          .addVaryingLines('varying vec4 vPositionWorld;')
-                         .addMainFunctionLines(`
-                             vPositionWorld = modelMatrix * vec4(position, 1.0);
-                             gl_Position = projectionMatrix * viewMatrix * vPositionWorld;
-                         `);
+                         .addMainFunctionLines('vPositionWorld = modelMatrix * vec4(position, 1.0);');
+
+        if (scaleFactor) {
+            // https://www.opengl.org/discussion_boards/showthread.php/177936-draw-an-object-that-looks-the-same-size-regarles-the-distance-in-perspective-view
+            this._vertBuilder.addMainFunctionLines(`
+                float w = (projectionMatrix * viewMatrix * modelMatrix * vec4(0, 0, 0, 1)).w;
+                w *= ${scaleFactor};
+                gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(w * position, 1);
+            `);
+        } else {
+            this._vertBuilder.addMainFunctionLines('gl_Position = projectionMatrix * viewMatrix * vPositionWorld;');
+        }
 
         this._fragBuilder.addVaryingLines('varying vec4 vPositionWorld;');
 

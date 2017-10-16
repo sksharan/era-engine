@@ -44,6 +44,7 @@ export default class ProgramBuilder {
         this._fragBuilder = new ShaderBuilder();
         this._lightEnabled = false;
         this._billboardEnabled = false;
+        this._positionScaleFactor = null;
 
         this._vertBuilder.addMainFunctionLines('gl_Position = vec4(0, 0, 0, 1);');
 
@@ -55,19 +56,21 @@ export default class ProgramBuilder {
                          .addUniformLines('uniform mat4 modelMatrix;')
                          .addUniformLines('uniform mat4 viewMatrix;')
                          .addUniformLines('uniform mat4 projectionMatrix;')
-                         .addVaryingLines('varying vec4 vPositionWorld;')
-                         .addMainFunctionLines('vPositionWorld = modelMatrix * vec4(position, 1.0);');
-
+                         .addVaryingLines('varying vec4 vPositionWorld;');
         if (scaleFactor) {
             // https://www.opengl.org/discussion_boards/showthread.php/177936-draw-an-object-that-looks-the-same-size-regarles-the-distance-in-perspective-view
             this._vertBuilder.addMainFunctionLines(`
                 float w = (projectionMatrix * viewMatrix * modelMatrix * vec4(0, 0, 0, 1)).w;
                 w *= ${scaleFactor};
-                gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(w * position, 1);
+                vPositionWorld = modelMatrix * vec4(w * position, 1);
             `);
+            this._positionScaleFactor = scaleFactor;
         } else {
-            this._vertBuilder.addMainFunctionLines('gl_Position = projectionMatrix * viewMatrix * vPositionWorld;');
+            this._vertBuilder.addMainFunctionLines(`
+                vPositionWorld = modelMatrix * vec4(position, 1.0);
+            `);
         }
+        this._vertBuilder.addMainFunctionLines('gl_Position = projectionMatrix * viewMatrix * vPositionWorld;');
 
         this._fragBuilder.addVaryingLines('varying vec4 vPositionWorld;');
 
@@ -243,6 +246,7 @@ export default class ProgramBuilder {
 
         this._programData.lightEnabled = this._lightEnabled;
         this._programData.billboardEnabled = this._billboardEnabled;
+        this._programData.positionScaleFactor = this._positionScaleFactor;
 
         return this._programData;
     }

@@ -24,6 +24,7 @@ export default class ProgramData {
 
         this._lightEnabled = false;
         this._billboardEnabled = false;
+        this._positionScaleFactor = null;
     }
 
     // Copy data from the given 'programData' into this program data object
@@ -44,6 +45,7 @@ export default class ProgramData {
 
         this._lightEnabled = programData._lightEnabled;
         this._billboardEnabled = programData._billboardEnabled;
+        this._positionScaleFactor = programData._positionScaleFactor;
     }
 
     get id() {
@@ -169,5 +171,15 @@ export default class ProgramData {
     }
     set billboardEnabled(billboardEnabled) {
         this._billboardEnabled = billboardEnabled;
+    }
+
+    hasPositionScaleFactor() {
+        return this._positionScaleFactor !== null;
+    }
+    get positionScaleFactor() {
+        return this._positionScaleFactor;
+    }
+    set positionScaleFactor(positionScaleFactor) {
+        this._positionScaleFactor = positionScaleFactor;
     }
 }

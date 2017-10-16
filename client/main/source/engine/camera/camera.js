@@ -3,10 +3,10 @@ import {glMatrix, mat4, vec3} from 'gl-matrix'
 class Camera {
     constructor() {
         /* Camera position */
-        this.position = vec3.fromValues(0, 0, 5);
+        this.position = vec3.fromValues(-145.67300415039062, 158.8555908203125, 217.2246551513672);
 
         /* Direction the camera is facing */
-        this.direction = vec3.fromValues(0, 0, -1);
+        this.direction = vec3.fromValues(0.6006218194961548, -0.44775909185409546, -0.6623935699462891);
 
         /* Camera up vector */
         this.up = vec3.fromValues(0, 1, 0);

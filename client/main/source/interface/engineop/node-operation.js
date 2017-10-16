@@ -47,7 +47,7 @@ export const addObjectWithBoundingBox = (sceneNode, parentRenderNode) => {
         material: new Material({
             programData: objectProgramData,
             imageSrc: `${filesEndpoint}/${sceneNode.content.textureFileId}/content`,
-            isVisible: false
+            isVisible: true
         })
     });
     renderNode.addChild(obb);

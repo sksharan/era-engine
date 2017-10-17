@@ -24,6 +24,12 @@ export class NoneSelectedState extends SelectionState {
     handleCanvasMouseMove() {
         return null;
     }
+    handleKeyDown() {
+        return null;
+    }
+    handleKeyUp() {
+        return null;
+    }
     onExit() {
         // Do nothing
     }

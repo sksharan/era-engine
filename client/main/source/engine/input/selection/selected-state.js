@@ -9,8 +9,10 @@ import {
     createRotateNode,
     CurrentTransformMode,
     TRANSLATE, SCALE, ROTATE,
+    TransformScaleFactor,
 } from './transform/index'
 import {CurrentTransformOrientation} from '../../global/index'
+import {Camera} from '../../camera/index'
 import {mat4, vec3, vec4} from 'gl-matrix'
 
 export class SelectedState extends SelectionState {
@@ -23,9 +25,11 @@ export class SelectedState extends SelectionState {
     }
     onEnter() {
         this._setupTransformNode();
+        this._scaleTransformGizmoBoundingBox();
     }
     handleDocumentClick() {
         this._setupTransformNode();
+        this._scaleTransformGizmoBoundingBox();
         return null;
     }
     handleCanvasMouseDown(mouseX, mouseY, sceneNode) {
@@ -55,6 +59,14 @@ export class SelectedState extends SelectionState {
         return null;
     }
     handleCanvasMouseMove() {
+        return null;
+    }
+    handleKeyDown() {
+        this._scaleTransformGizmoBoundingBox();
+        return null;
+    }
+    handleKeyUp() {
+        this._scaleTransformGizmoBoundingBox();
         return null;
     }
     onExit() {
@@ -103,5 +115,25 @@ export class SelectedState extends SelectionState {
                 invertedScale);
         }
         this._lastTransformOrientation = CurrentTransformOrientation.orientation;
+    }
+
+    _scaleTransformGizmoBoundingBox() {
+        /* The transformation gizmo should be the same size regardless of how far the camera is from it.
+           Here, we'll scale only the gizmo bounding boxes and allow the rescaling of the actual gizmo
+           meshes to happen in the shader. We could rescale the meshes here as well, but then the
+           transformation gizmo would not change size smoothly.
+        */
+        const objectPosition = mat4.getTranslation(vec3.create(), this._selectedObjectBaseNode.localMatrix);
+        const distance = vec3.distance(Camera.getPosition(), objectPosition);
+        const scale = distance * TransformScaleFactor;
+        for (let transformGizmoComponentNode of this._transformBaseNode.children) {
+            if (transformGizmoComponentNode.children.length !== 1) {
+                console.warn('Expected gizmo component to have exactly one child (a bounding box)');
+            } else {
+                transformGizmoComponentNode.children[0].resetScaling();
+                transformGizmoComponentNode.children[0].applyScaling(
+                        mat4.fromScaling(mat4.create(), vec3.fromValues(scale, scale, scale)));
+            }
+        }
     }
 }

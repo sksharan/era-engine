@@ -59,6 +59,12 @@ export class TransformingState extends SelectionState {
         // Otherwise we're no longer actively transforming the object
         return this._transitionToSelectedState();
     }
+    handleKeyDown() {
+        return null;
+    }
+    handleKeyUp() {
+        return null;
+    }
     onExit() {
         // Detach the plane and line from the gizmo component
         this._transformBoundingPlaneNode.removeParent();

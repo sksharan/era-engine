@@ -4,6 +4,7 @@ import {Mesh, BoundingBox} from '../../../mesh/index'
 import {ProgramBuilder} from '../../../shader/index'
 import {gl} from '../../../gl'
 import {colorTexture} from './color'
+import {TransformScaleFactor} from './transform-scale-factor'
 import {mat4} from 'gl-matrix'
 
 export class TransformMesh extends Mesh {
@@ -88,7 +89,11 @@ export const attachToBaseNode = ({base, mesh, zClip}) => {
 }
 function getTransformMaterial(zClip) {
     return new Material({
-        programData: new ProgramBuilder().addPosition({scaleFactor: 0.003}).addFixedZClip(zClip).addTexcoord().build(),
+        programData: new ProgramBuilder()
+                .addPosition({scaleFactor: TransformScaleFactor})
+                .addFixedZClip(zClip)
+                .addTexcoord()
+                .build(),
         imageSrc: colorTexture
     });
 }

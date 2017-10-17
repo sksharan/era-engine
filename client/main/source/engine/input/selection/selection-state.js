@@ -34,6 +34,16 @@ export class SelectionState {
         console.warn(`Called handleCanvasMouseMove with mouseX=${mouseX}, mouseY=${mouseY}, sceneNode=${sceneNode}`);
         return null;
     }
+    // Returns the next state to transition to, otherwise returns null
+    handleKeyDown(key, sceneNode) {
+        console.warn(`Called handleKeyDown with key=${key}, sceneNode=${sceneNode}`);
+        return null;
+    }
+    // Returns the next state to transition to, otherwise returns null
+    handleKeyUp(key, sceneNode) {
+        console.warn(`Called handleKeyUp with key=${key}, sceneNode=${sceneNode}`);
+        return null;
+    }
     // Action to perform when transitioning out of this state
     onExit(sceneNode) {
         console.warn(`Called onExit with sceneNode=${sceneNode}`);

@@ -101,6 +101,16 @@ export default class SceneNode {
         }
     }
 
+    resetTranslation() {
+        this._translate = mat4.create();
+    }
+    resetScaling() {
+        this._scale = mat4.create();
+    }
+    resetRotation() {
+        this._rotate = mat4.create();
+    }
+
     addChild(child) {
         if (child === this) {
             throw new Error("A scene node cannot add itself as a child");
@@ -112,14 +122,12 @@ export default class SceneNode {
         this._children.push(child);
         updateWorldMatrix(child, this._worldMatrix);
     }
-
     removeAllChildren() {
         for (let child of this._children) {
             child._parent = null;
         }
         this._children = [];
     }
-
     removeParent() {
         if (this._parent === null) {
             throw new Error("Node does not have a parent");

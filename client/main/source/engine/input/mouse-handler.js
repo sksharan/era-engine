@@ -2,15 +2,13 @@
  * https://developer.mozilla.org/en-US/docs/Web/API/Pointer_Lock_API
  */
 
-import {NoneSelectedState} from './selection/index'
+import {CurrentHandlerState} from './handler-state'
 import {Camera} from '../camera/index'
 import {gl} from '../gl'
 import {RootSceneNode} from '../index'
 
 gl.canvas.requestPointerLock = gl.canvas.requestPointerLock || gl.canvas.mozRequestPointerLock;
 document.exitPointerLock = document.exitPointerLock || document.mozExitPointerLock;
-
-let currSelectionState = new NoneSelectedState();
 
 function handleLockChange() {
     if (isPointerLocked()) {
@@ -29,38 +27,30 @@ function isPointerLocked() {
     return document.pointerLockElement === gl.canvas || document.mozPointerLockElement === gl.canvas;
 }
 
-function handleSelectionState(nextState) {
-    if (nextState !== null) {
-        currSelectionState.onExit(RootSceneNode);
-        currSelectionState = nextState;
-        currSelectionState.onEnter(RootSceneNode);
-    }
-}
-
 export const MouseHandler = {
     init() {
         document.addEventListener('click', (e) => {
             if (!this.isPointerLocked()) {
-                const nextState = currSelectionState.handleDocumentClick(e.clientX, e.clientY, RootSceneNode);
-                handleSelectionState(nextState);
+                const nextState = CurrentHandlerState.selectionState.handleDocumentClick(e.clientX, e.clientY, RootSceneNode);
+                CurrentHandlerState.selectionState = nextState;
             }
         });
         gl.canvas.addEventListener('mousedown', (e) => {
             if (!this.isPointerLocked()) {
-                const nextState = currSelectionState.handleCanvasMouseDown(e.clientX, e.clientY, RootSceneNode);
-                handleSelectionState(nextState);
+                const nextState = CurrentHandlerState.selectionState.handleCanvasMouseDown(e.clientX, e.clientY, RootSceneNode);
+                CurrentHandlerState.selectionState = nextState;
             }
         });
         gl.canvas.addEventListener('mouseup', (e) => {
             if (!this.isPointerLocked()) {
-                const nextState = currSelectionState.handleCanvasMouseUp(e.clientX, e.clientY, RootSceneNode);
-                handleSelectionState(nextState);
+                const nextState = CurrentHandlerState.selectionState.handleCanvasMouseUp(e.clientX, e.clientY, RootSceneNode);
+                CurrentHandlerState.selectionState = nextState;
             }
         });
         gl.canvas.addEventListener('mousemove', (e) => {
             if (!this.isPointerLocked()) {
-                const nextState = currSelectionState.handleCanvasMouseMove(e.clientX, e.clientY, RootSceneNode);
-                handleSelectionState(nextState);
+                const nextState = CurrentHandlerState.selectionState.handleCanvasMouseMove(e.clientX, e.clientY, RootSceneNode);
+                CurrentHandlerState.selectionState = nextState;
             }
         });
         document.addEventListener('pointerlockchange', handleLockChange);

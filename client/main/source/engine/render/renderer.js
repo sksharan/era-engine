@@ -46,13 +46,24 @@ function renderNode(sceneNode) {
         this._programDataManager.initCameraUniforms(programData);
     }
 
-    renderGeometry.call(this, sceneNode, lightNodes);
+    renderGeometry.call(this, sceneNode, lightNodes, true);
+
+    // https://stackoverflow.com/questions/5526704/how-do-i-keep-an-object-always-in-front-of-everything-else-in-opengl
+    gl.clear(gl.DEPTH_BUFFER_BIT);
+    const ignoreDepthNodes = this._nodeAnalyzer.getAllIgnoreDepthNodes();
+    for (let ignoreDepthNode of ignoreDepthNodes) {
+        renderGeometry.call(this, ignoreDepthNode, lightNodes, false);
+    }
 }
 
-function renderGeometry(sceneNode, lightNodes) {
+function renderGeometry(sceneNode, lightNodes, skipIgnoreDepthNodes) {
     if (sceneNode.nodeType === "GEOMETRY" && sceneNode.material.isVisible) {
         const mesh = sceneNode.mesh;
         const material = sceneNode.material;
+
+        if (material.ignoreDepth && skipIgnoreDepthNodes) {
+            return;
+        }
 
         if (material.programData !== this._cachedProgramData) {
             this._cachedProgramData = material.programData;
@@ -108,7 +119,7 @@ function renderGeometry(sceneNode, lightNodes) {
     }
 
     for (let child of sceneNode.children) {
-        renderGeometry.call(this, child, lightNodes);
+        renderGeometry.call(this, child, lightNodes, skipIgnoreDepthNodes);
     }
 }
 

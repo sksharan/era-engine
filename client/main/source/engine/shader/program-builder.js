@@ -100,12 +100,6 @@ export default class ProgramBuilder {
     }
 
     // Requires add*Position() to be called first
-    addFixedZClip(z=0) {
-        this._vertBuilder.addMainFunctionLines(`gl_Position.z = float(${z});`);
-        return this;
-    }
-
-    // Requires add*Position() to be called first
     addNormal() {
         this._vertBuilder.addAttributeLines('attribute vec3 normal;')
                          .addUniformLines('uniform mat3 normalMatrix;')

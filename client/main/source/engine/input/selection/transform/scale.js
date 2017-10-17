@@ -221,9 +221,9 @@ class ScaleCenterMesh extends ScaleBaseMesh {
 export const createScaleNode = () => {
     const localMatrix = mat4.create();
     const base = new SceneNode(localMatrix);
-    attachToBaseNode({base, mesh: new ScaleXMesh(), zClip: 0.1});
-    attachToBaseNode({base, mesh: new ScaleYMesh(), zClip: 0.1});
-    attachToBaseNode({base, mesh: new ScaleZMesh(), zClip: 0.1});
-    attachToBaseNode({base, mesh: new ScaleCenterMesh(), zClip: 0.0});
+    attachToBaseNode({base, mesh: new ScaleXMesh()});
+    attachToBaseNode({base, mesh: new ScaleYMesh()});
+    attachToBaseNode({base, mesh: new ScaleZMesh()});
+    attachToBaseNode({base, mesh: new ScaleCenterMesh()});
     return base;
 }

@@ -75,10 +75,10 @@ export class TransformMesh extends Mesh {
     }
 }
 
-export const attachToBaseNode = ({base, mesh, zClip}) => {
+export const attachToBaseNode = ({base, mesh}) => {
     const objectNode = new GeometryNode(mat4.create(), {
         mesh,
-        material: getTransformMaterial(zClip)
+        material: getTransformMaterial()
     });
     const boundingBoxNode = new GeometryNode(mat4.create(), {
         mesh: new BoundingBox(objectNode.mesh.positions),
@@ -87,14 +87,14 @@ export const attachToBaseNode = ({base, mesh, zClip}) => {
     base.addChild(objectNode);
     objectNode.addChild(boundingBoxNode);
 }
-function getTransformMaterial(zClip) {
+function getTransformMaterial() {
     return new Material({
         programData: new ProgramBuilder()
                 .addPosition({scaleFactor: TransformScaleFactor})
-                .addFixedZClip(zClip)
                 .addTexcoord()
                 .build(),
-        imageSrc: colorTexture
+        imageSrc: colorTexture,
+        ignoreDepth: true
     });
 }
 function getBoundingBoxMaterial() {

@@ -173,8 +173,8 @@ function getRadiansForRotation({baseSceneNode, intersectionDelta, intersectionPo
 export const createRotateNode = () => {
     const localMatrix = mat4.create();
     const base = new SceneNode(localMatrix);
-    attachToBaseNode({base, mesh: new RotateXMesh(), zClip: 0.1});
-    attachToBaseNode({base, mesh: new RotateYMesh(), zClip: 0.2});
-    attachToBaseNode({base, mesh: new RotateZMesh(), zClip: 0.3});
+    attachToBaseNode({base, mesh: new RotateXMesh()});
+    attachToBaseNode({base, mesh: new RotateYMesh()});
+    attachToBaseNode({base, mesh: new RotateZMesh()});
     return base;
 }

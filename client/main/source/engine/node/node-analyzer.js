@@ -12,6 +12,7 @@ export default class NodeAnalyzer {
         this._lightsChanged = false;
 
         this._allBoundingBoxNodes = [];
+        this._ignoreDepthNodes = [];
 
         this._allProgramData = new Set();
     }
@@ -36,6 +37,10 @@ export default class NodeAnalyzer {
         return this._allBoundingBoxNodes;
     }
 
+    getAllIgnoreDepthNodes() {
+        return this._ignoreDepthNodes;
+    }
+
     // Get the program data object detected by the analysis
     getAllProgramData() {
         return this._allProgramData.values();
@@ -47,6 +52,7 @@ export default class NodeAnalyzer {
 function beginAnalysis(sceneNode) {
     this._allLightNodes = [];
     this._allBoundingBoxNodes = [];
+    this._ignoreDepthNodes = [];
     this._allProgramData.clear();
     analyze.call(this, sceneNode);
 
@@ -67,6 +73,9 @@ function analyze(sceneNode) {
     if (sceneNode.nodeType === "GEOMETRY") {
         if (sceneNode.mesh instanceof BoundingBox) {
             this._allBoundingBoxNodes.push(sceneNode);
+        }
+        if (sceneNode.material.ignoreDepth) {
+            this._ignoreDepthNodes.push(sceneNode);
         }
         this._allProgramData.add(sceneNode.material.programData);
     }

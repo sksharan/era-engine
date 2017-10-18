@@ -127,8 +127,11 @@ export class SelectedState extends SelectionState {
         const distance = vec3.distance(Camera.getPosition(), objectPosition);
         const scale = distance * TransformScaleFactor;
         for (let transformGizmoComponentNode of this._transformBaseNode.children) {
-            if (transformGizmoComponentNode.children.length !== 1) {
-                console.warn('Expected gizmo component to have exactly one child (a bounding box)');
+            if (transformGizmoComponentNode.children.length == 0) {
+                continue; // The rotation gizmo black circle, for instance, has no bounding box
+            }
+            if (transformGizmoComponentNode.children.length > 1) {
+                console.warn('Expected gizmo component to have no more than one child (a bounding box)');
             } else {
                 transformGizmoComponentNode.children[0].resetScaling();
                 transformGizmoComponentNode.children[0].applyScaling(

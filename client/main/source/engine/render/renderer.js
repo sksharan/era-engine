@@ -2,7 +2,6 @@ import ProgramDataManager from './program-data-manager'
 import {NodeAnalyzer} from '../node/index'
 import {gl} from '../gl'
 import {NumFloatsPerPosition, NumFloatsPerNormal, NumFloatsPerTexcoord} from '../mesh/index'
-import {vec3} from 'gl-matrix'
 
 const vertexBufferStride = NumFloatsPerPosition + NumFloatsPerNormal + NumFloatsPerTexcoord;
 
@@ -98,10 +97,6 @@ function renderGeometry(sceneNode, lightNodes, skipIgnoreDepthNodes) {
         }
         if (material.programData.hasNormalMatrixUniformLocation()) {
             gl.uniformMatrix3fv(material.programData.normalMatrixUniformLocation, gl.FALSE, sceneNode.normalMatrix);
-        }
-        if (material.programData.hasCenterPositionUniformLocation()) {
-            gl.uniform3fv(material.programData.centerPositionUniformLocation,
-                vec3.transformMat4(vec3.create(), vec3.create(), sceneNode.worldMatrix));
         }
         if (material.programData.hasColorUniformLocation()) {
             gl.uniform4fv(material.programData.colorUniformLocation, material.color);

@@ -1,18 +1,18 @@
 import {TransformMesh, attachToBaseNode} from './transform'
-import {redTexcoord, greenTexcoord, blueTexcoord} from './color'
+import {redTexcoord, greenTexcoord, blueTexcoord, blackTexcoord} from './color'
 import {SceneNode} from '../../../node/index'
 import {gl} from '../../../gl'
 import {mat4, vec3, glMatrix} from 'gl-matrix'
 
 class RotateMesh extends TransformMesh {
-    constructor(texcoord, transform) {
+    constructor(texcoord, transform, {customSegmentSize} = {}) {
         if (texcoord.length !== 2) {
             throw new TypeError(`Texcoord must have length of 2, but instead has length ${texcoord.length}`);
         }
         const radius = 75;
         const numSegments = 32;
         const segmentLength = 16.0;
-        const segmentSize = 1.5;
+        const segmentSize = customSegmentSize ? customSegmentSize : 0.75;
 
         // Positions of the base segment
         const basePositions = [
@@ -157,6 +157,14 @@ export class RotateZMesh extends RotateMesh {
         baseSceneNode.applyRotation(rotation);
     }
 }
+
+export class RotateCircleMesh extends RotateMesh {
+    constructor() {
+        super(blackTexcoord, mat4.fromRotation(mat4.create(), -3.14/2, vec3.fromValues(1, 0, 0)),
+                { customSegmentSize: 0.25 });
+    }
+}
+
 function getRadiansForRotation({baseSceneNode, intersectionDelta, intersectionPoint}, idx1, idx2) {
     const baseTransform = mat4.getTranslation(vec3.create(), baseSceneNode.worldMatrix);
 
@@ -176,5 +184,6 @@ export const createRotateNode = () => {
     attachToBaseNode({base, mesh: new RotateXMesh()});
     attachToBaseNode({base, mesh: new RotateYMesh()});
     attachToBaseNode({base, mesh: new RotateZMesh()});
+    attachToBaseNode({base, mesh: new RotateCircleMesh(), generateBoundingBox: false, useBillboardPosition: true});
     return base;
 }

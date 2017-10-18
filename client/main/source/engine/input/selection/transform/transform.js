@@ -75,24 +75,36 @@ export class TransformMesh extends Mesh {
     }
 }
 
-export const attachToBaseNode = ({base, mesh}) => {
+export const attachToBaseNode = ({base, mesh, generateBoundingBox=true, useBillboardPosition=false}) => {
     const objectNode = new GeometryNode(mat4.create(), {
         mesh,
-        material: getTransformMaterial()
-    });
-    const boundingBoxNode = new GeometryNode(mat4.create(), {
-        mesh: new BoundingBox(objectNode.mesh.positions),
-        material: getBoundingBoxMaterial()
+        material: getTransformMaterial(useBillboardPosition)
     });
     base.addChild(objectNode);
-    objectNode.addChild(boundingBoxNode);
+
+    if (generateBoundingBox) {
+        const boundingBoxNode = new GeometryNode(mat4.create(), {
+            mesh: new BoundingBox(objectNode.mesh.positions),
+            material: getBoundingBoxMaterial()
+        });
+        objectNode.addChild(boundingBoxNode);
+    }
 }
-function getTransformMaterial() {
+function getTransformMaterial(useBillboardPosition) {
+    let programData;
+    if (useBillboardPosition) {
+        programData = new ProgramBuilder()
+            .addBillboardPosition({scaleFactor: TransformScaleFactor})
+            .addTexcoord()
+            .build()
+    } else {
+        programData = new ProgramBuilder()
+            .addPosition({scaleFactor: TransformScaleFactor})
+            .addTexcoord()
+            .build()
+    }
     return new Material({
-        programData: new ProgramBuilder()
-                .addPosition({scaleFactor: TransformScaleFactor})
-                .addTexcoord()
-                .build(),
+        programData,
         imageSrc: colorTexture,
         ignoreDepth: true
     });

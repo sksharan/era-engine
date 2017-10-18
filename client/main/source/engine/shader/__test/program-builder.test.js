@@ -32,7 +32,6 @@ describe('Program builder build', () => {
         assertPositionData(programData);
         assert.isFalse(programData.hasPositionScaleFactor());
     });
-
     it('should succeed with position enabled, scaling applied', () => {
         builder.addPosition({scaleFactor: 1.5}).build();
     });
@@ -48,7 +47,16 @@ describe('Program builder build', () => {
     });
     it('should set correct program data when billboard position enabled', () => {
         const programData = builder.addBillboardPosition().build();
-        assertBillboardPositionData(programData);
+        assertPositionData(programData);
+    });
+    it('should succeed with billboard position enabled, scaling applied', () => {
+        builder.addBillboardPosition({scaleFactor: 1.25}).build();
+    });
+    it('should set correct program data when billboard position enabled, scaling applied', () => {
+        const programData = builder.addBillboardPosition({scaleFactor: 1.25}).build();
+        assertPositionData(programData);
+        assert.isTrue(programData.hasPositionScaleFactor());
+        assert.equal(1.25, programData.positionScaleFactor);
     });
 
     it('should succeed with position and normal enabled', () => {
@@ -129,11 +137,6 @@ function assertPositionData(programData) {
     assert.isTrue(programData.hasModelMatrixUniformLocation());
     assert.isTrue(programData.hasViewMatrixUniformLocation());
     assert.isTrue(programData.hasProjectionMatrixUniformLocation());
-}
-
-function assertBillboardPositionData(programData) {
-    assertPositionData(programData);
-    assert.isTrue(programData.hasCenterPositionUniformLocation());
 }
 
 function assertNormalData(programData) {

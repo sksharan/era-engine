@@ -75,10 +75,11 @@ export class TransformMesh extends Mesh {
     }
 }
 
-export const attachToBaseNode = ({base, mesh, generateBoundingBox=true, useBillboardPosition=false}) => {
+export const attachToBaseNode = ({base, mesh, generateBoundingBox=true, useBillboardPosition=false,
+        useBillboardClipping=false}) => {
     const objectNode = new GeometryNode(mat4.create(), {
         mesh,
-        material: getTransformMaterial(useBillboardPosition)
+        material: getTransformMaterial(useBillboardPosition, useBillboardClipping)
     });
     base.addChild(objectNode);
 
@@ -90,19 +91,17 @@ export const attachToBaseNode = ({base, mesh, generateBoundingBox=true, useBillb
         objectNode.addChild(boundingBoxNode);
     }
 }
-function getTransformMaterial(useBillboardPosition) {
-    let programData;
+function getTransformMaterial(useBillboardPosition, useBillboardClipping) {
+    let programData = new ProgramBuilder();
     if (useBillboardPosition) {
-        programData = new ProgramBuilder()
-            .addBillboardPosition({scaleFactor: TransformScaleFactor})
-            .addTexcoord()
-            .build()
+        programData = programData.addBillboardPosition({scaleFactor: TransformScaleFactor});
     } else {
-        programData = new ProgramBuilder()
-            .addPosition({scaleFactor: TransformScaleFactor})
-            .addTexcoord()
-            .build()
+        programData = programData.addPosition({scaleFactor: TransformScaleFactor});
     }
+    if (useBillboardClipping) {
+        programData = programData.addBillboardClipping();
+    }
+    programData = programData.addTexcoord().build();
     return new Material({
         programData,
         imageSrc: colorTexture,

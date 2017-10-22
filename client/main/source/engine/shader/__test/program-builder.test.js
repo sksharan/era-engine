@@ -42,6 +42,10 @@ describe('Program builder build', () => {
         assert.equal(1.5, programData.positionScaleFactor);
     });
 
+    it('should succeed with position and billboard clipping enabled', () => {
+        builder.addPosition().addBillboardClipping().build();
+    });
+
     it('should succeed with billboard position enabled', () => {
         builder.addBillboardPosition().build();
     });

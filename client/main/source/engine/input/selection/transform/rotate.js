@@ -5,14 +5,10 @@ import {gl} from '../../../gl'
 import {mat4, vec3, glMatrix} from 'gl-matrix'
 
 class RotateMesh extends TransformMesh {
-    constructor(texcoord, transform, {customSegmentSize} = {}) {
+    constructor(texcoord, transform, {radius=75, numSegments=32, segmentLength=16, segmentSize=0.75} = {}) {
         if (texcoord.length !== 2) {
             throw new TypeError(`Texcoord must have length of 2, but instead has length ${texcoord.length}`);
         }
-        const radius = 75;
-        const numSegments = 32;
-        const segmentLength = 16.0;
-        const segmentSize = customSegmentSize ? customSegmentSize : 0.75;
 
         // Positions of the base segment
         const basePositions = [
@@ -161,7 +157,7 @@ export class RotateZMesh extends RotateMesh {
 export class RotateCircleMesh extends RotateMesh {
     constructor() {
         super(blackTexcoord, mat4.fromRotation(mat4.create(), -3.14/2, vec3.fromValues(1, 0, 0)),
-                { customSegmentSize: 0.25 });
+                { radius: 75, numSegments: 32, segmentLength: 16, segmentSize: 0.25 });
     }
 }
 
@@ -181,9 +177,9 @@ function getRadiansForRotation({baseSceneNode, intersectionDelta, intersectionPo
 export const createRotateNode = () => {
     const localMatrix = mat4.create();
     const base = new SceneNode(localMatrix);
-    attachToBaseNode({base, mesh: new RotateXMesh()});
-    attachToBaseNode({base, mesh: new RotateYMesh()});
-    attachToBaseNode({base, mesh: new RotateZMesh()});
+    attachToBaseNode({base, mesh: new RotateXMesh(), useBillboardClipping: true});
+    attachToBaseNode({base, mesh: new RotateYMesh(), useBillboardClipping: true});
+    attachToBaseNode({base, mesh: new RotateZMesh(), useBillboardClipping: true});
     attachToBaseNode({base, mesh: new RotateCircleMesh(), generateBoundingBox: false, useBillboardPosition: true});
     return base;
 }

@@ -57,6 +57,7 @@ export default class ProgramBuilder {
                          .addUniformLines('uniform mat4 viewMatrix;')
                          .addUniformLines('uniform mat4 projectionMatrix;')
                          .addVaryingLines('varying vec4 vPositionWorld;');
+        // vPositionWorld
         if (scaleFactor) {
             // https://www.opengl.org/discussion_boards/showthread.php/177936-draw-an-object-that-looks-the-same-size-regarles-the-distance-in-perspective-view
             this._vertBuilder.addMainFunctionLines(`
@@ -70,10 +71,32 @@ export default class ProgramBuilder {
                 vPositionWorld = modelMatrix * vec4(position, 1.0);
             `);
         }
+        // gl_Position
         this._vertBuilder.addMainFunctionLines('gl_Position = projectionMatrix * viewMatrix * vPositionWorld;');
 
         this._fragBuilder.addVaryingLines('varying vec4 vPositionWorld;');
 
+        return this;
+    }
+
+    // Requires addPosition() to be called first. Clips all geometry behind an invisible infinitely-large billboard.
+    addBillboardClipping() {
+        this._vertBuilder.addVaryingLines('varying vec3 vPlaneNormal;')
+                         .addVaryingLines('varying vec4 vPlanePosition;')
+                         .addMainFunctionLines(`
+                             vec3 cameraRightWorld = normalize(vec3(viewMatrix[0][0], viewMatrix[1][0], viewMatrix[2][0]));
+                             vec3 cameraUpWorld = normalize(vec3(viewMatrix[0][1], viewMatrix[1][1], viewMatrix[2][1]));
+                             vPlaneNormal = normalize(cross(cameraRightWorld, cameraUpWorld));
+                             vPlanePosition = modelMatrix * vec4(0, 0, 0, 1);
+                         `);
+        // https://math.stackexchange.com/questions/2036116/plane-formula-explanation-and-implicit-form
+        this._fragBuilder.addVaryingLines('varying vec3 vPlaneNormal;')
+                         .addVaryingLines('varying vec4 vPlanePosition;')
+                         .addMainFunctionLines(`
+                             if (dot(vec3(vPositionWorld-vPlanePosition), vPlaneNormal) < 0.0) {
+                                 discard;
+                             }
+                         `);
         return this;
     }
 

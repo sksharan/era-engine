@@ -75,11 +75,10 @@ export class TransformMesh extends Mesh {
     }
 }
 
-export const attachToBaseNode = ({base, mesh, generateBoundingBox=true, useBillboardPosition=false,
-        useBillboardClipping=false}) => {
+export const attachToBaseNode = ({base, mesh, generateBoundingBox=true, useBillboardClipping=false}) => {
     const objectNode = new GeometryNode(mat4.create(), {
         mesh,
-        material: getTransformMaterial(useBillboardPosition, useBillboardClipping)
+        material: getTransformMaterial(useBillboardClipping)
     });
     base.addChild(objectNode);
 
@@ -91,13 +90,9 @@ export const attachToBaseNode = ({base, mesh, generateBoundingBox=true, useBillb
         objectNode.addChild(boundingBoxNode);
     }
 }
-function getTransformMaterial(useBillboardPosition, useBillboardClipping) {
+function getTransformMaterial(useBillboardClipping) {
     let programData = new ProgramBuilder();
-    if (useBillboardPosition) {
-        programData = programData.addBillboardPosition({scaleFactor: TransformScaleFactor});
-    } else {
-        programData = programData.addPosition({scaleFactor: TransformScaleFactor});
-    }
+    programData = programData.addPosition({scaleFactor: TransformScaleFactor});
     if (useBillboardClipping) {
         programData = programData.addBillboardClipping();
     }

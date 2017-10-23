@@ -1,6 +1,7 @@
 import {TransformMesh, attachToBaseNode} from './transform'
 import {redTexcoord, greenTexcoord, blueTexcoord, blackTexcoord} from './color'
 import {SceneNode} from '../../../node/index'
+import {Sphere} from '../../../mesh/index'
 import {gl} from '../../../gl'
 import {mat4, vec3, glMatrix} from 'gl-matrix'
 
@@ -102,7 +103,7 @@ class RotateMesh extends TransformMesh {
         });
     }
 }
-export class RotateXMesh extends RotateMesh {
+class RotateXMesh extends RotateMesh {
     constructor() {
         super(redTexcoord, mat4.fromRotation(mat4.create(), 3.14/2, vec3.fromValues(0, 0, 1)));
     }
@@ -119,7 +120,7 @@ export class RotateXMesh extends RotateMesh {
         baseSceneNode.applyRotation(rotation);
     }
 }
-export class RotateYMesh extends RotateMesh {
+class RotateYMesh extends RotateMesh {
     constructor() {
         super(greenTexcoord, mat4.create());
     }
@@ -136,7 +137,7 @@ export class RotateYMesh extends RotateMesh {
         baseSceneNode.applyRotation(rotation);
     }
 }
-export class RotateZMesh extends RotateMesh {
+class RotateZMesh extends RotateMesh {
     constructor() {
         super(blueTexcoord, mat4.fromRotation(mat4.create(), -3.14/2, vec3.fromValues(1, 0, 0)));
     }
@@ -151,13 +152,6 @@ export class RotateZMesh extends RotateMesh {
         const rad = getRadiansForRotation({baseSceneNode, intersectionDelta, intersectionPoint}, 1, 0);
         const rotation = mat4.fromRotation(mat4.create(), rad, vec3.fromValues(0, 0, 1));
         baseSceneNode.applyRotation(rotation);
-    }
-}
-
-export class RotateCircleMesh extends RotateMesh {
-    constructor() {
-        super(blackTexcoord, mat4.fromRotation(mat4.create(), -3.14/2, vec3.fromValues(1, 0, 0)),
-                { radius: 75, numSegments: 32, segmentLength: 16, segmentSize: 0.25 });
     }
 }
 
@@ -180,6 +174,6 @@ export const createRotateNode = () => {
     attachToBaseNode({base, mesh: new RotateXMesh(), useBillboardClipping: true});
     attachToBaseNode({base, mesh: new RotateYMesh(), useBillboardClipping: true});
     attachToBaseNode({base, mesh: new RotateZMesh(), useBillboardClipping: true});
-    attachToBaseNode({base, mesh: new RotateCircleMesh(), generateBoundingBox: false, useBillboardPosition: true});
+    attachToBaseNode({base, mesh: new Sphere(75, 20, 20, {customTexcoords: blackTexcoord}), generateBoundingBox: false});
     return base;
 }

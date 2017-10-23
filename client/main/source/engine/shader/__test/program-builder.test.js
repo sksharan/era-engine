@@ -53,15 +53,6 @@ describe('Program builder build', () => {
         const programData = builder.addBillboardPosition().build();
         assertPositionData(programData);
     });
-    it('should succeed with billboard position enabled, scaling applied', () => {
-        builder.addBillboardPosition({scaleFactor: 1.25}).build();
-    });
-    it('should set correct program data when billboard position enabled, scaling applied', () => {
-        const programData = builder.addBillboardPosition({scaleFactor: 1.25}).build();
-        assertPositionData(programData);
-        assert.isTrue(programData.hasPositionScaleFactor());
-        assert.equal(1.25, programData.positionScaleFactor);
-    });
 
     it('should succeed with position and normal enabled', () => {
         builder.addPosition().addNormal().build();

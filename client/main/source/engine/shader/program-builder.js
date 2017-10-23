@@ -100,33 +100,21 @@ export default class ProgramBuilder {
         return this;
     }
 
-    addBillboardPosition({scaleFactor=null} = {}) {
+    addBillboardPosition() {
         //http://www.opengl-tutorial.org/intermediate-tutorials/billboards-particles/billboards/
         this._vertBuilder.addAttributeLines('attribute vec3 position;')
                          .addUniformLines('uniform mat4 modelMatrix;')
                          .addUniformLines('uniform mat4 viewMatrix;')
                          .addUniformLines('uniform mat4 projectionMatrix;')
+                         .addUniformLines('uniform vec3 centerPosition;')
                          .addVaryingLines('varying vec4 vPositionWorld;')
                          .addMainFunctionLines(`
                              vec3 cameraRightWorld = vec3(viewMatrix[0][0], viewMatrix[1][0], viewMatrix[2][0]);
                              vec3 cameraUpWorld = vec3(viewMatrix[0][1], viewMatrix[1][1], viewMatrix[2][1]);
-                             vec3 updatedPosition = vec3(cameraRightWorld * position.x + cameraUpWorld * position.y);
+                             vPositionWorld = modelMatrix *
+                                    vec4(centerPosition + cameraRightWorld * position.x + cameraUpWorld * position.y, 1.0);
+                             gl_Position = projectionMatrix * viewMatrix * vPositionWorld;
                          `);
-
-        if (scaleFactor) {
-            // https://www.opengl.org/discussion_boards/showthread.php/177936-draw-an-object-that-looks-the-same-size-regarles-the-distance-in-perspective-view
-            this._vertBuilder.addMainFunctionLines(`
-                float w = (projectionMatrix * viewMatrix * modelMatrix * vec4(0, 0, 0, 1)).w;
-                w *= ${scaleFactor};
-                vPositionWorld = modelMatrix * vec4(w * updatedPosition, 1.0);
-            `);
-            this._positionScaleFactor = scaleFactor;
-        } else {
-            this._vertBuilder.addMainFunctionLines(`
-                vPositionWorld = modelMatrix * vec4(updatedPosition, 1.0);
-            `);
-        }
-        this._vertBuilder.addMainFunctionLines('gl_Position = projectionMatrix * viewMatrix * vPositionWorld;');
 
         this._fragBuilder.addVaryingLines('varying vec4 vPositionWorld;');
 

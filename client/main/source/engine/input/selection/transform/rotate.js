@@ -6,7 +6,7 @@ import {gl} from '../../../gl'
 import {mat4, vec3, glMatrix} from 'gl-matrix'
 
 class RotateMesh extends TransformMesh {
-    constructor(texcoord, transform, {radius=75, numSegments=32, segmentLength=16, segmentSize=0.75} = {}) {
+    constructor(texcoord, transform, {radius=75, numSegments=64, segmentLength=8, segmentSize=0.5} = {}) {
         if (texcoord.length !== 2) {
             throw new TypeError(`Texcoord must have length of 2, but instead has length ${texcoord.length}`);
         }
@@ -174,6 +174,7 @@ export const createRotateNode = () => {
     attachToBaseNode({base, mesh: new RotateXMesh(), useBillboardClipping: true});
     attachToBaseNode({base, mesh: new RotateYMesh(), useBillboardClipping: true});
     attachToBaseNode({base, mesh: new RotateZMesh(), useBillboardClipping: true});
-    attachToBaseNode({base, mesh: new Sphere(75, 20, 20, {customTexcoords: blackTexcoord}), generateBoundingBox: false});
+    attachToBaseNode({base, mesh: new Sphere(75, 50, 50, {customTexcoords: blackTexcoord}),
+        generateBoundingBox: false, useSphereOutling: true});
     return base;
 }

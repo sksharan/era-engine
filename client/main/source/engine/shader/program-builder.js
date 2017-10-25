@@ -134,6 +134,18 @@ export default class ProgramBuilder {
         return this;
     }
 
+    // Requires addPosition() and addNormal() to be called first
+    addSphereOutlining(epsilon) {
+        this._fragBuilder.addUniformLines('uniform vec3 cameraPosition;');
+        this._fragBuilder.addMainFunctionLines(`
+            vec3 cameraToObject = normalize(cameraPosition-vec3(vPositionWorld));
+            if (dot(cameraToObject, vNormalWorld) > ${epsilon})  {
+                discard;
+            }
+        `);
+        return this;
+    }
+
     // Requires add*Position() to be called first
     addTexcoord() {
         this._vertBuilder.addAttributeLines('attribute vec2 texcoord;')

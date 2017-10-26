@@ -4,7 +4,7 @@ import {gl} from '../gl'
 export default class Sphere extends Mesh {
     // Algorithm from https://stackoverflow.com/questions/5988686/creating-a-3d-sphere-in-opengl-using-visual-c/5989676#5989676
     // except we use GL_TRIANGLES instead of GL_QUADS
-    constructor(radius, rings, sectors, {customTexcoords=null} = {}) {
+    constructor(radius, rings, sectors) {
         if (!radius || !rings || !sectors) {
             throw new TypeError('Must specify radius, rings, and sectors');
         }
@@ -22,11 +22,7 @@ export default class Sphere extends Mesh {
                 const z = Math.sin(2*Math.PI * s * S) * Math.sin(Math.PI * r * R);
                 positions.push(x*radius, y*radius, z*radius);
                 normals.push(x, y, z);
-                if (customTexcoords) {
-                    texcoords.push(customTexcoords[0], customTexcoords[1]);
-                } else {
-                    texcoords.push(s*S, r*R);
-                }
+                texcoords.push(s*S, r*R);
             }
         }
 

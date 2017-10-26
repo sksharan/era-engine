@@ -1,16 +1,12 @@
 import {TransformMesh, attachToBaseNode} from './transform'
-import {redTexcoord, greenTexcoord, blueTexcoord, blackTexcoord} from './color'
+import {redColor, greenColor, blueColor, blackColor} from './color'
 import {SceneNode} from '../../../node/index'
 import {Sphere} from '../../../mesh/index'
 import {gl} from '../../../gl'
 import {mat4, vec3, glMatrix} from 'gl-matrix'
 
 class RotateMesh extends TransformMesh {
-    constructor(texcoord, transform, {radius=75, numSegments=64, segmentLength=8, segmentSize=0.75} = {}) {
-        if (texcoord.length !== 2) {
-            throw new TypeError(`Texcoord must have length of 2, but instead has length ${texcoord.length}`);
-        }
-
+    constructor(transform, {radius=75, numSegments=64, segmentLength=8, segmentSize=0.75} = {}) {
         // Positions of the base segment
         const basePositions = [
             -segmentLength/2,  segmentSize,   radius,
@@ -56,13 +52,8 @@ class RotateMesh extends TransformMesh {
 
         // Normals not needed
         const normals = new Array(positions.length).fill(0);
-
-        // Fill 'texcoords' with 'texcoord' - 'texcoords' is 2/3 the length of 'positions'
-        let texcoords = new Array(2*positions.length/3);
-        for (let i = 0; i < texcoords.length; i+=2) {
-            texcoords[i] = texcoord[0];
-            texcoords[i+1] = texcoord[1];
-        }
+        // Texcoords not needed
+        const texcoords = new Array(positions.length*2/3).fill(0);
 
         // Indices of the 'base' segment - indices into 'basePositions'
         const baseIndices = [
@@ -105,13 +96,13 @@ class RotateMesh extends TransformMesh {
 }
 class RotateXMesh extends RotateMesh {
     constructor() {
-        super(redTexcoord, mat4.fromRotation(mat4.create(), 3.14/2, vec3.fromValues(0, 0, 1)));
+        super(mat4.fromRotation(mat4.create(), 3.14/2, vec3.fromValues(0, 0, 1)));
     }
     generateBoundingPlaneNode() {
         return this._generateBoundingBoxNode([0, this._min, this._min, 0, this._max, this._max]);
     }
     generateAxisLineGeometryNode() {
-        return this._generateAxisLineGeometryNode([this._min, 0, 0, this._max, 0, 0], redTexcoord);
+        return this._generateAxisLineGeometryNode([this._min, 0, 0, this._max, 0, 0], redColor);
     }
     handleTransform({baseSceneNode, intersectionDelta, intersectionPoint}) {
         super.handleTransform({baseSceneNode, intersectionDelta, intersectionPoint});
@@ -122,13 +113,13 @@ class RotateXMesh extends RotateMesh {
 }
 class RotateYMesh extends RotateMesh {
     constructor() {
-        super(greenTexcoord, mat4.create());
+        super(mat4.create());
     }
     generateBoundingPlaneNode() {
         return this._generateBoundingBoxNode([this._min, 0, this._min, this._max, 0, this._max]);
     }
     generateAxisLineGeometryNode() {
-        return this._generateAxisLineGeometryNode([0, this._min, 0, 0, this._max, 0], greenTexcoord);
+        return this._generateAxisLineGeometryNode([0, this._min, 0, 0, this._max, 0], greenColor);
     }
     handleTransform({baseSceneNode, intersectionDelta, intersectionPoint}) {
         super.handleTransform({baseSceneNode, intersectionDelta, intersectionPoint});
@@ -139,13 +130,13 @@ class RotateYMesh extends RotateMesh {
 }
 class RotateZMesh extends RotateMesh {
     constructor() {
-        super(blueTexcoord, mat4.fromRotation(mat4.create(), -3.14/2, vec3.fromValues(1, 0, 0)));
+        super(mat4.fromRotation(mat4.create(), -3.14/2, vec3.fromValues(1, 0, 0)));
     }
     generateBoundingPlaneNode() {
         return this._generateBoundingBoxNode([this._min, this._min, 0, this._max, this._max, 0]);
     }
     generateAxisLineGeometryNode() {
-        return this._generateAxisLineGeometryNode([0, 0, this._min, 0, 0, this._max], blueTexcoord);
+        return this._generateAxisLineGeometryNode([0, 0, this._min, 0, 0, this._max], blueColor);
     }
     handleTransform({baseSceneNode, intersectionDelta, intersectionPoint}) {
         super.handleTransform({baseSceneNode, intersectionDelta, intersectionPoint});
@@ -172,10 +163,10 @@ export const createRotateNode = () => {
     const localMatrix = mat4.create();
     const base = new SceneNode(localMatrix);
     const sphereRadius = 75;
-    attachToBaseNode({base, mesh: new RotateXMesh(), useSphereClipping: true, sphereRadius});
-    attachToBaseNode({base, mesh: new RotateYMesh(), useSphereClipping: true, sphereRadius});
-    attachToBaseNode({base, mesh: new RotateZMesh(), useSphereClipping: true, sphereRadius});
-    attachToBaseNode({base, mesh: new Sphere(sphereRadius, 50, 50, {customTexcoords: blackTexcoord}),
-        generateBoundingBox: false, useSphereOutling: true});
+    attachToBaseNode({base, mesh: new RotateXMesh(), color: redColor, useSphereClipping: true, sphereRadius});
+    attachToBaseNode({base, mesh: new RotateYMesh(), color: greenColor, useSphereClipping: true, sphereRadius});
+    attachToBaseNode({base, mesh: new RotateZMesh(), color: blueColor, useSphereClipping: true, sphereRadius});
+    attachToBaseNode({base, mesh: new Sphere(sphereRadius, 50, 50), color: blackColor,
+            generateBoundingBox: false, useSphereOutling: true});
     return base;
 }

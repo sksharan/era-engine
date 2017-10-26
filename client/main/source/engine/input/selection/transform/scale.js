@@ -1,5 +1,5 @@
 import {TransformMesh, attachToBaseNode} from './transform'
-import {whiteTexcoord, redTexcoord, greenTexcoord, blueTexcoord} from './color'
+import {whiteColor, redColor, greenColor, blueColor} from './color'
 import {SceneNode} from '../../../node/index'
 import {gl} from '../../../gl'
 import {mat4, vec3} from 'gl-matrix'
@@ -12,10 +12,7 @@ class ScaleBaseMesh extends TransformMesh {
 }
 
 class ScaleHandleMesh extends ScaleBaseMesh {
-    constructor(texcoord, transform) {
-        if (texcoord.length !== 2) {
-            throw new TypeError(`Texcoord must have length of 2, but instead has length ${texcoord.length}`);
-        }
+    constructor(transform) {
         const shaftLength = 75.0;
         const shaftSize = 1.0;
         const pointerSize = 3.0;
@@ -48,26 +45,9 @@ class ScaleHandleMesh extends ScaleBaseMesh {
         }
         // Normals not needed
         const normals = new Array(positions.length).fill(0);
-        const texcoords = [
-            // shaft
-            ...texcoord,
-            ...texcoord,
-            ...texcoord,
-            ...texcoord,
-            ...texcoord,
-            ...texcoord,
-            ...texcoord,
-            ...texcoord,
-            // pointer
-            ...texcoord,
-            ...texcoord,
-            ...texcoord,
-            ...texcoord,
-            ...texcoord,
-            ...texcoord,
-            ...texcoord,
-            ...texcoord,
-        ];
+        // Texcoords not needed
+        const texcoords = new Array(positions.length*2/3).fill(0);
+
         const indices = [
             // shaft
             4, 0, 5, 1, 6, 2, 7, 3, 4, 0,
@@ -97,13 +77,13 @@ class ScaleHandleMesh extends ScaleBaseMesh {
 }
 class ScaleXMesh extends ScaleHandleMesh {
     constructor() {
-        super(redTexcoord, mat4.create());
+        super(mat4.create());
     }
     generateBoundingPlaneNode() {
         return this._generateBoundingBoxNode([this._min, 0, this._min, this._max, 0, this._max]);
     }
     generateAxisLineGeometryNode() {
-        return this._generateAxisLineGeometryNode([this._min, 0, 0, this._max, 0, 0], redTexcoord);
+        return this._generateAxisLineGeometryNode([this._min, 0, 0, this._max, 0, 0], redColor);
     }
     handleTransform({baseSceneNode, intersectionDelta}) {
         super.handleTransform({baseSceneNode, intersectionDelta});
@@ -113,13 +93,13 @@ class ScaleXMesh extends ScaleHandleMesh {
 }
 class ScaleYMesh extends ScaleHandleMesh {
     constructor() {
-        super(greenTexcoord, mat4.fromRotation(mat4.create(), 3.14/2, vec3.fromValues(0, 0, 1)));
+        super(mat4.fromRotation(mat4.create(), 3.14/2, vec3.fromValues(0, 0, 1)));
     }
     generateBoundingPlaneNode() {
         return this._generateBoundingBoxNode([this._min, this._min, 0, this._max, this._max, 0]);
     }
     generateAxisLineGeometryNode() {
-        return this._generateAxisLineGeometryNode([0, this._min, 0, 0, this._max, 0], greenTexcoord);
+        return this._generateAxisLineGeometryNode([0, this._min, 0, 0, this._max, 0], greenColor);
     }
     handleTransform({baseSceneNode, intersectionDelta}) {
         super.handleTransform({baseSceneNode, intersectionDelta});
@@ -129,13 +109,13 @@ class ScaleYMesh extends ScaleHandleMesh {
 }
 class ScaleZMesh extends ScaleHandleMesh {
     constructor() {
-        super(blueTexcoord, mat4.fromRotation(mat4.create(), -3.14/2, vec3.fromValues(0, 1, 0)));
+        super(mat4.fromRotation(mat4.create(), -3.14/2, vec3.fromValues(0, 1, 0)));
     }
     generateBoundingPlaneNode() {
         return this._generateBoundingBoxNode([this._min, 0, this._min, this._max, 0, this._max]);
     }
     generateAxisLineGeometryNode() {
-        return this._generateAxisLineGeometryNode([0, 0, this._min, 0, 0, this._max], blueTexcoord);
+        return this._generateAxisLineGeometryNode([0, 0, this._min, 0, 0, this._max], blueColor);
     }
     handleTransform({baseSceneNode, intersectionDelta}) {
         super.handleTransform({baseSceneNode, intersectionDelta});
@@ -145,7 +125,7 @@ class ScaleZMesh extends ScaleHandleMesh {
 }
 
 class ScaleCenterMesh extends ScaleBaseMesh {
-    constructor(texcoord=whiteTexcoord) {
+    constructor() {
         const size = 5.0;
         const positions = [
             -size, -size,  size,
@@ -159,16 +139,9 @@ class ScaleCenterMesh extends ScaleBaseMesh {
         ];
         // Normals not needed
         const normals = new Array(positions.length).fill(0);
-        const texcoords = [
-            ...texcoord,
-            ...texcoord,
-            ...texcoord,
-            ...texcoord,
-            ...texcoord,
-            ...texcoord,
-            ...texcoord,
-            ...texcoord,
-        ];
+        // Texcoords not needed
+        const texcoords = new Array(positions.length*2/3).fill(0);
+
         const indices = [
             // Side 1
             0, 1, 2,
@@ -203,9 +176,9 @@ class ScaleCenterMesh extends ScaleBaseMesh {
     }
     generateAxisLineGeometryNode() {
         const base = new SceneNode();
-        base.addChild(this._generateAxisLineGeometryNode([this._min, 0, 0, this._max, 0, 0], redTexcoord));
-        base.addChild(this._generateAxisLineGeometryNode([0, this._min, 0, 0, this._max, 0], greenTexcoord));
-        base.addChild(this._generateAxisLineGeometryNode([0, 0, this._min, 0, 0, this._max], blueTexcoord));
+        base.addChild(this._generateAxisLineGeometryNode([this._min, 0, 0, this._max, 0, 0], redColor));
+        base.addChild(this._generateAxisLineGeometryNode([0, this._min, 0, 0, this._max, 0], greenColor));
+        base.addChild(this._generateAxisLineGeometryNode([0, 0, this._min, 0, 0, this._max], blueColor));
         return base;
     }
     handleTransform({baseSceneNode, intersectionDelta}) {
@@ -221,9 +194,9 @@ class ScaleCenterMesh extends ScaleBaseMesh {
 export const createScaleNode = () => {
     const localMatrix = mat4.create();
     const base = new SceneNode(localMatrix);
-    attachToBaseNode({base, mesh: new ScaleXMesh()});
-    attachToBaseNode({base, mesh: new ScaleYMesh()});
-    attachToBaseNode({base, mesh: new ScaleZMesh()});
-    attachToBaseNode({base, mesh: new ScaleCenterMesh()});
+    attachToBaseNode({base, mesh: new ScaleXMesh(), color: redColor});
+    attachToBaseNode({base, mesh: new ScaleYMesh(), color: greenColor});
+    attachToBaseNode({base, mesh: new ScaleZMesh(), color: blueColor});
+    attachToBaseNode({base, mesh: new ScaleCenterMesh(), color: whiteColor});
     return base;
 }

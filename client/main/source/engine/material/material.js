@@ -7,13 +7,15 @@ const defaultProgramData = new ProgramBuilder().addPosition().build();
 export default class Material {
     constructor({
         programData=defaultProgramData,
-        imageSrc='public/textures/debug.png',
+        imageSrc,
         color=vec4.fromValues(0, 0, 0, 0),
         isVisible=true,
         ignoreDepth=false
     } = {}) {
         this._programData = programData;
-        this._texture = loadTextureAsync(imageSrc);
+        if (imageSrc) {
+            this._texture = loadTextureAsync(imageSrc);
+        }
         this._color = color;
         this._isVisible = isVisible;
         this._ignoreDepth = ignoreDepth;

@@ -3,9 +3,8 @@ import {Material} from '../../../material/index'
 import {Mesh, BoundingBox} from '../../../mesh/index'
 import {ProgramBuilder} from '../../../shader/index'
 import {gl} from '../../../gl'
-import {colorTexture} from './color'
 import {TransformScaleFactor} from './transform-scale-factor'
-import {mat4} from 'gl-matrix'
+import {mat4, vec4} from 'gl-matrix'
 
 export class TransformMesh extends Mesh {
     constructor(meshArgs) {
@@ -26,7 +25,7 @@ export class TransformMesh extends Mesh {
             material: new Material({
                 programData: new ProgramBuilder()
                         .addPosition().addTexcoord().build(),
-                imageSrc: colorTexture,
+                color: vec4.fromValues(0.5, 0.5, 0.5, 1.0),
                 isVisible: false
             })
         });
@@ -34,25 +33,22 @@ export class TransformMesh extends Mesh {
     generateAxisLineGeometryNode() {
         throw new Error('No base implementation');
     }
-    _generateAxisLineGeometryNode(positions, texcoord) {
+    _generateAxisLineGeometryNode(positions, color) {
         if (positions.length !== 6) { // 2 vertices * 3 floats per vertex
             throw new Error(`Positions must have length 6, but has length ${positions.length}`);
-        }
-        if (texcoord.length !== 2) {
-            throw new Error(`Texcoord must have length 2, but has length ${texcoord.length}`);
         }
         return new GeometryNode(mat4.create(), {
             mesh: new Mesh({
                 drawMode: gl.LINES,
                 positions,
                 normals: [0, 0, 0, 0, 0, 0],
-                texcoords: [...texcoord, ...texcoord],
+                texcoords: [0, 0, 0, 0],
                 numVertices: positions.length
             }),
             material: new Material({
                 programData: new ProgramBuilder()
-                        .addPosition().addTexcoord().build(),
-                imageSrc: colorTexture
+                        .addPosition().addColor().build(),
+                color
             })
         });
     }
@@ -75,23 +71,23 @@ export class TransformMesh extends Mesh {
     }
 }
 
-export const attachToBaseNode = ({base, mesh, generateBoundingBox=true, useSphereClipping=false,
+export const attachToBaseNode = ({base, mesh, color, generateBoundingBox=true, useSphereClipping=false,
         sphereRadius=0, useSphereOutling=false}) => {
     const objectNode = new GeometryNode(mat4.create(), {
         mesh,
-        material: getTransformMaterial(useSphereClipping, sphereRadius, useSphereOutling)
+        material: getTransformMaterial({color, useSphereClipping, sphereRadius, useSphereOutling})
     });
     base.addChild(objectNode);
 
     if (generateBoundingBox) {
         const boundingBoxNode = new GeometryNode(mat4.create(), {
             mesh: new BoundingBox(objectNode.mesh.positions),
-            material: getBoundingBoxMaterial()
+            material: getBoundingBoxMaterial({color})
         });
         objectNode.addChild(boundingBoxNode);
     }
 }
-function getTransformMaterial(useSphereClipping, sphereRadius, useSphereOutling) {
+function getTransformMaterial({color, useSphereClipping, sphereRadius, useSphereOutling}) {
     let programData = new ProgramBuilder();
     programData = programData.addPosition({scaleFactor: TransformScaleFactor});
     if (useSphereClipping) {
@@ -100,17 +96,17 @@ function getTransformMaterial(useSphereClipping, sphereRadius, useSphereOutling)
     if (useSphereOutling) {
         programData = programData.addNormal().addSphereOutlining({epsilon: 0.10});
     }
-    programData = programData.addTexcoord().build();
+    programData = programData.addColor().build();
     return new Material({
         programData,
-        imageSrc: colorTexture,
+        color,
         ignoreDepth: true
     });
 }
-function getBoundingBoxMaterial() {
+function getBoundingBoxMaterial({color}) {
     return new Material({
-        programData: new ProgramBuilder().addPosition().addTexcoord().build(),
-        imageSrc: colorTexture,
+        programData: new ProgramBuilder().addPosition().addColor().build(),
+        color,
         isVisible: false
     });
 }

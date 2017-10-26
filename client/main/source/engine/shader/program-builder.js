@@ -203,7 +203,7 @@ export default class ProgramBuilder {
         return this;
     }
 
-    // Requires addTexcoord() to be called first
+    // Can be used with addTexcoord() but is not required. Color comes from the object material.
     addColor() {
         this._fragBuilder.addUniformLines('uniform vec4 color;')
                          .addMainFunctionLines(`fragColor += color;`);

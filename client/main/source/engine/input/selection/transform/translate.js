@@ -1,14 +1,11 @@
 import {TransformMesh, attachToBaseNode} from './transform'
-import {redTexcoord, greenTexcoord, blueTexcoord} from './color'
+import {redColor, greenColor, blueColor} from './color'
 import {SceneNode} from '../../../node/index'
 import {gl} from '../../../gl'
 import {mat4, vec3} from 'gl-matrix'
 
 class TranslateMesh extends TransformMesh {
-    constructor(texcoord, transform) {
-        if (texcoord.length !== 2) {
-            throw new TypeError(`Texcoord must have length of 2, but instead has length ${texcoord.length}`);
-        }
+    constructor(transform) {
         const shaftLength = 75.0;
         const shaftSize = 1.0;
         const pointerLength = 10.0;
@@ -46,29 +43,8 @@ class TranslateMesh extends TransformMesh {
 
         // Normals not needed
         const normals = new Array(positions.length).fill(0);
-
-        const texcoords = [
-            // shaft
-            ...texcoord,
-            ...texcoord,
-            ...texcoord,
-            ...texcoord,
-            ...texcoord,
-            ...texcoord,
-            ...texcoord,
-            ...texcoord,
-            // pointer
-            ...texcoord,
-            ...texcoord,
-            ...texcoord,
-            ...texcoord,
-            ...texcoord,
-            ...texcoord,
-            ...texcoord,
-            ...texcoord,
-            ...texcoord,
-            ...texcoord,
-        ];
+        // Texcoords not needed
+        const texcoords = new Array(positions.length*2/3).fill(0);
 
         const indices = [
             // shaft
@@ -105,13 +81,13 @@ class TranslateMesh extends TransformMesh {
 }
 class TranslateXMesh extends TranslateMesh {
     constructor() {
-        super(redTexcoord, mat4.create());
+        super(mat4.create());
     }
     generateBoundingPlaneNode() {
         return this._generateBoundingBoxNode([this._min, 0, this._min, this._max, 0, this._max]);
     }
     generateAxisLineGeometryNode() {
-        return this._generateAxisLineGeometryNode([this._min, 0, 0, this._max, 0, 0], redTexcoord);
+        return this._generateAxisLineGeometryNode([this._min, 0, 0, this._max, 0, 0], redColor);
     }
     handleTransform({baseSceneNode, intersectionDelta}) {
         super.handleTransform({baseSceneNode, intersectionDelta});
@@ -121,13 +97,13 @@ class TranslateXMesh extends TranslateMesh {
 }
 class TranslateYMesh extends TranslateMesh {
     constructor() {
-        super(greenTexcoord, mat4.fromRotation(mat4.create(), 3.14/2, vec3.fromValues(0, 0, 1)));
+        super(mat4.fromRotation(mat4.create(), 3.14/2, vec3.fromValues(0, 0, 1)));
     }
     generateBoundingPlaneNode() {
         return this._generateBoundingBoxNode([this._min, this._min, 0, this._max, this._max, 0]);
     }
     generateAxisLineGeometryNode() {
-        return this._generateAxisLineGeometryNode([0, this._min, 0, 0, this._max, 0], greenTexcoord);
+        return this._generateAxisLineGeometryNode([0, this._min, 0, 0, this._max, 0], greenColor);
     }
     handleTransform({baseSceneNode, intersectionDelta}) {
         super.handleTransform({baseSceneNode, intersectionDelta});
@@ -137,13 +113,13 @@ class TranslateYMesh extends TranslateMesh {
 }
 class TranslateZMesh extends TranslateMesh {
     constructor() {
-        super(blueTexcoord, mat4.fromRotation(mat4.create(), -3.14/2, vec3.fromValues(0, 1, 0)));
+        super(mat4.fromRotation(mat4.create(), -3.14/2, vec3.fromValues(0, 1, 0)));
     }
     generateBoundingPlaneNode() {
         return this._generateBoundingBoxNode([this._min, 0, this._min, this._max, 0, this._max]);
     }
     generateAxisLineGeometryNode() {
-        return this._generateAxisLineGeometryNode([0, 0, this._min, 0, 0, this._max], blueTexcoord);
+        return this._generateAxisLineGeometryNode([0, 0, this._min, 0, 0, this._max], blueColor);
     }
     handleTransform({baseSceneNode, intersectionDelta}) {
         super.handleTransform({baseSceneNode, intersectionDelta});
@@ -155,8 +131,8 @@ class TranslateZMesh extends TranslateMesh {
 export const createTranslateNode = () => {
     const localMatrix = mat4.create();
     const base = new SceneNode(localMatrix);
-    attachToBaseNode({base, mesh: new TranslateXMesh()});
-    attachToBaseNode({base, mesh: new TranslateYMesh()});
-    attachToBaseNode({base, mesh: new TranslateZMesh()});
+    attachToBaseNode({base, mesh: new TranslateXMesh(), color: redColor});
+    attachToBaseNode({base, mesh: new TranslateYMesh(), color: greenColor});
+    attachToBaseNode({base, mesh: new TranslateZMesh(), color: blueColor});
     return base;
 }

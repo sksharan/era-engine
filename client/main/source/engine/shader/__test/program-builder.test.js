@@ -75,6 +75,9 @@ describe('Program builder build', () => {
         assertTexcoordData(programData);
     });
 
+    it('should succeed with position and color enabled', () => {
+        builder.addPosition().addColor().build();
+    });
     it('should succeed with position, texcoord, and color enabled', () => {
         builder.addPosition().addTexcoord().addColor().build();
     });

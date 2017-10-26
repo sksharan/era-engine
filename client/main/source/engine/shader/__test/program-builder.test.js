@@ -42,10 +42,6 @@ describe('Program builder build', () => {
         assert.equal(1.5, programData.positionScaleFactor);
     });
 
-    it('should succeed with position and billboard clipping enabled', () => {
-        builder.addPosition().addBillboardClipping().build();
-    });
-
     it('should succeed with billboard position enabled', () => {
         builder.addBillboardPosition().build();
     });
@@ -62,6 +58,13 @@ describe('Program builder build', () => {
         assertPositionData(programData);
         assertNormalData(programData);
     });
+
+    it('should succeed with sphere clipping', () => {
+        builder.addPosition({scaleFactor: 0.5}).addSphereClipping({sphereRadius: 0.5}).build();
+    });
+    it('should succeed with sphere outlining', () => {
+        builder.addPosition().addNormal().addSphereOutlining({epsilon: 0.10}).build();
+    })
 
     it('should succeed with position and texcoord enabled', () => {
         builder.addPosition().addTexcoord().build();

@@ -95,10 +95,10 @@ function getTransformMaterial(useSphereClipping, sphereRadius, useSphereOutling)
     let programData = new ProgramBuilder();
     programData = programData.addPosition({scaleFactor: TransformScaleFactor});
     if (useSphereClipping) {
-        programData = programData.addSphereClipping(sphereRadius);
+        programData = programData.addSphereClipping({sphereRadius});
     }
     if (useSphereOutling) {
-        programData = programData.addNormal().addSphereOutlining(0.10);
+        programData = programData.addNormal().addSphereOutlining({epsilon: 0.10});
     }
     programData = programData.addTexcoord().build();
     return new Material({

@@ -117,7 +117,10 @@ export default class ProgramBuilder {
     }
 
     // Requires addPosition() to be called first with scaling applied
-    addSphereClipping(sphereRadius) {
+    addSphereClipping({sphereRadius}) {
+        if (!sphereRadius) {
+            throw new TypeError('No sphere radius specified');
+        }
         if (!this._positionScaleFactor) {
             throw new Error('addPosition() needs to be called first with a scaling factor');
         }
@@ -167,7 +170,10 @@ export default class ProgramBuilder {
         return this;
     }
     // Requires addPosition() and addNormal() to be called first
-    addSphereOutlining(epsilon) {
+    addSphereOutlining({epsilon}) {
+        if (!epsilon) {
+            throw new TypeError('Must specify an epsilon');
+        }
         this._fragBuilder.addUniformLines('uniform vec3 cameraPosition;');
         this._fragBuilder.addMainFunctionLines(`
             vec3 cameraToObject = normalize(cameraPosition-vec3(vPositionWorld));

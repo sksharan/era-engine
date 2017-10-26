@@ -75,11 +75,11 @@ export class TransformMesh extends Mesh {
     }
 }
 
-export const attachToBaseNode = ({base, mesh, generateBoundingBox=true, useBillboardClipping=false,
-        useSphereOutling=false}) => {
+export const attachToBaseNode = ({base, mesh, generateBoundingBox=true, useSphereClipping=false,
+        sphereRadius=0, useSphereOutling=false}) => {
     const objectNode = new GeometryNode(mat4.create(), {
         mesh,
-        material: getTransformMaterial(useBillboardClipping, useSphereOutling)
+        material: getTransformMaterial(useSphereClipping, sphereRadius, useSphereOutling)
     });
     base.addChild(objectNode);
 
@@ -91,11 +91,11 @@ export const attachToBaseNode = ({base, mesh, generateBoundingBox=true, useBillb
         objectNode.addChild(boundingBoxNode);
     }
 }
-function getTransformMaterial(useBillboardClipping, useSphereOutling) {
+function getTransformMaterial(useSphereClipping, sphereRadius, useSphereOutling) {
     let programData = new ProgramBuilder();
     programData = programData.addPosition({scaleFactor: TransformScaleFactor});
-    if (useBillboardClipping) {
-        programData = programData.addBillboardClipping();
+    if (useSphereClipping) {
+        programData = programData.addSphereClipping(sphereRadius);
     }
     if (useSphereOutling) {
         programData = programData.addNormal().addSphereOutlining(0.10);

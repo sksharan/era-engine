@@ -60,11 +60,14 @@ export default class ProgramBuilder {
         // vPositionWorld
         if (scaleFactor) {
             // https://www.opengl.org/discussion_boards/showthread.php/177936-draw-an-object-that-looks-the-same-size-regarles-the-distance-in-perspective-view
+            this._vertBuilder.addVaryingLines('varying float scale;')
             this._vertBuilder.addMainFunctionLines(`
                 float w = (projectionMatrix * viewMatrix * modelMatrix * vec4(0, 0, 0, 1)).w;
                 w *= ${scaleFactor};
+                scale = w;
                 vPositionWorld = modelMatrix * vec4(w * position, 1);
             `);
+            this._fragBuilder.addVaryingLines('varying float scale;');
             this._positionScaleFactor = scaleFactor;
         } else {
             this._vertBuilder.addMainFunctionLines(`
@@ -76,27 +79,6 @@ export default class ProgramBuilder {
 
         this._fragBuilder.addVaryingLines('varying vec4 vPositionWorld;');
 
-        return this;
-    }
-
-    // Requires addPosition() to be called first. Clips all geometry behind an invisible infinitely-large billboard.
-    addBillboardClipping() {
-        this._vertBuilder.addVaryingLines('varying vec3 vPlaneNormal;')
-                         .addVaryingLines('varying vec4 vPlanePosition;')
-                         .addMainFunctionLines(`
-                             vec3 cameraRightWorld = normalize(vec3(viewMatrix[0][0], viewMatrix[1][0], viewMatrix[2][0]));
-                             vec3 cameraUpWorld = normalize(vec3(viewMatrix[0][1], viewMatrix[1][1], viewMatrix[2][1]));
-                             vPlaneNormal = normalize(cross(cameraRightWorld, cameraUpWorld));
-                             vPlanePosition = modelMatrix * vec4(0, 0, 0, 1);
-                         `);
-        // https://math.stackexchange.com/questions/2036116/plane-formula-explanation-and-implicit-form
-        this._fragBuilder.addVaryingLines('varying vec3 vPlaneNormal;')
-                         .addVaryingLines('varying vec4 vPlanePosition;')
-                         .addMainFunctionLines(`
-                             if (dot(vec3(vPositionWorld-vPlanePosition), vPlaneNormal) < 0.0) {
-                                 discard;
-                             }
-                         `);
         return this;
     }
 
@@ -134,6 +116,56 @@ export default class ProgramBuilder {
         return this;
     }
 
+    // Requires addPosition() to be called first with scaling applied
+    addSphereClipping(sphereRadius) {
+        if (!this._positionScaleFactor) {
+            throw new Error('addPosition() needs to be called first with a scaling factor');
+        }
+        // Uses the "geometric solution" from
+        // https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-sphere-intersection
+        this._fragBuilder.addUniformLines('uniform vec3 cameraPosition;')
+                         .addUniformLines('uniform mat4 modelMatrix;')
+                         .addFunction(`
+                             bool shouldDiscard() {
+                                 vec3 rayDir = normalize(vec3(vPositionWorld) - cameraPosition);
+                                 vec3 sphereCenter = vec3(modelMatrix * vec4(0, 0, 0, 1));
+                                 float radius2 = (float(${sphereRadius})*float(scale)) * (float(${sphereRadius})*float(scale));
+
+                                 vec3 L = sphereCenter - cameraPosition;
+                                 float tca = dot(L, rayDir);
+                                 float d2 = dot(L, L) - tca * tca;
+                                 if (d2 > radius2) {
+                                     return false;
+                                 }
+                                 float thc = sqrt(radius2 - d2);
+                                 float t0 = tca - thc;
+                                 float t1 = tca + thc;
+
+                                 if (t0 > t1) {
+                                     float temp = t0;
+                                     t0 = t1;
+                                     t1 = temp;
+                                 }
+                                 if (t0 < 0.0) {
+                                     t0 = t1;
+                                     if (t0 < 0.0) {
+                                         return false;
+                                     }
+                                 }
+
+                                 if (t0 < length(vec3(vPositionWorld) - cameraPosition)) {
+                                     return true;
+                                 }
+                                 return false;
+                             }
+                         `)
+                         .addMainFunctionLines(`
+                             if (shouldDiscard()) {
+                                 discard;
+                             }
+                         `);
+        return this;
+    }
     // Requires addPosition() and addNormal() to be called first
     addSphereOutlining(epsilon) {
         this._fragBuilder.addUniformLines('uniform vec3 cameraPosition;');
@@ -255,6 +287,7 @@ export default class ProgramBuilder {
     }
 
     build() {
+        this._vertBuilder.setPrecisionLine('precision mediump float;');
         this._fragBuilder.setPrecisionLine('precision mediump float;');
         this._fragBuilder.addMainFunctionLines('gl_FragColor = fragColor;');
 

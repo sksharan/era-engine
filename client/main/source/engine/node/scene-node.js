@@ -27,11 +27,6 @@ export default class SceneNode {
         this._worldMatrix = mat4.create();
         /* The normal matrix for this node; the inverse-transverse of the world matrix. */
         this._normalMatrix = mat3.create();
-
-        /* Total amount of translation, scaling, rotation currently applied. */
-        this._translate = mat4.create();
-        this._scale = mat4.create();
-        this._rotate = mat4.create();
     }
 
     get nodeType() {
@@ -53,7 +48,6 @@ export default class SceneNode {
         return this._normalMatrix;
     }
 
-    // Set the local matrix directly
     set localMatrix(localMatrix) {
         this._localMatrix = localMatrix;
         if (this._parent) {
@@ -62,53 +56,51 @@ export default class SceneNode {
             updateWorldMatrix(this, mat4.create());
         }
     }
-    // Change the local matrix indirectly by applying translation, scaling, rotation
-    applyTranslation(translation) {
+    applyTranslation(translationMatrix) {
         if (CurrentTransformOrientation.isGlobal()) {
-            this._translate = mat4.mul(mat4.create(), this._translate, translation);
+            this.localMatrix = mat4.mul(this._localMatrix, translationMatrix, this._localMatrix);
         } else if (CurrentTransformOrientation.isLocal()) {
-            // https://gamedev.stackexchange.com/questions/31705/translate-along-local-axis
-            const translationVector = mat4.getTranslation(vec3.create(), translation);
-            vec3.transformMat4(translationVector, translationVector, this._rotate);
-            this._translate = mat4.mul(mat4.create(), this._translate,
-                    mat4.fromTranslation(translation, translationVector));
-        }
-        this._updateLocalMatrix();
-    }
-    applyScaling(scaling) {
-        if (CurrentTransformOrientation.isGlobal()) {
-            this._scale = mat4.mul(mat4.create(), this._scale, scaling);
-        } else if (CurrentTransformOrientation.isLocal()) {
-            this._scale = mat4.mul(mat4.create(), this._scale, scaling);
-        }
-        this._updateLocalMatrix();
-    }
-    applyRotation(rotation) {
-        if (CurrentTransformOrientation.isGlobal()) {
-            this._rotate = mat4.mul(mat4.create(), rotation, this._rotate);
-        } else if (CurrentTransformOrientation.isLocal()) {
-            this._rotate = mat4.mul(mat4.create(), this._rotate, rotation);
-        }
-        this._updateLocalMatrix();
-    }
-    _updateLocalMatrix() {
-        if (CurrentTransformOrientation.isGlobal()) {
-            this.localMatrix = mat4.mul(mat4.create(),this._translate,
-                    mat4.mul(mat4.create(), this._scale, this._rotate));
-        } else if (CurrentTransformOrientation.isLocal()) {
-            this.localMatrix = mat4.mul(mat4.create(),this._translate,
-                    mat4.mul(mat4.create(), this._rotate, this._scale));
+            this.localMatrix = mat4.mul(this._localMatrix, this._localMatrix, translationMatrix);
         }
     }
+    applyScaling(scalingMatrix) {
+        if (CurrentTransformOrientation.isGlobal()) {
+            this._transformAtOrigin((mat) => {
+                mat4.mul(mat, scalingMatrix, mat);
+            });
+        } else if (CurrentTransformOrientation.isLocal()) {
+            this._transformAtOrigin((mat) => {
+                mat4.mul(mat, mat, scalingMatrix);
+            });
+        }
+    }
+    applyRotation(rotationMatrix) {
+        if (CurrentTransformOrientation.isGlobal()) {
+            this._transformAtOrigin((mat) => {
+                mat4.mul(mat, rotationMatrix, mat);
+            });
+        } else if (CurrentTransformOrientation.isLocal()) {
+            this._transformAtOrigin((mat) => {
+                mat4.mul(mat, mat, rotationMatrix);
+            });
+        }
+    }
+    _transformAtOrigin(originFunction) {
+        const currMatrix = mat4.copy(mat4.create(), this._localMatrix);
+        const translationVector = mat4.getTranslation(vec3.create(), currMatrix);
 
-    resetTranslation() {
-        this._translate = mat4.create();
-    }
-    resetScaling() {
-        this._scale = mat4.create();
-    }
-    resetRotation() {
-        this._rotate = mat4.create();
+        // Translate to origin
+        currMatrix[12] = 0;
+        currMatrix[13] = 0;
+        currMatrix[14] = 0;
+        // Apply transformation at origin
+        originFunction(currMatrix);
+        // Translate back to original position
+        currMatrix[12] = translationVector[0];
+        currMatrix[13] = translationVector[1];
+        currMatrix[14] = translationVector[2];
+
+        this.localMatrix = currMatrix;
     }
 
     addChild(child) {

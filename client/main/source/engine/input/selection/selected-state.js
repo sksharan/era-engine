@@ -133,9 +133,10 @@ export class SelectedState extends SelectionState {
             if (transformGizmoComponentNode.children.length > 1) {
                 console.warn('Expected gizmo component to have no more than one child (a bounding box)');
             } else {
-                transformGizmoComponentNode.children[0].resetScaling();
-                transformGizmoComponentNode.children[0].applyScaling(
-                        mat4.fromScaling(mat4.create(), vec3.fromValues(scale, scale, scale)));
+                const child = transformGizmoComponentNode.children[0];
+                const currScale = mat4.getScaling(vec3.create(), child.localMatrix);
+                transformGizmoComponentNode.children[0].applyScaling(mat4.fromScaling(mat4.create(),
+                    vec3.fromValues(1.0/currScale[0] * scale, 1.0/currScale[1] * scale, 1.0/currScale[2] * scale)));
             }
         }
     }

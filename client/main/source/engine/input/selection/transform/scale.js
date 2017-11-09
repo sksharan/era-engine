@@ -1,22 +1,11 @@
 import {TransformMesh, attachToBaseNode} from './transform'
-import {whiteColor, redColor, greenColor, blueColor} from './color'
+import {redColor, greenColor, blueColor} from './color'
 import {SceneNode} from '../../../node/index'
 import {gl} from '../../../gl'
 import {CurrentTransformOrientation} from '../../../global/index'
 import {mat4, vec3} from 'gl-matrix'
 
-class ScaleBaseMesh extends TransformMesh {
-    constructor(meshArgs) {
-        super(meshArgs);
-        this._scaleFactor = 0.03;
-    }
-    handleUniformTransform({baseSceneNode, intersectionDelta, intersectionPoint}) {
-        super.handleTransform({baseSceneNode, intersectionDelta, intersectionPoint});
-        handleScaling({baseSceneNode, intersectionDelta, intersectionPoint}, ['x', 'y', 'z'], this._scaleFactor);
-    }
-}
-
-class ScaleHandleMesh extends ScaleBaseMesh {
+class ScaleMesh extends TransformMesh {
     constructor(transform) {
         const shaftLength = 75.0;
         const shaftSize = 1.0;
@@ -78,9 +67,14 @@ class ScaleHandleMesh extends ScaleBaseMesh {
             indices,
             numVertices: positions.length
         });
+        this._scaleFactor = 0.03;
+    }
+    handleUniformTransform({baseSceneNode, intersectionDelta, intersectionPoint}) {
+        super.handleTransform({baseSceneNode, intersectionDelta, intersectionPoint});
+        handleScaling({baseSceneNode, intersectionDelta, intersectionPoint}, ['x', 'y', 'z'], this._scaleFactor);
     }
 }
-class ScaleXMesh extends ScaleHandleMesh {
+class ScaleXMesh extends ScaleMesh {
     constructor() {
         super(mat4.create());
     }
@@ -99,7 +93,7 @@ class ScaleXMesh extends ScaleHandleMesh {
         }
     }
 }
-class ScaleYMesh extends ScaleHandleMesh {
+class ScaleYMesh extends ScaleMesh {
     constructor() {
         super(mat4.fromRotation(mat4.create(), 3.14/2, vec3.fromValues(0, 0, 1)));
     }
@@ -118,7 +112,7 @@ class ScaleYMesh extends ScaleHandleMesh {
         }
     }
 }
-class ScaleZMesh extends ScaleHandleMesh {
+class ScaleZMesh extends ScaleMesh {
     constructor() {
         super(mat4.fromRotation(mat4.create(), -3.14/2, vec3.fromValues(0, 1, 0)));
     }
@@ -135,68 +129,6 @@ class ScaleZMesh extends ScaleHandleMesh {
             super.handleTransform({baseSceneNode, intersectionDelta, intersectionPoint});
             handleScaling({baseSceneNode, intersectionDelta, intersectionPoint}, ['z'], this._scaleFactor);
         }
-    }
-}
-
-class ScaleCenterMesh extends ScaleBaseMesh {
-    constructor() {
-        const size = 5.0;
-        const positions = [
-            -size, -size,  size,
-             size, -size,  size,
-             size,  size,  size,
-            -size,  size,  size,
-            -size, -size, -size,
-             size, -size, -size,
-             size,  size, -size,
-            -size,  size, -size,
-        ];
-        // Normals not needed
-        const normals = new Array(positions.length).fill(0);
-        // Texcoords not needed
-        const texcoords = new Array(positions.length*2/3).fill(0);
-
-        const indices = [
-            // Side 1
-            0, 1, 2,
-            2, 3, 0,
-            // Side 2
-            1, 5, 6,
-            6, 2, 1,
-            // Side 3
-            0, 3, 4,
-            4, 3, 7,
-            // Side 4
-            7, 5, 4,
-            5, 7, 6,
-            // Side 5
-            0, 5, 1,
-            0, 4, 5,
-            // Side 6
-            3, 2, 6,
-            3, 6, 7,
-        ];
-        super({
-            drawMode: gl.TRIANGLES,
-            positions,
-            normals,
-            texcoords,
-            indices,
-            numVertices: positions.length
-        });
-    }
-    generateBoundingPlaneNode() {
-        return this._generateBoundingBoxNode([this._min, this._min, 0, this._max, this._max, 0]);
-    }
-    generateAxisLineGeometryNode() {
-        const base = new SceneNode();
-        base.addChild(this._generateAxisLineGeometryNode([this._min, 0, 0, this._max, 0, 0], redColor));
-        base.addChild(this._generateAxisLineGeometryNode([0, this._min, 0, 0, this._max, 0], greenColor));
-        base.addChild(this._generateAxisLineGeometryNode([0, 0, this._min, 0, 0, this._max], blueColor));
-        return base;
-    }
-    handleTransform({baseSceneNode, intersectionDelta, intersectionPoint}) {
-        super.handleUniformTransform({baseSceneNode, intersectionDelta, intersectionPoint});
     }
 }
 
@@ -232,6 +164,5 @@ export const createScaleNode = () => {
     attachToBaseNode({base, mesh: new ScaleXMesh(), color: redColor});
     attachToBaseNode({base, mesh: new ScaleYMesh(), color: greenColor});
     attachToBaseNode({base, mesh: new ScaleZMesh(), color: blueColor});
-    attachToBaseNode({base, mesh: new ScaleCenterMesh(), color: whiteColor});
     return base;
 }

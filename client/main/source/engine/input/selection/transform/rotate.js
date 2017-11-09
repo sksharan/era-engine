@@ -2,6 +2,7 @@ import {TransformMesh, attachToBaseNode} from './transform'
 import {redColor, greenColor, blueColor, blackColor} from './color'
 import {SceneNode} from '../../../node/index'
 import {Sphere} from '../../../mesh/index'
+import {CurrentTransformOrientation} from '../../../global/index'
 import {gl} from '../../../gl'
 import {mat4, vec3, glMatrix} from 'gl-matrix'
 
@@ -147,13 +148,23 @@ class RotateZMesh extends RotateMesh {
 }
 
 function getRadiansForRotation({baseSceneNode, intersectionDelta, intersectionPoint}, idx1, idx2) {
-    const baseTransform = mat4.getTranslation(vec3.create(), baseSceneNode.worldMatrix);
+    const baseTranslation = mat4.getTranslation(vec3.create(), baseSceneNode.worldMatrix);
+    const W = mat4.copy(mat4.create(), baseSceneNode.worldMatrix);
+    W[12] = W[13] = W[14] = 0;
 
-    const delta1 = vec3.subtract(vec3.create(), intersectionPoint, baseTransform);
+    const delta1 = vec3.subtract(vec3.create(),
+            CurrentTransformOrientation.isGlobal()
+                ? intersectionPoint
+                : vec3.transformMat4(vec3.create(), intersectionPoint, W),
+            baseTranslation);
     const rad1 = Math.atan2(delta1[idx1], delta1[idx2]);
 
     const lastIntersectionPoint = vec3.subtract(vec3.create(), intersectionPoint, intersectionDelta);
-    const delta2 = vec3.subtract(vec3.create(), lastIntersectionPoint, baseTransform);
+    const delta2 = vec3.subtract(vec3.create(),
+            CurrentTransformOrientation.isGlobal()
+                ? lastIntersectionPoint
+                : vec3.transformMat4(vec3.create(), lastIntersectionPoint, W),
+            baseTranslation);
     const rad2 = Math.atan2(delta2[idx1], delta2[idx2]);
 
     return rad1 - rad2;

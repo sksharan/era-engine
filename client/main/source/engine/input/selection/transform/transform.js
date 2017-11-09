@@ -10,8 +10,8 @@ export class TransformMesh extends Mesh {
     constructor(meshArgs) {
         super(meshArgs);
         this._positions = meshArgs.positions;
-        this._min = -1000;
-        this._max = 1000;
+        this._min = -5000;
+        this._max = 5000;
     }
     get positions() {
         return this._positions;
@@ -23,9 +23,8 @@ export class TransformMesh extends Mesh {
         return new GeometryNode(mat4.create(), {
             mesh: new BoundingBox(positions),
             material: new Material({
-                programData: new ProgramBuilder()
-                        .addPosition().addTexcoord().build(),
-                color: vec4.fromValues(0.5, 0.5, 0.5, 1.0),
+                programData: new ProgramBuilder().addPosition().addColor().build(),
+                color: vec4.fromValues(0.0, 0.0, 0.0, 1.0),
                 isVisible: false
             })
         });

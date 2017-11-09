@@ -8,15 +8,11 @@ import {mat4, vec3} from 'gl-matrix'
 class ScaleBaseMesh extends TransformMesh {
     constructor(meshArgs) {
         super(meshArgs);
-        this._scaleFactor = 0.01;
+        this._scaleFactor = 0.03;
     }
-    handleUniformTransform({baseSceneNode, intersectionDelta}) {
-        super.handleTransform({baseSceneNode, intersectionDelta});
-        const scale = mat4.fromScaling(mat4.create(), vec3.fromValues(
-                1+intersectionDelta[0]*this._scaleFactor,
-                1+intersectionDelta[0]*this._scaleFactor,
-                1+intersectionDelta[0]*this._scaleFactor));
-        baseSceneNode.applyScaling(scale);
+    handleUniformTransform({baseSceneNode, intersectionDelta, intersectionPoint}) {
+        super.handleTransform({baseSceneNode, intersectionDelta, intersectionPoint});
+        handleScaling({baseSceneNode, intersectionDelta, intersectionPoint}, ['x', 'y', 'z'], this._scaleFactor);
     }
 }
 
@@ -94,13 +90,12 @@ class ScaleXMesh extends ScaleHandleMesh {
     generateAxisLineGeometryNode() {
         return this._generateAxisLineGeometryNode([this._min, 0, 0, this._max, 0, 0], redColor);
     }
-    handleTransform({baseSceneNode, intersectionDelta}) {
+    handleTransform({baseSceneNode, intersectionDelta, intersectionPoint}) {
         if (CurrentTransformOrientation.isGlobal()) {
-            super.handleUniformTransform({baseSceneNode, intersectionDelta});
+            super.handleUniformTransform({baseSceneNode, intersectionDelta, intersectionPoint});
         } else if (CurrentTransformOrientation.isLocal()) {
-            super.handleTransform({baseSceneNode, intersectionDelta});
-            const scale = mat4.fromScaling(mat4.create(), vec3.fromValues(1+intersectionDelta[0]*this._scaleFactor, 1, 1));
-            baseSceneNode.applyScaling(scale);
+            super.handleTransform({baseSceneNode, intersectionDelta, intersectionPoint});
+            handleScaling({baseSceneNode, intersectionDelta, intersectionPoint}, ['x'], this._scaleFactor);
         }
     }
 }
@@ -114,13 +109,12 @@ class ScaleYMesh extends ScaleHandleMesh {
     generateAxisLineGeometryNode() {
         return this._generateAxisLineGeometryNode([0, this._min, 0, 0, this._max, 0], greenColor);
     }
-    handleTransform({baseSceneNode, intersectionDelta}) {
+    handleTransform({baseSceneNode, intersectionDelta, intersectionPoint}) {
         if (CurrentTransformOrientation.isGlobal()) {
-            super.handleUniformTransform({baseSceneNode, intersectionDelta});
+            super.handleUniformTransform({baseSceneNode, intersectionDelta, intersectionPoint});
         } else if (CurrentTransformOrientation.isLocal()) {
-            super.handleTransform({baseSceneNode, intersectionDelta});
-            const scale = mat4.fromScaling(mat4.create(), vec3.fromValues(1, 1+intersectionDelta[1]*this._scaleFactor, 1));
-            baseSceneNode.applyScaling(scale);
+            super.handleTransform({baseSceneNode, intersectionDelta, intersectionPoint});
+            handleScaling({baseSceneNode, intersectionDelta, intersectionPoint}, ['y'], this._scaleFactor);
         }
     }
 }
@@ -134,13 +128,12 @@ class ScaleZMesh extends ScaleHandleMesh {
     generateAxisLineGeometryNode() {
         return this._generateAxisLineGeometryNode([0, 0, this._min, 0, 0, this._max], blueColor);
     }
-    handleTransform({baseSceneNode, intersectionDelta}) {
+    handleTransform({baseSceneNode, intersectionDelta, intersectionPoint}) {
         if (CurrentTransformOrientation.isGlobal()) {
-            super.handleUniformTransform({baseSceneNode, intersectionDelta});
+            super.handleUniformTransform({baseSceneNode, intersectionDelta, intersectionPoint});
         } else if (CurrentTransformOrientation.isLocal()) {
-            super.handleTransform({baseSceneNode, intersectionDelta});
-            const scale = mat4.fromScaling(mat4.create(), vec3.fromValues(1, 1, 1+intersectionDelta[2]*this._scaleFactor));
-            baseSceneNode.applyScaling(scale);
+            super.handleTransform({baseSceneNode, intersectionDelta, intersectionPoint});
+            handleScaling({baseSceneNode, intersectionDelta, intersectionPoint}, ['z'], this._scaleFactor);
         }
     }
 }
@@ -202,9 +195,35 @@ class ScaleCenterMesh extends ScaleBaseMesh {
         base.addChild(this._generateAxisLineGeometryNode([0, 0, this._min, 0, 0, this._max], blueColor));
         return base;
     }
-    handleTransform({baseSceneNode, intersectionDelta}) {
-        super.handleUniformTransform({baseSceneNode, intersectionDelta});
+    handleTransform({baseSceneNode, intersectionDelta, intersectionPoint}) {
+        super.handleUniformTransform({baseSceneNode, intersectionDelta, intersectionPoint});
     }
+}
+
+function handleScaling({baseSceneNode, intersectionDelta, intersectionPoint}, axes, scalingFactor) {
+    const baseWorldPosition = mat4.getTranslation(vec3.create(), baseSceneNode.worldMatrix);
+    const lastIntersection = vec3.sub(vec3.create(), intersectionPoint, intersectionDelta);
+    const scaleUp = vec3.dist(baseWorldPosition, intersectionPoint) > vec3.dist(baseWorldPosition, lastIntersection);
+    const scale = vec3.fromValues(1, 1, 1);
+    if (axes.includes('x')) {
+        scale[0] = scaleUp
+                ? 1 + Math.abs(intersectionDelta[0]) * scalingFactor
+                : 1 - Math.abs(intersectionDelta[0]) * scalingFactor;
+    }
+    if (axes.includes('y')) {
+        scale[1] = scaleUp
+                ? 1 + Math.abs(intersectionDelta[1]) * scalingFactor
+                : 1 - Math.abs(intersectionDelta[1]) * scalingFactor;
+    }
+    if (axes.includes('z')) {
+        scale[2] = scaleUp
+                ? 1 + Math.abs(intersectionDelta[2]) * scalingFactor
+                : 1 - Math.abs(intersectionDelta[2]) * scalingFactor;
+    }
+    if (axes.includes('x') && axes.includes('y') && axes.includes('z')) {
+        scale[2] = scale[1] = scale[0]; // Uniform scaling on all axes
+    }
+    baseSceneNode.applyScaling(mat4.fromScaling(mat4.create(), scale));
 }
 
 export const createScaleNode = () => {

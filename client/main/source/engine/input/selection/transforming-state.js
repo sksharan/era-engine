@@ -23,6 +23,12 @@ export class TransformingState extends SelectionState {
         // the object without having to keep the mouse directly on the gizmo
         this._transformBoundingPlaneNode = this._transformGeometryNode.mesh.generateBoundingPlaneNode();
         this._transformBoundingBoxNode.addChild(this._transformBoundingPlaneNode);
+        if (CurrentTransformOrientation.isGlobal()) {
+            // To compute global rotation correctly, keep the bounding planes aligned with the world axes
+            this._transformBoundingPlaneNode.localMatrix =
+                    mat4.invert(mat4.create(), this._transformBoundingPlaneNode.parent.localMatrix);
+        }
+
         // Also attach an axis-line visualization
         this._transformAxisLineNode = this._transformGeometryNode.mesh.generateAxisLineGeometryNode();
         if (CurrentTransformOrientation.isGlobal()) {

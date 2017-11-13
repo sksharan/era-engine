@@ -75,15 +75,10 @@ export default class SceneNode {
         }
     }
     applyRotation(rotationMatrix) {
-        if (CurrentTransformOrientation.isGlobal()) {
-            this._transformAtOrigin((mat) => {
-                mat4.mul(mat, rotationMatrix, mat);
-            });
-        } else if (CurrentTransformOrientation.isLocal()) {
-            this._transformAtOrigin((mat) => {
-                mat4.mul(mat, mat, rotationMatrix);
-            });
-        }
+        // Rely on the caller to provide a rotation matrix that uses the correct global or local axis
+        this._transformAtOrigin((mat) => {
+            mat4.mul(mat, rotationMatrix, mat);
+        });
     }
     _transformAtOrigin(originFunction) {
         const currMatrix = mat4.copy(mat4.create(), this._localMatrix);

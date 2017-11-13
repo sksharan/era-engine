@@ -2,7 +2,6 @@ import {TransformMesh, attachToBaseNode} from './transform'
 import {redColor, greenColor, blueColor, blackColor} from './color'
 import {SceneNode} from '../../../node/index'
 import {Sphere} from '../../../mesh/index'
-import {CurrentTransformOrientation} from '../../../global/index'
 import {gl} from '../../../gl'
 import {mat4, vec3, glMatrix} from 'gl-matrix'
 
@@ -107,9 +106,7 @@ class RotateXMesh extends RotateMesh {
     }
     handleTransform({baseSceneNode, intersectionDelta, intersectionPoint}) {
         super.handleTransform({baseSceneNode, intersectionDelta, intersectionPoint});
-        const rad = getRadiansForRotation({baseSceneNode, intersectionDelta, intersectionPoint}, 2, 1);
-        const rotation = mat4.fromRotation(mat4.create(), rad, vec3.fromValues(1, 0, 0));
-        baseSceneNode.applyRotation(rotation);
+        handleRotation({baseSceneNode, intersectionDelta, intersectionPoint});
     }
 }
 class RotateYMesh extends RotateMesh {
@@ -124,9 +121,7 @@ class RotateYMesh extends RotateMesh {
     }
     handleTransform({baseSceneNode, intersectionDelta, intersectionPoint}) {
         super.handleTransform({baseSceneNode, intersectionDelta, intersectionPoint});
-        const rad = getRadiansForRotation({baseSceneNode, intersectionDelta, intersectionPoint}, 0, 2);
-        const rotation = mat4.fromRotation(mat4.create(), rad, vec3.fromValues(0, 1, 0));
-        baseSceneNode.applyRotation(rotation);
+        handleRotation({baseSceneNode, intersectionDelta, intersectionPoint});
     }
 }
 class RotateZMesh extends RotateMesh {
@@ -141,33 +136,26 @@ class RotateZMesh extends RotateMesh {
     }
     handleTransform({baseSceneNode, intersectionDelta, intersectionPoint}) {
         super.handleTransform({baseSceneNode, intersectionDelta, intersectionPoint});
-        const rad = getRadiansForRotation({baseSceneNode, intersectionDelta, intersectionPoint}, 1, 0);
-        const rotation = mat4.fromRotation(mat4.create(), rad, vec3.fromValues(0, 0, 1));
-        baseSceneNode.applyRotation(rotation);
+        handleRotation({baseSceneNode, intersectionDelta, intersectionPoint});
     }
 }
 
-function getRadiansForRotation({baseSceneNode, intersectionDelta, intersectionPoint}, idx1, idx2) {
+function handleRotation({baseSceneNode, intersectionDelta, intersectionPoint}) {
     const baseTranslation = mat4.getTranslation(vec3.create(), baseSceneNode.worldMatrix);
-    const W = mat4.copy(mat4.create(), baseSceneNode.worldMatrix);
-    W[12] = W[13] = W[14] = 0;
-
-    const delta1 = vec3.subtract(vec3.create(),
-            CurrentTransformOrientation.isGlobal()
-                ? intersectionPoint
-                : vec3.transformMat4(vec3.create(), intersectionPoint, W),
-            baseTranslation);
-    const rad1 = Math.atan2(delta1[idx1], delta1[idx2]);
-
     const lastIntersectionPoint = vec3.subtract(vec3.create(), intersectionPoint, intersectionDelta);
-    const delta2 = vec3.subtract(vec3.create(),
-            CurrentTransformOrientation.isGlobal()
-                ? lastIntersectionPoint
-                : vec3.transformMat4(vec3.create(), lastIntersectionPoint, W),
-            baseTranslation);
-    const rad2 = Math.atan2(delta2[idx1], delta2[idx2]);
 
-    return rad1 - rad2;
+    const baseToLastIntersection = vec3.sub(vec3.create(), lastIntersectionPoint, baseTranslation);
+    vec3.normalize(baseToLastIntersection, baseToLastIntersection);
+
+    const baseToIntersection = vec3.sub(vec3.create(), intersectionPoint, baseTranslation);
+    vec3.normalize(baseToIntersection, baseToIntersection);
+
+    const rotationAxis = vec3.cross(vec3.create(), baseToLastIntersection, baseToIntersection);
+    vec3.normalize(rotationAxis, rotationAxis);
+
+    const rad = Math.acos(vec3.dot(baseToLastIntersection, baseToIntersection));
+    const rotation = mat4.fromRotation(mat4.create(), rad, rotationAxis);
+    baseSceneNode.applyRotation(rotation);
 }
 
 export const createRotateNode = () => {

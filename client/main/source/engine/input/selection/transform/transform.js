@@ -10,8 +10,8 @@ export class TransformMesh extends Mesh {
     constructor(meshArgs) {
         super(meshArgs);
         this._positions = meshArgs.positions;
-        this._min = -5000;
-        this._max = 5000;
+        this._min = -10000;
+        this._max = 10000;
     }
     get positions() {
         return this._positions;

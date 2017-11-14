@@ -152,9 +152,17 @@ function handleRotation({baseSceneNode, intersectionDelta, intersectionPoint}) {
 
     const rotationAxis = vec3.cross(vec3.create(), baseToLastIntersection, baseToIntersection);
     vec3.normalize(rotationAxis, rotationAxis);
+    if (rotationAxis[0] == 0 && rotationAxis[1] == 0 && rotationAxis[2] == 0) {
+        return; // Cannot rotate around the zero vector
+    }
 
     const rad = Math.acos(vec3.dot(baseToLastIntersection, baseToIntersection));
     const rotation = mat4.fromRotation(mat4.create(), rad, rotationAxis);
+    for (let i = 0; i < 16; i++) {
+        if (Number.isNaN(rotation[i])) {
+            return; // Bad rotation matrix produced
+        }
+    }
     baseSceneNode.applyRotation(rotation);
 }
 

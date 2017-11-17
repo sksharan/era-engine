@@ -2,8 +2,8 @@ import {expect} from 'chai'
 import request from 'supertest'
 import app from '../../app'
 import {ObjectRouterEndpoint} from '../object-router'
+import {SceneNodeRouterEndpoint} from '../scene-node-router'
 import {ObjectSceneNodePrefix} from '../../service/object-service'
-import {SceneNodeSelectFields, getSceneNode} from '../../graphql/__test/util/scene-node-util'
 import {
     connectDb,
     db,
@@ -11,6 +11,7 @@ import {
     FileChunkCollection,
     SceneNodeCollection
 } from '../../database'
+import {getSceneNode} from './util/scene-node-util'
 
 const pathToTest = 'main/router/__test';
 
@@ -173,40 +174,25 @@ describe('Object router', () => {
 
     it('should allow object ref scene node to be created after zip is uploaded', async() => {
         const sceneNodes = await uploadSpider();
-
-        const node = {name: 'a', path: '/a'};
-        const res = await request(app)
-            .post('/graphql')
-            .send({'query': `
-                mutation {
-                    saveObjectRefSceneNode(sceneNode: ${getSceneNode(node)},
-                            content: {objectSceneNodeId: "${sceneNodes[0].id}"}) {
-                        ${SceneNodeSelectFields}
-                    }
-                }
-            `})
-            .expect(200);
-
-        expect(JSON.parse(res.text).errors).to.be.undefined;
-        expect(JSON.parse(res.text).data.saveObjectRefSceneNode).to.be.defined;
+        const node = getSceneNode({name: 'a', path: '/a'});
+        node.objectSceneNodeId = sceneNodes[0].id;
+        await request(app)
+            .post(SceneNodeRouterEndpoint)
+            .send(node)
+            .expect(201);
     });
 });
 
 async function uploadSpider() {
     await request(app)
         .post(ObjectRouterEndpoint)
-        .attach('spider', `${pathToTest}/resources/assimp-spider.zip`, 'assimp-spider.zip');
+        .attach('spider', `${pathToTest}/resources/assimp-spider.zip`, 'assimp-spider.zip')
+        .expect(201);
 
     const res = await request(app)
-        .post('/graphql')
-        .send({'query': `
-            {
-                sceneNodes(pathRegex: ".*") {
-                    ${SceneNodeSelectFields}
-                }
-            }
-        `})
+        .get(SceneNodeRouterEndpoint)
+        .query({pathRegex: '.*'}) // Get all scene nodes
         .expect(200);
 
-    return JSON.parse(res.text).data.sceneNodes;
+    return res.body;
 }

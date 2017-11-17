@@ -1,26 +1,24 @@
 import path from 'path'
 import express from 'express';
+import bodyParser from 'body-parser'
 import exphbs from 'express-handlebars';
-import graphQLHTTP from 'express-graphql';
 import cors from 'cors';
 import config, {isTest} from './config';
 import {connectDb} from './database'
-import {Schema} from './graphql/index'
 import {FileRouter, FileRouterEndpoint} from './router/file-router'
 import {ObjectRouter, ObjectRouterEndpoint} from './router/object-router'
+import {SceneNodeRouter, SceneNodeRouterEndpoint} from './router/scene-node-router'
 
 const app = express();
 
 connectDb().then(() => {
     app.use(cors());
 
+    app.use(bodyParser.json());
+
     app.use(FileRouterEndpoint, FileRouter);
     app.use(ObjectRouterEndpoint, ObjectRouter);
-
-    app.use('/graphql', graphQLHTTP({
-        schema: Schema,
-        graphiql: true
-    }));
+    app.use(SceneNodeRouterEndpoint, SceneNodeRouter);
 
     const viewDir = path.join(__dirname, 'view');
     app.set('views', viewDir);

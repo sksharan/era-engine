@@ -1,4 +1,4 @@
-import * as FileDao from '../dao/file-dao'
+import {FileDao} from '../dao/index'
 import streamifier from 'streamifier'
 
 export const getAllFileMetadata = () => {

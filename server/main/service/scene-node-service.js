@@ -1,4 +1,4 @@
-import * as SceneNodeDao from '../dao/scene-node-dao'
+import {SceneNodeDao} from '../dao/index'
 
 export const getSceneNode = (id) => {
     return SceneNodeDao.getSceneNode(id);

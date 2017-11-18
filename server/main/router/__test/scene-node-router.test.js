@@ -1,8 +1,8 @@
 import {expect} from 'chai'
 import request from 'supertest'
 import app from '../../app'
-import {connectDb, db, SceneNodeCollection} from '../../database'
 import {SceneNodeRouterEndpoint} from '../scene-node-router'
+import {connectDb, db, SceneNodeCollection} from '../../database/index'
 import {SceneNodeType} from '../../enum/index'
 import {getLight, getSceneNode} from './util/scene-node-util'
 

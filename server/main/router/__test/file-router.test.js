@@ -1,8 +1,8 @@
 import {expect} from 'chai'
 import request from 'supertest'
 import app from '../../app'
-import {connectDb, db, FileMetadataCollection, FileChunkCollection} from '../../database'
 import {FileRouterEndpoint} from '../file-router'
+import {connectDb, db, FileMetadataCollection, FileChunkCollection} from '../../database/index'
 
 const pathToTest = 'main/router/__test';
 

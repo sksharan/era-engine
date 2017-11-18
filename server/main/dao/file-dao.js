@@ -1,4 +1,4 @@
-import {bucket, db, FileMetadataCollection} from '../database'
+import {bucket, db, FileMetadataCollection} from '../database/index'
 import {ObjectId} from 'mongodb'
 
 export const getAllFileMetadata = async () => {

@@ -1,15 +1,6 @@
 import express from 'express'
-import {ObjectSceneNodePrefix} from '../service/object-service'
-import {
-    getSceneNode,
-    getSceneNodes,
-    saveSceneNode,
-    deleteSceneNodes,
-} from '../service/scene-node-service'
-import {
-    LightType,
-    SceneNodeType,
-} from '../enum/index'
+import {ObjectService, SceneNodeService} from '../service/index'
+import {LightType, SceneNodeType} from '../enum/index'
 
 const router = express.Router();
 
@@ -20,7 +11,7 @@ const defaultPathRegex = '.*';
 
 router.get('/', async (req, res) => {
     const pathRegex = req.query.pathRegex || defaultPathRegex;
-    const sceneNodes = await getSceneNodes(pathRegex);
+    const sceneNodes = await SceneNodeService.getSceneNodes(pathRegex);
     res.status(200).json(sceneNodes);
 });
 
@@ -31,7 +22,7 @@ router.post('/', async (req, res) => {
         res.status(400).json({errors});
         return;
     }
-    const savedSceneNode = await saveSceneNode(sceneNode);
+    const savedSceneNode = await SceneNodeService.saveSceneNode(sceneNode);
     res.status(201).json(savedSceneNode);
 });
 // TODO: add a type system like Flow or TypeScript for more in-depth validation
@@ -53,10 +44,10 @@ async function validateSceneNode(sceneNode) {
         errors.push(`Cannot create ${SceneNodeType.OBJECT} node through this endpoint`);
     }
     if (sceneNode.type === SceneNodeType.OBJECT_REF) {
-        const doc = await getSceneNode(sceneNode.content.objectSceneNodeId);
+        const doc = await SceneNodeService.getSceneNode(sceneNode.content.objectSceneNodeId);
         if (doc === null) {
             errors.push(`No scene node with id ${sceneNode.content.objectSceneNodeId}`);
-        } else if (!doc.path.startsWith(ObjectSceneNodePrefix)) {
+        } else if (!doc.path.startsWith(ObjectService.ObjectSceneNodePrefix)) {
             errors.push('Scene node detected, but is not valid object scene node');
         }
     }
@@ -68,7 +59,7 @@ async function validateSceneNode(sceneNode) {
 
 router.delete('/', async (req, res) => {
     const pathRegex = req.query.pathRegex || defaultPathRegex;
-    const deletedSceneNodes = await deleteSceneNodes(pathRegex);
+    const deletedSceneNodes = await SceneNodeService.deleteSceneNodes(pathRegex);
     res.status(200).json(deletedSceneNodes);
 });
 

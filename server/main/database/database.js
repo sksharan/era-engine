@@ -1,7 +1,6 @@
 import mongodb from 'mongodb'
-import config, {isTest} from './config'
+import {appConfig, isTest} from '../config/index'
 
-// Must call connectDb() first to initialize
 export let db = null;
 export let bucket = null;
 
@@ -10,10 +9,10 @@ export const connectDb = () => {
         if (db !== null) {
             resolve();
         }
-        mongodb.MongoClient.connect(config.database.url)
+        mongodb.MongoClient.connect(appConfig.database.url)
             .then((database) => {
                 if (!isTest) {
-                    console.log('Connected to database ' + config.database.url);
+                    console.log('Connected to database ' + appConfig.database.url);
                 }
                 db = database;
                 bucket = new mongodb.GridFSBucket(db);
@@ -25,8 +24,3 @@ export const connectDb = () => {
             });
     });
 };
-
-export const FileMetadataCollection = 'fs.files';
-export const FileChunkCollection = 'fs.chunks';
-export const LightCollection = 'lights';
-export const SceneNodeCollection = 'sceneNodes';

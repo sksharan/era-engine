@@ -1,19 +1,14 @@
 import {expect} from 'chai'
 import request from 'supertest'
 import app from '../../app'
-import {ObjectRouterEndpoint} from '../object-router'
+import {ObjectRouterEndpoint,} from '../object-router'
 import {SceneNodeRouterEndpoint} from '../scene-node-router'
-import {ObjectSceneNodePrefix} from '../../service/object-service'
-import {
-    connectDb,
-    db,
-    FileMetadataCollection,
-    FileChunkCollection,
-    SceneNodeCollection
-} from '../../database'
+import {ObjectService} from '../../service/index'
+import {connectDb, db, FileMetadataCollection, FileChunkCollection, SceneNodeCollection} from '../../database/index'
 import {getSceneNode} from './util/scene-node-util'
 
 const pathToTest = 'main/router/__test';
+const ObjectSceneNodePrefix = ObjectService.ObjectSceneNodePrefix;
 
 describe('Object router', () => {
     before(async () => {

@@ -1,4 +1,4 @@
-import {db, SceneNodeCollection} from '../database'
+import {db, SceneNodeCollection} from '../database/index'
 import {ObjectId} from 'mongodb'
 
 export const getSceneNode = async (id) => {

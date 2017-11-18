@@ -1,7 +1,7 @@
 import express from 'express'
 import multer from 'multer'
 import path from 'path'
-import {createFromZip} from '../service/object-service'
+import {ObjectService} from '../service/index'
 
 const router = express.Router();
 const upload = multer({
@@ -26,7 +26,7 @@ router.post('/', upload.any(), async (req, res) => {
     }
     const zipPath = path.join(req.files[0].destination, req.files[0].filename);
     try {
-        await createFromZip(zipPath);
+        await ObjectService.createFromZip(zipPath);
         res.status(201).send('Successfully uploaded zip');
     } catch (e) {
         console.error(e);

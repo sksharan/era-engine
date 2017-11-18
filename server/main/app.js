@@ -1,13 +1,15 @@
 import path from 'path'
-import express from 'express';
+import express from 'express'
 import bodyParser from 'body-parser'
-import exphbs from 'express-handlebars';
-import cors from 'cors';
-import config, {isTest} from './config';
-import {connectDb} from './database'
-import {FileRouter, FileRouterEndpoint} from './router/file-router'
-import {ObjectRouter, ObjectRouterEndpoint} from './router/object-router'
-import {SceneNodeRouter, SceneNodeRouterEndpoint} from './router/scene-node-router'
+import exphbs from 'express-handlebars'
+import cors from 'cors'
+import {appConfig, isTest} from './config/index'
+import {connectDb} from './database/index'
+import {
+    FileRouter, FileRouterEndpoint,
+    ObjectRouter, ObjectRouterEndpoint,
+    SceneNodeRouter, SceneNodeRouterEndpoint
+} from './router/index'
 
 const app = express();
 
@@ -25,9 +27,9 @@ connectDb().then(() => {
     app.engine('handlebars', exphbs({defaultLayout: 'main', layoutsDir: path.join(viewDir, 'layout')}));
     app.set('view engine', 'handlebars');
 
-    app.listen(config.port, () => {
+    app.listen(appConfig.port, () => {
         if (!isTest) {
-            console.log('Started server on port ' + config.port);
+            console.log('Started server on port ' + appConfig.port);
         }
     });
 });

@@ -3,7 +3,6 @@ import * as request from 'supertest'
 import {app} from '../../app'
 import {SceneNodeRouterEndpoint} from '../scene-node-router'
 import {connectDb, getDb, SceneNodeCollection} from '../../database/index'
-import {SceneNodeType} from '../../enum/index'
 import {getLight, getSceneNode} from './util/scene-node-util'
 
 describe('Scene node router', () => {
@@ -34,7 +33,7 @@ describe('Scene node router', () => {
     });
 
     it('should allow light node to be created and fetched', async () => {
-        const lightNode = getSceneNode({name: 'name', path: '/a', type: SceneNodeType.LIGHT});
+        const lightNode = getSceneNode({name: 'name', path: '/a', type: 'LIGHT'});
         lightNode.content = getLight();
         await request(app).post(SceneNodeRouterEndpoint).send(lightNode).expect(201);
 
@@ -89,7 +88,7 @@ describe('Scene node router', () => {
     });
 
     it('should verify id exists when saving object ref scene node', async() => {
-        const objectRefNode = getSceneNode({name: 'name', path: '/a', type: SceneNodeType.OBJECT_REF});
+        const objectRefNode = getSceneNode({name: 'name', path: '/a', type: 'OBJECT_REF'});
         objectRefNode.content = {objectSceneNodeId: '59953ea7d491fa1dc07eee5c'};
 
         await request(app)

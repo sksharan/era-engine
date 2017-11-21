@@ -2,6 +2,7 @@
     "compilerOptions": {
         "target": "es6",
         "module": "none",
+        "moduleResolution": "node",
         "allowJs": true,
         "sourceMap": true,
         "outDir": "dist"

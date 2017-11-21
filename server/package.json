@@ -7,8 +7,8 @@
   "private": true,
   "main": "./main/app.js",
   "scripts": {
-    "start": "nodemon --ignore dist/ --exec \"npm run build\"",
-    "build": "tsc && node dist/app.js",
+    "start": "nodemon --ignore dist/ --exec \"npm run init\"",
+    "init": "rimraf dist/ && tsc && node dist/app.js",
     "test": "cross-env NODE_ENV=test mocha --exit --reporter spec --require ts-node/register main/**/**.test.js"
   },
   "dependencies": {
@@ -28,6 +28,7 @@
     "eslint-plugin-import": "^2.8.0",
     "mocha": "^4.0.1",
     "nodemon": "^1.12.1",
+    "rimraf": "^2.6.2",
     "supertest": "^3.0.0",
     "ts-node": "^3.3.0",
     "typescript": "^2.6.1"

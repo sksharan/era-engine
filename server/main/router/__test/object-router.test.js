@@ -1,10 +1,10 @@
 import {expect} from 'chai'
-import request from 'supertest'
-import app from '../../app'
+import * as request from 'supertest'
+import {app} from '../../app'
 import {ObjectRouterEndpoint,} from '../object-router'
 import {SceneNodeRouterEndpoint} from '../scene-node-router'
 import {ObjectService} from '../../service/index'
-import {connectDb, db, FileMetadataCollection, FileChunkCollection, SceneNodeCollection} from '../../database/index'
+import {connectDb, getDb, FileMetadataCollection, FileChunkCollection, SceneNodeCollection} from '../../database/index'
 import {getSceneNode} from './util/scene-node-util'
 
 const pathToTest = 'main/router/__test';
@@ -16,9 +16,9 @@ describe('Object router', () => {
     });
 
     beforeEach(async () => {
-        await db.collection(FileMetadataCollection).deleteMany({});
-        await db.collection(FileChunkCollection).deleteMany({});
-        await db.collection(SceneNodeCollection).deleteMany({});
+        await getDb().collection(FileMetadataCollection).deleteMany({});
+        await getDb().collection(FileChunkCollection).deleteMany({});
+        await getDb().collection(SceneNodeCollection).deleteMany({});
     });
 
     it('should return bad request if uploading zero assets', async () => {
@@ -58,9 +58,9 @@ describe('Object router', () => {
             .attach('spider', `${pathToTest}/resources/assimp-spider.zip`, 'assimp-spider.zip');
 
         const numFilesInZip = 6;
-        const metadata = await db.collection(FileMetadataCollection).find({}).toArray();
+        const metadata = await getDb().collection(FileMetadataCollection).find({}).toArray();
         expect(metadata).to.have.lengthOf(numFilesInZip);
-        const chunks = await db.collection(FileChunkCollection).find({}).toArray();
+        const chunks = await getDb().collection(FileChunkCollection).find({}).toArray();
         expect(chunks.length).to.be.above(numFilesInZip);
     });
 

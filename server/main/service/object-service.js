@@ -1,6 +1,6 @@
-import AdmZip from 'adm-zip'
-import streamifier from 'streamifier'
-import path from 'path'
+import * as AdmZip from 'adm-zip'
+import * as streamifier from 'streamifier'
+import * as path from 'path'
 import {uploadFile} from './file-service'
 import {saveSceneNode} from './scene-node-service'
 

@@ -7,11 +7,9 @@
   "private": true,
   "main": "./main/app.js",
   "scripts": {
-    "start": "nodemon main/app.js --exec babel-node",
-    "build": "babel main -d dist",
-    "serve": "node dist/app.js",
-    "test": "cross-env NODE_ENV=test mocha -r co-mocha --compilers js:babel-register main/**/**.test.js",
-    "lint": "eslint main/**"
+    "start": "nodemon --ignore dist/ --exec \"npm run build\"",
+    "build": "tsc && node dist/app.js",
+    "test": "cross-env NODE_ENV=test mocha --exit --reporter spec --require ts-node/register main/**/**.test.js"
   },
   "dependencies": {
     "adm-zip": "^0.4.7",
@@ -35,9 +33,11 @@
     "cross-env": "^5.0.1",
     "eslint": "^3.19.0",
     "eslint-plugin-import": "^2.3.0",
-    "mocha": "^3.2.0",
+    "mocha": "^4.0.1",
     "nodemon": "^1.11.0",
     "stringify-object": "^3.2.0",
-    "supertest": "^3.0.0"
+    "supertest": "^3.0.0",
+    "ts-node": "^3.3.0",
+    "typescript": "^2.6.1"
   }
 }

@@ -1,4 +1,4 @@
-import express from 'express'
+import * as express from 'express'
 import {ObjectService, SceneNodeService} from '../service/index'
 import {LightType, SceneNodeType} from '../enum/index'
 

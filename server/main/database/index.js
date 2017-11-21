@@ -1,6 +1,6 @@
 export {
-    db, // Must call connectDb() first to initialize
-    bucket, // Must call connectDb() first to initialize
+    getDb, // Must call connectDb() first to initialize
+    getBucket, // Must call connectDb() first to initialize
     connectDb,
 } from './database'
 

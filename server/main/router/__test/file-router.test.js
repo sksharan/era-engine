@@ -1,8 +1,8 @@
 import {expect} from 'chai'
-import request from 'supertest'
-import app from '../../app'
+import * as request from 'supertest'
+import {app} from '../../app'
 import {FileRouterEndpoint} from '../file-router'
-import {connectDb, db, FileMetadataCollection, FileChunkCollection} from '../../database/index'
+import {connectDb, getDb, FileMetadataCollection, FileChunkCollection} from '../../database/index'
 
 const pathToTest = 'main/router/__test';
 
@@ -13,21 +13,21 @@ describe('File router', () => {
 
     beforeEach(async () => {
         // Clear all file data from the db
-        await db.collection(FileMetadataCollection).deleteMany({});
-        await db.collection(FileChunkCollection).deleteMany({});
+        await getDb().collection(FileMetadataCollection).deleteMany({});
+        await getDb().collection(FileChunkCollection).deleteMany({});
     });
 
     it('should save uploaded files to the database', async () => {
         const files = await uploadFiles();
 
-        const metadata = await db.collection(FileMetadataCollection).find({}).toArray();
+        const metadata = await getDb().collection(FileMetadataCollection).find({}).toArray();
         expect(metadata).to.have.lengthOf(2);
 
         const metadataIds = metadata.map(m => m._id.toString());
         expect(metadataIds).to.include(files[0]._id);
         expect(metadataIds).to.include(files[1]._id);
 
-        const chunks = await db.collection(FileChunkCollection).find({}).toArray();
+        const chunks = await getDb().collection(FileChunkCollection).find({}).toArray();
         expect(chunks).to.have.lengthOf(2); // As the files are small, expect a chunk per file
     });
 

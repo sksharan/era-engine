@@ -1,17 +1,17 @@
-import {bucket, db, FileMetadataCollection} from '../database/index'
+import {getBucket, getDb, FileMetadataCollection} from '../database/index'
 import {ObjectId} from 'mongodb'
 
 export const getAllFileMetadata = async () => {
-    const cursor = await db.collection(FileMetadataCollection).find().sort({uploadDate: -1});
+    const cursor = await getDb().collection(FileMetadataCollection).find().sort({uploadDate: -1});
     return cursor.toArray();
 }
 
 export const getFileContentStream = (fileId) => {
-    return bucket.openDownloadStream(new ObjectId(fileId));
+    return getBucket().openDownloadStream(new ObjectId(fileId));
 }
 
 export const getFileMetadata = (fileId) => {
-    return db.collection(FileMetadataCollection).findOne({_id: new ObjectId(fileId)})
+    return getDb().collection(FileMetadataCollection).findOne({_id: new ObjectId(fileId)})
             .then((document) => {
                 return document;
             })
@@ -22,7 +22,7 @@ export const getFileMetadata = (fileId) => {
 
 export const uploadFile = (fileReadStream, filename) => {
     return new Promise((resolve, reject) => {
-        fileReadStream.pipe(bucket.openUploadStream(filename))
+        fileReadStream.pipe(getBucket().openUploadStream(filename))
             .on('error', (error) => {
                 reject(error);
             })

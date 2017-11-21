@@ -1,8 +1,11 @@
-import mongodb from 'mongodb'
+import * as mongodb from 'mongodb'
 import {appConfig, isTest} from '../config/index'
 
-export let db = null;
-export let bucket = null;
+let db = null;
+let bucket = null;
+
+export const getDb = () => db;
+export const getBucket = () => bucket;
 
 export const connectDb = () => {
     return new Promise((resolve, reject) => {

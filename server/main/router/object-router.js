@@ -1,6 +1,6 @@
-import express from 'express'
-import multer from 'multer'
-import path from 'path'
+import * as express from 'express'
+import * as multer from 'multer'
+import * as path from 'path'
 import {ObjectService} from '../service/index'
 
 const router = express.Router();

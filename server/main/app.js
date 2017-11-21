@@ -1,8 +1,8 @@
-import path from 'path'
-import express from 'express'
-import bodyParser from 'body-parser'
-import exphbs from 'express-handlebars'
-import cors from 'cors'
+import * as path from 'path'
+import * as express from 'express'
+import * as bodyParser from 'body-parser'
+import * as exphbs from 'express-handlebars'
+import * as cors from 'cors'
 import {appConfig, isTest} from './config/index'
 import {connectDb} from './database/index'
 import {
@@ -11,7 +11,7 @@ import {
     SceneNodeRouter, SceneNodeRouterEndpoint
 } from './router/index'
 
-const app = express();
+export let app = express();
 
 connectDb().then(() => {
     app.use(cors());
@@ -33,5 +33,3 @@ connectDb().then(() => {
         }
     });
 });
-
-export default app;

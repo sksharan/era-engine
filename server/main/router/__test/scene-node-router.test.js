@@ -1,8 +1,8 @@
 import {expect} from 'chai'
-import request from 'supertest'
-import app from '../../app'
+import * as request from 'supertest'
+import {app} from '../../app'
 import {SceneNodeRouterEndpoint} from '../scene-node-router'
-import {connectDb, db, SceneNodeCollection} from '../../database/index'
+import {connectDb, getDb, SceneNodeCollection} from '../../database/index'
 import {SceneNodeType} from '../../enum/index'
 import {getLight, getSceneNode} from './util/scene-node-util'
 
@@ -12,7 +12,7 @@ describe('Scene node router', () => {
     });
 
     beforeEach(async () => {
-        await db.collection(SceneNodeCollection).deleteMany({});
+        await getDb().collection(SceneNodeCollection).deleteMany({});
     });
 
     it('should allow scene nodes to be created and fetched, ordered by path', async () => {

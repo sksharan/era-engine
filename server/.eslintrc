@@ -13,16 +13,14 @@
         "es6": true,
         "mocha": true
     },
+    "settings": {
+        "import/resolver": {
+            "node": true,
+            "eslint-import-resolver-typescript": true
+        }
+    },
     "rules": {
         "no-console": 0,
-        "import/default": 0,
-        "import/no-extraneous-dependencies": [
-            "error",
-            {
-                "devDependencies": ["main/**/__test/**"],
-                "optionalDependencies": ["main/**/__test/**"],
-                "peerDependencies": ["main/**/__test/**"]
-            }
-        ]
+        "import/no-extraneous-dependencies": 0
     }
 }

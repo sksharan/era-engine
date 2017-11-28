@@ -1,1 +1,1 @@
-export {ToolPanel as view} from './view/tool-panel'
+export {ToolPanel} from './view/index'

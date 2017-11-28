@@ -1,9 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {graphql} from 'react-apollo'
+import {connect} from 'react-redux'
 import FontAwesome from 'react-fontawesome'
-import {SelectAllQuery} from '../query/scene-node-query'
 import {Node} from './node'
+import {fetchSceneNodes} from '../action/index'
 import {RootSceneNode} from '../../../engine/index'
 
 export class NodePanel extends React.Component {
@@ -20,24 +20,40 @@ export class NodePanel extends React.Component {
                 </div>
                 <div className='card-body'>
                     {
-                        (this.props.data.loading)
+                        (this.props.isFetching)
                             ? <div>Loading nodes...</div>
-                            : Object.entries(createHierarchyFromNodes(this.props.data.sceneNodes))
+                            : Object.entries(createHierarchyFromNodes(this.props.nodes))
                                     .map(([key, val]) => <Node key={key} val={val} depth={0} parentRenderNode={RootSceneNode} />)
                     }
                 </div>
             </div>
         );
     }
+
+    componentDidMount() {
+        this.props.getNodes();
+    }
 }
 
-export const NodePanelWithData = graphql(SelectAllQuery)(NodePanel);
+const mapStateToProps = state => ({
+    isFetching: state.nodePanel.isFetching,
+    isError: state.nodePanel.isError,
+    nodes: state.nodePanel.nodes
+})
+
+const mapDispatchToProps = dispatch => ({
+    getNodes() {
+        dispatch(fetchSceneNodes());
+    }
+});
+
+export const NodePanelWithData = connect(mapStateToProps, mapDispatchToProps)(NodePanel);
 
 NodePanel.propTypes = {
-    data: PropTypes.shape({
-        loading: PropTypes.bool.isRequired,
-        sceneNodes: PropTypes.array
-    })
+    isFetching: PropTypes.bool.isRequired,
+    isError: PropTypes.bool.isRequired,
+    nodes: PropTypes.array,
+    getNodes: PropTypes.func.isRequired,
 }
 
 /** Returns an object of the form:

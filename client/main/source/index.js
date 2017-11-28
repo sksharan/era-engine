@@ -1,8 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {ApolloProvider} from 'react-apollo'
+import {Provider} from 'react-redux'
 import FontAwesome from 'react-fontawesome'
-import {Client, Store} from './interface/index'
+import {Store} from './interface/index'
 import css from './main.scss'
 
 // Component for initializing the canvas and WebGL
@@ -89,7 +89,7 @@ class Main extends React.Component {
 }
 
 ReactDOM.render(
-    <ApolloProvider store={Store} client={Client}>
+    <Provider store={Store}>
         <Main/>
-    </ApolloProvider>,
+    </Provider>,
     document.getElementById('main'));

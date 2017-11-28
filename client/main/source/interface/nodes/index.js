@@ -1,3 +1,2 @@
-import {NodePanelWithData as view} from './view/node-panel'
-
-export {view};
+export {NodePanel} from './view/index'
+export {NodeReducer} from './reducer/index'

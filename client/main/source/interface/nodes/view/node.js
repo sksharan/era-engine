@@ -20,9 +20,9 @@ export class Node extends React.Component {
                     this.props.val.sceneNodes.map((sceneNode) => {
                         switch (sceneNode.type) {
                             case 'DEFAULT':
-                                return <DefaultNode key={sceneNode.id} node={sceneNode} parentRenderNode={this.props.parentRenderNode} />
+                                return <DefaultNode key={sceneNode._id} node={sceneNode} parentRenderNode={this.props.parentRenderNode} />
                             case 'OBJECT':
-                                return <ObjectNode key={sceneNode.id} node={sceneNode} parentRenderNode={this.props.parentRenderNode} />
+                                return <ObjectNode key={sceneNode._id} node={sceneNode} parentRenderNode={this.props.parentRenderNode} />
                             default:
                                 return <div>Unknown node type {sceneNode.type}</div>;
                         }

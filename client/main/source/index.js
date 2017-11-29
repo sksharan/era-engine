@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import {Provider} from 'react-redux'
 import FontAwesome from 'react-fontawesome'
 import {Store} from './interface/index'
-import css from './main.scss'
+import css from './scss/main.scss'
 
 // Component for initializing the canvas and WebGL
 class Canvas extends React.Component {
@@ -52,10 +52,10 @@ class Main extends React.Component {
                 </nav>
                 <div className='container-fluid'>
                     <div className='row'>
-                        <div className='col-md-8 pl-0 pr-0' id='tools'>
+                        <div className='col-md-9 pl-0 pr-0' id='tools'>
                             {this.state.glInitialized ? this.getToolsView() : ""}
                         </div>
-                        <div className='col-md-4 pl-0 pr-0'>
+                        <div className='col-md-3 pl-0 pr-0'>
                             {this.state.glInitialized ? this.getNodesView() : ""}
                         </div>
                     </div>

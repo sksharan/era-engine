@@ -25,9 +25,6 @@ export class ToolPanel extends React.Component {
                 <div className='card-header'>
                     <div className='row'>
                         <div className='col'>
-                            <strong>Camera</strong>
-                        </div>
-                        <div className='col'>
                             <strong>Transform</strong>
                         </div>
                         <div className='col'>
@@ -37,11 +34,6 @@ export class ToolPanel extends React.Component {
                 </div>
                 <div className='card-body'>
                     <div className='row'>
-                        <div className='col'>
-                            <button type='button' className='btn btn-sm btn-outline-light' onClick={togglePointerLock}>
-                                <FontAwesome name='video-camera' />
-                            </button>
-                        </div>
                         <div className='col'>
                             <button type='button' className='btn btn-sm btn-outline-light' onClick={setTranslate}>
                                 <FontAwesome name='arrows' />
@@ -60,6 +52,9 @@ export class ToolPanel extends React.Component {
                         <div className='col'>
                             <button type='button' className='btn btn-sm btn-outline-light'>
                                 <span>FPS</span>
+                            </button>
+                            <button type='button' className='btn btn-sm btn-outline-light' onClick={togglePointerLock}>
+                                <FontAwesome name='video-camera' />
                             </button>
                         </div>
                     </div>

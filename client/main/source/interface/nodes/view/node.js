@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {DefaultNode} from './default-node'
-import {ObjectNode} from './object-node'
+import {DefaultNodeWithData} from './default-node'
+import {ObjectNodeWithData} from './object-node'
 import {
     generateRenderNode,
     addChildToRenderNode,
@@ -15,14 +15,20 @@ export class Node extends React.Component {
     render() {
         const renderNode = generateRenderNode();
         return (
-            <div style={{marginLeft: `${this.props.depth * 30}px`}}>
+            <div>
                 {
                     this.props.val.sceneNodes.map((sceneNode) => {
                         switch (sceneNode.type) {
                             case 'DEFAULT':
-                                return <DefaultNode key={sceneNode._id} node={sceneNode} parentRenderNode={this.props.parentRenderNode} />
+                                return <DefaultNodeWithData key={sceneNode._id}
+                                                            node={sceneNode}
+                                                            parentRenderNode={this.props.parentRenderNode}
+                                                            depth={this.props.depth} />
                             case 'OBJECT':
-                                return <ObjectNode key={sceneNode._id} node={sceneNode} parentRenderNode={this.props.parentRenderNode} />
+                                return <ObjectNodeWithData key={sceneNode._id}
+                                                           node={sceneNode}
+                                                           parentRenderNode={this.props.parentRenderNode}
+                                                           depth={this.props.depth} />
                             default:
                                 return <div>Unknown node type {sceneNode.type}</div>;
                         }

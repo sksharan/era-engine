@@ -1,12 +1,14 @@
 import {applyMiddleware, combineReducers, createStore} from 'redux'
 import {logger} from 'redux-logger'
 import thunk from 'redux-thunk'
+import {SelectionReducer} from './common/index'
 
 // FIXME: get this reducer through an index file instead
 import {NodeReducer} from './nodes/reducer/node-reducer'
 
 const reducer = combineReducers({
-    nodePanel: NodeReducer
+    nodePanel: NodeReducer,
+    'common.selection': SelectionReducer
 });
 
 // To avoid dispatching undefined action, make logger last:

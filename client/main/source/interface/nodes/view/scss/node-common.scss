@@ -1,0 +1,8 @@
+:local(.node):hover {
+    background-color: rgb(105, 105, 105);
+    cursor: pointer;
+}
+
+:local(.nodeSelected) {
+    background-color: rgb(100, 100, 100);
+}

@@ -2,6 +2,7 @@
 $spacer: 0.25rem;
 $body-color: #e0e0e0;
 $font-family-base: 'Exo 2', sans-serif;
+$line-height-base: 1.25;
 
 // Semantic style overrides
 $dark: #424a52;
@@ -48,15 +49,15 @@ $navbar-padding-x: 1.0rem;
 }
 
 // Mouse clicks not directly in the tools panel should pass through to the canvas
-#tools {
+:local(.tools) {
     // Needed since the tools column div prevents pointer events from reaching the canvas
     pointer-events: none;
 }
-#tools > .card {
+:local(.tools) > .card {
     pointer-events: auto;
 }
 // Stylize buttons that appear on tools panel
-#tools button {
+:local(.tools) button {
     padding: 0.3rem 0.75rem;
     line-height: 1.25;
 }

@@ -52,16 +52,21 @@ class Main extends React.Component {
                 </nav>
                 <div className='container-fluid'>
                     <div className='row'>
-                        <div className='col-md-9 pl-0 pr-0' id='tools'>
+                        <div className={`col-md-9 pl-0 pr-0 ${css.tools}`}>
                             {this.state.glInitialized ? this.getToolsView() : ""}
                         </div>
                         <div className='col-md-3 pl-0 pr-0'>
                             {this.state.glInitialized ? this.getNodesView() : ""}
+                            {this.state.glInitialized ? this.getPropertiesView() : ""}
                         </div>
                     </div>
                 </div>
             </div>
         );
+    }
+    getPropertiesView() {
+        const Properties = require('./interface/index-deferred').PropertiesPanel;
+        return <Properties />
     }
     getNodesView() {
         const Node = require('./interface/index-deferred').NodePanel;

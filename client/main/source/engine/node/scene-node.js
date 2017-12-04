@@ -2,6 +2,7 @@
 
 import {mat3, mat4, vec3} from 'gl-matrix'
 import {CurrentTransformOrientation} from '../global/index'
+import {SceneNodeType} from './scene-node-type'
 
 function updateWorldMatrix(node, parentWorldMatrix) {
     mat4.multiply(node.worldMatrix, parentWorldMatrix, node.localMatrix);
@@ -14,7 +15,7 @@ function updateWorldMatrix(node, parentWorldMatrix) {
 
 export default class SceneNode {
     constructor(localMatrix = mat4.create()) {
-        this._nodeType = "BASE";
+        this._nodeType = SceneNodeType.BASE;
         /* Parent of this node - scene nodes have at most one parent. */
         this._parent = null;
         /* Children of this node. */

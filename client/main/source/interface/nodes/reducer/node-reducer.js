@@ -7,7 +7,7 @@ import {
 const initialState = {
     isFetching: true,
     isError: false,
-    nodes: null
+    nodeArray: null
 }
 
 export const NodeReducer = (state=initialState, action) => {
@@ -16,19 +16,19 @@ export const NodeReducer = (state=initialState, action) => {
             return {
                 isFetching: true,
                 isError: false,
-                nodes: null
+                nodeArray: null
             };
         case FETCH_NODES_SUCCESS:
             return {
                 isFetching: false,
                 isError: false,
-                nodes: action.payload
+                nodeArray: action.payload
             };
         case FETCH_NODES_FAILURE:
             return {
                 isFetching: false,
                 isError: true,
-                nodes: null
+                nodeArray: null
             };
     }
     return state;

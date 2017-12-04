@@ -5,8 +5,9 @@ import FontAwesome from 'react-fontawesome'
 import {Node} from './node'
 import {fetchSceneNodes} from '../action/index'
 import {RootSceneNode} from '../../../engine/index'
+import css from './scss/node-panel.scss'
 
-export class NodePanel extends React.Component {
+class NodePanel extends React.Component {
     constructor(props) {
         super(props);
     }
@@ -18,7 +19,7 @@ export class NodePanel extends React.Component {
                     <FontAwesome name='sitemap' />
                     <span>Nodes</span>
                 </div>
-                <div className='card-body'>
+                <div className={`card-body ${css.nodePanelBody}`}>
                     {
                         (this.props.isFetching)
                             ? <div>Loading nodes...</div>
@@ -38,7 +39,7 @@ export class NodePanel extends React.Component {
 const mapStateToProps = state => ({
     isFetching: state.nodePanel.isFetching,
     isError: state.nodePanel.isError,
-    nodes: state.nodePanel.nodes
+    nodes: state.nodePanel.nodeArray
 })
 
 const mapDispatchToProps = dispatch => ({

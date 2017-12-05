@@ -8,7 +8,7 @@
   "main": "./main/app.js",
   "scripts": {
     "start": "nodemon --ignore dist/ --exec \"npm run init\"",
-    "init": "rimraf dist/ && tsc && node dist/app.js",
+    "init": "rimraf dist/ && tsc && copyfiles -u 1 \"main/view/**\" dist && node dist/app.js",
     "test": "cross-env NODE_ENV=test mocha --exit --reporter spec --require ts-node/register main/**/**.test.js"
   },
   "dependencies": {
@@ -25,6 +25,7 @@
   },
   "devDependencies": {
     "chai": "^4.1.2",
+    "copyfiles": "^1.2.0",
     "cross-env": "^5.1.1",
     "eslint": "^4.11.0",
     "eslint-import-resolver-typescript": "^1.0.2",

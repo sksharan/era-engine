@@ -8,6 +8,10 @@ const upload = multer({});
 export const FileRouterEndpoint = "/files";
 export const FileRouter = router;
 
+router.get('/metadata', async (req, res) => {
+    res.status(200).json(await FileService.getAllFileMetadata());
+});
+
 router.get('/view', async (req, res) => {
     const metadata = await FileService.getAllFileMetadata();
     res.render('file', {fileEndpoint: FileRouterEndpoint, files: metadata});

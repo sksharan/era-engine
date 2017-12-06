@@ -35,7 +35,14 @@ describe('File router', () => {
         await request(app).post(FileRouterEndpoint).expect(400);
     });
 
-    it('should allow fetching metadata of uploaded files', async () => {
+    it('should allow all file metadata to be fetched', async () => {
+        await uploadFiles();
+        const res = await request(app).get(`${FileRouterEndpoint}/metadata`).expect(200);
+        const metadata = JSON.parse(res.text);
+        expect(metadata).to.have.lengthOf(2);
+    });
+
+    it('should allow file metadata to be fetched by id', async () => {
         const files = await uploadFiles();
 
         const res0 = await request(app).get(`${FileRouterEndpoint}/${files[0]._id}/metadata`).expect(200);

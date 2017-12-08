@@ -12,7 +12,7 @@ $dark: #424a52;
     margin-right: $spacer * 2;
 }
 
-$card-bg: rgba(51, 51, 51, 0.80);
+$card-bg: rgba(30, 30, 30, 0.80);
 $card-border-color: #5f5f5f;
 $card-cap-bg: #383838;
 $card-spacer-x: $spacer * 3;
@@ -29,7 +29,14 @@ $card-spacer-y: $spacer / 1.5;
     padding-bottom: $card-spacer-y / 2 !important;
 }
 
+$list-group-bg: rgba(0, 0, 0, 0); // No color
+$list-group-item-padding-x: $card-spacer-x;
+$list-group-item-padding-y: $card-spacer-y;
+
 $navbar-padding-x: 1.0rem;
+
+$table-cell-padding-sm: .1rem;
+$table-dark-bg: $card-bg;
 
 ////// Font Awesome
 :not(button) > .fa {

@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import FontAwesome from 'react-fontawesome'
 import {getFileContentEndpoint} from '../../../../config'
-import css from './scss/file-list-item.scss'
+import css from './scss/file-row.scss'
 
 export class FileRow extends React.Component {
     constructor(props) {

@@ -1,6 +1,6 @@
 import React from 'react'
 import {UploadObject} from './upload-object'
-import {ObjectList} from './object-list'
+import {ObjectTableWithData} from './object-table'
 
 export class Objects extends React.Component {
     constructor(props) {
@@ -11,7 +11,7 @@ export class Objects extends React.Component {
         return (
             <li className='list-group-item'>
                 <UploadObject />
-                <ObjectList />
+                <ObjectTableWithData />
             </li>
         );
     }

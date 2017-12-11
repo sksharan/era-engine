@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import {ObjectRow} from './object-row'
 import {connect} from 'react-redux'
 import {fetchObjects} from '../action/index'
-import css from './scss/object-table.scss'
+import commonCss from '../../common/scss/table-common.scss'
 
 class ObjectTable extends React.Component {
     constructor(props) {
@@ -12,7 +12,7 @@ class ObjectTable extends React.Component {
 
     render() {
         return (
-            <div className={`${css.objectTable}`}>
+            <div className={`${commonCss.contentTable}`}>
                 <table className='table table-sm table-hover table-striped table-dark'>
                     <tbody>
                     {

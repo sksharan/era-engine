@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import FontAwesome from 'react-fontawesome'
-import css from './scss/object-row.scss'
+import commonCss from '../../common/scss/table-row-common.scss'
 
 export class ObjectRow extends React.Component {
     constructor(props) {
@@ -11,11 +11,15 @@ export class ObjectRow extends React.Component {
     render() {
         return (
             <tr>
-                <td className={`${css.object}`}>
+                <td className={`${commonCss.contentItemName}`}>
                     <FontAwesome name='cube' />
                     {this.props.object.name}
                 </td>
-                <td></td>
+                <td>
+                    <button type='button' className={`btn btn-sm btn-outline-success ${commonCss.actionButton}`}>
+                        <FontAwesome name='plus' />
+                    </button>
+                </td>
             </tr>
         );
     }

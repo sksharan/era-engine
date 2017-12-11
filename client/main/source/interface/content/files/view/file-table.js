@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import {FileRow} from './file-row'
 import {connect} from 'react-redux'
 import {fetchMetadataForAllFiles} from '../action/index'
-import css from './scss/file-table.scss'
+import commonCss from '../../common/scss/table-common.scss'
 
 class FileTable extends React.Component {
     constructor(props) {
@@ -12,7 +12,7 @@ class FileTable extends React.Component {
 
     render() {
         return (
-            <div className={`${css.fileTable}`}>
+            <div className={`${commonCss.contentTable}`}>
                 <table className='table table-sm table-hover table-striped table-dark'>
                     <tbody>
                     {

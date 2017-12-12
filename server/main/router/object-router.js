@@ -26,7 +26,7 @@ router.post('/', upload.any(), async (req, res) => {
     }
     const zipPath = path.join(req.files[0].destination, req.files[0].filename);
     try {
-        await ObjectService.createFromZip(zipPath);
+        await ObjectService.createFromZip(zipPath, req.body.prefix);
         res.status(201).send('Successfully uploaded zip');
     } catch (e) {
         console.error(e);

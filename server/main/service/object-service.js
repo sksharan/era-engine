@@ -4,9 +4,7 @@ import * as path from 'path'
 import {uploadFile} from './file-service'
 import {saveSceneNode} from './scene-node-service'
 
-export const ObjectSceneNodePrefix = '__object';
-
-export const createFromZip = async (zipFile) => {
+export const createFromZip = async (zipFile, objectNodePrefix) => {
     const zip = new AdmZip(zipFile);
     const zipEntries = zip.getEntries();
 
@@ -30,7 +28,7 @@ export const createFromZip = async (zipFile) => {
     }
 
     const sceneNodes = [];
-    parseSceneNodes(assimpJson.rootnode, `${ObjectSceneNodePrefix}_${assimpJson.rootnode.name}`,
+    parseSceneNodes(assimpJson.rootnode, `${objectNodePrefix}${assimpJson.rootnode.name}`,
             sceneNodes, textures, assimpJson);
     for (let sceneNode of sceneNodes) {
         saveSceneNode(sceneNode);

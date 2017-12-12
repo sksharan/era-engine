@@ -3,12 +3,11 @@ import * as request from 'supertest'
 import {app} from '../../app'
 import {ObjectRouterEndpoint,} from '../object-router'
 import {SceneNodeRouterEndpoint} from '../scene-node-router'
-import {ObjectService} from '../../service/index'
 import {connectDb, getDb, FileMetadataCollection, FileChunkCollection, SceneNodeCollection} from '../../database/index'
 import {getSceneNode} from './util/scene-node-util'
 
 const pathToTest = 'main/router/__test';
-const ObjectSceneNodePrefix = ObjectService.ObjectSceneNodePrefix;
+const objectSceneNodePrefix = '__object_';
 
 describe('Object router', () => {
     before(async () => {
@@ -109,26 +108,26 @@ describe('Object router', () => {
     it('should create scene nodes with correct paths from uploaded zip', async () => {
         const sceneNodes = await uploadSpider();
         // Scene nodes are ordered by path
-        expect(sceneNodes[0].path).to.equal(`${ObjectSceneNodePrefix}_spider.obj`);
-        expect(sceneNodes[1].path).to.equal(`${ObjectSceneNodePrefix}_spider.obj/g Auge`);
-        expect(sceneNodes[2].path).to.equal(`${ObjectSceneNodePrefix}_spider.obj/g Bein1Li`);
-        expect(sceneNodes[3].path).to.equal(`${ObjectSceneNodePrefix}_spider.obj/g Bein1Re`);
-        expect(sceneNodes[4].path).to.equal(`${ObjectSceneNodePrefix}_spider.obj/g Bein2Li`);
-        expect(sceneNodes[5].path).to.equal(`${ObjectSceneNodePrefix}_spider.obj/g Bein2Re`);
-        expect(sceneNodes[6].path).to.equal(`${ObjectSceneNodePrefix}_spider.obj/g Bein3Li`);
-        expect(sceneNodes[7].path).to.equal(`${ObjectSceneNodePrefix}_spider.obj/g Bein3Re`);
-        expect(sceneNodes[8].path).to.equal(`${ObjectSceneNodePrefix}_spider.obj/g Bein4Li`);
-        expect(sceneNodes[9].path).to.equal(`${ObjectSceneNodePrefix}_spider.obj/g Bein4Re`);
-        expect(sceneNodes[10].path).to.equal(`${ObjectSceneNodePrefix}_spider.obj/g Brust`);
-        expect(sceneNodes[11].path).to.equal(`${ObjectSceneNodePrefix}_spider.obj/g Duplicate05`);
-        expect(sceneNodes[12].path).to.equal(`${ObjectSceneNodePrefix}_spider.obj/g HLeib01`);
-        expect(sceneNodes[13].path).to.equal(`${ObjectSceneNodePrefix}_spider.obj/g Kopf`);
-        expect(sceneNodes[14].path).to.equal(`${ObjectSceneNodePrefix}_spider.obj/g Kopf2`);
-        expect(sceneNodes[15].path).to.equal(`${ObjectSceneNodePrefix}_spider.obj/g OK`);
-        expect(sceneNodes[16].path).to.equal(`${ObjectSceneNodePrefix}_spider.obj/g Zahn`);
-        expect(sceneNodes[17].path).to.equal(`${ObjectSceneNodePrefix}_spider.obj/g Zahn2`);
-        expect(sceneNodes[18].path).to.equal(`${ObjectSceneNodePrefix}_spider.obj/g klZahn`);
-        expect(sceneNodes[19].path).to.equal(`${ObjectSceneNodePrefix}_spider.obj/g klZahn2`);
+        expect(sceneNodes[0].path).to.equal(`${objectSceneNodePrefix}spider.obj`);
+        expect(sceneNodes[1].path).to.equal(`${objectSceneNodePrefix}spider.obj/g Auge`);
+        expect(sceneNodes[2].path).to.equal(`${objectSceneNodePrefix}spider.obj/g Bein1Li`);
+        expect(sceneNodes[3].path).to.equal(`${objectSceneNodePrefix}spider.obj/g Bein1Re`);
+        expect(sceneNodes[4].path).to.equal(`${objectSceneNodePrefix}spider.obj/g Bein2Li`);
+        expect(sceneNodes[5].path).to.equal(`${objectSceneNodePrefix}spider.obj/g Bein2Re`);
+        expect(sceneNodes[6].path).to.equal(`${objectSceneNodePrefix}spider.obj/g Bein3Li`);
+        expect(sceneNodes[7].path).to.equal(`${objectSceneNodePrefix}spider.obj/g Bein3Re`);
+        expect(sceneNodes[8].path).to.equal(`${objectSceneNodePrefix}spider.obj/g Bein4Li`);
+        expect(sceneNodes[9].path).to.equal(`${objectSceneNodePrefix}spider.obj/g Bein4Re`);
+        expect(sceneNodes[10].path).to.equal(`${objectSceneNodePrefix}spider.obj/g Brust`);
+        expect(sceneNodes[11].path).to.equal(`${objectSceneNodePrefix}spider.obj/g Duplicate05`);
+        expect(sceneNodes[12].path).to.equal(`${objectSceneNodePrefix}spider.obj/g HLeib01`);
+        expect(sceneNodes[13].path).to.equal(`${objectSceneNodePrefix}spider.obj/g Kopf`);
+        expect(sceneNodes[14].path).to.equal(`${objectSceneNodePrefix}spider.obj/g Kopf2`);
+        expect(sceneNodes[15].path).to.equal(`${objectSceneNodePrefix}spider.obj/g OK`);
+        expect(sceneNodes[16].path).to.equal(`${objectSceneNodePrefix}spider.obj/g Zahn`);
+        expect(sceneNodes[17].path).to.equal(`${objectSceneNodePrefix}spider.obj/g Zahn2`);
+        expect(sceneNodes[18].path).to.equal(`${objectSceneNodePrefix}spider.obj/g klZahn`);
+        expect(sceneNodes[19].path).to.equal(`${objectSceneNodePrefix}spider.obj/g klZahn2`);
     });
 
     it('should create scene nodes with correct local matrices from uploaded zip', async () => {
@@ -181,6 +180,7 @@ describe('Object router', () => {
 async function uploadSpider() {
     await request(app)
         .post(ObjectRouterEndpoint)
+        .field('prefix', objectSceneNodePrefix)
         .attach('spider', `${pathToTest}/resources/assimp-spider.zip`, 'assimp-spider.zip')
         .expect(201);
 

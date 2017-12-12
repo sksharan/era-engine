@@ -51,11 +51,11 @@ interface ObjectSceneNode extends SceneNodeBase {
     }
 }
 
-interface ObjectRefSceneNode extends SceneNodeBase {
-    type: 'OBJECT_REF',
+interface ReferenceSceneNode extends SceneNodeBase {
+    type: 'REFERENCE',
     content: {
-        objectSceneNodeId: string
+        sceneNodeId: string
     }
 }
 
-export type SceneNode = DefaultSceneNode | LightSceneNode | ObjectSceneNode | ObjectRefSceneNode;
+export type SceneNode = DefaultSceneNode | LightSceneNode | ObjectSceneNode | ReferenceSceneNode;

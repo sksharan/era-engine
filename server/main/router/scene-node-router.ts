@@ -30,12 +30,10 @@ async function validateSceneNode(sceneNode: SceneNode) : Promise<string[]> {
     if (sceneNode.type === 'OBJECT') {
         errors.push(`Cannot create object scene nodes through this endpoint`);
     }
-    if (sceneNode.type === 'OBJECT_REF') {
-        const doc : SceneNode = await SceneNodeService.getSceneNode(sceneNode.content.objectSceneNodeId);
+    if (sceneNode.type === 'REFERENCE') {
+        const doc : SceneNode = await SceneNodeService.getSceneNode(sceneNode.content.sceneNodeId);
         if (doc === null) {
-            errors.push(`No scene node with id ${sceneNode.content.objectSceneNodeId}`);
-        } else if (!doc.path.startsWith(ObjectService.ObjectSceneNodePrefix)) {
-            errors.push('Scene node detected, but is not valid object scene node');
+            errors.push(`No scene node with id ${sceneNode.content.sceneNodeId}`);
         }
     }
     return errors;

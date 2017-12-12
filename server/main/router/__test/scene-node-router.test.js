@@ -87,13 +87,31 @@ describe('Scene node router', () => {
         expect(sceneNodes).to.have.lengthOf(3); // Number of remaining nodes
     });
 
-    it('should verify id exists when saving object ref scene node', async() => {
-        const objectRefNode = getSceneNode({name: 'name', path: '/a', type: 'OBJECT_REF'});
-        objectRefNode.content = {objectSceneNodeId: '59953ea7d491fa1dc07eee5c'};
+    it('should succeed saving reference scene node if referenced node exists', async () => {
+        await request(app)
+            .post(SceneNodeRouterEndpoint)
+            .send(getSceneNode({name: 'name', path: '/a'}))
+            .expect(201);
+        const res = await request(app).get(SceneNodeRouterEndpoint).query({pathRegex: '^/a'}).expect(200);
+        const sceneNodes = res.body;
+        expect(sceneNodes).to.have.lengthOf(1);
+
+        const refNode = getSceneNode({name: 'name', path: '/a', type: 'REFERENCE'});
+        refNode.content = {sceneNodeId: sceneNodes[0]._id};
 
         await request(app)
             .post(SceneNodeRouterEndpoint)
-            .send(objectRefNode)
+            .send(refNode)
+            .expect(201);
+    });
+
+    it('should fail when saving reference scene node if referenced node does not exist', async () => {
+        const refNode = getSceneNode({name: 'name', path: '/a', type: 'REFERENCE'});
+        refNode.content = {sceneNodeId: '59953ea7d491fa1dc07eee5c'};
+
+        await request(app)
+            .post(SceneNodeRouterEndpoint)
+            .send(refNode)
             .expect(400, {errors:['No scene node with id 59953ea7d491fa1dc07eee5c']});
     });
 });

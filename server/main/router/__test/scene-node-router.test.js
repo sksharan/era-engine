@@ -14,6 +14,25 @@ describe('Scene node router', () => {
         await getDb().collection(SceneNodeCollection).deleteMany({});
     });
 
+    it('should allow a scene node to be created and fetched', async () => {
+        const createResponse = await request(app)
+            .post(SceneNodeRouterEndpoint)
+            .send(getSceneNode({name: 'name', path: '/a'}))
+            .expect(201);
+        const createdNode = createResponse.body;
+
+        const getResponse = await request(app)
+            .get(`${SceneNodeRouterEndpoint}/${createdNode._id}`)
+            .expect(200);
+
+        expect(getResponse.body).to.be.not.null;
+        expect(getResponse.body._id).to.equal(createdNode._id);
+    });
+
+    it('should return not found if trying to fetch a node that does not exist', async () => {
+        await request(app).get(`${SceneNodeRouterEndpoint}/abcdef123456`).expect(404);
+    });
+
     it('should allow scene nodes to be created and fetched, ordered by path', async () => {
         for (let path of ['/a', '/a/b', '/a/d', '/a/d/e', '/a/b/c', '/b/a', '/b/a/a']) {
             await request(app)

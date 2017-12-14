@@ -15,6 +15,15 @@ router.get('/', async (req, res) => {
     res.status(200).json(sceneNodes);
 });
 
+router.get('/:id', async (req, res) => {
+    const sceneNode = await SceneNodeService.getSceneNode(req.params.id);
+    if (sceneNode) {
+        res.status(200).json(sceneNode);
+    } else {
+        res.status(404).json({error: `No scene node found with id ${req.params.id}`});
+    }
+});
+
 router.post('/', async (req, res) => {
     const sceneNode : SceneNode = req.body;
     const errors : string[] = await validateSceneNode(sceneNode);

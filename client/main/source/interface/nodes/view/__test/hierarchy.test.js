@@ -1,5 +1,5 @@
 import {assert} from 'chai'
-import {createHierarchyFromNodes} from '../node-panel'
+import {createHierarchyFromNodes} from '../hierarchy'
 
 describe('Scene node panel', () => {
 

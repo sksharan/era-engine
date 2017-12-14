@@ -7,3 +7,8 @@ export const getFileContentEndpoint = (fileId) => {
 }
 
 export const sceneNodesEndpoint = `${server}/scene-nodes`;
+export const getSceneNodeEndpoint = (sceneNodeId) => {
+    return `${sceneNodesEndpoint}/${sceneNodeId}`;
+}
+
+export const refNodePrefix = "__ref_";

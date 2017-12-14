@@ -1,4 +1,5 @@
 import {mat4} from 'gl-matrix'
+import {filesEndpoint} from '../../config'
 import {
     BoundingBox,
     GeometryNode,
@@ -6,8 +7,14 @@ import {
     Mesh,
     ProgramBuilder,
     SceneNode,
+    ReferenceNode,
 } from '../../engine/index'
-import {filesEndpoint} from '../../config'
+
+export {
+    SceneNodeType,
+    ReferenceNodeEngineCache,
+    ReferenceNodeExternalCache,
+} from '../../engine/index'
 
 export const generateRenderNode = () => {
     return new SceneNode();
@@ -51,4 +58,11 @@ export const addObjectWithBoundingBox = (sceneNode, parentRenderNode) => {
         })
     });
     renderNode.addChild(obb);
+}
+
+export const convertToRenderRefNode = (sceneNode) => {
+    if (sceneNode.type !== 'REFERENCE') {
+        throw new TypeError(`Expected scene node to have type REFERENCE, but has type ${sceneNode.type} instead`);
+    }
+    return new ReferenceNode(sceneNode.localMatrix, sceneNode.sceneNodeId);
 }

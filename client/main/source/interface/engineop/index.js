@@ -6,6 +6,10 @@ export {
     generateRenderNode,
     addChildToRenderNode,
     addObjectWithBoundingBox,
+    convertToRenderRefNode,
+    SceneNodeType,
+    ReferenceNodeEngineCache,
+    ReferenceNodeExternalCache,
 } from './node-operation'
 
 export {

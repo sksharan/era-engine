@@ -1,10 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import {createHierarchyFromNodes} from './hierarchy'
 import {DefaultNodeWithData} from './default-node'
 import {ObjectNodeWithData} from './object-node'
 import {
     generateRenderNode,
     addChildToRenderNode,
+    ReferenceNodeExternalCache,
 } from '../../engineop/index'
 
 export class Node extends React.Component {
@@ -29,6 +31,20 @@ export class Node extends React.Component {
                                                            node={sceneNode}
                                                            parentRenderNode={this.props.parentRenderNode}
                                                            depth={this.props.depth} />
+                            case 'REFERENCE':
+                                return (
+                                    <div key={sceneNode._id}>
+                                        {
+                                            Object.entries(createHierarchyFromNodes(ReferenceNodeExternalCache.getReference({
+                                                referenceId: sceneNode.content.sceneNodeId
+                                            })))
+                                            .map(([key, val]) => <Node key={key}
+                                                                       val={val}
+                                                                       depth={this.props.depth}
+                                                                       parentRenderNode={this.props.parentRenderNode} />)
+                                        }
+                                    </div>
+                                );
                             default:
                                 return <div>Unknown node type {sceneNode.type}</div>;
                         }

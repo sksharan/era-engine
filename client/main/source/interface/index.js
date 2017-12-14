@@ -2,13 +2,17 @@ import {applyMiddleware, combineReducers, createStore} from 'redux'
 import {logger} from 'redux-logger'
 import thunk from 'redux-thunk'
 import {SelectionReducer} from './common/index'
-import {ContentReducer} from './content/index'
 
-// FIXME: get this reducer through an index file instead
+// FIXME: get these reducers through index files instead
 import {NodeReducer} from './nodes/reducer/node-reducer'
+import {FileMetadataReducer} from './content/files/reducer/file-metadata-reducer'
+import {ObjectReducer} from './content/objects/reducer/object-reducer'
 
 const reducer = combineReducers({
-    contentPanel: ContentReducer,
+    contentPanel: combineReducers({
+        files: FileMetadataReducer,
+        objects: ObjectReducer,
+    }),
     nodePanel: NodeReducer,
     'common.selection': SelectionReducer
 });

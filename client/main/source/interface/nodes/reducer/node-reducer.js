@@ -1,8 +1,9 @@
+// FIXME: import from the index file instead
 import {
     FETCH_NODES_REQUEST,
     FETCH_NODES_SUCCESS,
     FETCH_NODES_FAILURE
-} from '../action/index'
+} from '../action/node-action-type'
 
 const initialState = {
     isFetching: true,

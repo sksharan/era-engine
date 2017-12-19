@@ -97,5 +97,8 @@ function toRGB(property) {
 }
 
 function toFilename(property) {
-    return property.value.substring(2); // Exclude leading '.\\'
+    if (property.value.startsWith('.\\')) {
+        return property.value.substring(2); // Exclude leading '.\'
+    }
+    return property.value;
 }

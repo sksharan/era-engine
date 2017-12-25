@@ -1,5 +1,5 @@
 import React from 'react'
-import {UploadObject} from './upload-object'
+import {UploadObjectWithData} from './upload-object'
 import {ObjectTableWithData} from './object-table'
 
 export class Objects extends React.Component {
@@ -9,10 +9,10 @@ export class Objects extends React.Component {
 
     render() {
         return (
-            <li className='list-group-item'>
-                <UploadObject />
+            <div>
+                <UploadObjectWithData />
                 <ObjectTableWithData />
-            </li>
+            </div>
         );
     }
 }

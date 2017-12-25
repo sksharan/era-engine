@@ -8,8 +8,8 @@ $line-height-base: 1.25;
 $dark: #424a52;
 
 .btn {
-    // Space out adjacent buttons
-    margin-right: $spacer * 2;
+    // Vertically centers buttons that appear in table rows
+    vertical-align: unset !important;
 }
 
 $card-bg: rgba(30, 30, 30, 0.80);
@@ -30,13 +30,16 @@ $card-spacer-y: $spacer / 1.5;
 }
 
 $list-group-bg: rgba(0, 0, 0, 0); // No color
-$list-group-item-padding-x: $card-spacer-x;
-$list-group-item-padding-y: $card-spacer-y;
+$nav-link-padding-y: 0.25rem;
 
 $navbar-padding-x: 1.0rem;
 
 $table-cell-padding-sm: .1rem;
 $table-dark-bg: $card-bg;
+
+// File upload
+$custom-file-bg: #dcdcdc;
+$custom-file-border-radius: 0;
 
 ////// Font Awesome
 :not(button) > .fa {
@@ -67,4 +70,6 @@ $table-dark-bg: $card-bg;
 :local(.tools) button {
     padding: 0.3rem 0.75rem;
     line-height: 1.25;
+    // Space out adjacent buttons
+    margin-right: $spacer * 2;
 }

@@ -6,6 +6,8 @@ export const getFileContentEndpoint = (fileId) => {
     return `${server}/files/${fileId}/content`;
 }
 
+export const objectsEndpoint = `${server}/objects`;
+
 export const sceneNodesEndpoint = `${server}/scene-nodes`;
 export const getSceneNodeEndpoint = (sceneNodeId) => {
     return `${sceneNodesEndpoint}/${sceneNodeId}`;

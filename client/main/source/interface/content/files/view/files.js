@@ -8,9 +8,9 @@ export class Files extends React.Component {
 
     render() {
         return (
-            <li className='list-group-item'>
+            <div>
                 <FileTableWithData />
-            </li>
+            </div>
         );
     }
 }

@@ -1,0 +1,15 @@
+:local(.uploadForm) {
+    display: flex;
+    padding-top: 3px;
+    padding-bottom: 3px;
+}
+
+:local(.browseButton) {
+    width: 80%;
+    max-width: 80%;
+}
+
+:local(.uploadButton) {
+    width: 20%;
+    border-radius: 0;
+}

@@ -1,4 +1,5 @@
 import React from 'react'
+import {UploadFileWithData} from './upload-file'
 import {FileTableWithData} from './file-table'
 
 export class Files extends React.Component {
@@ -9,6 +10,7 @@ export class Files extends React.Component {
     render() {
         return (
             <div>
+                <UploadFileWithData />
                 <FileTableWithData />
             </div>
         );

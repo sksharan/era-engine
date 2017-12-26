@@ -4,7 +4,9 @@ import {connect} from 'react-redux'
 import FontAwesome from 'react-fontawesome'
 import {Node} from './node'
 import {createHierarchyFromNodes} from './hierarchy'
-import {fetchSceneNodes} from '../action/index'
+// FIXME: use index file instead of importing directly - it's currently needed
+// for the canvas to render correctly
+import {fetchSceneNodes} from '../../common/action/node-action'
 import {RootSceneNode} from '../../../engine/index'
 import css from './scss/node-panel.scss'
 
@@ -38,9 +40,9 @@ class NodePanel extends React.Component {
 }
 
 const mapStateToProps = state => ({
-    isFetching: state.nodePanel.isFetching,
-    isError: state.nodePanel.isError,
-    nodes: state.nodePanel.nodeArray
+    isFetching: state['common.nodes'].isFetching,
+    isError: state['common.nodes'].isError,
+    nodes: state['common.nodes'].nodeArray,
 })
 
 const mapDispatchToProps = dispatch => ({

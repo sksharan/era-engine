@@ -1,15 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import {connect} from 'react-redux'
 import FontAwesome from 'react-fontawesome'
 import {sceneNodesEndpoint, refNodePrefix} from '../../../../config'
-import {
-    ReferenceNodeEngineCache,
-    ReferenceNodeExternalCache,
-    convertToRenderRefNode
-,} from '../../../engineop/index'
+// FIXME: use index file instead of importing directly - it's currently needed
+// for the canvas to render correctly
+import {fetchSceneNodes} from '../../../common/action/node-action'
 import commonCss from '../../common/scss/table-row-common.scss'
 
-export class ObjectRow extends React.Component {
+class ObjectRow extends React.Component {
     constructor(props) {
         super(props);
         this._updateObjectRefNode = this._updateObjectRefNode.bind(this);
@@ -58,16 +57,9 @@ export class ObjectRow extends React.Component {
         })
         .then(([ok, json]) => {
             if (ok) {
-                ReferenceNodeEngineCache.updateReference({
-                    referenceId: sceneNodeRefId,
-                    data: [convertToRenderRefNode(json)]
-                });
-                ReferenceNodeExternalCache.updateReference({
-                    referenceId: sceneNodeRefId,
-                    data: [json]
-                });
+                this.props.getNodes();
             } else {
-                console.error(json);
+                throw new Error(JSON.stringify(json));
             }
         })
         .catch(error => {
@@ -76,9 +68,21 @@ export class ObjectRow extends React.Component {
     }
 }
 
+const mapStateToProps = () => ({
+})
+
+const mapDispatchToProps = dispatch => ({
+    getNodes() {
+        dispatch(fetchSceneNodes());
+    }
+});
+
+export const ObjectRowWithData = connect(mapStateToProps, mapDispatchToProps)(ObjectRow);
+
 ObjectRow.propTypes = {
     object: PropTypes.shape({
         _id: PropTypes.string.isRequired,
         name: PropTypes.string.isRequired,
     }),
+    getNodes: PropTypes.func.isRequired,
 }

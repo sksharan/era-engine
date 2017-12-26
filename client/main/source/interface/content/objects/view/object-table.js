@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import {ObjectRow} from './object-row'
+import {ObjectRowWithData} from './object-row'
 import {connect} from 'react-redux'
 import {fetchObjects} from '../action/index'
 import commonCss from '../../common/scss/table-common.scss'
@@ -18,7 +18,7 @@ class ObjectTable extends React.Component {
                     {
                         (this.props.isFetching)
                             ? <tr></tr>
-                            : this.props.objectArray.map((e) => <ObjectRow key={e._id} object={e} />)
+                            : this.props.objectArray.map((e) => <ObjectRowWithData key={e._id} object={e} />)
                     }
                     </tbody>
                 </table>

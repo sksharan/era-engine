@@ -4,7 +4,7 @@ import thunk from 'redux-thunk'
 import {SelectionReducer} from './common/index'
 
 // FIXME: get these reducers through index files instead
-import {NodeReducer} from './nodes/reducer/node-reducer'
+import {NodeReducer} from './common/reducer/node-reducer'
 import {FileMetadataReducer} from './content/files/reducer/file-metadata-reducer'
 import {ObjectReducer} from './content/objects/reducer/object-reducer'
 
@@ -13,7 +13,7 @@ const reducer = combineReducers({
         files: FileMetadataReducer,
         objects: ObjectReducer,
     }),
-    nodePanel: NodeReducer,
+    'common.nodes': NodeReducer,
     'common.selection': SelectionReducer
 });
 

@@ -3,8 +3,13 @@ import ReactDOM from 'react-dom'
 import {Provider} from 'react-redux'
 import FontAwesome from 'react-fontawesome'
 
-import {Store} from './interface/index'
-import {ContentPanel, PropertiesPanel, NodePanel, ToolPanel} from './interface/index-deferred'
+import {
+    Store,
+    ContentPanel,
+    PropertiesPanel,
+    NodePanel,
+    ToolPanel
+} from './interface/index'
 
 import {
     KeyboardHandler,

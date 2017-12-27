@@ -3,9 +3,7 @@ import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import FontAwesome from 'react-fontawesome'
 import {sceneNodesEndpoint, refNodePrefix} from '../../../../config'
-// FIXME: use index file instead of importing directly - it's currently needed
-// for the canvas to render correctly
-import {fetchSceneNodes} from '../../../common/action/node-action'
+import {fetchSceneNodes} from '../../../common/index'
 import commonCss from '../../common/scss/table-row-common.scss'
 
 class ObjectRow extends React.Component {

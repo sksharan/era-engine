@@ -1,18 +1,12 @@
-// FIXME: these types currently need to be in a separate file otherwise
-// canvas will not appear correctly
-import {
-    FETCH_NODES_REQUEST,
-    FETCH_NODES_SUCCESS,
-    FETCH_NODES_FAILURE
-} from './node-action-type'
-
 import {sceneNodesEndpoint, getSceneNodeEndpoint, refNodePrefix} from '../../../config'
 import {
-    // convertToRenderRefNode,
     SceneNodeType,
-    // ReferenceNodeEngineCache,
     ReferenceNodeExternalCache,
 } from '../../engineop/index'
+
+export const FETCH_NODES_REQUEST = 'FETCH_NODES_REQUEST';
+export const FETCH_NODES_SUCCESS = 'FETCH_NODES_SUCCESS';
+export const FETCH_NODES_FAILURE = 'FETCH_NODES_FAILURE';
 
 const pathRegex = `^${refNodePrefix}`
 
@@ -77,15 +71,6 @@ function fetchReferencedNodeAndChildren(sceneNodeRefId, referencedNode) {
             if (!ok) {
                 throw new Error(JSON.stringify(json)); // JSON is an error
             }
-            // FIXME: Are render nodes needed here?
-            // const renderNodes = [];
-            // for (let sceneNode of json) {
-            //     renderNodes.push(convertToRenderRefNode(sceneNode));
-            // }
-            // ReferenceNodeEngineCache.updateReference({
-            //     referenceId: sceneNodeRefId,
-            //     data: renderNodes
-            // });
             ReferenceNodeExternalCache.updateReference({
                 referenceId: sceneNodeRefId,
                 data: json

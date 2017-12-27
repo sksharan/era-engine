@@ -4,9 +4,7 @@ import {connect} from 'react-redux'
 import FontAwesome from 'react-fontawesome'
 import {Node} from './node'
 import {createHierarchyFromNodes} from './hierarchy'
-// FIXME: use index file instead of importing directly - it's currently needed
-// for the canvas to render correctly
-import {fetchSceneNodes} from '../../common/action/node-action'
+import {fetchSceneNodes} from '../../common/index'
 import {RootSceneNode} from '../../../engine/index'
 import css from './scss/node-panel.scss'
 

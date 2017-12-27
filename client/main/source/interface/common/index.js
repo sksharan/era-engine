@@ -1,3 +1,9 @@
-export {selectNode} from './action/index'
+export {
+    selectNode,
+    fetchSceneNodes,
+} from './action/index'
 
-export {SelectionReducer} from './reducer/index'
+export {
+    NodeReducer,
+    SelectionReducer,
+} from './reducer/index'

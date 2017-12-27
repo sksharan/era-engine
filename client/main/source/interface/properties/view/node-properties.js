@@ -60,8 +60,8 @@ function renderMatrix(matrix, n) {
     for (let i = 0; i < n*n; i++) {
         mapped.push(
             i % n == n-1
-            ? <span key={i}>{matrix[i]}<br /></span>
-            : <span key={i}>{matrix[i]} </span>
+            ? <span key={i}>{new Number(matrix[i]).toFixed(2)}<br /></span>
+            : <span key={i}>{new Number(matrix[i]).toFixed(2)}&nbsp;&nbsp;</span>
         );
     }
     return mapped;

@@ -2,36 +2,23 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import {Provider} from 'react-redux'
 import FontAwesome from 'react-fontawesome'
-import {Store} from './interface/index'
-import css from './scss/main.scss'
 
-// Component for initializing the canvas and WebGL
-class Canvas extends React.Component {
-    render() {
-        return <canvas id="canvas" height="480" width="720" className={css.canvas}></canvas>;
-    }
-    componentDidMount() {
-        // With the canvas now rendered, init WebGL by requiring it
-        const gl = require('./engine/gl').gl;
-        if (!gl) {
-            throw new Error('WebGL is unavailable');
-        }
-    }
-    shouldComponentUpdate() {
-        // Canvas should never be re-rendered after initialization
-        return false;
-    }
-}
+import {Store} from './interface/index'
+import {ContentPanel, PropertiesPanel, NodePanel, ToolPanel} from './interface/index-deferred'
+
+import {
+    KeyboardHandler,
+    MouseHandler,
+    RootSceneNode,
+    Renderer,
+} from './engine/index'
+
+import css from './scss/main.scss'
 
 class Main extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            // True if WebGL has been already initialized
-            glInitialized: false,
-            // True if the main loop has already been initialized
-            mainLoopInitialized: false,
-
             // The last time FPS was changed
             prevTime: Date.now(),
             // The number of frames rendered since 'prevTime'
@@ -41,10 +28,8 @@ class Main extends React.Component {
         }
     }
     render() {
-        // Render the canvas in order to init WebGL before rendering any other components
         return (
             <div>
-                <Canvas />
                 <nav className='navbar navbar-expand-sm navbar-dark bg-dark'>
                     <a className='navbar-brand' href="#">
                         <FontAwesome name='gamepad' />
@@ -53,50 +38,49 @@ class Main extends React.Component {
                 <div className='container-fluid'>
                     <div className='row'>
                         <div className='col-md-3 pl-0 pr-0'>
-                            {this.state.glInitialized ? this.getContentView() : ""}
+                            <ContentPanel />
                         </div>
                         <div className={`col-md-6 pl-0 pr-0 ${css.tools}`}>
-                            {this.state.glInitialized ? this.getToolsView() : ""}
+                            <ToolPanel />
                         </div>
                         <div className='col-md-3 pl-0 pr-0'>
-                            {this.state.glInitialized ? this.getNodesView() : ""}
-                            {this.state.glInitialized ? this.getPropertiesView() : ""}
+                            <NodePanel />
+                            <PropertiesPanel />
                         </div>
                     </div>
                 </div>
             </div>
         );
     }
-    getContentView() {
-        const Content = require('./interface/index-deferred').ContentPanel;
-        return <Content />
-    }
-    getPropertiesView() {
-        const Properties = require('./interface/index-deferred').PropertiesPanel;
-        return <Properties />
-    }
-    getNodesView() {
-        const Node = require('./interface/index-deferred').NodePanel;
-        return <Node />
-    }
-    getToolsView() {
-        const Tool = require('./interface/index-deferred').ToolPanel;
-        return <Tool />
-    }
     componentDidMount() {
-        // At this point, canvas has been rendered so WebGL is initialized
-        this.setState({glInitialized: true});
-    }
-    componentDidUpdate() {
-        // Only do main loop setup logic once
-        if (this.state.mainLoopInitialized) {
-            return;
+        // Setup mouse and keyboard handlers
+        MouseHandler.init();
+        KeyboardHandler.init();
+        // FPS counter
+        function updateFPS() {
+            const currTime = Date.now();
+            const millisElapsed = currTime - this.state.prevTime;
+            this.setState((prevState) => ({
+                frames: prevState.frames + 1
+            }));
+            if (millisElapsed >= 1000) { // Update FPS approximately every second
+                this.setState((prevState) => ({
+                    prevTime: currTime,
+                    frames: 0,
+                    // Note: display as ms/frame instead with console.log(millisElapsed / frames)
+                    // Do (ms/s)/(ms/frame) to get FPS, and there are 1000ms in a second
+                    fps: 1000 / (millisElapsed / prevState.frames)
+                }));
+            }
         }
-        this.setState({mainLoopInitialized: true});
-
-        // Start the main loop, which will also handle FPS calculation
-        const mainLoop = require('./main-loop');
-        mainLoop.begin(this);
+        // Start main loop
+        function mainLoop() {
+            KeyboardHandler.processKeys();
+            Renderer.render(RootSceneNode);
+            updateFPS.call(this);
+            requestAnimationFrame(mainLoop.bind(this));
+        }
+        requestAnimationFrame(mainLoop.bind(this));
     }
 }
 

@@ -1,10 +1,10 @@
-import SceneNode from './scene-node';
-import {SceneNodeType} from './scene-node-type'
+import {RenderNode} from './render-node';
+import {RenderNodeType} from './render-node-type'
 
-export default class GeometryNode extends SceneNode {
+export class GeometryNode extends RenderNode {
     constructor(localMatrix, {mesh, material}) {
         super(localMatrix);
-        this._nodeType = SceneNodeType.GEOMETRY;
+        this._nodeType = RenderNodeType.GEOMETRY;
         /* The mesh to render. */
         this._mesh = mesh;
         /* The material to associate with the mesh. */

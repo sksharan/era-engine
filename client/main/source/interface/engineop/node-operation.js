@@ -6,18 +6,18 @@ import {
     Material,
     Mesh,
     ProgramBuilder,
-    SceneNode,
+    RenderNode,
     ReferenceNode,
 } from '../../engine/index'
 
 export {
-    SceneNodeType,
+    RenderNodeType,
     ReferenceNodeEngineCache,
     ReferenceNodeExternalCache,
 } from '../../engine/index'
 
 export const generateRenderNode = () => {
-    return new SceneNode();
+    return new RenderNode();
 }
 
 export const addChildToRenderNode = (childRenderNode, parentRenderNode) => {

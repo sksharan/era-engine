@@ -1,6 +1,6 @@
 import {TransformMesh, attachToBaseNode} from './transform'
 import {redColor, greenColor, blueColor} from './color'
-import {SceneNode} from '../../../node/index'
+import {RenderNode} from '../../../node/index'
 import {gl} from '../../../gl'
 import {CurrentTransformOrientation} from '../../../global/index'
 import {mat4, vec3} from 'gl-matrix'
@@ -160,7 +160,7 @@ function handleScaling({baseSceneNode, intersectionDelta, intersectionPoint}, ax
 
 export const createScaleNode = () => {
     const localMatrix = mat4.create();
-    const base = new SceneNode(localMatrix);
+    const base = new RenderNode(localMatrix);
     attachToBaseNode({base, mesh: new ScaleXMesh(), color: redColor});
     attachToBaseNode({base, mesh: new ScaleYMesh(), color: greenColor});
     attachToBaseNode({base, mesh: new ScaleZMesh(), color: blueColor});

@@ -1,11 +1,11 @@
-import SceneNode from './scene-node'
+import {RenderNode} from './render-node'
 import {Light} from '../light/index'
-import {SceneNodeType} from './scene-node-type'
+import {RenderNodeType} from './render-node-type'
 
-export default class LightNode extends SceneNode {
+export class LightNode extends RenderNode {
     constructor(localMatrix, light) {
         super(localMatrix);
-        this._nodeType = SceneNodeType.LIGHT;
+        this._nodeType = RenderNodeType.LIGHT;
         this._light = new Light(light);
     }
 

@@ -1,6 +1,6 @@
 import {assert} from 'chai'
 import {colorGeometryNodes} from '../node-colorizer'
-import {GeometryNode, SceneNode} from '../../../node/index'
+import {GeometryNode, RenderNode} from '../../../node/index'
 import {BoundingBox} from '../../../mesh/index'
 import {Material} from '../../../material/index'
 import {mat4, vec3} from 'gl-matrix'
@@ -12,12 +12,12 @@ describe('Node colorizer', () => {
                 'Node must be a SceneNode');
         });
         it('should color all geometry nodes', () => {
-            const node1 = new SceneNode();
+            const node1 = new RenderNode();
             const node2 = new GeometryNode(mat4.create(), {
                 mesh: new BoundingBox([0, 0, 0, 0, 0, 0]),
                 material: new Material()
             });
-            const node3 = new SceneNode();
+            const node3 = new RenderNode();
             const node4 = new GeometryNode(mat4.create(), {
                 mesh: new BoundingBox([0, 0, 0, 0, 0, 0]),
                 material: new Material()

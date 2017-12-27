@@ -1,13 +1,13 @@
 export {CurrentTransformOrientation} from './global/index'
 
-import {SceneNode} from './node/index'
-export const RootSceneNode = new SceneNode();
+import {RenderNode} from './node/index'
+export const RootSceneNode = new RenderNode();
 export {
-    SceneNode,
+    RenderNode,
     GeometryNode,
     LightNode,
     ReferenceNode,
-    SceneNodeType,
+    RenderNodeType,
 } from './node/index'
 
 export {KeyboardHandler, MouseHandler, CurrentTransformMode} from './input/index'

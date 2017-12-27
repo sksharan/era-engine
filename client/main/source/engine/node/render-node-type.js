@@ -1,4 +1,4 @@
-export const SceneNodeType = {
+export const RenderNodeType = {
     BASE: 'BASE',
     GEOMETRY: 'GEOMETRY',
     LIGHT: 'LIGHT',

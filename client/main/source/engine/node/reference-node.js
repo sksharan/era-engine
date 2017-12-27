@@ -1,10 +1,10 @@
-import SceneNode from './scene-node'
-import {SceneNodeType} from './scene-node-type'
+import {RenderNode} from './render-node'
+import {RenderNodeType} from './render-node-type'
 
-export class ReferenceNode extends SceneNode {
+export class ReferenceNode extends RenderNode {
     constructor(localMatrix, referencedNodeId) {
         super(localMatrix);
-        this._nodeType = SceneNodeType.REFERENCE;
+        this._nodeType = RenderNodeType.REFERENCE;
         this._referencedNodeId = referencedNodeId;
     }
 

@@ -5,7 +5,7 @@
 
 import {BoundingBox} from '../mesh/index'
 
-export default class NodeAnalyzer {
+export class NodeAnalyzer {
     constructor() {
         this._allLightNodes = [];
         this._prevLightNodes = null;

@@ -1,8 +1,6 @@
-/* A node in a scene graph. */
-
 import {mat3, mat4, vec3} from 'gl-matrix'
 import {CurrentTransformOrientation} from '../global/index'
-import {SceneNodeType} from './scene-node-type'
+import {RenderNodeType} from './render-node-type'
 
 function updateWorldMatrix(node, parentWorldMatrix) {
     mat4.multiply(node.worldMatrix, parentWorldMatrix, node.localMatrix);
@@ -13,10 +11,10 @@ function updateWorldMatrix(node, parentWorldMatrix) {
     });
 }
 
-export default class SceneNode {
+export class RenderNode {
     constructor(localMatrix = mat4.create()) {
-        this._nodeType = SceneNodeType.BASE;
-        /* Parent of this node - scene nodes have at most one parent. */
+        this._nodeType = RenderNodeType.BASE;
+        /* Parent of this node - render nodes have at most one parent. */
         this._parent = null;
         /* Children of this node. */
         this._children = [];
@@ -101,7 +99,7 @@ export default class SceneNode {
 
     addChild(child) {
         if (child === this) {
-            throw new Error("A scene node cannot add itself as a child");
+            throw new Error("A render node cannot add itself as a child");
         }
         if (child._parent !== null) {
             throw new Error("The child node already has a parent");

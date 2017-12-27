@@ -1,5 +1,5 @@
 import ProgramDataManager from './program-data-manager'
-import {NodeAnalyzer, SceneNodeType} from '../node/index'
+import {NodeAnalyzer, RenderNodeType} from '../node/index'
 import {gl} from '../gl'
 import {NumFloatsPerPosition, NumFloatsPerNormal, NumFloatsPerTexcoord} from '../mesh/index'
 
@@ -56,10 +56,10 @@ function renderNode(sceneNode) {
 }
 
 function renderGeometry(sceneNode, lightNodes, skipIgnoreDepthNodes) {
-    if (sceneNode.nodeType === SceneNodeType.REFERENCE) {
+    if (sceneNode.nodeType === RenderNodeType.REFERENCE) {
         // TODO
     }
-    if (sceneNode.nodeType === SceneNodeType.GEOMETRY && sceneNode.material.isVisible) {
+    if (sceneNode.nodeType === RenderNodeType.GEOMETRY && sceneNode.material.isVisible) {
         const mesh = sceneNode.mesh;
         const material = sceneNode.material;
 

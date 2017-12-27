@@ -1,6 +1,6 @@
 import {sceneNodesEndpoint, getSceneNodeEndpoint, refNodePrefix} from '../../../config'
 import {
-    SceneNodeType,
+    RenderNodeType,
     ReferenceNodeExternalCache,
 } from '../../engineop/index'
 
@@ -36,7 +36,7 @@ export const fetchSceneNodes = () => {
 function populateRefCache(sceneNodes) {
     let promises = [], sceneNodeIds = [];
     for (let sceneNode of sceneNodes) {
-        if (sceneNode.type !== SceneNodeType.REFERENCE) {
+        if (sceneNode.type !== RenderNodeType.REFERENCE) {
             continue;
         }
         if (sceneNodeIds.indexOf(sceneNode.content.sceneNodeId) === -1) {

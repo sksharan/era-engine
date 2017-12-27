@@ -1,4 +1,4 @@
-import {SceneNode, GeometryNode} from '../../../node/index'
+import {RenderNode, GeometryNode} from '../../../node/index'
 import {Material} from '../../../material/index'
 import {Mesh, BoundingBox} from '../../../mesh/index'
 import {ProgramBuilder} from '../../../shader/index'
@@ -55,7 +55,7 @@ export class TransformMesh extends Mesh {
         this._validateTransformArgs({baseSceneNode, intersectionDelta, intersectionPoint});
     }
     _validateTransformArgs({baseSceneNode, intersectionDelta, intersectionPoint}) {
-        if (!(baseSceneNode instanceof SceneNode)) {
+        if (!(baseSceneNode instanceof RenderNode)) {
             throw new Error('baseSceneNode must be a SceneNode');
         }
         if (baseSceneNode.nodeType !== 'BASE') {

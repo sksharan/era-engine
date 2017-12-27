@@ -3,7 +3,7 @@ import {mat4, vec3} from 'gl-matrix'
 import {testBoundingBoxIntersection} from '../intersection'
 import {Ray} from '../ray'
 import {BoundingBox} from '../../../mesh/index'
-import {GeometryNode, SceneNode} from '../../../node/index'
+import {GeometryNode, RenderNode} from '../../../node/index'
 
 describe('Bounding box intersection test', () => {
     let node = null;
@@ -63,11 +63,11 @@ describe('Bounding box intersection test', () => {
         });
         it('should validate bounding box node type', () => {
             assert.throws(() => testBoundingBoxIntersection(new Ray(vec3.create(), vec3.create()),
-                new SceneNode()), 'Node must be a GeometryNode');
+                new RenderNode()), 'Node must be a GeometryNode');
         });
         it('should validate bounding box node mesh type', () => {
             node =  new GeometryNode(mat4.create(), {
-                mesh: new SceneNode(),
+                mesh: new RenderNode(),
                 material: null
             });
             assert.throws(() => testBoundingBoxIntersection(new Ray(vec3.create(), vec3.create()), node),

@@ -6,7 +6,7 @@ import {NoNodeSelected} from './no-node-selected'
 import {NodeProperties} from './node-properties'
 import {DefaultNodeProperties} from './default-node-properties'
 import {ObjectNodeProperties} from './object-node-properties'
-import {SceneNodeType} from '../../engineop/index'
+import {RenderNodeType} from '../../engineop/index'
 
 class PropertiesPanel extends React.Component {
     constructor(props) {
@@ -18,7 +18,7 @@ class PropertiesPanel extends React.Component {
 
         if (this.props.selectedNode) {
             switch (this.props.selectedNode.renderNode.nodeType) {
-                case SceneNodeType.BASE:
+                case RenderNodeType.BASE:
                     cardBody = (
                         <div>
                             <NodeProperties node={this.props.selectedNode} keyWidth={4} valueWidth={8} />
@@ -26,7 +26,7 @@ class PropertiesPanel extends React.Component {
                         </div>
                     );
                     break;
-                case SceneNodeType.GEOMETRY:
+                case RenderNodeType.GEOMETRY:
                     cardBody = (
                         <div>
                             <NodeProperties node={this.props.selectedNode} keyWidth={4} valueWidth={8} />

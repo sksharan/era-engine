@@ -7,7 +7,7 @@ export {
     addChildToRenderNode,
     addObjectWithBoundingBox,
     convertToRenderRefNode,
-    SceneNodeType,
+    RenderNodeType,
     ReferenceNodeEngineCache,
     ReferenceNodeExternalCache,
 } from './node-operation'

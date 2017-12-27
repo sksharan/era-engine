@@ -1,8 +1,8 @@
-import {SceneNode} from '../../node/index'
+import {RenderNode} from '../../node/index'
 import {vec3} from 'gl-matrix'
 
 export const colorGeometryNodes = (node, color=vec3.create()) => {
-    if (!(node instanceof SceneNode)) {
+    if (!(node instanceof RenderNode)) {
         throw new TypeError('Node must be a SceneNode');
     }
     if (node.nodeType === "GEOMETRY") {

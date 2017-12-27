@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import FontAwesome from 'react-fontawesome'
-import {SceneNode} from '../../../engine/index'
+import {RenderNode} from '../../../engine/index'
 import {selectNode} from '../../common/index'
 import css from './scss/node-common.scss'
 
@@ -30,7 +30,7 @@ class DefaultNode extends React.Component {
 
     componentDidMount() {
         this.setState({
-            renderNode: new SceneNode()
+            renderNode: new RenderNode()
         },
         () => {
             this.props.parentRenderNode.addChild(this.state.renderNode);

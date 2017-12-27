@@ -1,6 +1,6 @@
 import {TransformMesh, attachToBaseNode} from './transform'
 import {redColor, greenColor, blueColor, blackColor} from './color'
-import {SceneNode} from '../../../node/index'
+import {RenderNode} from '../../../node/index'
 import {Sphere} from '../../../mesh/index'
 import {gl} from '../../../gl'
 import {mat4, vec3, glMatrix} from 'gl-matrix'
@@ -168,7 +168,7 @@ function handleRotation({baseSceneNode, intersectionDelta, intersectionPoint}) {
 
 export const createRotateNode = () => {
     const localMatrix = mat4.create();
-    const base = new SceneNode(localMatrix);
+    const base = new RenderNode(localMatrix);
     const sphereRadius = 75;
     attachToBaseNode({base, mesh: new RotateXMesh(), color: redColor, useSphereClipping: true, sphereRadius});
     attachToBaseNode({base, mesh: new RotateYMesh(), color: greenColor, useSphereClipping: true, sphereRadius});

@@ -1,6 +1,6 @@
 import {TransformMesh, attachToBaseNode} from './transform'
 import {redColor, greenColor, blueColor} from './color'
-import {SceneNode} from '../../../node/index'
+import {RenderNode} from '../../../node/index'
 import {CurrentTransformOrientation} from '../../../global/transform-orientation'
 import {gl} from '../../../gl'
 import {mat4, vec3} from 'gl-matrix'
@@ -179,7 +179,7 @@ function handleTranslation({baseSceneNode, intersectionDelta, intersectionPoint}
 
 export const createTranslateNode = () => {
     const localMatrix = mat4.create();
-    const base = new SceneNode(localMatrix);
+    const base = new RenderNode(localMatrix);
     attachToBaseNode({base, mesh: new TranslateXMesh(), color: redColor});
     attachToBaseNode({base, mesh: new TranslateYMesh(), color: greenColor});
     attachToBaseNode({base, mesh: new TranslateZMesh(), color: blueColor});

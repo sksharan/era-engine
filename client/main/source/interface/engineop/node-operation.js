@@ -58,6 +58,8 @@ export const addObjectWithBoundingBox = (sceneNode, parentRenderNode) => {
         })
     });
     renderNode.addChild(obb);
+
+    return renderNode;
 }
 
 export const convertToRenderRefNode = (sceneNode) => {

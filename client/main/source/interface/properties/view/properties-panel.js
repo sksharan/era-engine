@@ -2,10 +2,11 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import FontAwesome from 'react-fontawesome'
-// import {Node} from './node'
-// import {fetchSceneNodes} from '../action/index'
-import {/*RootSceneNode, SceneNodeType*/} from '../../../engine/index'
 import {NoNodeSelected} from './no-node-selected'
+import {NodeProperties} from './node-properties'
+import {DefaultNodeProperties} from './default-node-properties'
+import {ObjectNodeProperties} from './object-node-properties'
+import {SceneNodeType} from '../../engineop/index'
 
 class PropertiesPanel extends React.Component {
     constructor(props) {
@@ -16,7 +17,28 @@ class PropertiesPanel extends React.Component {
         let cardBody = <NoNodeSelected />;
 
         if (this.props.selectedNode) {
-            cardBody = (<span>Node selected</span>);
+            switch (this.props.selectedNode.renderNode.nodeType) {
+                case SceneNodeType.BASE:
+                    cardBody = (
+                        <div>
+                            <NodeProperties node={this.props.selectedNode} keyWidth={4} valueWidth={8} />
+                            <DefaultNodeProperties node={this.props.selectedNode} keyWidth={4} valueWidth={8} />
+                        </div>
+                    );
+                    break;
+                case SceneNodeType.GEOMETRY:
+                    cardBody = (
+                        <div>
+                            <NodeProperties node={this.props.selectedNode} keyWidth={4} valueWidth={8} />
+                            <ObjectNodeProperties node={this.props.selectedNode} keyWidth={4} valueWidth={8} />
+                        </div>
+                    );
+                    break;
+                default:
+                    console.warn(`Unknown selected node type: ${this.props.selectedNode.renderNode.nodeType}`);
+                    cardBody = (<span>Node selected</span>);
+                    break;
+            }
         }
 
         return (
@@ -44,6 +66,8 @@ export const PropertiesPanelWithData = connect(mapStateToProps, mapDispatchToPro
 
 PropertiesPanel.propTypes = {
     selectedNode: PropTypes.shape({
-        type: PropTypes.string.isRequired
+        renderNode: PropTypes.shape({
+            nodeType: PropTypes.string.isRequired,
+        }),
     }),
 }

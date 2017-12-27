@@ -3,20 +3,22 @@ import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import FontAwesome from 'react-fontawesome'
 import {addObjectWithBoundingBox} from '../../engineop/index'
-import {selectSceneNode} from '../../common/index'
+import {selectNode} from '../../common/index'
 import css from './scss/node-common.scss'
 
 class ObjectNode extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            renderNode: null,
+        }
         this._triggerNodeSelection = this._triggerNodeSelection.bind(this);
     }
 
     render() {
-        addObjectWithBoundingBox(this.props.node, this.props.parentRenderNode);
         return (
             <div style={{paddingLeft: `${this.props.depth * 30}px`}}
-                 className={this.props.selectedNode && this.props.selectedNode._id === this.props.node._id
+                 className={this.props.selectedSceneNode && this.props.selectedSceneNode._id === this.props.node._id
                      ? `${css.node} ${css.nodeSelected}`
                      : `${css.node}`}
                  onClick={this._triggerNodeSelection}>
@@ -26,18 +28,26 @@ class ObjectNode extends React.Component {
         );
     }
 
+    componentDidMount() {
+        this.setState({
+            renderNode: addObjectWithBoundingBox(this.props.node, this.props.parentRenderNode)
+        })
+    }
+
     _triggerNodeSelection() {
-        this.props.selectNode(this.props.node);
+        this.props.selectNode(this.props.node, this.state.renderNode);
     }
 }
 
 const mapStateToProps = state => ({
-    selectedNode: state['common.selection'].selectedNode
-})
+    selectedSceneNode: state['common.selection'].selectedNode
+        ? state['common.selection'].selectedNode.sceneNode
+        : null
+});
 
 const mapDispatchToProps = dispatch => ({
-    selectNode(node) {
-        dispatch(selectSceneNode(node));
+    selectNode(sceneNode, renderNode) {
+        dispatch(selectNode(sceneNode, renderNode));
     }
 });
 
@@ -59,5 +69,5 @@ ObjectNode.propTypes = {
     parentRenderNode: PropTypes.object.isRequired,
     depth: PropTypes.number.isRequired,
     selectNode: PropTypes.func.isRequired,
-    selectedNode: PropTypes.object
+    selectedSceneNode: PropTypes.object,
 }

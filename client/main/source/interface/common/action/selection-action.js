@@ -1,8 +1,11 @@
-export const SELECT_SCENE_NODE = "SELECT_SCENE_NODE";
+export const SELECT_NODE = "SELECT_NODE";
 
-export const selectSceneNode = (sceneNode) => {
+export const selectNode = (sceneNode, renderNode) => {
     return {
-        type: SELECT_SCENE_NODE,
-        payload: sceneNode
+        type: SELECT_NODE,
+        payload: {
+            sceneNode,
+            renderNode,
+        }
     }
 }

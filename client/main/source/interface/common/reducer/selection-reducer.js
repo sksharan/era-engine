@@ -1,5 +1,5 @@
 import {
-    SELECT_SCENE_NODE,
+    SELECT_NODE,
 } from '../action/index'
 
 const initialState = {
@@ -8,7 +8,7 @@ const initialState = {
 
 export const SelectionReducer = (state=initialState, action) => {
     switch (action.type) {
-        case SELECT_SCENE_NODE:
+        case SELECT_NODE:
             return {
                 selectedNode: action.payload
             };

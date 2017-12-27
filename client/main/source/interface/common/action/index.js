@@ -1,4 +1,4 @@
 export {
-    SELECT_SCENE_NODE,
-    selectSceneNode
+    SELECT_NODE,
+    selectNode
 } from './selection-action'

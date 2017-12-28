@@ -9,16 +9,16 @@ const extractSass = new ExtractTextPlugin({
 });
 
 module.exports = {
-    entry: './main/source/index.js',
+    entry: './main/index.js',
     output: {
-        filename: './main/public/bundle.js'
+        filename: './dist/bundle.js'
     },
     watch: true,
     devtool: 'source-map',
     plugins: [
         new HtmlWebpackPlugin({
-            filename: 'main/public/index.html',
-            template: 'main/template/index.template.html'
+            filename: 'dist/index.html',
+            template: 'main/index.html'
         }),
         extractSass
     ],

@@ -6,32 +6,39 @@ import {
     Material,
     Mesh,
     ProgramBuilder,
-    RenderNode,
     ReferenceNode,
 } from '../../engine/index'
+import { RenderNode } from '../../engine/node/render-node';
 
-export {
-    RenderNodeType,
-    ReferenceNodeEngineCache,
-    ReferenceNodeExternalCache,
-} from '../../engine/index'
-
-export const generateRenderNode = () => {
-    return new RenderNode();
+export const convertSceneNodesToRenderNodes = (sceneNodes) => {
+    let renderNodes = [];
+    for (let sceneNode of sceneNodes) {
+        renderNodes.push(convertSceneNodeToRenderNode(sceneNode));
+    }
+    return renderNodes;
 }
 
-export const addChildToRenderNode = (childRenderNode, parentRenderNode) => {
-    parentRenderNode.addChild(childRenderNode);
+export const convertSceneNodeToRenderNode = (sceneNode) => {
+    switch (sceneNode.type) {
+        case 'DEFAULT':
+            return new RenderNode();
+        case 'OBJECT':
+            return convertObjectSceneNodeToGeometryRenderNode(sceneNode);
+        case 'REFERENCE':
+            return convertReferenceSceneNodeToReferenceRenderNode(sceneNode);
+        default:
+            throw new TypeError(`Unknown scene node type: ${sceneNode.type}`);
+    }
 }
 
-const objectProgramData = new ProgramBuilder()
+const convertObjectSceneNodeToGeometryRenderNode = (sceneNode) => {
+    const objectProgramData = new ProgramBuilder()
         .addPosition()
         .addNormal()
         .addTexcoord()
         .addColor()
         .build();
 
-export const addObjectWithBoundingBox = (sceneNode, parentRenderNode) => {
     const mesh = new Mesh({
         positions: sceneNode.content.positions,
         normals: sceneNode.content.normals,
@@ -46,7 +53,6 @@ export const addObjectWithBoundingBox = (sceneNode, parentRenderNode) => {
             imageSrc: `${filesEndpoint}/${sceneNode.content.textureFileId}/content`
         })
     });
-    parentRenderNode.addChild(renderNode);
 
     const localMatrix = mat4.create();
     const obb = new GeometryNode(localMatrix, {
@@ -62,9 +68,6 @@ export const addObjectWithBoundingBox = (sceneNode, parentRenderNode) => {
     return renderNode;
 }
 
-export const convertToRenderRefNode = (sceneNode) => {
-    if (sceneNode.type !== 'REFERENCE') {
-        throw new TypeError(`Expected scene node to have type REFERENCE, but has type ${sceneNode.type} instead`);
-    }
+const convertReferenceSceneNodeToReferenceRenderNode = (sceneNode) => {
     return new ReferenceNode(sceneNode.localMatrix, sceneNode.sceneNodeId);
 }

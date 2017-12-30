@@ -3,11 +3,11 @@ import PropTypes from 'prop-types'
 import {createHierarchyFromNodes} from './hierarchy'
 import {DefaultNodeWithData} from './default-node'
 import {ObjectNodeWithData} from './object-node'
+import {RenderNode} from '../../../engine/index'
 import {
-    generateRenderNode,
-    addChildToRenderNode,
-    ReferenceNodeExternalCache,
-} from '../../engineop/index'
+    ReferenceNodeCache,
+    convertSceneNodeToRenderNode,
+} from '../../../common/index'
 
 export class Node extends React.Component {
     constructor(props) {
@@ -15,7 +15,7 @@ export class Node extends React.Component {
     }
 
     render() {
-        const renderNode = generateRenderNode();
+        const renderNode = new RenderNode();
         return (
             <div>
                 {
@@ -23,19 +23,21 @@ export class Node extends React.Component {
                         switch (sceneNode.type) {
                             case 'DEFAULT':
                                 return <DefaultNodeWithData key={sceneNode._id}
-                                                            node={sceneNode}
+                                                            sceneNode={sceneNode}
+                                                            renderNode={convertSceneNodeToRenderNode(sceneNode)}
                                                             parentRenderNode={this.props.parentRenderNode}
                                                             depth={this.props.depth} />
                             case 'OBJECT':
                                 return <ObjectNodeWithData key={sceneNode._id}
-                                                           node={sceneNode}
+                                                           sceneNode={sceneNode}
+                                                           renderNode={convertSceneNodeToRenderNode(sceneNode)}
                                                            parentRenderNode={this.props.parentRenderNode}
                                                            depth={this.props.depth} />
                             case 'REFERENCE':
                                 return (
                                     <div key={sceneNode._id}>
                                         {
-                                            Object.entries(createHierarchyFromNodes(ReferenceNodeExternalCache.getReference({
+                                            Object.entries(createHierarchyFromNodes(ReferenceNodeCache.getReference({
                                                 referenceId: sceneNode.content.sceneNodeId
                                             })))
                                             .map(([key, val]) => <Node key={key}
@@ -53,7 +55,7 @@ export class Node extends React.Component {
                 {
                     Object.entries(this.props.val.hierarchy).map(([key, val], index) => {
                         if (index === 0) {
-                            addChildToRenderNode(renderNode, this.props.parentRenderNode);
+                            this.props.parentRenderNode.addChild(renderNode);
                         }
                         return <Node key={key} val={val} depth={this.props.depth + 1} parentRenderNode={renderNode} />;
                     })

@@ -6,6 +6,7 @@ import {Node} from './node'
 import {createHierarchyFromNodes} from './hierarchy'
 import {fetchSceneNodes} from '../../common/index'
 import {RootSceneNode} from '../../../engine/index'
+import {convertSceneNodesToRenderNodes} from '../../../common/index'
 import css from './scss/node-panel.scss'
 
 class NodePanel extends React.Component {
@@ -24,8 +25,11 @@ class NodePanel extends React.Component {
                     {
                         (this.props.isFetching)
                             ? <div>Loading nodes...</div>
-                            : Object.entries(createHierarchyFromNodes(this.props.nodes))
-                                    .map(([key, val]) => <Node key={key} val={val} depth={0} parentRenderNode={RootSceneNode} />)
+                            : Object.entries(createHierarchyFromNodes({
+                                    sceneNodes: this.props.nodes,
+                                    renderNodes: convertSceneNodesToRenderNodes(this.props.nodes)
+                                }))
+                                .map(([key, val]) => <Node key={key} val={val} depth={0} parentRenderNode={RootSceneNode} />)
                     }
                 </div>
             </div>

@@ -6,7 +6,7 @@ describe('Scene node panel', () => {
     describe('creating hierarchy from scene node list', () => {
 
         it('should be successful for empty list', () => {
-            const hierarchy = createHierarchyFromNodes([]);
+            const hierarchy = createHierarchyFromNodes({sceneNodes: [], renderNodes: []});
             const expectedHierarchy = {};
             assert.equal(JSON.stringify(hierarchy), JSON.stringify(expectedHierarchy));
         });
@@ -23,6 +23,17 @@ describe('Scene node panel', () => {
                 {path: 'a/d'},
                 {path: 'a/d/e'},
             ];
+            const renderNodes = [
+                {data: 'A'},
+                {data: 'A/D/E/F'},
+                {data: 'A/D/G'},
+                {data: 'B'},
+                {data: 'B/D'},
+                {data: 'B/D'},
+                {data: 'C'},
+                {data: 'A/D'},
+                {data: 'A/D/E'},
+            ];
 
             const expectedHierarchy = {
                 "a": {
@@ -35,28 +46,43 @@ describe('Scene node panel', () => {
                                             "hierarchy": {},
                                             "sceneNodes": [{
                                                 "path": "a/d/e/f"
-                                            }]
+                                            }],
+                                            "renderNodes": [{
+                                                "data": "A/D/E/F"
+                                            }],
                                         }
                                     },
                                     "sceneNodes": [{
                                         "path": "a/d/e"
-                                    }]
+                                    }],
+                                    "renderNodes": [{
+                                        "data": "A/D/E"
+                                    }],
                                 },
                                 "g": {
                                     "hierarchy": {},
                                     "sceneNodes": [{
                                         "path": "a/d/g"
-                                    }]
+                                    }],
+                                    "renderNodes": [{
+                                        "data": "A/D/G"
+                                    }],
                                 }
                             },
                             "sceneNodes": [{
                                 "path": "a/d"
-                            }]
+                            }],
+                            "renderNodes": [{
+                                "data": "A/D"
+                            }],
                         }
                     },
                     "sceneNodes": [{
                         "path": "a"
-                    }]
+                    }],
+                    "renderNodes": [{
+                        "data": "A"
+                    }],
                 },
                 "b": {
                     "hierarchy": {
@@ -66,22 +92,33 @@ describe('Scene node panel', () => {
                                 "path": "b/d"
                             }, {
                                 "path": "b/d"
-                            }]
+                            }],
+                            "renderNodes": [{
+                                "data": "B/D"
+                            }, {
+                                "data": "B/D"
+                            }],
                         }
                     },
                     "sceneNodes": [{
                         "path": "b"
-                    }]
+                    }],
+                    "renderNodes": [{
+                        "data": "B"
+                    }],
                 },
                 "c": {
                     "hierarchy": {},
                     "sceneNodes": [{
                         "path": "c"
-                    }]
+                    }],
+                    "renderNodes": [{
+                        "data": "C"
+                    }],
                 }
             };
 
-            const hierarchy = createHierarchyFromNodes(sceneNodes);
+            const hierarchy = createHierarchyFromNodes({sceneNodes, renderNodes});
             assert.equal(JSON.stringify(hierarchy), JSON.stringify(expectedHierarchy));
         });
     });

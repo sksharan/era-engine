@@ -19,7 +19,3 @@ export {Material} from './material/index'
 export {Renderer} from './render/index'
 
 export {ProgramBuilder} from './shader/index'
-
-import {ReferenceCache} from './cache/index'
-export const ReferenceNodeEngineCache = new ReferenceCache();
-export const ReferenceNodeExternalCache = new ReferenceCache();

@@ -1,8 +1,6 @@
 import {sceneNodesEndpoint, getSceneNodeEndpoint, refNodePrefix} from '../../../config'
-import {
-    RenderNodeType,
-    ReferenceNodeExternalCache,
-} from '../../engineop/index'
+import {RenderNodeType} from '../../../engine/index'
+import {ReferenceNodeCache, convertSceneNodesToRenderNodes} from '../../../common/index'
 
 export const FETCH_NODES_REQUEST = 'FETCH_NODES_REQUEST';
 export const FETCH_NODES_SUCCESS = 'FETCH_NODES_SUCCESS';
@@ -71,9 +69,10 @@ function fetchReferencedNodeAndChildren(sceneNodeRefId, referencedNode) {
             if (!ok) {
                 throw new Error(JSON.stringify(json)); // JSON is an error
             }
-            ReferenceNodeExternalCache.updateReference({
+            ReferenceNodeCache.updateReference({
                 referenceId: sceneNodeRefId,
-                data: json
+                sceneNodes: json,
+                renderNodes: convertSceneNodesToRenderNodes(json),
             });
         })
         .catch(error => {

@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import FontAwesome from 'react-fontawesome'
-import {addObjectWithBoundingBox} from '../../engineop/index'
 import {selectNode} from '../../common/index'
 import css from './scss/node-common.scss'
 
@@ -18,30 +17,28 @@ class ObjectNode extends React.Component {
     render() {
         return (
             <div style={{paddingLeft: `${this.props.depth * 30}px`}}
-                 className={this.props.selectedSceneNode && this.props.selectedSceneNode._id === this.props.node._id
+                 className={this.props.selectedRenderNode && this.props.selectedRenderNode === this.props.renderNode
                      ? `${css.node} ${css.nodeSelected}`
                      : `${css.node}`}
                  onClick={this._triggerNodeSelection}>
                 <FontAwesome name='cube' />
-                <span>{this.props.node.name}</span>
+                <span>{this.props.sceneNode.name}</span>
             </div>
         );
     }
 
     componentDidMount() {
-        this.setState({
-            renderNode: addObjectWithBoundingBox(this.props.node, this.props.parentRenderNode)
-        })
+        this.props.parentRenderNode.addChild(this.props.renderNode);
     }
 
     _triggerNodeSelection() {
-        this.props.selectNode(this.props.node, this.state.renderNode);
+        this.props.selectNode(this.props.sceneNode, this.props.renderNode);
     }
 }
 
 const mapStateToProps = state => ({
-    selectedSceneNode: state['common.selection'].selectedNode
-        ? state['common.selection'].selectedNode.sceneNode
+    selectedRenderNode: state['common.selection'].selectedNode
+        ? state['common.selection'].selectedNode.renderNode
         : null
 });
 
@@ -54,7 +51,7 @@ const mapDispatchToProps = dispatch => ({
 export const ObjectNodeWithData = connect(mapStateToProps, mapDispatchToProps)(ObjectNode);
 
 ObjectNode.propTypes = {
-    node: PropTypes.shape({
+    sceneNode: PropTypes.shape({
         _id: PropTypes.string.isRequired,
         name: PropTypes.string.isRequired,
         localMatrix: PropTypes.array.isRequired,
@@ -66,8 +63,9 @@ ObjectNode.propTypes = {
             textureFileId: PropTypes.string.isRequired,
         })
     }),
+    renderNode: PropTypes.object.isRequired, // TODO define shape
     parentRenderNode: PropTypes.object.isRequired,
     depth: PropTypes.number.isRequired,
     selectNode: PropTypes.func.isRequired,
-    selectedSceneNode: PropTypes.object,
+    selectedRenderNode: PropTypes.object,
 }

@@ -6,7 +6,7 @@ import {NoNodeSelected} from './no-node-selected'
 import {NodeProperties} from './node-properties'
 import {DefaultNodeProperties} from './default-node-properties'
 import {ObjectNodeProperties} from './object-node-properties'
-import {RenderNodeType} from '../../engineop/index'
+import {RenderNodeType} from '../../../engine/index'
 
 class PropertiesPanel extends React.Component {
     constructor(props) {

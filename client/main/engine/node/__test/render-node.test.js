@@ -17,7 +17,7 @@ describe("Scene node", () => {
 
         it("should accept a custom local matrix", () => {
             const localMatrix = mat4.add(mat4.create(), mat4.create(), mat4.create());
-            const node = new RenderNode(localMatrix);
+            const node = new RenderNode({localMatrix});
             assert.isTrue(mat4.equals(node.localMatrix, localMatrix));
         });
 
@@ -57,13 +57,13 @@ describe("Scene node", () => {
             const root = new RenderNode();
 
             const localMatrix1 = mat4.fromTranslation(mat4.create(), vec3.fromValues(0, 1, 0));
-            const node1 = new RenderNode(localMatrix1);
+            const node1 = new RenderNode({localMatrix: localMatrix1});
 
             const localMatrix2 = mat4.fromTranslation(mat4.create(), vec3.fromValues(0, 5, 0));
-            const node2 = new RenderNode(localMatrix2);
+            const node2 = new RenderNode({localMatrix: localMatrix2});
 
             const localMatrix3 = mat4.fromTranslation(mat4.create(), vec3.fromValues(0, 3, 0));
-            const node3 = new RenderNode(localMatrix3);
+            const node3 = new RenderNode({localMatrix: localMatrix3});
 
             root.addChild(node1);
             node1.addChild(node2);

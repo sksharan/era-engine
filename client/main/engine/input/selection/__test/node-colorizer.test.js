@@ -13,16 +13,19 @@ describe('Node colorizer', () => {
         });
         it('should color all geometry nodes', () => {
             const node1 = new RenderNode();
-            const node2 = new GeometryNode(mat4.create(), {
+            const node2 = new GeometryNode({
+                localMatrix: mat4.create(),
                 mesh: new BoundingBox([0, 0, 0, 0, 0, 0]),
                 material: new Material()
             });
             const node3 = new RenderNode();
-            const node4 = new GeometryNode(mat4.create(), {
+            const node4 = new GeometryNode({
+                localMatrix: mat4.create(),
                 mesh: new BoundingBox([0, 0, 0, 0, 0, 0]),
                 material: new Material()
             });
-            const node5 = new GeometryNode(mat4.create(), {
+            const node5 = new GeometryNode({
+                localMatrix: mat4.create(),
                 mesh: new BoundingBox([0, 0, 0, 0, 0, 0]),
                 material: new Material()
             });

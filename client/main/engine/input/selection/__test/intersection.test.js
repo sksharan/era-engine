@@ -2,6 +2,7 @@ import {assert} from 'chai'
 import {mat4, vec3} from 'gl-matrix'
 import {testBoundingBoxIntersection} from '../intersection'
 import {Ray} from '../ray'
+import {Material} from '../../../material/index'
 import {BoundingBox} from '../../../mesh/index'
 import {GeometryNode, RenderNode} from '../../../node/index'
 
@@ -9,9 +10,10 @@ describe('Bounding box intersection test', () => {
     let node = null;
     before(() => {
         // A 4x4x4 bounding box centered at the origin
-        node = new GeometryNode(mat4.create(), {
+        node = new GeometryNode({
+            localMatrix: mat4.create(),
             mesh: new BoundingBox([-2, -2, -2, 2, 2, 2]),
-            material: null
+            material: new Material()
         });
     });
 
@@ -66,9 +68,10 @@ describe('Bounding box intersection test', () => {
                 new RenderNode()), 'Node must be a GeometryNode');
         });
         it('should validate bounding box node mesh type', () => {
-            node =  new GeometryNode(mat4.create(), {
+            node = new GeometryNode({
+                localMatrix: mat4.create(),
                 mesh: new RenderNode(),
-                material: null
+                material: new Material()
             });
             assert.throws(() => testBoundingBoxIntersection(new Ray(vec3.create(), vec3.create()), node),
                     'Node must have a BoundingBox mesh');

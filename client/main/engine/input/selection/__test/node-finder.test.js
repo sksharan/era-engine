@@ -1,6 +1,7 @@
 import {assert} from 'chai'
 import {findNearestBaseNodeForBoundingBoxNode} from '../node-finder'
 import {GeometryNode, RenderNode} from '../../../node/index'
+import {Material} from '../../../material/index'
 import {BoundingBox} from '../../../mesh/index'
 import {mat4} from 'gl-matrix'
 
@@ -13,9 +14,10 @@ describe('Node finder', () => {
         it('should find nearest parent', () => {
             const ancestor = new RenderNode();
             const parent = new RenderNode();
-            const child1 = new GeometryNode(mat4.create(), {
+            const child1 = new GeometryNode({
+                localMatrix: mat4.create(),
                 mesh: new BoundingBox([-2, -2, -2, 2, 2, 2]),
-                material: null
+                material: new Material()
             });
             const child2 = new RenderNode();
 

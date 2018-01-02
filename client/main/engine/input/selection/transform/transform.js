@@ -20,7 +20,8 @@ export class TransformMesh extends Mesh {
         throw new Error('No base implementation');
     }
     _generateBoundingBoxNode(positions) {
-        return new GeometryNode(mat4.create(), {
+        return new GeometryNode({
+            localMatrix: mat4.create(),
             mesh: new BoundingBox(positions),
             material: new Material({
                 programData: new ProgramBuilder().addPosition().addColor().build(),
@@ -36,7 +37,8 @@ export class TransformMesh extends Mesh {
         if (positions.length !== 6) { // 2 vertices * 3 floats per vertex
             throw new Error(`Positions must have length 6, but has length ${positions.length}`);
         }
-        return new GeometryNode(mat4.create(), {
+        return new GeometryNode({
+            localMatrix: mat4.create(),
             mesh: new Mesh({
                 drawMode: gl.LINES,
                 positions,
@@ -72,14 +74,16 @@ export class TransformMesh extends Mesh {
 
 export const attachToBaseNode = ({base, mesh, color, generateBoundingBox=true, useSphereClipping=false,
         sphereRadius=0, useSphereOutling=false}) => {
-    const objectNode = new GeometryNode(mat4.create(), {
+    const objectNode = new GeometryNode({
+        localMatrix: mat4.create(),
         mesh,
         material: getTransformMaterial({color, useSphereClipping, sphereRadius, useSphereOutling})
     });
     base.addChild(objectNode);
 
     if (generateBoundingBox) {
-        const boundingBoxNode = new GeometryNode(mat4.create(), {
+        const boundingBoxNode = new GeometryNode({
+            localMatrix: mat4.create(),
             mesh: new BoundingBox(objectNode.mesh.positions),
             material: getBoundingBoxMaterial({color})
         });

@@ -179,7 +179,7 @@ function handleTranslation({baseSceneNode, intersectionDelta, intersectionPoint}
 
 export const createTranslateNode = () => {
     const localMatrix = mat4.create();
-    const base = new RenderNode(localMatrix);
+    const base = new RenderNode({localMatrix});
     attachToBaseNode({base, mesh: new TranslateXMesh(), color: redColor});
     attachToBaseNode({base, mesh: new TranslateYMesh(), color: greenColor});
     attachToBaseNode({base, mesh: new TranslateZMesh(), color: blueColor});

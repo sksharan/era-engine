@@ -46,7 +46,8 @@ const convertObjectSceneNodeToGeometryRenderNode = (sceneNode) => {
         numVertices: sceneNode.content.positions.length,
         indices: sceneNode.content.indices
     });
-    const renderNode = new GeometryNode(sceneNode.content.positions.localMatrix, {
+    const renderNode = new GeometryNode({
+        localMatrix: sceneNode.content.positions.localMatrix,
         mesh,
         material: new Material({
             programData: objectProgramData,
@@ -55,7 +56,8 @@ const convertObjectSceneNodeToGeometryRenderNode = (sceneNode) => {
     });
 
     const localMatrix = mat4.create();
-    const obb = new GeometryNode(localMatrix, {
+    const obb = new GeometryNode({
+        localMatrix,
         mesh: new BoundingBox(sceneNode.content.positions),
         material: new Material({
             programData: objectProgramData,
@@ -69,5 +71,8 @@ const convertObjectSceneNodeToGeometryRenderNode = (sceneNode) => {
 }
 
 const convertReferenceSceneNodeToReferenceRenderNode = (sceneNode) => {
-    return new ReferenceNode(sceneNode.localMatrix, sceneNode.sceneNodeId);
+    return new ReferenceNode({
+        localMatrix: sceneNode.localMatrix,
+        referencedNodeId: sceneNode._id
+    });
 }

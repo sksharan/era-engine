@@ -12,7 +12,7 @@ function updateWorldMatrix(node, parentWorldMatrix) {
 }
 
 export class RenderNode {
-    constructor(localMatrix = mat4.create()) {
+    constructor({localMatrix=mat4.create()} = {}) {
         this._nodeType = RenderNodeType.BASE;
         /* Parent of this node - render nodes have at most one parent. */
         this._parent = null;

@@ -160,7 +160,7 @@ function handleScaling({baseSceneNode, intersectionDelta, intersectionPoint}, ax
 
 export const createScaleNode = () => {
     const localMatrix = mat4.create();
-    const base = new RenderNode(localMatrix);
+    const base = new RenderNode({localMatrix});
     attachToBaseNode({base, mesh: new ScaleXMesh(), color: redColor});
     attachToBaseNode({base, mesh: new ScaleYMesh(), color: greenColor});
     attachToBaseNode({base, mesh: new ScaleZMesh(), color: blueColor});

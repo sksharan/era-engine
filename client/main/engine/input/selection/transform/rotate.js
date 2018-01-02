@@ -168,7 +168,7 @@ function handleRotation({baseSceneNode, intersectionDelta, intersectionPoint}) {
 
 export const createRotateNode = () => {
     const localMatrix = mat4.create();
-    const base = new RenderNode(localMatrix);
+    const base = new RenderNode({localMatrix});
     const sphereRadius = 75;
     attachToBaseNode({base, mesh: new RotateXMesh(), color: redColor, useSphereClipping: true, sphereRadius});
     attachToBaseNode({base, mesh: new RotateYMesh(), color: greenColor, useSphereClipping: true, sphereRadius});

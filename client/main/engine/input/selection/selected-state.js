@@ -24,6 +24,9 @@ export class SelectedState extends SelectionState {
         this._lastTransformOrientation = null;
     }
     onEnter() {
+        // Highlight the selected object
+        colorGeometryNodes(this._selectedObjectBaseNode, vec4.fromValues(0.15, 0.15, 0.15, 0));
+
         this._setupTransformNode();
         this._scaleTransformGizmoBoundingBox();
     }
@@ -47,6 +50,7 @@ export class SelectedState extends SelectionState {
             const selectedObjectBaseNode = findNearestBaseNodeForBoundingBoxNode(intersection.boundingBoxNode);
             if (selectedObjectBaseNode !== this._selectedObjectBaseNode) {
                 // Selected a new object
+                colorGeometryNodes(this._selectedObjectBaseNode, vec4.fromValues(0, 0, 0, 0));
                 return new SelectedState(selectedObjectBaseNode);
             }
             return null;

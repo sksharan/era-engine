@@ -11,46 +11,46 @@ export class SelectionState {
         this._nodeAnalyzer = new NodeAnalyzer();
     }
     // Action to perform when transitioning into this state
-    onEnter(sceneNode) {
-        console.warn(`Called onEnter with sceneNode=${sceneNode}`);
+    onEnter(renderNode) {
+        console.warn(`Called onEnter with renderNode=${renderNode}`);
     }
     // Returns the next state to transition to, otherwise returns null
-    handleDocumentClick(mouseX, mouseY, sceneNode) {
-        console.warn(`Called handleDocumentClick with mouseX=${mouseX}, mouseY=${mouseY}, sceneNode=${sceneNode}`);
+    handleDocumentClick(mouseX, mouseY, renderNode) {
+        console.warn(`Called handleDocumentClick with mouseX=${mouseX}, mouseY=${mouseY}, renderNode=${renderNode}`);
         return null;
     }
     // Returns the next state to transition to, otherwise returns null
-    handleCanvasMouseDown(mouseX, mouseY, sceneNode) {
-        console.warn(`Called handleCanvasMouseDown with mouseX=${mouseX}, mouseY=${mouseY}, sceneNode=${sceneNode}`);
+    handleCanvasMouseDown(mouseX, mouseY, renderNode) {
+        console.warn(`Called handleCanvasMouseDown with mouseX=${mouseX}, mouseY=${mouseY}, renderNode=${renderNode}`);
         return null;
     }
     // Returns the next state to transition to, otherwise returns null
-    handleCanvasMouseUp(mouseX, mouseY, sceneNode) {
-        console.warn(`Called handleCanvasMouseUp with mouseX=${mouseX}, mouseY=${mouseY}, sceneNode=${sceneNode}`);
+    handleCanvasMouseUp(mouseX, mouseY, renderNode) {
+        console.warn(`Called handleCanvasMouseUp with mouseX=${mouseX}, mouseY=${mouseY}, renderNode=${renderNode}`);
         return null;
     }
     // Returns the next state to transition to, otherwise returns null
-    handleCanvasMouseMove(mouseX, mouseY, sceneNode) {
-        console.warn(`Called handleCanvasMouseMove with mouseX=${mouseX}, mouseY=${mouseY}, sceneNode=${sceneNode}`);
+    handleCanvasMouseMove(mouseX, mouseY, renderNode) {
+        console.warn(`Called handleCanvasMouseMove with mouseX=${mouseX}, mouseY=${mouseY}, renderNode=${renderNode}`);
         return null;
     }
     // Returns the next state to transition to, otherwise returns null
-    handleKeyDown(key, sceneNode) {
-        console.warn(`Called handleKeyDown with key=${key}, sceneNode=${sceneNode}`);
+    handleKeyDown(key, renderNode) {
+        console.warn(`Called handleKeyDown with key=${key}, renderNode=${renderNode}`);
         return null;
     }
     // Returns the next state to transition to, otherwise returns null
-    handleKeyUp(key, sceneNode) {
-        console.warn(`Called handleKeyUp with key=${key}, sceneNode=${sceneNode}`);
+    handleKeyUp(key, renderNode) {
+        console.warn(`Called handleKeyUp with key=${key}, renderNode=${renderNode}`);
         return null;
     }
     // Action to perform when transitioning out of this state
-    onExit(sceneNode) {
-        console.warn(`Called onExit with sceneNode=${sceneNode}`);
+    onExit(renderNode) {
+        console.warn(`Called onExit with renderNode=${renderNode}`);
     }
 
-    _getNearestIntersection(mouseX, mouseY, sceneNode) {
-        this._nodeAnalyzer.analyze(sceneNode);
+    _getNearestIntersection(mouseX, mouseY, renderNode) {
+        this._nodeAnalyzer.analyze(renderNode);
         const boundingBoxNodes = this._nodeAnalyzer.getAllBoundingBoxNodes();
 
         const ray = toRay(mouseX, mouseY);

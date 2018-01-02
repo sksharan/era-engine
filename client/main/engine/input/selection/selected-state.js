@@ -32,7 +32,7 @@ export class SelectedState extends SelectionState {
         this._scaleTransformGizmoBoundingBox();
         return null;
     }
-    handleCanvasMouseDown(mouseX, mouseY, sceneNode) {
+    handleCanvasMouseDown(mouseX, mouseY, renderNode) {
         let intersection = null;
         // Clicked on the transformation gizmo?
         intersection = this._getNearestIntersection(mouseX, mouseY, this._transformBaseNode);
@@ -42,7 +42,7 @@ export class SelectedState extends SelectionState {
             return new TransformingState(this._selectedObjectBaseNode, transformBoundingBoxNode);
         }
         // Clicked on an object instead?
-        intersection = this._getNearestIntersection(mouseX, mouseY, sceneNode);
+        intersection = this._getNearestIntersection(mouseX, mouseY, renderNode);
         if (intersection.boundingBoxNode) {
             const selectedObjectBaseNode = findNearestBaseNodeForBoundingBoxNode(intersection.boundingBoxNode);
             if (selectedObjectBaseNode !== this._selectedObjectBaseNode) {

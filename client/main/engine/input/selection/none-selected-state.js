@@ -11,8 +11,8 @@ export class NoneSelectedState extends SelectionState {
     handleDocumentClick() {
         return null;
     }
-    handleCanvasMouseDown(mouseX, mouseY, sceneNode) {
-        const intersection = this._getNearestIntersection(mouseX, mouseY, sceneNode);
+    handleCanvasMouseDown(mouseX, mouseY, renderNode) {
+        const intersection = this._getNearestIntersection(mouseX, mouseY, renderNode);
         if (intersection.boundingBoxNode) {
             return this._transitionToSelectedState(intersection);
         }

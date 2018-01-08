@@ -27,10 +27,6 @@ class ObjectNode extends React.Component {
         );
     }
 
-    componentDidMount() {
-        this.props.parentRenderNode.addChild(this.props.renderNode);
-    }
-
     _triggerNodeSelection() {
         this.props.selectNode(this.props.sceneNode, this.props.renderNode);
     }

@@ -3,14 +3,14 @@ import {RenderNodeType} from './render-node-type'
 import {mat4} from 'gl-matrix'
 
 export class GeometryNode extends RenderNode {
-    constructor({localMatrix=mat4.create(), mesh, material}) {
+    constructor({id, localMatrix=mat4.create(), mesh, material}) {
         if (!mesh) {
             throw new TypeError('Mesh is required');
         }
         if (!material) {
             throw new TypeError('Material is required');
         }
-        super({localMatrix});
+        super({id, localMatrix});
         this._nodeType = RenderNodeType.GEOMETRY;
         /* The mesh to render. */
         this._mesh = mesh;

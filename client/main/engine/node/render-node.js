@@ -12,7 +12,10 @@ function updateWorldMatrix(node, parentWorldMatrix) {
 }
 
 export class RenderNode {
-    constructor({localMatrix=mat4.create()} = {}) {
+    constructor({id=null, localMatrix=mat4.create()} = {}) {
+        /* An optional ID for this node. */
+        this._id = id;
+        /* Type of node - subclasses of this class will use different node types. */
         this._nodeType = RenderNodeType.BASE;
         /* Parent of this node - render nodes have at most one parent. */
         this._parent = null;
@@ -28,6 +31,9 @@ export class RenderNode {
         this._normalMatrix = mat3.create();
     }
 
+    get id() {
+        return this._id;
+    }
     get nodeType() {
         return this._nodeType;
     }

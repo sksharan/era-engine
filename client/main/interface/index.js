@@ -17,8 +17,11 @@ const reducer = combineReducers({
 // https://stackoverflow.com/questions/39271923/redux-thunk-dispatch-method-fires-undefined-action
 const middleware = applyMiddleware(thunk, logger);
 
+// Export store
 export const Store = createStore(reducer, middleware);
-
+// Export actions
+export {selectNode} from './common/index'
+// Export components
 export {ContentPanel} from './content/index'
 export {PropertiesPanel} from './properties/index'
 export {NodePanel} from './nodes/index'

@@ -2,13 +2,13 @@ import {mat4} from 'gl-matrix'
 import {filesEndpoint} from '../../config'
 import {
     BoundingBox,
+    RenderNode,
     GeometryNode,
     Material,
     Mesh,
     ProgramBuilder,
     ReferenceNode,
 } from '../../engine/index'
-import { RenderNode } from '../../engine/node/render-node';
 
 export const convertSceneNodesToRenderNodes = (sceneNodes) => {
     let renderNodes = [];
@@ -21,7 +21,7 @@ export const convertSceneNodesToRenderNodes = (sceneNodes) => {
 export const convertSceneNodeToRenderNode = (sceneNode) => {
     switch (sceneNode.type) {
         case 'DEFAULT':
-            return new RenderNode();
+            return new RenderNode({id: sceneNode._id});
         case 'OBJECT':
             return convertObjectSceneNodeToGeometryRenderNode(sceneNode);
         case 'REFERENCE':
@@ -47,6 +47,7 @@ const convertObjectSceneNodeToGeometryRenderNode = (sceneNode) => {
         indices: sceneNode.content.indices
     });
     const renderNode = new GeometryNode({
+        id: sceneNode._id,
         localMatrix: sceneNode.content.positions.localMatrix,
         mesh,
         material: new Material({
@@ -72,6 +73,7 @@ const convertObjectSceneNodeToGeometryRenderNode = (sceneNode) => {
 
 const convertReferenceSceneNodeToReferenceRenderNode = (sceneNode) => {
     return new ReferenceNode({
+        id: sceneNode._id,
         localMatrix: sceneNode.localMatrix,
         referencedNodeId: sceneNode._id
     });

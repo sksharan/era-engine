@@ -6,13 +6,13 @@
  *                  hierarchy: {
  *                      ...
  *                  },
- *                  sceneNodes: [...],
- *                  renderNodes [...],
+ *                  sceneNode: {...},
+ *                  renderNode: {...},
  *              },
  *              ...
  *          },
- *          sceneNodes: [...],
- *          renderNodes: [...],
+ *          sceneNode: {...},
+ *          renderNode: {...},
  *      },
  *      ...
  *  }
@@ -36,11 +36,11 @@ function addNodeToHierarchy(sceneNode, renderNode, hierarchy, separator) {
     for (let i = 0; i < pathFragments.length; i++) {
         let pathFragment = pathFragments[i];
         if (!currHierarchy[pathFragment]) {
-            currHierarchy[pathFragment] = {hierarchy: {}, sceneNodes: [], renderNodes: []};
+            currHierarchy[pathFragment] = {hierarchy: {}, sceneNode: null, renderNode: null};
         }
         if (i === pathFragments.length - 1) {
-            currHierarchy[pathFragment].sceneNodes.push(sceneNode);
-            currHierarchy[pathFragment].renderNodes.push(renderNode);
+            currHierarchy[pathFragment].sceneNode = sceneNode;
+            currHierarchy[pathFragment].renderNode = renderNode;
         }
         currHierarchy = currHierarchy[pathFragment].hierarchy;
     }

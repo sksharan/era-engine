@@ -12,23 +12,25 @@ describe('Scene node panel', () => {
         });
 
         it('should be successful for non-empty list', () => {
+            // Hierarchy constructed from scene node paths
             const sceneNodes = [
                 {path: 'a'},
                 {path: 'a/d/e/f'},
                 {path: 'a/d/g'},
                 {path: 'b'},
-                {path: 'b/d'},
+                {path: 'b/d'}, // For duplicates, only one used in hierarchy
                 {path: 'b/d'},
                 {path: 'c'},
                 {path: 'a/d'},
                 {path: 'a/d/e'},
             ];
+            // Render node structure could be anything
             const renderNodes = [
                 {data: 'A'},
                 {data: 'A/D/E/F'},
                 {data: 'A/D/G'},
                 {data: 'B'},
-                {data: 'B/D'},
+                {data: 'B/D'}, // For duplicates, only one used in hierarchy
                 {data: 'B/D'},
                 {data: 'C'},
                 {data: 'A/D'},
@@ -44,77 +46,73 @@ describe('Scene node panel', () => {
                                     "hierarchy": {
                                         "f": {
                                             "hierarchy": {},
-                                            "sceneNodes": [{
+                                            "sceneNode": {
                                                 "path": "a/d/e/f"
-                                            }],
-                                            "renderNodes": [{
+                                            },
+                                            "renderNode": {
                                                 "data": "A/D/E/F"
-                                            }],
+                                            },
                                         }
                                     },
-                                    "sceneNodes": [{
+                                    "sceneNode": {
                                         "path": "a/d/e"
-                                    }],
-                                    "renderNodes": [{
+                                    },
+                                    "renderNode": {
                                         "data": "A/D/E"
-                                    }],
+                                    },
                                 },
                                 "g": {
                                     "hierarchy": {},
-                                    "sceneNodes": [{
+                                    "sceneNode": {
                                         "path": "a/d/g"
-                                    }],
-                                    "renderNodes": [{
+                                    },
+                                    "renderNode": {
                                         "data": "A/D/G"
-                                    }],
+                                    },
                                 }
                             },
-                            "sceneNodes": [{
+                            "sceneNode": {
                                 "path": "a/d"
-                            }],
-                            "renderNodes": [{
+                            },
+                            "renderNode": {
                                 "data": "A/D"
-                            }],
+                            },
                         }
                     },
-                    "sceneNodes": [{
+                    "sceneNode": {
                         "path": "a"
-                    }],
-                    "renderNodes": [{
+                    },
+                    "renderNode": {
                         "data": "A"
-                    }],
+                    },
                 },
                 "b": {
                     "hierarchy": {
                         "d": {
                             "hierarchy": {},
-                            "sceneNodes": [{
+                            "sceneNode": {
                                 "path": "b/d"
-                            }, {
-                                "path": "b/d"
-                            }],
-                            "renderNodes": [{
+                            },
+                            "renderNode": {
                                 "data": "B/D"
-                            }, {
-                                "data": "B/D"
-                            }],
+                            },
                         }
                     },
-                    "sceneNodes": [{
+                    "sceneNode": {
                         "path": "b"
-                    }],
-                    "renderNodes": [{
+                    },
+                    "renderNode": {
                         "data": "B"
-                    }],
+                    },
                 },
                 "c": {
                     "hierarchy": {},
-                    "sceneNodes": [{
+                    "sceneNode": {
                         "path": "c"
-                    }],
-                    "renderNodes": [{
+                    },
+                    "renderNode": {
                         "data": "C"
-                    }],
+                    },
                 }
             };
 

@@ -1,6 +1,7 @@
 import {SelectionState} from './selection-state'
 import {SelectedState} from './selected-state'
 import {findNearestBaseNodeForBoundingBoxNode} from './node-finder'
+import {triggerNodeSelectedEvent} from '../../../common/index'
 
 export class NoneSelectedState extends SelectionState {
     onEnter() {
@@ -35,7 +36,8 @@ export class NoneSelectedState extends SelectionState {
     _transitionToSelectedState(intersection) {
         // Selected an object - given the bounding box, get the selected object base node
         const selectedObjectBaseNode = findNearestBaseNodeForBoundingBoxNode(intersection.boundingBoxNode);
-        // Next state
+
+        triggerNodeSelectedEvent(selectedObjectBaseNode);
         return new SelectedState(selectedObjectBaseNode);
 
     }

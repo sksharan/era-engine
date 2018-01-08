@@ -32,11 +32,11 @@ class ObjectRow extends React.Component {
     _updateObjectRefNode() {
         const sceneNodeRefId = this.props.object._id;
         const name = this.props.object.name;
-        const path = '';
         const refNode = {
             type: 'REFERENCE',
             name,
-            path: refNodePrefix + path,
+            // Make the path unique by appending the current time in milliseconds
+            path: refNodePrefix + name + new Date().getTime(),
             localMatrix: [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1],
             content: {
                 sceneNodeId: sceneNodeRefId

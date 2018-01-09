@@ -13,6 +13,10 @@ import {
 } from './transform/index'
 import {CurrentTransformOrientation} from '../../global/index'
 import {Camera} from '../../camera/index'
+import {
+    triggerNodeSelectedEvent,
+    triggerNodeDeselectedEvent
+} from '../../../common/index'
 import {mat4, vec3, vec4} from 'gl-matrix'
 
 export class SelectedState extends SelectionState {
@@ -51,12 +55,15 @@ export class SelectedState extends SelectionState {
             if (selectedObjectBaseNode !== this._selectedObjectBaseNode) {
                 // Selected a new object
                 colorGeometryNodes(this._selectedObjectBaseNode, vec4.fromValues(0, 0, 0, 0));
+                triggerNodeDeselectedEvent(this._selectedObjectBaseNode);
+                triggerNodeSelectedEvent(selectedObjectBaseNode);
                 return new SelectedState(selectedObjectBaseNode);
             }
             return null;
         }
         // No intersection, so object has been deselected - remove highlighting from selected object
         colorGeometryNodes(this._selectedObjectBaseNode, vec4.fromValues(0, 0, 0, 0));
+        triggerNodeDeselectedEvent(this._selectedObjectBaseNode);
         return new NoneSelectedState();
     }
     handleCanvasMouseUp() {

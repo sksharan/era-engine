@@ -1,7 +1,43 @@
-export const triggerNodeSelectedEvent = (renderNode) => {
-    console.warn(`Triggering selection event ${renderNode.id}`);
+import {ReferenceNodeCache} from '../node/index'
+import {
+    Store,
+    selectNode,
+    deselectNode,
+} from '../../interface/index'
+
+export const triggerNodeSelectedEvent = (selectedRenderNode) => {
+    actOnRenderNode(selectedRenderNode,
+        (sceneNode, renderNode) => {
+            Store.dispatch(selectNode(sceneNode, renderNode));
+        });
 }
 
-export const triggerNodeDeselectedEvent = (renderNode) => {
-    console.warn(`Triggering de-selected event ${renderNode.id}`);
+export const triggerNodeDeselectedEvent = (deselectedRenderNode) => {
+    actOnRenderNode(deselectedRenderNode,
+        (sceneNode, renderNode) => {
+            Store.dispatch(deselectNode(sceneNode, renderNode));
+        });
+}
+
+function actOnRenderNode(renderNode, func) {
+    const sceneNodes = Store.getState()['common.nodes'].nodeArray;
+    if (!sceneNodes) {
+        return;
+    }
+    for (const sceneNode of sceneNodes) {
+        if (sceneNode.type === 'REFERENCE') {
+            if (ReferenceNodeCache.hasReference({referenceId: sceneNode.content.sceneNodeId})) {
+                const {sceneNodes, renderNodes} = ReferenceNodeCache.getReference({
+                    referenceId: sceneNode.content.sceneNodeId
+                });
+                for (let i = 0; i < renderNodes.length; i++) {
+                    if (renderNodes[i].id === renderNode.id) {
+                        func(sceneNodes[i], renderNodes[i]);
+                    }
+                }
+            }
+        } else {
+            // TODO: what to do when scene node is not a reference?
+        }
+    }
 }

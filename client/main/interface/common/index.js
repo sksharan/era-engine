@@ -1,5 +1,6 @@
 export {
     selectNode,
+    deselectNode,
     fetchSceneNodes,
 } from './action/index'
 

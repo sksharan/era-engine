@@ -7,5 +7,7 @@ export {
 
 export {
     SELECT_NODE,
-    selectNode
+    DESELECT_NODE,
+    selectNode,
+    deselectNode,
 } from './selection-action'

@@ -17,7 +17,8 @@ class DefaultNode extends React.Component {
     render() {
         return (
             <div style={{paddingLeft: `${this.props.depth * 30}px`}}
-                 className={this.props.selectedRenderNode && this.props.selectedRenderNode === this.props.renderNode
+                 className={this.props.selectedRenderNode
+                        && this.props.selectedRenderNode.id === this.props.renderNode.id
                      ? `${css.node} ${css.nodeSelected}`
                      : `${css.node}`}
                  onClick={this._triggerNodeSelection}>

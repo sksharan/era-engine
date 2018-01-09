@@ -20,7 +20,7 @@ const middleware = applyMiddleware(thunk, logger);
 // Export store
 export const Store = createStore(reducer, middleware);
 // Export actions
-export {selectNode} from './common/index'
+export {selectNode, deselectNode} from './common/index'
 // Export components
 export {ContentPanel} from './content/index'
 export {PropertiesPanel} from './properties/index'

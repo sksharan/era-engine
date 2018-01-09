@@ -1,5 +1,6 @@
 import {
     SELECT_NODE,
+    DESELECT_NODE,
 } from '../action/index'
 
 const initialState = {
@@ -12,6 +13,10 @@ export const SelectionReducer = (state=initialState, action) => {
             return {
                 selectedNode: action.payload
             };
+        case DESELECT_NODE:
+            return {
+                selectedNode: null
+            }
         default:
             return state;
     }

@@ -20,6 +20,7 @@ function handleKeyUp(e) {
 
 export const KeyboardHandler = {
     init() {
+        CurrentHandlerState.initListeners();
         document.addEventListener('keydown', handleKeyDown);
         document.addEventListener('keyup', handleKeyUp);
     },

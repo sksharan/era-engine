@@ -48,6 +48,10 @@ export class SelectionState {
     onExit(renderNode) {
         console.warn(`Called onExit with renderNode=${renderNode}`);
     }
+    // Action to perform when a node is selected
+    onNodeSelectedEvent(selectedObjectBaseNode) {
+        console.warn(`Called onNodeSelectedEvent with node=${selectedObjectBaseNode}`);
+    }
 
     _getNearestIntersection(mouseX, mouseY, renderNode) {
         this._nodeAnalyzer.analyze(renderNode);

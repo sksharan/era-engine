@@ -29,6 +29,7 @@ function isPointerLocked() {
 
 export const MouseHandler = {
     init() {
+        CurrentHandlerState.initListeners();
         document.addEventListener('click', (e) => {
             if (!isPointerLocked()) {
                 const nextState = CurrentHandlerState.selectionState.handleDocumentClick(e.clientX, e.clientY, RootSceneNode);

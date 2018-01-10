@@ -1,4 +1,5 @@
 export {
+    subscribeToNodeSelectedEvent,
     triggerNodeSelectedEvent,
     triggerNodeDeselectedEvent,
 } from './event/index'

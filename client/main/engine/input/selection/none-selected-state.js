@@ -13,7 +13,10 @@ export class NoneSelectedState extends SelectionState {
     handleCanvasMouseDown(mouseX, mouseY, renderNode) {
         const intersection = this._getNearestIntersection(mouseX, mouseY, renderNode);
         if (intersection.boundingBoxNode) {
-            return this._transitionToSelectedState(intersection);
+            // Selected an object - given the bounding box, get the selected object base node
+            const selectedObjectBaseNode = findNearestBaseNodeForBoundingBoxNode(intersection.boundingBoxNode);
+            triggerNodeSelectedEvent(selectedObjectBaseNode);
+            return new SelectedState(selectedObjectBaseNode);
         }
         return null;
     }
@@ -32,13 +35,7 @@ export class NoneSelectedState extends SelectionState {
     onExit() {
         // Do nothing
     }
-
-    _transitionToSelectedState(intersection) {
-        // Selected an object - given the bounding box, get the selected object base node
-        const selectedObjectBaseNode = findNearestBaseNodeForBoundingBoxNode(intersection.boundingBoxNode);
-
-        triggerNodeSelectedEvent(selectedObjectBaseNode);
+    onNodeSelectedEvent(selectedObjectBaseNode) {
         return new SelectedState(selectedObjectBaseNode);
-
     }
 }

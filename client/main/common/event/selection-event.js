@@ -5,20 +5,28 @@ import {
     deselectNode,
 } from '../../interface/index'
 
+// Provide a callback that takes the selected node as the only argument
+export const subscribeToNodeSelectedEvent = (callback) => {
+    Store.subscribe(() => {
+        const {selectedNode} = Store.getState()['common.selection'];
+        if (selectedNode) {
+            callback(selectedNode.renderNode);
+        }
+    });
+}
+
 export const triggerNodeSelectedEvent = (selectedRenderNode) => {
     actOnRenderNode(selectedRenderNode,
         (sceneNode, renderNode) => {
             Store.dispatch(selectNode(sceneNode, renderNode));
         });
 }
-
 export const triggerNodeDeselectedEvent = (deselectedRenderNode) => {
     actOnRenderNode(deselectedRenderNode,
         (sceneNode, renderNode) => {
             Store.dispatch(deselectNode(sceneNode, renderNode));
         });
 }
-
 function actOnRenderNode(renderNode, func) {
     const sceneNodes = Store.getState()['common.nodes'].nodeArray;
     if (!sceneNodes) {

@@ -53,11 +53,9 @@ export class SelectedState extends SelectionState {
         if (intersection.boundingBoxNode) {
             const selectedObjectBaseNode = findNearestBaseNodeForBoundingBoxNode(intersection.boundingBoxNode);
             if (selectedObjectBaseNode !== this._selectedObjectBaseNode) {
-                // Selected a new object
-                colorGeometryNodes(this._selectedObjectBaseNode, vec4.fromValues(0, 0, 0, 0));
                 triggerNodeDeselectedEvent(this._selectedObjectBaseNode);
                 triggerNodeSelectedEvent(selectedObjectBaseNode);
-                return new SelectedState(selectedObjectBaseNode);
+                return this._transitionToNewSelectedState(selectedObjectBaseNode);
             }
             return null;
         }
@@ -83,6 +81,15 @@ export class SelectedState extends SelectionState {
     onExit() {
         // Detach the transformation gizmo
         this._transformBaseNode.removeParent();
+    }
+    onNodeSelectedEvent(selectedObjectBaseNode) {
+        return this._transitionToNewSelectedState(selectedObjectBaseNode);
+    }
+
+    // Selected a new object
+    _transitionToNewSelectedState(selectedObjectBaseNode) {
+        colorGeometryNodes(this._selectedObjectBaseNode, vec4.fromValues(0, 0, 0, 0));
+        return new SelectedState(selectedObjectBaseNode);
     }
 
     _setupTransformNode() {

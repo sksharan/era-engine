@@ -11,6 +11,14 @@ export class NodeProperties extends React.Component {
             <div>
                 <div className='row'>
                     <div className={`col-md-${this.props.keyWidth}`}>
+                        ID
+                    </div>
+                    <div className={`col-md-${this.props.valueWidth}`}>
+                        {this.props.node.renderNode.id}
+                    </div>
+                </div>
+                <div className='row'>
+                    <div className={`col-md-${this.props.keyWidth}`}>
                         Name
                     </div>
                     <div className={`col-md-${this.props.valueWidth}`}>
@@ -74,6 +82,7 @@ NodeProperties.propTypes = {
             type: PropTypes.string.isRequired,
         }),
         renderNode: PropTypes.shape({
+            id: PropTypes.string.isRequired,
             nodeType: PropTypes.string.isRequired,
             localMatrix: PropTypes.object.isRequired, // Float32Array
             worldMatrix: PropTypes.object.isRequired, // Float32Array

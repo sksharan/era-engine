@@ -1,5 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import {Matrix3x3} from './matrix-3x3'
+import {Matrix4x4} from './matrix-4x4'
 
 export class NodeProperties extends React.Component {
     constructor(props) {
@@ -38,7 +40,7 @@ export class NodeProperties extends React.Component {
                         Local Matrix
                     </div>
                     <div className={`col-md-${this.props.valueWidth}`}>
-                        {renderMatrix(this.props.node.renderNode.localMatrix, 4)}
+                        <Matrix4x4 matrix={this.props.node.renderNode.localMatrix} />
                     </div>
                 </div>
                 <div className='row'>
@@ -46,7 +48,7 @@ export class NodeProperties extends React.Component {
                         World Matrix
                     </div>
                     <div className={`col-md-${this.props.valueWidth}`}>
-                        {renderMatrix(this.props.node.renderNode.worldMatrix, 4)}
+                        <Matrix4x4 matrix={this.props.node.renderNode.worldMatrix} />
                     </div>
                 </div>
                 <div className='row'>
@@ -54,25 +56,12 @@ export class NodeProperties extends React.Component {
                         Normal Matrix
                     </div>
                     <div className={`col-md-${this.props.valueWidth}`}>
-                        {renderMatrix(this.props.node.renderNode.normalMatrix, 3)}
+                        <Matrix3x3 matrix={this.props.node.renderNode.normalMatrix} />
                     </div>
                 </div>
             </div>
         );
     }
-}
-
-// Returns JSX code for rendering an n x n matrix
-function renderMatrix(matrix, n) {
-    let mapped = [];
-    for (let i = 0; i < n*n; i++) {
-        mapped.push(
-            i % n == n-1
-            ? <span key={i}>{new Number(matrix[i]).toFixed(2)}<br /></span>
-            : <span key={i}>{new Number(matrix[i]).toFixed(2)}&nbsp;&nbsp;</span>
-        );
-    }
-    return mapped;
 }
 
 NodeProperties.propTypes = {

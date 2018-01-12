@@ -4,9 +4,6 @@ import {connect} from 'react-redux'
 import FontAwesome from 'react-fontawesome'
 import {NoNodeSelected} from './no-node-selected'
 import {NodeProperties} from './node-properties'
-import {DefaultNodeProperties} from './default-node-properties'
-import {ObjectNodeProperties} from './object-node-properties'
-import {RenderNodeType} from '../../../engine/index'
 
 class PropertiesPanel extends React.Component {
     constructor(props) {
@@ -14,42 +11,17 @@ class PropertiesPanel extends React.Component {
     }
 
     render() {
-        let cardBody = <NoNodeSelected />;
-
-        if (this.props.selectedNode) {
-            switch (this.props.selectedNode.renderNode.nodeType) {
-                case RenderNodeType.BASE:
-                    cardBody = (
-                        <div>
-                            <NodeProperties node={this.props.selectedNode} keyWidth={4} valueWidth={8} />
-                            <DefaultNodeProperties node={this.props.selectedNode} keyWidth={4} valueWidth={8} />
-                        </div>
-                    );
-                    break;
-                case RenderNodeType.GEOMETRY:
-                    cardBody = (
-                        <div>
-                            <NodeProperties node={this.props.selectedNode} keyWidth={4} valueWidth={8} />
-                            <ObjectNodeProperties node={this.props.selectedNode} keyWidth={4} valueWidth={8} />
-                        </div>
-                    );
-                    break;
-                default:
-                    console.warn(`Unknown selected node type: ${this.props.selectedNode.renderNode.nodeType}`);
-                    cardBody = (<span>Node selected</span>);
-                    break;
-            }
-        }
-
         return (
             <div className='card'>
                 <div className='card-header'>
                     <FontAwesome name='search' />
                     <span>Properties</span>
                 </div>
-                <div className='card-body'>
-                    {cardBody}
-                </div>
+                {
+                    this.props.selectedNode
+                        ? <NodeProperties node={this.props.selectedNode} />
+                        : <NoNodeSelected />
+                }
             </div>
         );
     }

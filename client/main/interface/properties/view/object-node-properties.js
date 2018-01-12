@@ -1,4 +1,5 @@
 import React from 'react'
+import tableScss from '../scss/table.scss'
 
 export class ObjectNodeProperties extends React.Component {
     constructor(props) {
@@ -7,7 +8,10 @@ export class ObjectNodeProperties extends React.Component {
 
     render() {
         return (
-            <span>Object node selected</span>
+            <tr>
+                <td className={`${tableScss.key}`}>TODO</td>
+                <td>Object</td>
+            </tr>
         );
     }
 }

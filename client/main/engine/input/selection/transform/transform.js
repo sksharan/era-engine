@@ -53,15 +53,12 @@ export class TransformMesh extends Mesh {
             })
         });
     }
-    handleTransform({baseSceneNode, intersectionDelta, intersectionPoint}) {
-        this._validateTransformArgs({baseSceneNode, intersectionDelta, intersectionPoint});
+    handleTransform({sceneNode, intersectionDelta, intersectionPoint}) {
+        this._validateTransformArgs({sceneNode, intersectionDelta, intersectionPoint});
     }
-    _validateTransformArgs({baseSceneNode, intersectionDelta, intersectionPoint}) {
-        if (!(baseSceneNode instanceof RenderNode)) {
-            throw new Error('baseSceneNode must be a SceneNode');
-        }
-        if (baseSceneNode.nodeType !== 'BASE') {
-            throw new Error('Scene node must have a type of BASE');
+    _validateTransformArgs({sceneNode, intersectionDelta, intersectionPoint}) {
+        if (!(sceneNode instanceof RenderNode)) {
+            throw new Error('sceneNode must be a SceneNode');
         }
         if (!(intersectionDelta instanceof Float32Array)) {
             throw new TypeError('Intersection delta must be a vec3 (Float32Array)');

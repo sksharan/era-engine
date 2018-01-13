@@ -104,9 +104,9 @@ class RotateXMesh extends RotateMesh {
     generateAxisLineGeometryNode() {
         return this._generateAxisLineGeometryNode([this._min, 0, 0, this._max, 0, 0], redColor);
     }
-    handleTransform({baseSceneNode, intersectionDelta, intersectionPoint}) {
-        super.handleTransform({baseSceneNode, intersectionDelta, intersectionPoint});
-        handleRotation({baseSceneNode, intersectionDelta, intersectionPoint});
+    handleTransform({sceneNode, intersectionDelta, intersectionPoint}) {
+        super.handleTransform({sceneNode, intersectionDelta, intersectionPoint});
+        handleRotation({sceneNode, intersectionDelta, intersectionPoint});
     }
 }
 class RotateYMesh extends RotateMesh {
@@ -119,9 +119,9 @@ class RotateYMesh extends RotateMesh {
     generateAxisLineGeometryNode() {
         return this._generateAxisLineGeometryNode([0, this._min, 0, 0, this._max, 0], greenColor);
     }
-    handleTransform({baseSceneNode, intersectionDelta, intersectionPoint}) {
-        super.handleTransform({baseSceneNode, intersectionDelta, intersectionPoint});
-        handleRotation({baseSceneNode, intersectionDelta, intersectionPoint});
+    handleTransform({sceneNode, intersectionDelta, intersectionPoint}) {
+        super.handleTransform({sceneNode, intersectionDelta, intersectionPoint});
+        handleRotation({sceneNode, intersectionDelta, intersectionPoint});
     }
 }
 class RotateZMesh extends RotateMesh {
@@ -134,14 +134,14 @@ class RotateZMesh extends RotateMesh {
     generateAxisLineGeometryNode() {
         return this._generateAxisLineGeometryNode([0, 0, this._min, 0, 0, this._max], blueColor);
     }
-    handleTransform({baseSceneNode, intersectionDelta, intersectionPoint}) {
-        super.handleTransform({baseSceneNode, intersectionDelta, intersectionPoint});
-        handleRotation({baseSceneNode, intersectionDelta, intersectionPoint});
+    handleTransform({sceneNode, intersectionDelta, intersectionPoint}) {
+        super.handleTransform({sceneNode, intersectionDelta, intersectionPoint});
+        handleRotation({sceneNode, intersectionDelta, intersectionPoint});
     }
 }
 
-function handleRotation({baseSceneNode, intersectionDelta, intersectionPoint}) {
-    const baseTranslation = mat4.getTranslation(vec3.create(), baseSceneNode.worldMatrix);
+function handleRotation({sceneNode, intersectionDelta, intersectionPoint}) {
+    const baseTranslation = mat4.getTranslation(vec3.create(), sceneNode.worldMatrix);
     const lastIntersectionPoint = vec3.subtract(vec3.create(), intersectionPoint, intersectionDelta);
 
     const baseToLastIntersection = vec3.sub(vec3.create(), lastIntersectionPoint, baseTranslation);
@@ -163,7 +163,7 @@ function handleRotation({baseSceneNode, intersectionDelta, intersectionPoint}) {
             return; // Bad rotation matrix produced
         }
     }
-    baseSceneNode.applyRotation(rotation);
+    sceneNode.applyRotation(rotation);
 }
 
 export const createRotateNode = () => {

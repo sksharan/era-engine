@@ -90,9 +90,9 @@ class TranslateXMesh extends TranslateMesh {
     generateAxisLineGeometryNode() {
         return this._generateAxisLineGeometryNode([this._min, 0, 0, this._max, 0, 0], redColor);
     }
-    handleTransform({baseSceneNode, intersectionDelta, intersectionPoint}) {
-        super.handleTransform({baseSceneNode, intersectionDelta, intersectionPoint});
-        handleTranslation({baseSceneNode, intersectionDelta, intersectionPoint}, 'x');
+    handleTransform({sceneNode, intersectionDelta, intersectionPoint}) {
+        super.handleTransform({sceneNode, intersectionDelta, intersectionPoint});
+        handleTranslation({sceneNode, intersectionDelta, intersectionPoint}, 'x');
     }
 }
 class TranslateYMesh extends TranslateMesh {
@@ -105,9 +105,9 @@ class TranslateYMesh extends TranslateMesh {
     generateAxisLineGeometryNode() {
         return this._generateAxisLineGeometryNode([0, this._min, 0, 0, this._max, 0], greenColor);
     }
-    handleTransform({baseSceneNode, intersectionDelta, intersectionPoint}) {
-        super.handleTransform({baseSceneNode, intersectionDelta, intersectionPoint});
-        handleTranslation({baseSceneNode, intersectionDelta, intersectionPoint}, 'y');
+    handleTransform({sceneNode, intersectionDelta, intersectionPoint}) {
+        super.handleTransform({sceneNode, intersectionDelta, intersectionPoint});
+        handleTranslation({sceneNode, intersectionDelta, intersectionPoint}, 'y');
     }
 }
 class TranslateZMesh extends TranslateMesh {
@@ -120,25 +120,25 @@ class TranslateZMesh extends TranslateMesh {
     generateAxisLineGeometryNode() {
         return this._generateAxisLineGeometryNode([0, 0, this._min, 0, 0, this._max], blueColor);
     }
-    handleTransform({baseSceneNode, intersectionDelta, intersectionPoint}) {
-        super.handleTransform({baseSceneNode, intersectionDelta, intersectionPoint});
-        handleTranslation({baseSceneNode, intersectionDelta, intersectionPoint}, 'z');
+    handleTransform({sceneNode, intersectionDelta, intersectionPoint}) {
+        super.handleTransform({sceneNode, intersectionDelta, intersectionPoint});
+        handleTranslation({sceneNode, intersectionDelta, intersectionPoint}, 'z');
     }
 }
 
-function handleTranslation({baseSceneNode, intersectionDelta, intersectionPoint}, axis) {
+function handleTranslation({sceneNode, intersectionDelta, intersectionPoint}, axis) {
     if (CurrentTransformOrientation.isGlobal()) {
         switch (axis) {
             case 'x':
-                baseSceneNode.applyTranslation(
+                sceneNode.applyTranslation(
                     mat4.fromTranslation(mat4.create(), vec3.fromValues(intersectionDelta[0], 0, 0)));
                 break;
             case 'y':
-                baseSceneNode.applyTranslation(
+                sceneNode.applyTranslation(
                     mat4.fromTranslation(mat4.create(), vec3.fromValues(0, intersectionDelta[1], 0)));
                 break;
             case 'z':
-                baseSceneNode.applyTranslation(
+                sceneNode.applyTranslation(
                     mat4.fromTranslation(mat4.create(), vec3.fromValues(0, 0, intersectionDelta[2])));
                 break;
             default:
@@ -146,12 +146,12 @@ function handleTranslation({baseSceneNode, intersectionDelta, intersectionPoint}
         }
     } else if (CurrentTransformOrientation.isLocal()) {
         // Get last intersection as matrix 'L', using the axes given by the object's world matrix
-        const L = mat4.copy(mat4.create(), baseSceneNode.worldMatrix);
+        const L = mat4.copy(mat4.create(), sceneNode.worldMatrix);
         L[12] = intersectionPoint[0] - intersectionDelta[0];
         L[13] = intersectionPoint[1] - intersectionDelta[1];
         L[14] = intersectionPoint[2] - intersectionDelta[2];
         // Get current intersection as matrix 'I', using the axes given by the object's world matrix
-        const I = mat4.copy(mat4.create(), baseSceneNode.worldMatrix);
+        const I = mat4.copy(mat4.create(), sceneNode.worldMatrix);
         I[12] = intersectionPoint[0];
         I[13] = intersectionPoint[1];
         I[14] = intersectionPoint[2];
@@ -171,7 +171,7 @@ function handleTranslation({baseSceneNode, intersectionDelta, intersectionPoint}
             default:
                 throw new Error(`Invalid axis specified: ${axis}`);
         }
-        baseSceneNode.applyTranslation(M);
+        sceneNode.applyTranslation(M);
     } else {
         console.warn('Unknown transform orientation');
     }

@@ -20,16 +20,16 @@ import {
 import {mat4, vec3, vec4} from 'gl-matrix'
 
 export class SelectedState extends SelectionState {
-    constructor(selectedObjectBaseNode) {
+    constructor(selectedObjectNode) {
         super();
-        this._selectedObjectBaseNode = selectedObjectBaseNode;
+        this._selectedObjectNode = selectedObjectNode;
         this._transformBaseNode = null;
         this._currTransformMode = null;
         this._lastTransformOrientation = null;
     }
     onEnter() {
         // Highlight the selected object
-        colorGeometryNodes(this._selectedObjectBaseNode, vec4.fromValues(0.15, 0.15, 0.15, 0));
+        colorGeometryNodes(this._selectedObjectNode, vec4.fromValues(0.15, 0.15, 0.15, 0));
 
         this._setupTransformNode();
         this._scaleTransformGizmoBoundingBox();
@@ -46,22 +46,22 @@ export class SelectedState extends SelectionState {
         if (intersection.boundingBoxNode) {
             // Clicked on the x, y, or z axis of the gizmo
             const transformBoundingBoxNode = intersection.boundingBoxNode;
-            return new TransformingState(this._selectedObjectBaseNode, transformBoundingBoxNode);
+            return new TransformingState(this._selectedObjectNode, transformBoundingBoxNode);
         }
         // Clicked on an object instead?
         intersection = this._getNearestIntersection(mouseX, mouseY, renderNode);
         if (intersection.boundingBoxNode) {
-            const selectedObjectBaseNode = findNearestBaseNodeForBoundingBoxNode(intersection.boundingBoxNode);
-            if (selectedObjectBaseNode !== this._selectedObjectBaseNode) {
-                triggerNodeDeselectedEvent(this._selectedObjectBaseNode);
-                triggerNodeSelectedEvent(selectedObjectBaseNode);
-                return this._transitionToNewSelectedState(selectedObjectBaseNode);
+            const selectedObjectNode = findNearestBaseNodeForBoundingBoxNode(intersection.boundingBoxNode);
+            if (selectedObjectNode !== this._selectedObjectNode) {
+                triggerNodeDeselectedEvent(this._selectedObjectNode);
+                triggerNodeSelectedEvent(selectedObjectNode);
+                return this._transitionToNewSelectedState(selectedObjectNode);
             }
             return null;
         }
         // No intersection, so object has been deselected - remove highlighting from selected object
-        colorGeometryNodes(this._selectedObjectBaseNode, vec4.fromValues(0, 0, 0, 0));
-        triggerNodeDeselectedEvent(this._selectedObjectBaseNode);
+        colorGeometryNodes(this._selectedObjectNode, vec4.fromValues(0, 0, 0, 0));
+        triggerNodeDeselectedEvent(this._selectedObjectNode);
         return new NoneSelectedState();
     }
     handleCanvasMouseUp() {
@@ -82,14 +82,14 @@ export class SelectedState extends SelectionState {
         // Detach the transformation gizmo
         this._transformBaseNode.removeParent();
     }
-    onNodeSelectedEvent(selectedObjectBaseNode) {
-        return this._transitionToNewSelectedState(selectedObjectBaseNode);
+    onNodeSelectedEvent(selectedObjectNode) {
+        return this._transitionToNewSelectedState(selectedObjectNode);
     }
 
     // Selected a new object
-    _transitionToNewSelectedState(selectedObjectBaseNode) {
-        colorGeometryNodes(this._selectedObjectBaseNode, vec4.fromValues(0, 0, 0, 0));
-        return new SelectedState(selectedObjectBaseNode);
+    _transitionToNewSelectedState(selectedObjectNode) {
+        colorGeometryNodes(this._selectedObjectNode, vec4.fromValues(0, 0, 0, 0));
+        return new SelectedState(selectedObjectNode);
     }
 
     _setupTransformNode() {
@@ -115,17 +115,17 @@ export class SelectedState extends SelectionState {
         }
         this._currTransformMode = mode;
         // Attach gizmo to object
-        this._selectedObjectBaseNode.addChild(this._transformBaseNode);
+        this._selectedObjectNode.addChild(this._transformBaseNode);
 
         if (CurrentTransformOrientation.isGlobal()) {
             // The gizmo itself shouldn't be affected by any transformation applied to the object except translation
             this._transformBaseNode.localMatrix = mat4.translate(
                 mat4.create(),
-                mat4.invert(mat4.create(), this._selectedObjectBaseNode.localMatrix), // Undo all object transformations
-                mat4.getTranslation(vec3.create(), this._selectedObjectBaseNode.localMatrix)); // Then apply only object translation
+                mat4.invert(mat4.create(), this._selectedObjectNode.localMatrix), // Undo all object transformations
+                mat4.getTranslation(vec3.create(), this._selectedObjectNode.localMatrix)); // Then apply only object translation
         } else if (CurrentTransformOrientation.isLocal()) {
             // The gizmo should be affected by everything except scaling
-            const scale = mat4.getScaling(vec3.create(), this._selectedObjectBaseNode.localMatrix);
+            const scale = mat4.getScaling(vec3.create(), this._selectedObjectNode.localMatrix);
             const invertedScale = mat4.invert(mat4.create(), mat4.fromScaling(mat4.create(), scale));
             this._transformBaseNode.localMatrix = mat4.mul(
                 mat4.create(),
@@ -141,7 +141,7 @@ export class SelectedState extends SelectionState {
            meshes to happen in the shader. We could rescale the meshes here as well, but then the
            transformation gizmo would not change size smoothly.
         */
-        const objectPosition = mat4.getTranslation(vec3.create(), this._selectedObjectBaseNode.localMatrix);
+        const objectPosition = mat4.getTranslation(vec3.create(), this._selectedObjectNode.localMatrix);
         const distance = vec3.distance(Camera.getPosition(), objectPosition);
         const scale = distance * TransformScaleFactor;
         for (let transformGizmoComponentNode of this._transformBaseNode.children) {

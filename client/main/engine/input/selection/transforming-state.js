@@ -1,15 +1,14 @@
 import {SelectionState} from './selection-state'
 import {SelectedState} from './selected-state'
-import {findNearestBaseNodeForBoundingBoxNode} from './node-finder'
 import {RootSceneNode} from '../../index'
 import {CurrentTransformOrientation} from '../../global/index'
 import {mat4, vec3} from 'gl-matrix'
 
 export class TransformingState extends SelectionState {
-    constructor(selectedObjectBaseNode, transformBoundingBoxNode) {
+    constructor(selectedObjectNode, transformBoundingBoxNode) {
         super();
         // Object being transformed
-        this._selectedObjectBaseNode = selectedObjectBaseNode;
+        this._selectedObjectNode = selectedObjectNode;
         // The x, y, or z component of the gizmo, a geometry node and its bounding box
         this._transformBoundingBoxNode = transformBoundingBoxNode;
         this._transformGeometryNode = transformBoundingBoxNode.parent;
@@ -35,10 +34,10 @@ export class TransformingState extends SelectionState {
             // Attach to root node so the axis lines are unaffected by transformations applied to the object
             RootSceneNode.addChild(this._transformAxisLineNode);
             this._transformAxisLineNode.localMatrix = mat4.translate(mat4.create(), mat4.create(),
-                    mat4.getTranslation(mat4.create(), this._selectedObjectBaseNode.localMatrix));
+                    mat4.getTranslation(mat4.create(), this._selectedObjectNode.localMatrix));
         } else if (CurrentTransformOrientation.isLocal()) {
             // Define the axis lines relative to the selected object local space
-            this._selectedObjectBaseNode.addChild(this._transformAxisLineNode);
+            this._selectedObjectNode.addChild(this._transformAxisLineNode);
         } else {
             console.warn('Unknown transformation orientation');
         }
@@ -81,14 +80,14 @@ export class TransformingState extends SelectionState {
         const mesh = this._transformGeometryNode.mesh;
         const delta = vec3.sub(vec3.create(), intersection.point, this._lastIntersectionPoint);
         mesh.handleTransform({
-            baseSceneNode: this._selectedObjectBaseNode,
+            sceneNode: this._selectedObjectNode,
             intersectionDelta: delta,
             intersectionPoint: intersection.point
         });
     }
 
     _transitionToSelectedState() {
-        const transformBaseNode = findNearestBaseNodeForBoundingBoxNode(this._transformGeometryNode);
-        return new SelectedState(this._selectedObjectBaseNode, transformBaseNode);
+        const transformBaseNode = this._transformGeometryNode;
+        return new SelectedState(this._selectedObjectNode, transformBaseNode);
     }
 }

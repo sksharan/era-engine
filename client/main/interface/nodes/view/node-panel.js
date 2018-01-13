@@ -21,16 +21,28 @@ class NodePanel extends React.Component {
                     <FontAwesome name='sitemap' />
                     <span>Nodes</span>
                 </div>
-                <div className={`card-body ${css.nodePanelBody}`}>
-                    {
-                        (this.props.isFetching)
-                            ? <div>Loading nodes...</div>
-                            : Object.entries(createHierarchyFromNodes({
-                                    sceneNodes: this.props.nodes,
-                                    renderNodes: convertSceneNodesToRenderNodes(this.props.nodes)
-                                }))
-                                .map(([key, val]) => <Node key={key} val={val} depth={0} parentRenderNode={RootSceneNode} />)
-                    }
+                <div className={`${css.nodePanelBody}`}>
+                    <table className='table table-sm table-hover table-striped table-dark'>
+                        <tbody>
+                        {
+                            (this.props.isFetching)
+                                ? <tr><td>Loading nodes...</td></tr>
+                                : Object.entries(createHierarchyFromNodes({
+                                        sceneNodes: this.props.nodes,
+                                        renderNodes: convertSceneNodesToRenderNodes(this.props.nodes)
+                                    }))
+                                    .map(([key, val]) => {
+                                        return (
+                                            <tr key={key}>
+                                                <td className={`${css.nodePanelItem}`}>
+                                                    <Node val={val} depth={0} parentRenderNode={RootSceneNode} />
+                                                </td>
+                                            </tr>
+                                        );
+                                    })
+                        }
+                        </tbody>
+                    </table>
                 </div>
             </div>
         );

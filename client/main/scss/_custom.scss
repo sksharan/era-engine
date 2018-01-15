@@ -62,10 +62,30 @@ $custom-file-border-radius: 0;
 :local(.tools) {
     // Needed since the tools column div prevents pointer events from reaching the canvas
     pointer-events: none;
+
+    .card {
+        pointer-events: auto;
+    }
 }
-:local(.tools) > .card {
-    pointer-events: auto;
+
+@mixin allow-canvas-click {
+    // Allow pointer clicks to reach the canvas...
+    pointer-events: none;
+    // ...except if the pointer click is on a card
+    .card {
+        pointer-events: auto;
+    }
 }
+:local(.contents) {
+    @include allow-canvas-click
+}
+:local(.nodes) {
+    @include allow-canvas-click
+}
+:local(.tools) {
+    @include allow-canvas-click
+}
+
 // Stylize buttons that appear on tools panel
 :local(.tools) button {
     padding: 0.3rem 0.75rem;

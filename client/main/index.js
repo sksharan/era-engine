@@ -42,13 +42,13 @@ class Main extends React.Component {
                 </nav>
                 <div className='container-fluid'>
                     <div className='row'>
-                        <div className='col-md-3 pl-0 pr-0'>
+                        <div className={`col-md-3 pl-0 pr-0 ${css.contents}`}>
                             <ContentPanel />
                         </div>
                         <div className={`col-md-6 pl-0 pr-0 ${css.tools}`}>
                             <ToolPanel />
                         </div>
-                        <div className='col-md-3 pl-0 pr-0'>
+                        <div className={`col-md-3 pl-0 pr-0 ${css.nodes}`}>
                             <NodePanel />
                             <PropertiesPanel />
                         </div>

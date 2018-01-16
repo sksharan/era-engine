@@ -8,6 +8,10 @@ import {
     convertSceneNodeToRenderNode,
 } from '../../../common/index'
 
+// Maps render node ID to render node with that ID
+// Used to prevent duplicate nodes from being added to the scene when the component re-renders
+const renderNodeMap = {};
+
 export class Node extends React.Component {
     constructor(props) {
         super(props);
@@ -15,7 +19,10 @@ export class Node extends React.Component {
 
     render() {
         const renderNode = convertSceneNodeToRenderNode(this.props.val.sceneNode);
-        this.props.parentRenderNode.addChild(renderNode);
+        if (!renderNodeMap[renderNode.id]) {
+            this.props.parentRenderNode.addChild(renderNode);
+            renderNodeMap[renderNode.id] = renderNode;
+        }
         return (
             <div>
                 {this._getComponentFromSceneNode(this.props.val.sceneNode, renderNode)}

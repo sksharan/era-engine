@@ -3,10 +3,10 @@ import {glMatrix, mat4, vec3} from 'gl-matrix'
 class Camera {
     constructor() {
         /* Camera position */
-        this.position = vec3.fromValues(-145.67300415039062, 158.8555908203125, 217.2246551513672);
+        this.position = vec3.fromValues(-7, 3, 7);
 
         /* Direction the camera is facing */
-        this.direction = vec3.fromValues(0.6006218194961548, -0.44775909185409546, -0.6623935699462891);
+        this.direction = vec3.fromValues(0.7194738984107971, -0.2503800094127655, -0.6478171944618225);
 
         /* Camera up vector */
         this.up = vec3.fromValues(0, 1, 0);
@@ -22,7 +22,7 @@ class Camera {
         this.lookAroundSpeed = 0.1;
 
         /* Camera movement speed */
-        this.movementSpeed = 2.0;
+        this.movementSpeed = 0.5;
     }
 
     getPosition() {
@@ -32,6 +32,7 @@ class Camera {
     /* Given the number of pixels the mouse has moved in the x and y
      * directions, updates the direction of the camera. */
     updateDirection(movementX, movementY) {
+        console.warn(this.direction)
         movementX *= this.lookAroundSpeed;
         movementY *= this.lookAroundSpeed;
         this.yaw += movementX;

@@ -47,127 +47,72 @@ describe('Object router', () => {
     it('should accept a single zip file', async () => {
         await request(app)
             .post(ObjectRouterEndpoint)
-            .attach('spider', `${pathToTest}/resources/assimp-spider.zip`, 'assimp-spider.zip')
+            .attach('cubes', `${pathToTest}/resources/cubes.zip`, 'cubes.zip')
             .expect(201);
     });
 
     it('should store zip file contents in the database', async () => {
         await request(app)
             .post(ObjectRouterEndpoint)
-            .attach('spider', `${pathToTest}/resources/assimp-spider.zip`, 'assimp-spider.zip');
+            .attach('cubes', `${pathToTest}/resources/cubes.zip`, 'cubes.zip');
 
-        const numFilesInZip = 6;
+        const numFilesInZip = 2; // cubes.json and default.png
         const metadata = await getDb().collection(FileMetadataCollection).find({}).toArray();
         expect(metadata).to.have.lengthOf(numFilesInZip);
         const chunks = await getDb().collection(FileChunkCollection).find({}).toArray();
-        expect(chunks.length).to.be.above(numFilesInZip);
+        expect(chunks.length).to.equal(numFilesInZip);
     });
 
     it('should create correct number of total scene nodes from uploaded zip', async () => {
-        const sceneNodes = await uploadSpider();
-        expect(sceneNodes).to.have.lengthOf(20);
+        const sceneNodes = await uploadCubes();
+        expect(sceneNodes).to.have.lengthOf(4);
     });
-
     it('should create correct number of default scene nodes from uploaded zip', async () => {
-        const sceneNodes = await uploadSpider();
+        const sceneNodes = await uploadCubes();
         const filtered = sceneNodes.filter(sceneNode => sceneNode.type === "DEFAULT");
         expect(filtered.length).to.equal(1);
     });
-
     it('should create correct number of object scene nodes from uploaded zip', async () => {
-        const sceneNodes = await uploadSpider();
+        const sceneNodes = await uploadCubes();
         const filtered = sceneNodes.filter(sceneNode => sceneNode.type === "OBJECT");
-        expect(filtered.length).to.equal(19);
+        expect(filtered.length).to.equal(3);
     });
 
     it('should create scene nodes with correct names from uploaded zip', async () => {
-        const sceneNodes = await uploadSpider();
+        const sceneNodes = await uploadCubes();
         // Scene nodes are ordered by path
-        expect(sceneNodes[0].name).to.equal(`spider.obj`);
-        expect(sceneNodes[1].name).to.equal(`g Auge`);
-        expect(sceneNodes[2].name).to.equal(`g Bein1Li`);
-        expect(sceneNodes[3].name).to.equal(`g Bein1Re`);
-        expect(sceneNodes[4].name).to.equal(`g Bein2Li`);
-        expect(sceneNodes[5].name).to.equal(`g Bein2Re`);
-        expect(sceneNodes[6].name).to.equal(`g Bein3Li`);
-        expect(sceneNodes[7].name).to.equal(`g Bein3Re`);
-        expect(sceneNodes[8].name).to.equal(`g Bein4Li`);
-        expect(sceneNodes[9].name).to.equal(`g Bein4Re`);
-        expect(sceneNodes[10].name).to.equal(`g Brust`);
-        expect(sceneNodes[11].name).to.equal(`g Duplicate05`);
-        expect(sceneNodes[12].name).to.equal(`g HLeib01`);
-        expect(sceneNodes[13].name).to.equal(`g Kopf`);
-        expect(sceneNodes[14].name).to.equal(`g Kopf2`);
-        expect(sceneNodes[15].name).to.equal(`g OK`);
-        expect(sceneNodes[16].name).to.equal(`g Zahn`);
-        expect(sceneNodes[17].name).to.equal(`g Zahn2`);
-        expect(sceneNodes[18].name).to.equal(`g klZahn`);
-        expect(sceneNodes[19].name).to.equal(`g klZahn2`);
+        expect(sceneNodes[0].name).to.equal('Cubes');
+        expect(sceneNodes[1].name).to.equal('Cube_1');
+        expect(sceneNodes[2].name).to.equal('Cube_2');
+        expect(sceneNodes[3].name).to.equal('Cube_3');
     });
 
     it('should create scene nodes with correct paths from uploaded zip', async () => {
-        const sceneNodes = await uploadSpider();
+        const sceneNodes = await uploadCubes();
         // Scene nodes are ordered by path
-        expect(sceneNodes[0].path).to.equal(`${objectSceneNodePrefix}spider.obj`);
-        expect(sceneNodes[1].path).to.equal(`${objectSceneNodePrefix}spider.obj/g Auge`);
-        expect(sceneNodes[2].path).to.equal(`${objectSceneNodePrefix}spider.obj/g Bein1Li`);
-        expect(sceneNodes[3].path).to.equal(`${objectSceneNodePrefix}spider.obj/g Bein1Re`);
-        expect(sceneNodes[4].path).to.equal(`${objectSceneNodePrefix}spider.obj/g Bein2Li`);
-        expect(sceneNodes[5].path).to.equal(`${objectSceneNodePrefix}spider.obj/g Bein2Re`);
-        expect(sceneNodes[6].path).to.equal(`${objectSceneNodePrefix}spider.obj/g Bein3Li`);
-        expect(sceneNodes[7].path).to.equal(`${objectSceneNodePrefix}spider.obj/g Bein3Re`);
-        expect(sceneNodes[8].path).to.equal(`${objectSceneNodePrefix}spider.obj/g Bein4Li`);
-        expect(sceneNodes[9].path).to.equal(`${objectSceneNodePrefix}spider.obj/g Bein4Re`);
-        expect(sceneNodes[10].path).to.equal(`${objectSceneNodePrefix}spider.obj/g Brust`);
-        expect(sceneNodes[11].path).to.equal(`${objectSceneNodePrefix}spider.obj/g Duplicate05`);
-        expect(sceneNodes[12].path).to.equal(`${objectSceneNodePrefix}spider.obj/g HLeib01`);
-        expect(sceneNodes[13].path).to.equal(`${objectSceneNodePrefix}spider.obj/g Kopf`);
-        expect(sceneNodes[14].path).to.equal(`${objectSceneNodePrefix}spider.obj/g Kopf2`);
-        expect(sceneNodes[15].path).to.equal(`${objectSceneNodePrefix}spider.obj/g OK`);
-        expect(sceneNodes[16].path).to.equal(`${objectSceneNodePrefix}spider.obj/g Zahn`);
-        expect(sceneNodes[17].path).to.equal(`${objectSceneNodePrefix}spider.obj/g Zahn2`);
-        expect(sceneNodes[18].path).to.equal(`${objectSceneNodePrefix}spider.obj/g klZahn`);
-        expect(sceneNodes[19].path).to.equal(`${objectSceneNodePrefix}spider.obj/g klZahn2`);
+        expect(sceneNodes[0].path).to.equal(`${objectSceneNodePrefix}Cubes`);
+        expect(sceneNodes[1].path).to.equal(`${objectSceneNodePrefix}Cubes/Cube_1`);
+        expect(sceneNodes[2].path).to.equal(`${objectSceneNodePrefix}Cubes/Cube_2`);
+        expect(sceneNodes[3].path).to.equal(`${objectSceneNodePrefix}Cubes/Cube_3`);
     });
 
     it('should create scene nodes with correct local matrices from uploaded zip', async () => {
-        const sceneNodes = await uploadSpider();
+        const sceneNodes = await uploadCubes();
         for (let sceneNode of sceneNodes) {
             expect(sceneNode.localMatrix).to.eql([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]);
         }
     });
 
-    it('should create scene nodes with correct content from uploaded zip', async () => {
-        const sceneNodes = await uploadSpider();
+    it('should create scene nodes with non-null content', async () => {
+        const sceneNodes = await uploadCubes();
         expect(sceneNodes[0].content).to.be.not.null;
-        expect(sceneNodes[12].content).to.be.not.null;
-        expect(sceneNodes[12].content.positions.length).to.equal(213);
-        expect(sceneNodes[12].content.positions[0]).to.equal(1.16038);
-        expect(sceneNodes[12].content.positions[1]).to.equal(4.51268);
-        expect(sceneNodes[12].content.positions[2]).to.equal(6.44917);
-        expect(sceneNodes[12].content.normals.length).to.equal(213);
-        expect(sceneNodes[12].content.normals[0]).to.equal(-0.537588);
-        expect(sceneNodes[12].content.normals[1]).to.equal(-0.071798);
-        expect(sceneNodes[12].content.normals[2]).to.equal(0.840146);
-        expect(sceneNodes[12].content.texcoords.length).to.equal(142);
-        expect(sceneNodes[12].content.texcoords[0]).to.equal(0.186192);
-        expect(sceneNodes[12].content.texcoords[1]).to.equal(0.222718);
-        expect(sceneNodes[12].content.indices.length).to.equal(240);
-        expect(sceneNodes[12].content.ambient.r).to.equal(0.2);
-        expect(sceneNodes[12].content.ambient.g).to.equal(0.2);
-        expect(sceneNodes[12].content.ambient.b).to.equal(0.2);
-        expect(sceneNodes[12].content.diffuse.r).to.equal(0.690196);
-        expect(sceneNodes[12].content.diffuse.g).to.equal(0.639216);
-        expect(sceneNodes[12].content.diffuse.b).to.equal(0.615686);
-        expect(sceneNodes[12].content.specular.r).to.equal(0);
-        expect(sceneNodes[12].content.specular.g).to.equal(0);
-        expect(sceneNodes[12].content.specular.b).to.equal(0);
-        expect(sceneNodes[12].content.shininess).to.equal(0);
-        expect(sceneNodes[12].content.textureFileId).to.be.not.null;
+        expect(sceneNodes[1].content).to.be.not.null;
+        expect(sceneNodes[2].content).to.be.not.null;
+        expect(sceneNodes[3].content).to.be.not.null;
     });
 
     it('should allow object ref scene node to be created after zip is uploaded', async() => {
-        const sceneNodes = await uploadSpider();
+        const sceneNodes = await uploadCubes();
         const node = getSceneNode({name: 'a', path: '/a'});
         node.objectSceneNodeId = sceneNodes[0].id;
         await request(app)
@@ -177,11 +122,11 @@ describe('Object router', () => {
     });
 });
 
-async function uploadSpider() {
+async function uploadCubes() {
     await request(app)
         .post(ObjectRouterEndpoint)
         .field('prefix', objectSceneNodePrefix)
-        .attach('spider', `${pathToTest}/resources/assimp-spider.zip`, 'assimp-spider.zip')
+        .attach('cubes', `${pathToTest}/resources/cubes.zip`, 'cubes.zip')
         .expect(201);
 
     const res = await request(app)

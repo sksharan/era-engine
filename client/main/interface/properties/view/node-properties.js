@@ -53,7 +53,7 @@ export class NodeProperties extends React.Component {
                             <Matrix3x3 matrix={this.props.node.renderNode.normalMatrix} />
                         </td>
                     </tr>
-                    {this._getNodeTypeSpecificProperties()}
+                    {/* {this._getNodeTypeSpecificProperties()} */}
                 </tbody>
             </table>
         );

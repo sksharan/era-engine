@@ -25,7 +25,6 @@ This project is still very early in development, so some features are incomplete
 - Custom WebGL engine code with dynamic shader support
 - Support for local and global transformations (translate, scale, rotate)
 - Auto-generated bounding boxes for objects allowing for mouse picking
-- Debug tools: FPS counter and free-fly camera
 
 ## Usage
 *This section is still under development*

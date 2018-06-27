@@ -26,7 +26,7 @@ module.exports = {
         extensions: ['.js', '.jsx']
     },
     module: {
-        loaders: [
+        rules: [
             {
                 enforce: 'pre',
                 loader: 'eslint-loader',

@@ -18,7 +18,8 @@ class UploadObject extends React.Component {
     }
 
     // Other components that rely on the list of objects should re-render
-    componentWillUpdate() {
+    // FIXME: this is deprecated - https://reactjs.org/blog/2018/03/27/update-on-async-rendering.html
+    UNSAFE_componentWillUpdate() {
         this.props.getObjects();
     }
 

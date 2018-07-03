@@ -26,12 +26,12 @@ class UploadFile extends React.Component {
     render() {
         return (
             <form className={`${commonCss.uploadForm}`} onSubmit={this._onFormSubmit}>
-                <label className={`custom-file ${commonCss.browseButton}`}>
+                <div className={`custom-file ${commonCss.browseButton}`}>
                     <input type='file' className='custom-file-input' onChange={this._handleFileChange} />
-                    <span className='custom-file-control'>
+                    <label className='custom-file-label'>
                         {this._getFileText()}
-                    </span>
-                </label>
+                    </label>
+                </div>
                 <button type='submit' className={`btn btn-success ${commonCss.uploadButton}`}>
                     Upload
                 </button>
@@ -40,8 +40,7 @@ class UploadFile extends React.Component {
     }
 
     _getFileText() {
-        // Empty string allows use of the default placeholder text
-        return this.state.file ? this.state.file.name : "";
+        return this.state.file ? this.state.file.name : "Choose file...";
     }
 
     _handleFileChange(event) {

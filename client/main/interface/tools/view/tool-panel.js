@@ -1,5 +1,7 @@
 import React from 'react'
 import FontAwesome from 'react-fontawesome'
+import PropTypes from 'prop-types'
+import {FPS} from './fps'
 import {
     togglePointerLock,
     setTranslate,
@@ -50,12 +52,10 @@ export class ToolPanel extends React.Component {
                             </select>
                         </div>
                         <div className='col'>
-                            <button type='button' className='btn btn-sm btn-outline-light'>
-                                <span>FPS</span>
-                            </button>
                             <button type='button' className='btn btn-sm btn-outline-light' onClick={togglePointerLock}>
                                 <FontAwesome name='video-camera' />
                             </button>
+                            <FPS fps={this.props.fps} />
                         </div>
                     </div>
                 </div>
@@ -71,3 +71,7 @@ export class ToolPanel extends React.Component {
         }
     }
 }
+
+ToolPanel.propTypes = {
+    fps: PropTypes.number.isRequired
+};

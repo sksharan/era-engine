@@ -46,7 +46,7 @@ class Main extends React.Component {
                             <ContentPanel />
                         </div>
                         <div className={`col-md-6 pl-0 pr-0 ${css.tools}`}>
-                            <ToolPanel />
+                            <ToolPanel fps={this.state.fps} />
                         </div>
                         <div className={`col-md-3 pl-0 pr-0 ${css.nodes}`}>
                             <NodePanel />

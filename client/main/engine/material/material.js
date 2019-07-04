@@ -56,8 +56,8 @@ export function loadTextureAsync(imageSrc) {
         new Uint8Array([127, 127, 127, 255]));
 
     let image = new Image();
-    image.src = imageSrc;
     image.crossOrigin = 'anonymous';
+    image.src = imageSrc;
     image.addEventListener('load' , () => {
         gl.bindTexture(gl.TEXTURE_2D, texture);
         gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);

@@ -1,15 +1,15 @@
 import React, { Component } from "react";
 
-class Login extends Component {
-  constructor(props) {
-    super(props);
-  }
+class Register extends Component {
+    constructor(props) {
+        super(props);
+    }
 
-  render() {
-    return (
-        <div><h1>Login!</h1></div>
-    );
-  }
+    render() {
+        return (
+            <div><h1>Register</h1></div>
+        );
+    }
 }
 
-export default Login;
+export default Register;

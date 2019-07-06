@@ -1,7 +1,7 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import {Provider} from 'react-redux'
-import { Route, Switch, BrowserRouter as Router } from 'react-router-dom'
+import React from 'react';
+import ReactDOM from 'react-dom';
+import {Provider} from 'react-redux';
+import { Route, Switch, BrowserRouter as Router } from 'react-router-dom';
 import Main from './main';
 import Login from './login';
 import Register from './register';

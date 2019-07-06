@@ -14,6 +14,7 @@ module.exports = {
             "jsx": true
         }
     },
+    "plugins": ["prettier"],
     "env": {
         "browser": true,
         "commonjs": true,
@@ -29,6 +30,7 @@ module.exports = {
     },
     "rules": {
         "no-console": ["error", { "allow": ["warn", "error"] }],
+        "prettier/prettier": "error",
         "import/no-extraneous-dependencies": [
             "error",
             {

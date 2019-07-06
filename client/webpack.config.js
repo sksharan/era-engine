@@ -11,7 +11,7 @@ const extractSass = new ExtractTextPlugin({
 module.exports = {
     entry: './main/index.js',
     output: {
-        filename: './dist/bundle.js',
+        filename: './dist/bundle.js'
     },
     watch: true,
     devtool: 'source-map',
@@ -78,11 +78,11 @@ module.exports = {
         // For Enzyme with React 15: http://airbnb.io/enzyme/docs/guides/webpack.html
         'react/addons': true,
         'react/lib/ExecutionEnvironment': true,
-        'react/lib/ReactContext': true,
+        'react/lib/ReactContext': true
     },
     devServer: {
         historyApiFallback: {
             index: '/dist/'
-        },
+        }
     }
 };

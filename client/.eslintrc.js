@@ -5,7 +5,8 @@ module.exports = {
         "eslint:recommended",
         "plugin:react/recommended",
         "plugin:import/errors",
-        "plugin:import/warnings"
+        "plugin:import/warnings",
+        "plugin:prettier/recommended"
     ],
     "parserOptions": {
         "ecmaVersion": 6,
@@ -14,7 +15,6 @@ module.exports = {
             "jsx": true
         }
     },
-    "plugins": ["prettier"],
     "env": {
         "browser": true,
         "commonjs": true,

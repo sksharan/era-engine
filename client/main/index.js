@@ -1,15 +1,13 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import {Provider} from 'react-redux';
-import { Route, Switch, BrowserRouter as Router } from 'react-router-dom';
-import Main from './main';
-import Login from './login';
-import Register from './register';
-import NotFound from './notfound';
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { Provider } from 'react-redux'
+import { Route, Switch, BrowserRouter as Router } from 'react-router-dom'
+import Main from './main'
+import Login from './login'
+import Register from './register'
+import NotFound from './notfound'
 
-import {
-    Store,
-} from './interface/index'
+import { Store } from './interface/index'
 
 ReactDOM.render(
     <Provider store={Store}>
@@ -22,4 +20,5 @@ ReactDOM.render(
             </Switch>
         </Router>
     </Provider>,
-document.getElementById('main'));
+    document.getElementById('main')
+)

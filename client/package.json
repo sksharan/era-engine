@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "bootstrap": "^4.0.0-beta",
+    "eslint-config-prettier": "^6.0.0",
     "eslint-plugin-prettier": "^3.1.0",
     "gl-matrix": "^2.4.0",
     "immutable": "^3.8.2",

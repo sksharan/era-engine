@@ -1,1 +1,1 @@
-export {ContentPanel} from './content-panel'
+export {ContentPanel} from './content-panel';

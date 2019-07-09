@@ -1,16 +1,12 @@
-import {
-    FETCH_OBJECT_REQUEST,
-    FETCH_OBJECT_SUCCESS,
-    FETCH_OBJECT_FAILURE,
-} from '../action/index'
+import {FETCH_OBJECT_REQUEST, FETCH_OBJECT_SUCCESS, FETCH_OBJECT_FAILURE} from '../action/index';
 
 const initialState = {
     isFetching: true,
     isError: false,
     objectArray: null
-}
+};
 
-export const ObjectReducer = (state=initialState, action) => {
+export const ObjectReducer = (state = initialState, action) => {
     switch (action.type) {
         case FETCH_OBJECT_REQUEST:
             return {
@@ -32,4 +28,4 @@ export const ObjectReducer = (state=initialState, action) => {
             };
     }
     return state;
-}
+};

@@ -1,7 +1,7 @@
-import ProgramDataManager from './program-data-manager'
-import {NodeAnalyzer, RenderNodeType} from '../node/index'
-import {gl} from '../gl'
-import {NumFloatsPerPosition, NumFloatsPerNormal, NumFloatsPerTexcoord} from '../mesh/index'
+import ProgramDataManager from './program-data-manager';
+import {NodeAnalyzer, RenderNodeType} from '../node/index';
+import {gl} from '../gl';
+import {NumFloatsPerPosition, NumFloatsPerNormal, NumFloatsPerTexcoord} from '../mesh/index';
 
 const vertexBufferStride = NumFloatsPerPosition + NumFloatsPerNormal + NumFloatsPerTexcoord;
 
@@ -75,20 +75,38 @@ function renderGeometry(sceneNode, lightNodes, skipIgnoreDepthNodes) {
         if (material.programData.hasPositionAttributeLocation()) {
             gl.enableVertexAttribArray(material.programData.positionAttributeLocation);
             gl.bindBuffer(gl.ARRAY_BUFFER, mesh.vertexBuffer);
-            gl.vertexAttribPointer(material.programData.positionAttributeLocation, 3, gl.FLOAT, false,
-                vertexBufferStride * 4, 0);
+            gl.vertexAttribPointer(
+                material.programData.positionAttributeLocation,
+                3,
+                gl.FLOAT,
+                false,
+                vertexBufferStride * 4,
+                0
+            );
         }
         if (material.programData.hasNormalAttributeLocation()) {
             gl.enableVertexAttribArray(material.programData.normalAttributeLocation);
             gl.bindBuffer(gl.ARRAY_BUFFER, mesh.vertexBuffer);
-            gl.vertexAttribPointer(material.programData.normalAttributeLocation, 3, gl.FLOAT, false,
-                vertexBufferStride * 4, NumFloatsPerPosition * 4);
+            gl.vertexAttribPointer(
+                material.programData.normalAttributeLocation,
+                3,
+                gl.FLOAT,
+                false,
+                vertexBufferStride * 4,
+                NumFloatsPerPosition * 4
+            );
         }
         if (material.programData.hasTexcoordAttributeLocation()) {
             gl.enableVertexAttribArray(material.programData.texcoordAttributeLocation);
             gl.bindBuffer(gl.ARRAY_BUFFER, mesh.vertexBuffer);
-            gl.vertexAttribPointer(material.programData.texcoordAttributeLocation, 2, gl.FLOAT, false,
-                vertexBufferStride * 4, (NumFloatsPerPosition + NumFloatsPerNormal) * 4);
+            gl.vertexAttribPointer(
+                material.programData.texcoordAttributeLocation,
+                2,
+                gl.FLOAT,
+                false,
+                vertexBufferStride * 4,
+                (NumFloatsPerPosition + NumFloatsPerNormal) * 4
+            );
         }
 
         if (mesh.hasIndices()) {

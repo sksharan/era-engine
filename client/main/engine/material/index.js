@@ -1,1 +1,1 @@
-export {default as Material} from './material'
+export {default as Material} from './material';

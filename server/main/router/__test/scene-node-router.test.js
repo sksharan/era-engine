@@ -1,9 +1,9 @@
-import {expect} from 'chai'
-import * as request from 'supertest'
-import {app} from '../../app'
-import {SceneNodeRouterEndpoint} from '../scene-node-router'
-import {connectDb, getDb, SceneNodeCollection} from '../../database/index'
-import {getLight, getSceneNode} from './util/scene-node-util'
+import {expect} from 'chai';
+import * as request from 'supertest';
+import {app} from '../../app';
+import {SceneNodeRouterEndpoint} from '../scene-node-router';
+import {connectDb, getDb, SceneNodeCollection} from '../../database/index';
+import {getLight, getSceneNode} from './util/scene-node-util';
 
 describe('Scene node router', () => {
     before(async () => {
@@ -11,7 +11,9 @@ describe('Scene node router', () => {
     });
 
     beforeEach(async () => {
-        await getDb().collection(SceneNodeCollection).deleteMany({});
+        await getDb()
+            .collection(SceneNodeCollection)
+            .deleteMany({});
     });
 
     it('should allow a scene node to be created and fetched', async () => {
@@ -30,7 +32,9 @@ describe('Scene node router', () => {
     });
 
     it('should return not found if trying to fetch a node that does not exist', async () => {
-        await request(app).get(`${SceneNodeRouterEndpoint}/abcdef123456`).expect(404);
+        await request(app)
+            .get(`${SceneNodeRouterEndpoint}/abcdef123456`)
+            .expect(404);
     });
 
     it('should allow scene nodes to be created and fetched, ordered by path', async () => {
@@ -41,7 +45,10 @@ describe('Scene node router', () => {
                 .expect(201);
         }
 
-        const res = await request(app).get(SceneNodeRouterEndpoint).query({pathRegex: '^/a'}).expect(200);
+        const res = await request(app)
+            .get(SceneNodeRouterEndpoint)
+            .query({pathRegex: '^/a'})
+            .expect(200);
         const sceneNodes = res.body;
         expect(sceneNodes).to.have.lengthOf(5);
         expect(sceneNodes[0].path).to.equal('/a');
@@ -54,9 +61,15 @@ describe('Scene node router', () => {
     it('should allow light node to be created and fetched', async () => {
         const lightNode = getSceneNode({name: 'name', path: '/a', type: 'LIGHT'});
         lightNode.content = getLight();
-        await request(app).post(SceneNodeRouterEndpoint).send(lightNode).expect(201);
+        await request(app)
+            .post(SceneNodeRouterEndpoint)
+            .send(lightNode)
+            .expect(201);
 
-        const res = await request(app).get(SceneNodeRouterEndpoint).query({pathRegex: '^/a'}).expect(200);
+        const res = await request(app)
+            .get(SceneNodeRouterEndpoint)
+            .query({pathRegex: '^/a'})
+            .expect(200);
         const sceneNodes = res.body;
         expect(sceneNodes).to.have.lengthOf(1);
         expect(sceneNodes[0].path).to.equal('/a');
@@ -70,16 +83,31 @@ describe('Scene node router', () => {
         let res, sceneNodes;
 
         // Create two scene nodes
-        await request(app).post(SceneNodeRouterEndpoint).send(sceneNode).expect(201);
-        await request(app).post(SceneNodeRouterEndpoint).send(sceneNode).expect(201);
-        res = await request(app).get(SceneNodeRouterEndpoint).query({pathRegex: '^/a'}).expect(200);
+        await request(app)
+            .post(SceneNodeRouterEndpoint)
+            .send(sceneNode)
+            .expect(201);
+        await request(app)
+            .post(SceneNodeRouterEndpoint)
+            .send(sceneNode)
+            .expect(201);
+        res = await request(app)
+            .get(SceneNodeRouterEndpoint)
+            .query({pathRegex: '^/a'})
+            .expect(200);
         sceneNodes = res.body;
         expect(sceneNodes).to.have.lengthOf(2);
 
         // Update an existing scene node instead of creating a new one
         sceneNode.id = sceneNodes[0]._id;
-        await request(app).post(SceneNodeRouterEndpoint).send(sceneNode).expect(201);
-        res = await request(app).get(SceneNodeRouterEndpoint).query({pathRegex: '^/a'}).expect(200);
+        await request(app)
+            .post(SceneNodeRouterEndpoint)
+            .send(sceneNode)
+            .expect(201);
+        res = await request(app)
+            .get(SceneNodeRouterEndpoint)
+            .query({pathRegex: '^/a'})
+            .expect(200);
         sceneNodes = res.body;
         expect(sceneNodes).to.have.lengthOf(2);
     });
@@ -93,15 +121,24 @@ describe('Scene node router', () => {
                 .send(getSceneNode({name: 'name', path}))
                 .expect(201);
         }
-        res = await request(app).get(SceneNodeRouterEndpoint).query({pathRegex: '^/a'}).expect(200);
+        res = await request(app)
+            .get(SceneNodeRouterEndpoint)
+            .query({pathRegex: '^/a'})
+            .expect(200);
         sceneNodes = res.body;
         expect(sceneNodes).to.have.lengthOf(5); // Initial number of nodes
 
-        res = await request(app).delete(SceneNodeRouterEndpoint).query({pathRegex: '^/a/d'}).expect(200);
+        res = await request(app)
+            .delete(SceneNodeRouterEndpoint)
+            .query({pathRegex: '^/a/d'})
+            .expect(200);
         sceneNodes = res.body;
         expect(sceneNodes).to.have.lengthOf(2); // Number of deleted nodes
 
-        res = await request(app).get(SceneNodeRouterEndpoint).query({pathRegex: '^/a'}).expect(200);
+        res = await request(app)
+            .get(SceneNodeRouterEndpoint)
+            .query({pathRegex: '^/a'})
+            .expect(200);
         sceneNodes = res.body;
         expect(sceneNodes).to.have.lengthOf(3); // Number of remaining nodes
     });
@@ -111,7 +148,10 @@ describe('Scene node router', () => {
             .post(SceneNodeRouterEndpoint)
             .send(getSceneNode({name: 'name', path: '/a'}))
             .expect(201);
-        const res = await request(app).get(SceneNodeRouterEndpoint).query({pathRegex: '^/a'}).expect(200);
+        const res = await request(app)
+            .get(SceneNodeRouterEndpoint)
+            .query({pathRegex: '^/a'})
+            .expect(200);
         const sceneNodes = res.body;
         expect(sceneNodes).to.have.lengthOf(1);
 
@@ -131,6 +171,6 @@ describe('Scene node router', () => {
         await request(app)
             .post(SceneNodeRouterEndpoint)
             .send(refNode)
-            .expect(400, {errors:['No scene node with id 59953ea7d491fa1dc07eee5c']});
+            .expect(400, {errors: ['No scene node with id 59953ea7d491fa1dc07eee5c']});
     });
 });

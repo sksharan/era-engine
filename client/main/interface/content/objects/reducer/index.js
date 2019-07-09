@@ -1,1 +1,1 @@
-export {ObjectReducer} from './object-reducer'
+export {ObjectReducer} from './object-reducer';

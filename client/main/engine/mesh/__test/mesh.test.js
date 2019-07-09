@@ -1,9 +1,8 @@
-import {assert} from 'chai'
-import MeshInjector from 'inject-loader!../mesh'
+import {assert} from 'chai';
+import MeshInjector from 'inject-loader!../mesh';
 
 // Setup WebGL
-document.body.insertAdjacentHTML('beforeend',
-        '<canvas id="canvas" height="720" width="1080"></canvas>');
+document.body.insertAdjacentHTML('beforeend', '<canvas id="canvas" height="720" width="1080"></canvas>');
 const gl = document.getElementById('canvas').getContext('webgl');
 
 const Mesh = MeshInjector({

@@ -1,10 +1,10 @@
-import {expect} from 'chai'
-import * as request from 'supertest'
-import {app} from '../../app'
-import {ObjectRouterEndpoint,} from '../object-router'
-import {SceneNodeRouterEndpoint} from '../scene-node-router'
-import {connectDb, getDb, FileMetadataCollection, FileChunkCollection, SceneNodeCollection} from '../../database/index'
-import {getSceneNode} from './util/scene-node-util'
+import {expect} from 'chai';
+import * as request from 'supertest';
+import {app} from '../../app';
+import {ObjectRouterEndpoint} from '../object-router';
+import {SceneNodeRouterEndpoint} from '../scene-node-router';
+import {connectDb, getDb, FileMetadataCollection, FileChunkCollection, SceneNodeCollection} from '../../database/index';
+import {getSceneNode} from './util/scene-node-util';
 
 const pathToTest = 'main/router/__test';
 const objectSceneNodePrefix = '__object_';
@@ -15,9 +15,15 @@ describe('Object router', () => {
     });
 
     beforeEach(async () => {
-        await getDb().collection(FileMetadataCollection).deleteMany({});
-        await getDb().collection(FileChunkCollection).deleteMany({});
-        await getDb().collection(SceneNodeCollection).deleteMany({});
+        await getDb()
+            .collection(FileMetadataCollection)
+            .deleteMany({});
+        await getDb()
+            .collection(FileChunkCollection)
+            .deleteMany({});
+        await getDb()
+            .collection(SceneNodeCollection)
+            .deleteMany({});
     });
 
     it('should return bad request if uploading zero assets', async () => {
@@ -57,9 +63,15 @@ describe('Object router', () => {
             .attach('cubes', `${pathToTest}/resources/cubes.zip`, 'cubes.zip');
 
         const numFilesInZip = 2; // cubes.json and default.png
-        const metadata = await getDb().collection(FileMetadataCollection).find({}).toArray();
+        const metadata = await getDb()
+            .collection(FileMetadataCollection)
+            .find({})
+            .toArray();
         expect(metadata).to.have.lengthOf(numFilesInZip);
-        const chunks = await getDb().collection(FileChunkCollection).find({}).toArray();
+        const chunks = await getDb()
+            .collection(FileChunkCollection)
+            .find({})
+            .toArray();
         expect(chunks.length).to.equal(numFilesInZip);
     });
 
@@ -69,12 +81,12 @@ describe('Object router', () => {
     });
     it('should create correct number of default scene nodes from uploaded zip', async () => {
         const sceneNodes = await uploadCubes();
-        const filtered = sceneNodes.filter(sceneNode => sceneNode.type === "DEFAULT");
+        const filtered = sceneNodes.filter(sceneNode => sceneNode.type === 'DEFAULT');
         expect(filtered.length).to.equal(1);
     });
     it('should create correct number of object scene nodes from uploaded zip', async () => {
         const sceneNodes = await uploadCubes();
-        const filtered = sceneNodes.filter(sceneNode => sceneNode.type === "OBJECT");
+        const filtered = sceneNodes.filter(sceneNode => sceneNode.type === 'OBJECT');
         expect(filtered.length).to.equal(3);
     });
 
@@ -111,7 +123,7 @@ describe('Object router', () => {
         expect(sceneNodes[3].content).to.be.not.null;
     });
 
-    it('should allow object ref scene node to be created after zip is uploaded', async() => {
+    it('should allow object ref scene node to be created after zip is uploaded', async () => {
         const sceneNodes = await uploadCubes();
         const node = getSceneNode({name: 'a', path: '/a'});
         node.objectSceneNodeId = sceneNodes[0].id;

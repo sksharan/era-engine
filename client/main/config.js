@@ -1,4 +1,4 @@
-const server = "http://localhost:3000";
+const server = 'http://localhost:3000';
 
 export const filesEndpoint = `${server}/files`;
 export const fileMetadataEndpoint = `${server}/files/metadata`;
@@ -13,4 +13,4 @@ export const getSceneNodeEndpoint = sceneNodeId => {
     return `${sceneNodesEndpoint}/${sceneNodeId}`;
 };
 
-export const refNodePrefix = "__ref_";
+export const refNodePrefix = '__ref_';

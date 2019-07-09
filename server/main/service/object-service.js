@@ -1,8 +1,8 @@
-import * as AdmZip from 'adm-zip'
-import * as streamifier from 'streamifier'
-import * as path from 'path'
-import {uploadFile} from './file-service'
-import {saveSceneNode} from './scene-node-service'
+import * as AdmZip from 'adm-zip';
+import * as streamifier from 'streamifier';
+import * as path from 'path';
+import {uploadFile} from './file-service';
+import {saveSceneNode} from './scene-node-service';
 
 export const createFromZip = async (zipFile, objectNodePrefix) => {
     const zip = new AdmZip(zipFile);
@@ -18,7 +18,7 @@ export const createFromZip = async (zipFile, objectNodePrefix) => {
 
         if (path.extname(name) === '.json') {
             if (assimpJson !== null) {
-                throw new Error("Detected more than one json file in zip package");
+                throw new Error('Detected more than one json file in zip package');
             }
             assimpJson = JSON.parse(zip.readAsText(zipEntry));
         } else {
@@ -28,12 +28,17 @@ export const createFromZip = async (zipFile, objectNodePrefix) => {
     }
 
     const sceneNodes = [];
-    parseSceneNodes(assimpJson.rootnode, `${objectNodePrefix}${assimpJson.rootnode.name}`,
-            sceneNodes, textures, assimpJson);
+    parseSceneNodes(
+        assimpJson.rootnode,
+        `${objectNodePrefix}${assimpJson.rootnode.name}`,
+        sceneNodes,
+        textures,
+        assimpJson
+    );
     for (let sceneNode of sceneNodes) {
         saveSceneNode(sceneNode);
     }
-}
+};
 
 function parseSceneNodes(assimpNode, path, sceneNodes, textures, assimpJson) {
     const sceneNode = {
@@ -88,12 +93,12 @@ function getProperty(material, key) {
             return property;
         }
     }
-    console.warn("No property found with key " + key);
+    console.warn('No property found with key ' + key);
     return null;
 }
 
 function toRGB(property) {
-    return { r: property.value[0], g: property.value[1], b: property.value[2] };
+    return {r: property.value[0], g: property.value[1], b: property.value[2]};
 }
 
 function toFilename(property) {

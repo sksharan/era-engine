@@ -1,14 +1,14 @@
-import React from 'react'
-import FontAwesome from 'react-fontawesome'
-import {Objects} from '../../objects/index'
-import {Files} from '../../files/index'
+import React from 'react';
+import FontAwesome from 'react-fontawesome';
+import {Objects} from '../../objects/index';
+import {Files} from '../../files/index';
 
 export class ContentPanel extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             selectedTab: 'OBJECTS'
-        }
+        };
         this._showSelectedTabContents = this._showSelectedTabContents.bind(this);
     }
 
@@ -21,13 +21,13 @@ export class ContentPanel extends React.Component {
                 </div>
                 <ul className='nav nav-tabs'>
                     <li className='nav-item' onClick={() => this.setState({selectedTab: 'OBJECTS'})}>
-                        <a className={`nav-link ${this.state.selectedTab === 'OBJECTS' ? 'active' : ''}`} href="#">
+                        <a className={`nav-link ${this.state.selectedTab === 'OBJECTS' ? 'active' : ''}`} href='#'>
                             <FontAwesome name='cubes' />
                             Objects
                         </a>
                     </li>
                     <li className='nav-item' onClick={() => this.setState({selectedTab: 'FILES'})}>
-                        <a className={`nav-link ${this.state.selectedTab === 'FILES' ? 'active' : ''}`} href="#">
+                        <a className={`nav-link ${this.state.selectedTab === 'FILES' ? 'active' : ''}`} href='#'>
                             <FontAwesome name='files-o' />
                             Files
                         </a>

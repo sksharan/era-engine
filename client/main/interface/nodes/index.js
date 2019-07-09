@@ -1,1 +1,1 @@
-export {NodePanel} from './view/index'
+export {NodePanel} from './view/index';

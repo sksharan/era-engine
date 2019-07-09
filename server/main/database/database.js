@@ -1,5 +1,5 @@
-import * as mongodb from 'mongodb'
-import {appConfig, isTest} from '../config/index'
+import * as mongodb from 'mongodb';
+import {appConfig, isTest} from '../config/index';
 
 let db = null;
 let bucket = null;
@@ -13,7 +13,7 @@ export const connectDb = () => {
             resolve();
         }
         mongodb.MongoClient.connect(appConfig.database.url)
-            .then((database) => {
+            .then(database => {
                 if (!isTest) {
                     console.log('Connected to database ' + appConfig.database.url);
                 }
@@ -21,7 +21,7 @@ export const connectDb = () => {
                 bucket = new mongodb.GridFSBucket(db);
                 resolve();
             })
-            .catch((err) => {
+            .catch(err => {
                 console.error('Connection error:', err);
                 reject();
             });

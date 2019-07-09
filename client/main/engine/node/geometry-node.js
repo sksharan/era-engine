@@ -1,9 +1,9 @@
 import {RenderNode} from './render-node';
-import {RenderNodeType} from './render-node-type'
-import {mat4} from 'gl-matrix'
+import {RenderNodeType} from './render-node-type';
+import {mat4} from 'gl-matrix';
 
 export class GeometryNode extends RenderNode {
-    constructor({id, localMatrix=mat4.create(), mesh, material}) {
+    constructor({id, localMatrix = mat4.create(), mesh, material}) {
         if (!mesh) {
             throw new TypeError('Mesh is required');
         }

@@ -3,7 +3,7 @@
  * results of the analysis.
  */
 
-import {BoundingBox} from '../mesh/index'
+import {BoundingBox} from '../mesh/index';
 
 export class NodeAnalyzer {
     constructor() {
@@ -19,7 +19,7 @@ export class NodeAnalyzer {
 
     // Collect data about the scene graph by traversing every node
     analyze(sceneNode) {
-        this._lightsChanged = (this._prevLightNodes === null);
+        this._lightsChanged = this._prevLightNodes === null;
         this._prevLightNodes = this._allLightNodes;
 
         beginAnalysis.call(this, sceneNode);
@@ -62,7 +62,7 @@ function beginAnalysis(sceneNode) {
 }
 
 function analyze(sceneNode) {
-    if (sceneNode.nodeType === "LIGHT") {
+    if (sceneNode.nodeType === 'LIGHT') {
         this._allLightNodes.push(sceneNode);
 
         if (!this._lightsChanged && this._prevLightNodes.indexOf(sceneNode) === -1) {
@@ -70,7 +70,7 @@ function analyze(sceneNode) {
         }
     }
 
-    if (sceneNode.nodeType === "GEOMETRY") {
+    if (sceneNode.nodeType === 'GEOMETRY') {
         if (sceneNode.mesh instanceof BoundingBox) {
             this._allBoundingBoxNodes.push(sceneNode);
         }

@@ -1,23 +1,22 @@
-import {SelectionState} from './selection-state'
-import {NoneSelectedState} from './none-selected-state'
-import {TransformingState} from './transforming-state'
-import {colorGeometryNodes} from './node-colorizer'
-import {findNearestBaseNodeForBoundingBoxNode} from './node-finder'
+import {SelectionState} from './selection-state';
+import {NoneSelectedState} from './none-selected-state';
+import {TransformingState} from './transforming-state';
+import {colorGeometryNodes} from './node-colorizer';
+import {findNearestBaseNodeForBoundingBoxNode} from './node-finder';
 import {
     createTranslateNode,
     createScaleNode,
     createRotateNode,
     CurrentTransformMode,
-    TRANSLATE, SCALE, ROTATE,
-    TransformScaleFactor,
-} from './transform/index'
-import {CurrentTransformOrientation} from '../../global/index'
-import {Camera} from '../../camera/index'
-import {
-    triggerNodeSelectedEvent,
-    triggerNodeDeselectedEvent
-} from '../../../common/index'
-import {mat4, vec3, vec4} from 'gl-matrix'
+    TRANSLATE,
+    SCALE,
+    ROTATE,
+    TransformScaleFactor
+} from './transform/index';
+import {CurrentTransformOrientation} from '../../global/index';
+import {Camera} from '../../camera/index';
+import {triggerNodeSelectedEvent, triggerNodeDeselectedEvent} from '../../../common/index';
+import {mat4, vec3, vec4} from 'gl-matrix';
 
 export class SelectedState extends SelectionState {
     constructor(selectedObjectNode) {
@@ -93,8 +92,10 @@ export class SelectedState extends SelectionState {
     }
 
     _setupTransformNode() {
-        if (CurrentTransformMode.getCurrent() === this._currTransformMode
-            && this._lastTransformOrientation === CurrentTransformOrientation.orientation) {
+        if (
+            CurrentTransformMode.getCurrent() === this._currTransformMode &&
+            this._lastTransformOrientation === CurrentTransformOrientation.orientation
+        ) {
             return;
         }
         // Detach previous transform gizmo if one already exists
@@ -102,7 +103,7 @@ export class SelectedState extends SelectionState {
             this._transformBaseNode.removeParent();
         }
         // Attach the new transformation gizmo
-        const mode = CurrentTransformMode.getCurrent()
+        const mode = CurrentTransformMode.getCurrent();
         if (mode === TRANSLATE) {
             this._transformBaseNode = createTranslateNode();
         } else if (mode === SCALE) {
@@ -122,7 +123,8 @@ export class SelectedState extends SelectionState {
             this._transformBaseNode.localMatrix = mat4.translate(
                 mat4.create(),
                 mat4.invert(mat4.create(), this._selectedObjectNode.localMatrix), // Undo all object transformations
-                mat4.getTranslation(vec3.create(), this._selectedObjectNode.localMatrix)); // Then apply only object translation
+                mat4.getTranslation(vec3.create(), this._selectedObjectNode.localMatrix)
+            ); // Then apply only object translation
         } else if (CurrentTransformOrientation.isLocal()) {
             // The gizmo should be affected by everything except scaling
             const scale = mat4.getScaling(vec3.create(), this._selectedObjectNode.localMatrix);
@@ -130,7 +132,8 @@ export class SelectedState extends SelectionState {
             this._transformBaseNode.localMatrix = mat4.mul(
                 mat4.create(),
                 this._transformBaseNode.localMatrix,
-                invertedScale);
+                invertedScale
+            );
         }
         this._lastTransformOrientation = CurrentTransformOrientation.orientation;
     }
@@ -153,8 +156,16 @@ export class SelectedState extends SelectionState {
             } else {
                 const child = transformGizmoComponentNode.children[0];
                 const currScale = mat4.getScaling(vec3.create(), child.localMatrix);
-                transformGizmoComponentNode.children[0].applyScaling(mat4.fromScaling(mat4.create(),
-                    vec3.fromValues(1.0/currScale[0] * scale, 1.0/currScale[1] * scale, 1.0/currScale[2] * scale)));
+                transformGizmoComponentNode.children[0].applyScaling(
+                    mat4.fromScaling(
+                        mat4.create(),
+                        vec3.fromValues(
+                            (1.0 / currScale[0]) * scale,
+                            (1.0 / currScale[1]) * scale,
+                            (1.0 / currScale[2]) * scale
+                        )
+                    )
+                );
             }
         }
     }

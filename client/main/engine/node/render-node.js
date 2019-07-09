@@ -1,6 +1,6 @@
-import {mat3, mat4, vec3} from 'gl-matrix'
-import {CurrentTransformOrientation} from '../global/index'
-import {RenderNodeType} from './render-node-type'
+import {mat3, mat4, vec3} from 'gl-matrix';
+import {CurrentTransformOrientation} from '../global/index';
+import {RenderNodeType} from './render-node-type';
 
 function updateWorldMatrix(node, parentWorldMatrix) {
     mat4.multiply(node.worldMatrix, parentWorldMatrix, node.localMatrix);
@@ -12,7 +12,7 @@ function updateWorldMatrix(node, parentWorldMatrix) {
 }
 
 export class RenderNode {
-    constructor({id=null, localMatrix=mat4.create()} = {}) {
+    constructor({id = null, localMatrix = mat4.create()} = {}) {
         /* An optional ID for this node. */
         this._id = id;
         /* Type of node - subclasses of this class will use different node types. */
@@ -70,18 +70,18 @@ export class RenderNode {
     }
     applyScaling(scalingMatrix) {
         if (CurrentTransformOrientation.isGlobal()) {
-            this._transformAtOrigin((mat) => {
+            this._transformAtOrigin(mat => {
                 mat4.mul(mat, scalingMatrix, mat);
             });
         } else if (CurrentTransformOrientation.isLocal()) {
-            this._transformAtOrigin((mat) => {
+            this._transformAtOrigin(mat => {
                 mat4.mul(mat, mat, scalingMatrix);
             });
         }
     }
     applyRotation(rotationMatrix) {
         // Rely on the caller to provide a rotation matrix that uses the correct global or local axis
-        this._transformAtOrigin((mat) => {
+        this._transformAtOrigin(mat => {
             mat4.mul(mat, rotationMatrix, mat);
         });
     }
@@ -105,10 +105,10 @@ export class RenderNode {
 
     addChild(child) {
         if (child === this) {
-            throw new Error("A render node cannot add itself as a child");
+            throw new Error('A render node cannot add itself as a child');
         }
         if (child._parent !== null) {
-            throw new Error("The child node already has a parent");
+            throw new Error('The child node already has a parent');
         }
         child._parent = this;
         this._children.push(child);
@@ -122,12 +122,12 @@ export class RenderNode {
     }
     removeParent() {
         if (this._parent === null) {
-            throw new Error("Node does not have a parent");
+            throw new Error('Node does not have a parent');
         }
 
         const childIndex = this._parent.children.indexOf(this);
         if (childIndex === -1) {
-            throw new Error("Parent does not have this node as a child");
+            throw new Error('Parent does not have this node as a child');
         }
         this._parent.children.splice(childIndex, 1);
         this._parent = null;

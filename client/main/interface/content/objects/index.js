@@ -1,2 +1,2 @@
-export {Objects} from './view/index'
-export {ObjectReducer} from './reducer/index'
+export {Objects} from './view/index';
+export {ObjectReducer} from './reducer/index';

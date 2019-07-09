@@ -1,10 +1,10 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import {connect} from 'react-redux'
-import FontAwesome from 'react-fontawesome'
-import {sceneNodesEndpoint, refNodePrefix} from '../../../../config'
-import {fetchSceneNodes} from '../../../common/index'
-import commonCss from '../../common/scss/table-row-common.scss'
+import React from 'react';
+import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
+import FontAwesome from 'react-fontawesome';
+import {sceneNodesEndpoint, refNodePrefix} from '../../../../config';
+import {fetchSceneNodes} from '../../../common/index';
+import commonCss from '../../common/scss/table-row-common.scss';
 
 class ObjectRow extends React.Component {
     constructor(props) {
@@ -20,8 +20,11 @@ class ObjectRow extends React.Component {
                     {this.props.object.name}
                 </td>
                 <td>
-                    <button type='button' className={`btn btn-sm btn-outline-success ${commonCss.actionButton}`}
-                            onClick={this._updateObjectRefNode}>
+                    <button
+                        type='button'
+                        className={`btn btn-sm btn-outline-success ${commonCss.actionButton}`}
+                        onClick={this._updateObjectRefNode}
+                    >
                         <FontAwesome name='plus' />
                     </button>
                 </td>
@@ -50,24 +53,23 @@ class ObjectRow extends React.Component {
             },
             body: JSON.stringify(refNode)
         })
-        .then(response => {
-            return Promise.all([response.ok, response.json()]);
-        })
-        .then(([ok, json]) => {
-            if (ok) {
-                this.props.getNodes();
-            } else {
-                throw new Error(JSON.stringify(json));
-            }
-        })
-        .catch(error => {
-            console.error(error);
-        });
+            .then(response => {
+                return Promise.all([response.ok, response.json()]);
+            })
+            .then(([ok, json]) => {
+                if (ok) {
+                    this.props.getNodes();
+                } else {
+                    throw new Error(JSON.stringify(json));
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            });
     }
 }
 
-const mapStateToProps = () => ({
-})
+const mapStateToProps = () => ({});
 
 const mapDispatchToProps = dispatch => ({
     getNodes() {
@@ -75,12 +77,15 @@ const mapDispatchToProps = dispatch => ({
     }
 });
 
-export const ObjectRowWithData = connect(mapStateToProps, mapDispatchToProps)(ObjectRow);
+export const ObjectRowWithData = connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(ObjectRow);
 
 ObjectRow.propTypes = {
     object: PropTypes.shape({
         _id: PropTypes.string.isRequired,
-        name: PropTypes.string.isRequired,
+        name: PropTypes.string.isRequired
     }),
-    getNodes: PropTypes.func.isRequired,
-}
+    getNodes: PropTypes.func.isRequired
+};

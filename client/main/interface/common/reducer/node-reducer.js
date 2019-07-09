@@ -1,16 +1,12 @@
-import {
-    FETCH_NODES_REQUEST,
-    FETCH_NODES_SUCCESS,
-    FETCH_NODES_FAILURE
-} from '../action/index'
+import {FETCH_NODES_REQUEST, FETCH_NODES_SUCCESS, FETCH_NODES_FAILURE} from '../action/index';
 
 const initialState = {
     isFetching: true,
     isError: false,
     nodeArray: null
-}
+};
 
-export const NodeReducer = (state=initialState, action) => {
+export const NodeReducer = (state = initialState, action) => {
     switch (action.type) {
         case FETCH_NODES_REQUEST:
             return {
@@ -32,4 +28,4 @@ export const NodeReducer = (state=initialState, action) => {
             };
     }
     return state;
-}
+};

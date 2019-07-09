@@ -1,1 +1,1 @@
-export {NodePanelWithData as NodePanel} from './node-panel'
+export {NodePanelWithData as NodePanel} from './node-panel';

@@ -1,11 +1,3 @@
-export {
-    subscribeToNodeSelectedEvent,
-    triggerNodeSelectedEvent,
-    triggerNodeDeselectedEvent,
-} from './event/index'
+export {subscribeToNodeSelectedEvent, triggerNodeSelectedEvent, triggerNodeDeselectedEvent} from './event/index';
 
-export {
-    ReferenceNodeCache,
-    convertSceneNodeToRenderNode,
-    convertSceneNodesToRenderNodes,
-} from './node/index'
+export {ReferenceNodeCache, convertSceneNodeToRenderNode, convertSceneNodesToRenderNodes} from './node/index';

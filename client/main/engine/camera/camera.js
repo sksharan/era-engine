@@ -1,4 +1,4 @@
-import {glMatrix, mat4, vec3} from 'gl-matrix'
+import {glMatrix, mat4, vec3} from 'gl-matrix';
 
 class Camera {
     constructor() {
@@ -32,7 +32,7 @@ class Camera {
     /* Given the number of pixels the mouse has moved in the x and y
      * directions, updates the direction of the camera. */
     updateDirection(movementX, movementY) {
-        console.warn(this.direction)
+        console.warn(this.direction);
         movementX *= this.lookAroundSpeed;
         movementY *= this.lookAroundSpeed;
         this.yaw += movementX;
@@ -58,28 +58,44 @@ class Camera {
     }
 
     moveForward() {
-        this.position = vec3.add(vec3.create(), this.position,
-                vec3.scale(vec3.create(), this.direction, this.movementSpeed));
+        this.position = vec3.add(
+            vec3.create(),
+            this.position,
+            vec3.scale(vec3.create(), this.direction, this.movementSpeed)
+        );
     }
 
     moveBackward() {
-        this.position = vec3.sub(vec3.create(), this.position,
-                vec3.scale(vec3.create(), this.direction, this.movementSpeed));
+        this.position = vec3.sub(
+            vec3.create(),
+            this.position,
+            vec3.scale(vec3.create(), this.direction, this.movementSpeed)
+        );
     }
 
     moveRight() {
-        this.position = vec3.add(vec3.create(), this.position,
-                vec3.scale(vec3.create(), this.right, this.movementSpeed));
+        this.position = vec3.add(
+            vec3.create(),
+            this.position,
+            vec3.scale(vec3.create(), this.right, this.movementSpeed)
+        );
     }
 
     moveLeft() {
-        this.position = vec3.sub(vec3.create(), this.position,
-                vec3.scale(vec3.create(), this.right, this.movementSpeed));
+        this.position = vec3.sub(
+            vec3.create(),
+            this.position,
+            vec3.scale(vec3.create(), this.right, this.movementSpeed)
+        );
     }
 
     getViewMatrix() {
-        return mat4.lookAt(mat4.create(), this.position,
-                vec3.add(vec3.create(), this.position, this.direction), this.up);
+        return mat4.lookAt(
+            mat4.create(),
+            this.position,
+            vec3.add(vec3.create(), this.position, this.direction),
+            this.up
+        );
     }
 
     getViewMatrixInverse() {

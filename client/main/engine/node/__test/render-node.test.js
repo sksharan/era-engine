@@ -1,12 +1,10 @@
-import {RenderNode} from '../render-node'
-import {mat3, mat4, vec3} from 'gl-matrix'
-import {assert} from 'chai'
+import {RenderNode} from '../render-node';
+import {mat3, mat4, vec3} from 'gl-matrix';
+import {assert} from 'chai';
 
-describe("Scene node", () => {
-
-    describe("creation", () => {
-
-        it("should work with zero constructor arguments", () => {
+describe('Scene node', () => {
+    describe('creation', () => {
+        it('should work with zero constructor arguments', () => {
             const node = new RenderNode();
             assert.isArray(node.children);
             assert.equal(node.children.length, 0);
@@ -15,16 +13,15 @@ describe("Scene node", () => {
             assert.isTrue(mat3.equals(node.normalMatrix, mat3.create()));
         });
 
-        it("should accept a custom local matrix", () => {
+        it('should accept a custom local matrix', () => {
             const localMatrix = mat4.add(mat4.create(), mat4.create(), mat4.create());
             const node = new RenderNode({localMatrix});
             assert.isTrue(mat4.equals(node.localMatrix, localMatrix));
         });
-
     });
 
-    describe("adding child nodes", () => {
-        it("should be successful if the nodes form a valid n-ary tree", () => {
+    describe('adding child nodes', () => {
+        it('should be successful if the nodes form a valid n-ary tree', () => {
             const node1 = new RenderNode();
             const node2 = new RenderNode();
             const node3 = new RenderNode();
@@ -40,12 +37,12 @@ describe("Scene node", () => {
             assert.sameMembers(node4.children, []);
         });
 
-        it("should fail if a node tries to add itself as a child", () => {
+        it('should fail if a node tries to add itself as a child', () => {
             const node = new RenderNode();
             assert.throws(() => node.addChild(node));
         });
 
-        it("should fail if the child already has a parent", () => {
+        it('should fail if the child already has a parent', () => {
             const parent1 = new RenderNode();
             const parent2 = new RenderNode();
             const child = new RenderNode();
@@ -53,7 +50,7 @@ describe("Scene node", () => {
             assert.throws(() => parent2.addChild(child));
         });
 
-        it("should update the child world and normal matrices", () => {
+        it('should update the child world and normal matrices', () => {
             const root = new RenderNode();
 
             const localMatrix1 = mat4.fromTranslation(mat4.create(), vec3.fromValues(0, 1, 0));
@@ -72,25 +69,27 @@ describe("Scene node", () => {
             // Check world matrices
             assert.isTrue(mat4.exactEquals(root.worldMatrix, mat4.create()));
 
-            assert.isTrue(mat4.exactEquals(node1.worldMatrix,
-                mat4.fromTranslation(mat4.create(), vec3.fromValues(0, 1, 0))));
+            assert.isTrue(
+                mat4.exactEquals(node1.worldMatrix, mat4.fromTranslation(mat4.create(), vec3.fromValues(0, 1, 0)))
+            );
 
-            assert.isTrue(mat4.exactEquals(node2.worldMatrix,
-                mat4.fromTranslation(mat4.create(), vec3.fromValues(0, (5+1), 0))));
+            assert.isTrue(
+                mat4.exactEquals(node2.worldMatrix, mat4.fromTranslation(mat4.create(), vec3.fromValues(0, 5 + 1, 0)))
+            );
 
-            assert.isTrue(mat4.exactEquals(node3.worldMatrix,
-                mat4.fromTranslation(mat4.create(), vec3.fromValues(0, 3, 0))));
+            assert.isTrue(
+                mat4.exactEquals(node3.worldMatrix, mat4.fromTranslation(mat4.create(), vec3.fromValues(0, 3, 0)))
+            );
 
             // Check normal matrices
             assert.isTrue(mat4.exactEquals(root.normalMatrix, mat3.normalFromMat4(mat3.create(), root.worldMatrix)));
             assert.isTrue(mat4.exactEquals(node1.normalMatrix, mat3.normalFromMat4(mat3.create(), node1.worldMatrix)));
             assert.isTrue(mat4.exactEquals(node2.normalMatrix, mat3.normalFromMat4(mat3.create(), node2.worldMatrix)));
             assert.isTrue(mat4.exactEquals(node3.normalMatrix, mat3.normalFromMat4(mat3.create(), node3.worldMatrix)));
-        })
+        });
     });
 
     describe('removing all children', () => {
-
         it('should be successful', () => {
             const parent = new RenderNode();
             const child1 = new RenderNode();
@@ -108,11 +107,9 @@ describe("Scene node", () => {
             parent.addChild(child2);
             assert.equal(parent.children.length, 2);
         });
-
     });
 
     describe('removing parent node', () => {
-
         it('should be successful if node has a parent', () => {
             const parent = new RenderNode();
             const child = new RenderNode();
@@ -128,8 +125,6 @@ describe("Scene node", () => {
 
         it('should fail if the node does not have a parent', () => {
             assert.throws(() => new RenderNode().removeParent());
-        })
-
+        });
     });
-
 });

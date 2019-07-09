@@ -1,10 +1,10 @@
-import {RenderNode, GeometryNode} from '../../../node/index'
-import {Material} from '../../../material/index'
-import {Mesh, BoundingBox} from '../../../mesh/index'
-import {ProgramBuilder} from '../../../shader/index'
-import {gl} from '../../../gl'
-import {TransformScaleFactor} from './transform-scale-factor'
-import {mat4, vec4} from 'gl-matrix'
+import {RenderNode, GeometryNode} from '../../../node/index';
+import {Material} from '../../../material/index';
+import {Mesh, BoundingBox} from '../../../mesh/index';
+import {ProgramBuilder} from '../../../shader/index';
+import {gl} from '../../../gl';
+import {TransformScaleFactor} from './transform-scale-factor';
+import {mat4, vec4} from 'gl-matrix';
 
 export class TransformMesh extends Mesh {
     constructor(meshArgs) {
@@ -24,7 +24,10 @@ export class TransformMesh extends Mesh {
             localMatrix: mat4.create(),
             mesh: new BoundingBox(positions),
             material: new Material({
-                programData: new ProgramBuilder().addPosition().addColor().build(),
+                programData: new ProgramBuilder()
+                    .addPosition()
+                    .addColor()
+                    .build(),
                 color: vec4.fromValues(0.0, 0.0, 0.0, 1.0),
                 isVisible: false
             })
@@ -34,7 +37,8 @@ export class TransformMesh extends Mesh {
         throw new Error('No base implementation');
     }
     _generateAxisLineGeometryNode(positions, color) {
-        if (positions.length !== 6) { // 2 vertices * 3 floats per vertex
+        if (positions.length !== 6) {
+            // 2 vertices * 3 floats per vertex
             throw new Error(`Positions must have length 6, but has length ${positions.length}`);
         }
         return new GeometryNode({
@@ -48,7 +52,9 @@ export class TransformMesh extends Mesh {
             }),
             material: new Material({
                 programData: new ProgramBuilder()
-                        .addPosition().addColor().build(),
+                    .addPosition()
+                    .addColor()
+                    .build(),
                 color
             })
         });
@@ -69,8 +75,15 @@ export class TransformMesh extends Mesh {
     }
 }
 
-export const attachToBaseNode = ({base, mesh, color, generateBoundingBox=true, useSphereClipping=false,
-        sphereRadius=0, useSphereOutling=false}) => {
+export const attachToBaseNode = ({
+    base,
+    mesh,
+    color,
+    generateBoundingBox = true,
+    useSphereClipping = false,
+    sphereRadius = 0,
+    useSphereOutling = false
+}) => {
     const objectNode = new GeometryNode({
         localMatrix: mat4.create(),
         mesh,
@@ -86,7 +99,7 @@ export const attachToBaseNode = ({base, mesh, color, generateBoundingBox=true, u
         });
         objectNode.addChild(boundingBoxNode);
     }
-}
+};
 function getTransformMaterial({color, useSphereClipping, sphereRadius, useSphereOutling}) {
     let programData = new ProgramBuilder();
     programData = programData.addPosition({scaleFactor: TransformScaleFactor});
@@ -94,7 +107,7 @@ function getTransformMaterial({color, useSphereClipping, sphereRadius, useSphere
         programData = programData.addSphereClipping({sphereRadius});
     }
     if (useSphereOutling) {
-        programData = programData.addNormal().addSphereOutlining({epsilon: 0.10});
+        programData = programData.addNormal().addSphereOutlining({epsilon: 0.1});
     }
     programData = programData.addColor().build();
     return new Material({
@@ -105,7 +118,10 @@ function getTransformMaterial({color, useSphereClipping, sphereRadius, useSphere
 }
 function getBoundingBoxMaterial({color}) {
     return new Material({
-        programData: new ProgramBuilder().addPosition().addColor().build(),
+        programData: new ProgramBuilder()
+            .addPosition()
+            .addColor()
+            .build(),
         color,
         isVisible: false
     });

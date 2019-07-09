@@ -1,27 +1,30 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import {connect} from 'react-redux'
-import FontAwesome from 'react-fontawesome'
-import {selectNode} from '../../common/index'
-import css from './scss/node-common.scss'
+import React from 'react';
+import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
+import FontAwesome from 'react-fontawesome';
+import {selectNode} from '../../common/index';
+import css from './scss/node-common.scss';
 
 class DefaultNode extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            renderNode: null,
-        }
+            renderNode: null
+        };
         this._triggerNodeSelection = this._triggerNodeSelection.bind(this);
     }
 
     render() {
         return (
-            <div style={{paddingLeft: `${this.props.depth * 30}px`}}
-                 className={this.props.selectedRenderNode
-                        && this.props.selectedRenderNode.id === this.props.renderNode.id
-                     ? `${css.node} ${css.nodeSelected}`
-                     : `${css.node}`}
-                 onClick={this._triggerNodeSelection}>
+            <div
+                style={{paddingLeft: `${this.props.depth * 30}px`}}
+                className={
+                    this.props.selectedRenderNode && this.props.selectedRenderNode.id === this.props.renderNode.id
+                        ? `${css.node} ${css.nodeSelected}`
+                        : `${css.node}`
+                }
+                onClick={this._triggerNodeSelection}
+            >
                 <FontAwesome name='object-group' />
                 <span>{this.props.sceneNode.name}</span>
             </div>
@@ -45,7 +48,10 @@ const mapDispatchToProps = dispatch => ({
     }
 });
 
-export const DefaultNodeWithData = connect(mapStateToProps, mapDispatchToProps)(DefaultNode);
+export const DefaultNodeWithData = connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(DefaultNode);
 
 DefaultNode.propTypes = {
     sceneNode: PropTypes.shape({
@@ -56,5 +62,5 @@ DefaultNode.propTypes = {
     parentRenderNode: PropTypes.object.isRequired,
     depth: PropTypes.number.isRequired,
     selectNode: PropTypes.func.isRequired,
-    selectedRenderNode: PropTypes.object,
-}
+    selectedRenderNode: PropTypes.object
+};

@@ -1,7 +1,7 @@
-import React from 'react'
-import FontAwesome from 'react-fontawesome'
-import PropTypes from 'prop-types'
-import {FPS} from './fps'
+import React from 'react';
+import FontAwesome from 'react-fontawesome';
+import PropTypes from 'prop-types';
+import {FPS} from './fps';
 import {
     togglePointerLock,
     setTranslate,
@@ -9,7 +9,7 @@ import {
     setRotate,
     setGlobalOrientation,
     setLocalOrientation
-} from '../../engineop/index'
+} from '../../engineop/index';
 
 export class ToolPanel extends React.Component {
     constructor(props) {

@@ -1,6 +1,6 @@
-import React from 'react'
-import {UploadObjectWithData} from './upload-object'
-import {ObjectTableWithData} from './object-table'
+import React from 'react';
+import {UploadObjectWithData} from './upload-object';
+import {ObjectTableWithData} from './object-table';
 
 export class Objects extends React.Component {
     constructor(props) {

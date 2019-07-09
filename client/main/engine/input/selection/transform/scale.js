@@ -1,9 +1,9 @@
-import {TransformMesh, attachToBaseNode} from './transform'
-import {redColor, greenColor, blueColor} from './color'
-import {RenderNode} from '../../../node/index'
-import {gl} from '../../../gl'
-import {CurrentTransformOrientation} from '../../../global/index'
-import {mat4, vec3} from 'gl-matrix'
+import {TransformMesh, attachToBaseNode} from './transform';
+import {redColor, greenColor, blueColor} from './color';
+import {RenderNode} from '../../../node/index';
+import {gl} from '../../../gl';
+import {CurrentTransformOrientation} from '../../../global/index';
+import {mat4, vec3} from 'gl-matrix';
 
 class ScaleMesh extends TransformMesh {
     constructor(transform) {
@@ -12,52 +12,120 @@ class ScaleMesh extends TransformMesh {
         const pointerSize = 3.0;
         const positions = [
             // shaft
-            0, shaftSize, 0,
-            0, 0, shaftSize,
-            0, -shaftSize, 0,
-            0, 0, -shaftSize,
-            shaftLength, shaftSize, 0,
-            shaftLength, 0, shaftSize,
-            shaftLength, -shaftSize, 0,
-            shaftLength, 0, -shaftSize,
+            0,
+            shaftSize,
+            0,
+            0,
+            0,
+            shaftSize,
+            0,
+            -shaftSize,
+            0,
+            0,
+            0,
+            -shaftSize,
+            shaftLength,
+            shaftSize,
+            0,
+            shaftLength,
+            0,
+            shaftSize,
+            shaftLength,
+            -shaftSize,
+            0,
+            shaftLength,
+            0,
+            -shaftSize,
             // pointer
-            shaftLength, -pointerSize, pointerSize,
-            shaftLength, pointerSize, pointerSize,
-            shaftLength, pointerSize, -pointerSize,
-            shaftLength, -pointerSize, -pointerSize,
-            shaftLength+2*pointerSize, -pointerSize, pointerSize,
-            shaftLength+2*pointerSize, pointerSize, pointerSize,
-            shaftLength+2*pointerSize, pointerSize, -pointerSize,
-            shaftLength+2*pointerSize, -pointerSize, -pointerSize,
+            shaftLength,
+            -pointerSize,
+            pointerSize,
+            shaftLength,
+            pointerSize,
+            pointerSize,
+            shaftLength,
+            pointerSize,
+            -pointerSize,
+            shaftLength,
+            -pointerSize,
+            -pointerSize,
+            shaftLength + 2 * pointerSize,
+            -pointerSize,
+            pointerSize,
+            shaftLength + 2 * pointerSize,
+            pointerSize,
+            pointerSize,
+            shaftLength + 2 * pointerSize,
+            pointerSize,
+            -pointerSize,
+            shaftLength + 2 * pointerSize,
+            -pointerSize,
+            -pointerSize
         ];
-        for (let i = 0; i < positions.length; i+=3) {
-            const transformed = vec3.transformMat4(vec3.create(),
-                    vec3.fromValues(positions[i], positions[i+1], positions[i+2]), transform);
+        for (let i = 0; i < positions.length; i += 3) {
+            const transformed = vec3.transformMat4(
+                vec3.create(),
+                vec3.fromValues(positions[i], positions[i + 1], positions[i + 2]),
+                transform
+            );
             positions[i] = transformed[0];
-            positions[i+1] = transformed[1];
-            positions[i+2] = transformed[2];
+            positions[i + 1] = transformed[1];
+            positions[i + 2] = transformed[2];
         }
         // Normals not needed
         const normals = new Array(positions.length).fill(0);
         // Texcoords not needed
-        const texcoords = new Array(positions.length*2/3).fill(0);
+        const texcoords = new Array((positions.length * 2) / 3).fill(0);
 
         const indices = [
             // shaft
-            4, 0, 5, 1, 6, 2, 7, 3, 4, 0,
+            4,
+            0,
+            5,
+            1,
+            6,
+            2,
+            7,
+            3,
+            4,
+            0,
             // pointer
-            0, 8, // degenerate
-            8, 12, 9, 13,
-            13, 12, // degenerate
-            12, 15, 13, 14,
-            14, 15, // degenerate
-            15, 11, 14, 10,
-            10, 8, // degenerate
-            8, 9, 11, 10,
-            10, 9, // degnerate
-            9, 13, 10, 14,
-            14, 12, // degenerate
-            12, 8, 15, 11
+            0,
+            8, // degenerate
+            8,
+            12,
+            9,
+            13,
+            13,
+            12, // degenerate
+            12,
+            15,
+            13,
+            14,
+            14,
+            15, // degenerate
+            15,
+            11,
+            14,
+            10,
+            10,
+            8, // degenerate
+            8,
+            9,
+            11,
+            10,
+            10,
+            9, // degnerate
+            9,
+            13,
+            10,
+            14,
+            14,
+            12, // degenerate
+            12,
+            8,
+            15,
+            11
         ];
         super({
             drawMode: gl.TRIANGLE_STRIP,
@@ -95,7 +163,7 @@ class ScaleXMesh extends ScaleMesh {
 }
 class ScaleYMesh extends ScaleMesh {
     constructor() {
-        super(mat4.fromRotation(mat4.create(), 3.14/2, vec3.fromValues(0, 0, 1)));
+        super(mat4.fromRotation(mat4.create(), 3.14 / 2, vec3.fromValues(0, 0, 1)));
     }
     generateBoundingPlaneNode() {
         return this._generateBoundingBoxNode([this._min, this._min, 0, this._max, this._max, 0]);
@@ -114,7 +182,7 @@ class ScaleYMesh extends ScaleMesh {
 }
 class ScaleZMesh extends ScaleMesh {
     constructor() {
-        super(mat4.fromRotation(mat4.create(), -3.14/2, vec3.fromValues(0, 1, 0)));
+        super(mat4.fromRotation(mat4.create(), -3.14 / 2, vec3.fromValues(0, 1, 0)));
     }
     generateBoundingPlaneNode() {
         return this._generateBoundingBoxNode([this._min, 0, this._min, this._max, 0, this._max]);
@@ -139,18 +207,18 @@ function handleScaling({sceneNode, intersectionDelta, intersectionPoint}, axes, 
     const scale = vec3.fromValues(1, 1, 1);
     if (axes.includes('x')) {
         scale[0] = scaleUp
-                ? 1 + Math.abs(intersectionDelta[0]) * scalingFactor
-                : 1 - Math.abs(intersectionDelta[0]) * scalingFactor;
+            ? 1 + Math.abs(intersectionDelta[0]) * scalingFactor
+            : 1 - Math.abs(intersectionDelta[0]) * scalingFactor;
     }
     if (axes.includes('y')) {
         scale[1] = scaleUp
-                ? 1 + Math.abs(intersectionDelta[1]) * scalingFactor
-                : 1 - Math.abs(intersectionDelta[1]) * scalingFactor;
+            ? 1 + Math.abs(intersectionDelta[1]) * scalingFactor
+            : 1 - Math.abs(intersectionDelta[1]) * scalingFactor;
     }
     if (axes.includes('z')) {
         scale[2] = scaleUp
-                ? 1 + Math.abs(intersectionDelta[2]) * scalingFactor
-                : 1 - Math.abs(intersectionDelta[2]) * scalingFactor;
+            ? 1 + Math.abs(intersectionDelta[2]) * scalingFactor
+            : 1 - Math.abs(intersectionDelta[2]) * scalingFactor;
     }
     if (axes.includes('x') && axes.includes('y') && axes.includes('z')) {
         scale[2] = scale[1] = scale[0]; // Uniform scaling on all axes
@@ -165,4 +233,4 @@ export const createScaleNode = () => {
     attachToBaseNode({base, mesh: new ScaleYMesh(), color: greenColor});
     attachToBaseNode({base, mesh: new ScaleZMesh(), color: blueColor});
     return base;
-}
+};

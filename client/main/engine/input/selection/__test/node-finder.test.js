@@ -1,15 +1,14 @@
-import {assert} from 'chai'
-import {findNearestBaseNodeForBoundingBoxNode} from '../node-finder'
-import {GeometryNode, RenderNode} from '../../../node/index'
-import {Material} from '../../../material/index'
-import {BoundingBox} from '../../../mesh/index'
-import {mat4} from 'gl-matrix'
+import {assert} from 'chai';
+import {findNearestBaseNodeForBoundingBoxNode} from '../node-finder';
+import {GeometryNode, RenderNode} from '../../../node/index';
+import {Material} from '../../../material/index';
+import {BoundingBox} from '../../../mesh/index';
+import {mat4} from 'gl-matrix';
 
 describe('Node finder', () => {
     describe('find nearest base node for bounding box node', () => {
         it('should verify that node is GeometryNode', () => {
-            assert.throws(() => findNearestBaseNodeForBoundingBoxNode(new RenderNode(),
-                'Node must be a GeometryNode'));
+            assert.throws(() => findNearestBaseNodeForBoundingBoxNode(new RenderNode(), 'Node must be a GeometryNode'));
         });
         it('should find nearest parent', () => {
             const ancestor = new RenderNode();
@@ -26,6 +25,6 @@ describe('Node finder', () => {
             parent.addChild(child2);
 
             assert.equal(findNearestBaseNodeForBoundingBoxNode(child1), parent);
-        })
+        });
     });
 });

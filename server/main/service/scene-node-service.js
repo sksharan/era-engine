@@ -1,17 +1,17 @@
-import {SceneNodeDao} from '../dao/index'
+import {SceneNodeDao} from '../dao/index';
 
-export const getSceneNode = (id) => {
+export const getSceneNode = id => {
     return SceneNodeDao.getSceneNode(id);
-}
+};
 
-export const getSceneNodes = (pathRegex) => {
+export const getSceneNodes = pathRegex => {
     return SceneNodeDao.getSceneNodes(new RegExp(pathRegex));
-}
+};
 
-export const saveSceneNode = (sceneNode) => {
+export const saveSceneNode = sceneNode => {
     return SceneNodeDao.saveSceneNode(sceneNode);
-}
+};
 
-export const deleteSceneNodes = (pathRegex) => {
+export const deleteSceneNodes = pathRegex => {
     return SceneNodeDao.deleteSceneNodes(new RegExp(pathRegex));
-}
+};

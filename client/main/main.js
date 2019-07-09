@@ -1,21 +1,11 @@
-import React from "react";
-import FontAwesome from "react-fontawesome";
+import React from 'react';
+import FontAwesome from 'react-fontawesome';
 
-import {
-    ContentPanel,
-    PropertiesPanel,
-    NodePanel,
-    ToolPanel
-} from "./interface/index";
+import {ContentPanel, PropertiesPanel, NodePanel, ToolPanel} from './interface/index';
 
-import {
-    KeyboardHandler,
-    MouseHandler,
-    RootSceneNode,
-    Renderer
-} from "./engine/index";
+import {KeyboardHandler, MouseHandler, RootSceneNode, Renderer} from './engine/index';
 
-import css from "./scss/main.scss";
+import css from './scss/main.scss';
 
 class Main extends React.Component {
     constructor(props) {
@@ -32,13 +22,13 @@ class Main extends React.Component {
     render() {
         return (
             <div>
-                <nav className="navbar navbar-expand-sm navbar-dark bg-dark">
-                    <a className="navbar-brand" href="#">
-                        <FontAwesome name="gamepad" />
+                <nav className='navbar navbar-expand-sm navbar-dark bg-dark'>
+                    <a className='navbar-brand' href='#'>
+                        <FontAwesome name='gamepad' />
                     </a>
                 </nav>
-                <div className="container-fluid">
-                    <div className="row">
+                <div className='container-fluid'>
+                    <div className='row'>
                         <div className={`col-md-3 pl-0 pr-0 ${css.contents}`}>
                             <ContentPanel />
                         </div>

@@ -1,4 +1,4 @@
-import {gl} from '../gl'
+import {gl} from '../gl';
 
 export const NumFloatsPerPosition = 3;
 export const NumFloatsPerNormal = 3;
@@ -8,16 +8,16 @@ export const interleave = (positions, normals, texcoords) => {
     const interleaved = [];
 
     for (let i = 0; i < positions.length / 3; i++) {
-        interleaved.push(positions[i*3], positions[i*3+1], positions[i*3+2]);
-        interleaved.push(normals[i*3], normals[i*3+1], normals[i*3+2]);
-        interleaved.push(texcoords[i*2], texcoords[i*2+1]);
+        interleaved.push(positions[i * 3], positions[i * 3 + 1], positions[i * 3 + 2]);
+        interleaved.push(normals[i * 3], normals[i * 3 + 1], normals[i * 3 + 2]);
+        interleaved.push(texcoords[i * 2], texcoords[i * 2 + 1]);
     }
 
     return interleaved;
-}
+};
 
 export default class Mesh {
-    constructor({drawMode=gl.TRIANGLES, positions, normals, texcoords, numVertices, indices}) {
+    constructor({drawMode = gl.TRIANGLES, positions, normals, texcoords, numVertices, indices}) {
         if (!positions) {
             throw new Error('Mesh must have positions');
         }

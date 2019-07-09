@@ -1,6 +1,6 @@
-import {gl} from '../gl'
-import ProgramData from './program-data'
-import ShaderBuilder from './shader-builder'
+import {gl} from '../gl';
+import ProgramData from './program-data';
+import ShaderBuilder from './shader-builder';
 
 /* Creates shaders from the given source code, links the shaders into a program,
  * and returns the created program. */
@@ -31,7 +31,7 @@ function createShader(type, shaderSourceCode) {
     if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
         const info = gl.getShaderInfoLog(shader);
         gl.deleteShader(shader);
-        const typeName = (type == gl.VERTEX_SHADER) ? 'vertex' : 'fragment';
+        const typeName = type == gl.VERTEX_SHADER ? 'vertex' : 'fragment';
         throw new Error('Error compiling ' + typeName + ' shader:\n' + info);
     }
     return shader;
@@ -51,16 +51,17 @@ export default class ProgramBuilder {
         this._fragBuilder.addMainFunctionLines('vec4 fragColor = vec4(0, 0, 0, 1);');
     }
 
-    addPosition({scaleFactor=null} = {}) {
-        this._vertBuilder.addAttributeLines('attribute vec3 position;')
-                         .addUniformLines('uniform mat4 modelMatrix;')
-                         .addUniformLines('uniform mat4 viewMatrix;')
-                         .addUniformLines('uniform mat4 projectionMatrix;')
-                         .addVaryingLines('varying vec4 vPositionWorld;');
+    addPosition({scaleFactor = null} = {}) {
+        this._vertBuilder
+            .addAttributeLines('attribute vec3 position;')
+            .addUniformLines('uniform mat4 modelMatrix;')
+            .addUniformLines('uniform mat4 viewMatrix;')
+            .addUniformLines('uniform mat4 projectionMatrix;')
+            .addVaryingLines('varying vec4 vPositionWorld;');
         // vPositionWorld
         if (scaleFactor) {
             // https://www.opengl.org/discussion_boards/showthread.php/177936-draw-an-object-that-looks-the-same-size-regarles-the-distance-in-perspective-view
-            this._vertBuilder.addVaryingLines('varying float scale;')
+            this._vertBuilder.addVaryingLines('varying float scale;');
             this._vertBuilder.addMainFunctionLines(`
                 float w = (projectionMatrix * viewMatrix * modelMatrix * vec4(0, 0, 0, 1)).w;
                 w *= ${scaleFactor};
@@ -84,13 +85,13 @@ export default class ProgramBuilder {
 
     addBillboardPosition() {
         //http://www.opengl-tutorial.org/intermediate-tutorials/billboards-particles/billboards/
-        this._vertBuilder.addAttributeLines('attribute vec3 position;')
-                         .addUniformLines('uniform mat4 modelMatrix;')
-                         .addUniformLines('uniform mat4 viewMatrix;')
-                         .addUniformLines('uniform mat4 projectionMatrix;')
-                         .addUniformLines('uniform vec3 centerPosition;')
-                         .addVaryingLines('varying vec4 vPositionWorld;')
-                         .addMainFunctionLines(`
+        this._vertBuilder
+            .addAttributeLines('attribute vec3 position;')
+            .addUniformLines('uniform mat4 modelMatrix;')
+            .addUniformLines('uniform mat4 viewMatrix;')
+            .addUniformLines('uniform mat4 projectionMatrix;')
+            .addUniformLines('uniform vec3 centerPosition;')
+            .addVaryingLines('varying vec4 vPositionWorld;').addMainFunctionLines(`
                              vec3 cameraRightWorld = vec3(viewMatrix[0][0], viewMatrix[1][0], viewMatrix[2][0]);
                              vec3 cameraUpWorld = vec3(viewMatrix[0][1], viewMatrix[1][1], viewMatrix[2][1]);
                              vPositionWorld = modelMatrix *
@@ -106,10 +107,11 @@ export default class ProgramBuilder {
 
     // Requires add*Position() to be called first
     addNormal() {
-        this._vertBuilder.addAttributeLines('attribute vec3 normal;')
-                         .addUniformLines('uniform mat3 normalMatrix;')
-                         .addVaryingLines('varying vec3 vNormalWorld;')
-                         .addMainFunctionLines('vNormalWorld = normalMatrix * normal;');
+        this._vertBuilder
+            .addAttributeLines('attribute vec3 normal;')
+            .addUniformLines('uniform mat3 normalMatrix;')
+            .addVaryingLines('varying vec3 vNormalWorld;')
+            .addMainFunctionLines('vNormalWorld = normalMatrix * normal;');
 
         this._fragBuilder.addVaryingLines('varying vec3 vNormalWorld;');
 
@@ -126,9 +128,8 @@ export default class ProgramBuilder {
         }
         // Uses the "geometric solution" from
         // https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-sphere-intersection
-        this._fragBuilder.addUniformLines('uniform vec3 cameraPosition;')
-                         .addUniformLines('uniform mat4 modelMatrix;')
-                         .addFunction(`
+        this._fragBuilder.addUniformLines('uniform vec3 cameraPosition;').addUniformLines('uniform mat4 modelMatrix;')
+            .addFunction(`
                              bool shouldDiscard() {
                                  vec3 rayDir = normalize(vec3(vPositionWorld) - cameraPosition);
                                  vec3 sphereCenter = vec3(modelMatrix * vec4(0, 0, 0, 1));
@@ -161,8 +162,7 @@ export default class ProgramBuilder {
                                  }
                                  return false;
                              }
-                         `)
-                         .addMainFunctionLines(`
+                         `).addMainFunctionLines(`
                              if (shouldDiscard()) {
                                  discard;
                              }
@@ -186,13 +186,13 @@ export default class ProgramBuilder {
 
     // Requires add*Position() to be called first
     addTexcoord() {
-        this._vertBuilder.addAttributeLines('attribute vec2 texcoord;')
-                         .addVaryingLines('varying vec2 vTexcoord;')
-                         .addMainFunctionLines('vTexcoord = texcoord;');
+        this._vertBuilder
+            .addAttributeLines('attribute vec2 texcoord;')
+            .addVaryingLines('varying vec2 vTexcoord;')
+            .addMainFunctionLines('vTexcoord = texcoord;');
 
-        this._fragBuilder.addUniformLines('uniform sampler2D texture;')
-                         .addVaryingLines('varying vec2 vTexcoord;')
-                         .addMainFunctionLines(`
+        this._fragBuilder.addUniformLines('uniform sampler2D texture;').addVaryingLines('varying vec2 vTexcoord;')
+            .addMainFunctionLines(`
                              vec4 texColor = texture2D(texture, vTexcoord);
                              if (texColor.a < 0.8) {
                                  discard;
@@ -205,8 +205,7 @@ export default class ProgramBuilder {
 
     // Can be used with addTexcoord() but is not required. Color comes from the object material.
     addColor() {
-        this._fragBuilder.addUniformLines('uniform vec4 color;')
-                         .addMainFunctionLines(`fragColor += color;`);
+        this._fragBuilder.addUniformLines('uniform vec4 color;').addMainFunctionLines(`fragColor += color;`);
 
         return this;
     }
@@ -219,7 +218,8 @@ export default class ProgramBuilder {
             vec3 materialAmbient = vec3(0.5, 0.5, 0.5);
             vec3 materialDiffuse = vec3(0.5, 0.5, 0.5);
             vec3 materialSpecular = vec3(0.8, 0.8, 0.8);
-            `);
+            `
+        );
         this._fragBuilder.addFunction(
             `
             vec4 addPointLight(vec3 lightPositionWorld,
@@ -283,11 +283,13 @@ export default class ProgramBuilder {
             uniform float ${varPrefix}ConstantAttenuation;
             uniform float ${varPrefix}LinearAttenuation;
             uniform float ${varPrefix}QuadraticAttenuation;
-            `);
+            `
+        );
         this._fragBuilder.addMainFunctionLines(
             `fragColor += addPointLight(${varPrefix}PositionWorld,
                     ${varPrefix}Ambient, ${varPrefix}Diffuse, ${varPrefix}Specular, ${varPrefix}SpecularTerm,
-                    ${varPrefix}ConstantAttenuation, ${varPrefix}LinearAttenuation, ${varPrefix}QuadraticAttenuation);`);
+                    ${varPrefix}ConstantAttenuation, ${varPrefix}LinearAttenuation, ${varPrefix}QuadraticAttenuation);`
+        );
 
         return this;
     }

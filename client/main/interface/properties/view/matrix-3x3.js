@@ -1,6 +1,6 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import {MatrixCell} from './matrix-cell'
+import React from 'react';
+import PropTypes from 'prop-types';
+import {MatrixCell} from './matrix-cell';
 
 export class Matrix3x3 extends React.Component {
     constructor(props) {
@@ -27,5 +27,5 @@ export class Matrix3x3 extends React.Component {
 }
 
 Matrix3x3.propTypes = {
-    matrix: PropTypes.object.isRequired, // Float32Array
-}
+    matrix: PropTypes.object.isRequired // Float32Array
+};

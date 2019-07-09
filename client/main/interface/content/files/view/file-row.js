@@ -1,8 +1,8 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import FontAwesome from 'react-fontawesome'
-import {getFileContentEndpoint} from '../../../../config'
-import commonCss from '../../common/scss/table-row-common.scss'
+import React from 'react';
+import PropTypes from 'prop-types';
+import FontAwesome from 'react-fontawesome';
+import {getFileContentEndpoint} from '../../../../config';
+import commonCss from '../../common/scss/table-row-common.scss';
 
 export class FileRow extends React.Component {
     constructor(props) {
@@ -34,4 +34,4 @@ FileRow.propTypes = {
         _id: PropTypes.string.isRequired,
         filename: PropTypes.string.isRequired
     })
-}
+};

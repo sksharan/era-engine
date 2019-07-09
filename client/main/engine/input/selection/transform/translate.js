@@ -1,9 +1,9 @@
-import {TransformMesh, attachToBaseNode} from './transform'
-import {redColor, greenColor, blueColor} from './color'
-import {RenderNode} from '../../../node/index'
-import {CurrentTransformOrientation} from '../../../global/transform-orientation'
-import {gl} from '../../../gl'
-import {mat4, vec3} from 'gl-matrix'
+import {TransformMesh, attachToBaseNode} from './transform';
+import {redColor, greenColor, blueColor} from './color';
+import {RenderNode} from '../../../node/index';
+import {CurrentTransformOrientation} from '../../../global/transform-orientation';
+import {gl} from '../../../gl';
+import {mat4, vec3} from 'gl-matrix';
 
 class TranslateMesh extends TransformMesh {
     constructor(transform) {
@@ -14,60 +14,140 @@ class TranslateMesh extends TransformMesh {
 
         const positions = [
             // shaft
-            0, shaftSize, 0,
-            0, 0, shaftSize,
-            0, -shaftSize, 0,
-            0, 0, -shaftSize,
-            shaftLength, shaftSize, 0,
-            shaftLength, 0, shaftSize,
-            shaftLength, -shaftSize, 0,
-            shaftLength, 0, -shaftSize,
+            0,
+            shaftSize,
+            0,
+            0,
+            0,
+            shaftSize,
+            0,
+            -shaftSize,
+            0,
+            0,
+            0,
+            -shaftSize,
+            shaftLength,
+            shaftSize,
+            0,
+            shaftLength,
+            0,
+            shaftSize,
+            shaftLength,
+            -shaftSize,
+            0,
+            shaftLength,
+            0,
+            -shaftSize,
             // pointer
-            shaftLength, 0, 0,
-            shaftLength, pointerSize*1.5, 0,
-            shaftLength, pointerSize, pointerSize,
-            shaftLength, 0, pointerSize*1.5,
-            shaftLength, -pointerSize, pointerSize,
-            shaftLength, -pointerSize*1.5, 0,
-            shaftLength, -pointerSize, -pointerSize,
-            shaftLength, 0, -pointerSize*1.5,
-            shaftLength, pointerSize, -pointerSize,
-            shaftLength + pointerLength, 0, 0,
+            shaftLength,
+            0,
+            0,
+            shaftLength,
+            pointerSize * 1.5,
+            0,
+            shaftLength,
+            pointerSize,
+            pointerSize,
+            shaftLength,
+            0,
+            pointerSize * 1.5,
+            shaftLength,
+            -pointerSize,
+            pointerSize,
+            shaftLength,
+            -pointerSize * 1.5,
+            0,
+            shaftLength,
+            -pointerSize,
+            -pointerSize,
+            shaftLength,
+            0,
+            -pointerSize * 1.5,
+            shaftLength,
+            pointerSize,
+            -pointerSize,
+            shaftLength + pointerLength,
+            0,
+            0
         ];
-        for (let i = 0; i < positions.length; i+=3) {
-            const transformed = vec3.transformMat4(vec3.create(),
-                    vec3.fromValues(positions[i], positions[i+1], positions[i+2]), transform);
+        for (let i = 0; i < positions.length; i += 3) {
+            const transformed = vec3.transformMat4(
+                vec3.create(),
+                vec3.fromValues(positions[i], positions[i + 1], positions[i + 2]),
+                transform
+            );
             positions[i] = transformed[0];
-            positions[i+1] = transformed[1];
-            positions[i+2] = transformed[2];
+            positions[i + 1] = transformed[1];
+            positions[i + 2] = transformed[2];
         }
 
         // Normals not needed
         const normals = new Array(positions.length).fill(0);
         // Texcoords not needed
-        const texcoords = new Array(positions.length*2/3).fill(0);
+        const texcoords = new Array((positions.length * 2) / 3).fill(0);
 
         const indices = [
             // shaft
-            4, 0, 5, 1, 6, 2, 7, 3, 4, 0,
+            4,
+            0,
+            5,
+            1,
+            6,
+            2,
+            7,
+            3,
+            4,
+            0,
             // pointer base
-            0, 9, // degenerate
-            9, 8, 10, 11,
-            11, 11, // degenerate
-            11, 8, 12, 13,
-            13, 13, // degenerate
-            13, 8, 14, 15,
-            15, 15, // degenerate
-            15, 8, 16, 9,
+            0,
+            9, // degenerate
+            9,
+            8,
+            10,
+            11,
+            11,
+            11, // degenerate
+            11,
+            8,
+            12,
+            13,
+            13,
+            13, // degenerate
+            13,
+            8,
+            14,
+            15,
+            15,
+            15, // degenerate
+            15,
+            8,
+            16,
+            9,
             // pointer
-            9, 10, // degenerate
-            10, 17, 9, 16,
-            16, 16, // degenerate
-            16, 17, 15, 14,
-            14, 14, // degenerate
-            14, 17, 13, 12,
-            12, 12, // degenerate
-            12, 17, 11, 10,
+            9,
+            10, // degenerate
+            10,
+            17,
+            9,
+            16,
+            16,
+            16, // degenerate
+            16,
+            17,
+            15,
+            14,
+            14,
+            14, // degenerate
+            14,
+            17,
+            13,
+            12,
+            12,
+            12, // degenerate
+            12,
+            17,
+            11,
+            10
         ];
 
         super({
@@ -97,7 +177,7 @@ class TranslateXMesh extends TranslateMesh {
 }
 class TranslateYMesh extends TranslateMesh {
     constructor() {
-        super(mat4.fromRotation(mat4.create(), 3.14/2, vec3.fromValues(0, 0, 1)));
+        super(mat4.fromRotation(mat4.create(), 3.14 / 2, vec3.fromValues(0, 0, 1)));
     }
     generateBoundingPlaneNode() {
         return this._generateBoundingBoxNode([this._min, this._min, 0, this._max, this._max, 0]);
@@ -112,7 +192,7 @@ class TranslateYMesh extends TranslateMesh {
 }
 class TranslateZMesh extends TranslateMesh {
     constructor() {
-        super(mat4.fromRotation(mat4.create(), -3.14/2, vec3.fromValues(0, 1, 0)));
+        super(mat4.fromRotation(mat4.create(), -3.14 / 2, vec3.fromValues(0, 1, 0)));
     }
     generateBoundingPlaneNode() {
         return this._generateBoundingBoxNode([this._min, 0, this._min, this._max, 0, this._max]);
@@ -131,15 +211,18 @@ function handleTranslation({sceneNode, intersectionDelta, intersectionPoint}, ax
         switch (axis) {
             case 'x':
                 sceneNode.applyTranslation(
-                    mat4.fromTranslation(mat4.create(), vec3.fromValues(intersectionDelta[0], 0, 0)));
+                    mat4.fromTranslation(mat4.create(), vec3.fromValues(intersectionDelta[0], 0, 0))
+                );
                 break;
             case 'y':
                 sceneNode.applyTranslation(
-                    mat4.fromTranslation(mat4.create(), vec3.fromValues(0, intersectionDelta[1], 0)));
+                    mat4.fromTranslation(mat4.create(), vec3.fromValues(0, intersectionDelta[1], 0))
+                );
                 break;
             case 'z':
                 sceneNode.applyTranslation(
-                    mat4.fromTranslation(mat4.create(), vec3.fromValues(0, 0, intersectionDelta[2])));
+                    mat4.fromTranslation(mat4.create(), vec3.fromValues(0, 0, intersectionDelta[2]))
+                );
                 break;
             default:
                 throw new Error(`Invalid axis specified: ${axis}`);
@@ -184,4 +267,4 @@ export const createTranslateNode = () => {
     attachToBaseNode({base, mesh: new TranslateYMesh(), color: greenColor});
     attachToBaseNode({base, mesh: new TranslateZMesh(), color: blueColor});
     return base;
-}
+};

@@ -1,5 +1,5 @@
-import React from 'react'
-import tableScss from '../scss/table.scss'
+import React from 'react';
+import tableScss from '../scss/table.scss';
 
 export class NoNodeSelected extends React.Component {
     constructor(props) {

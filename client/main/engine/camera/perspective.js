@@ -1,5 +1,5 @@
-import {gl} from '../gl'
-import {glMatrix, mat4} from 'gl-matrix'
+import {gl} from '../gl';
+import {glMatrix, mat4} from 'gl-matrix';
 
 const fovy = glMatrix.toRadian(45.0);
 const aspectRatio = gl.canvas.clientWidth / gl.canvas.clientHeight;
@@ -10,8 +10,8 @@ const inversePerspectiveMatrix = mat4.invert(mat4.create(), perspectiveMatrix);
 
 export const getDefaultPerspectiveMatrix = () => {
     return perspectiveMatrix;
-}
+};
 
 export const getDefaultPerspectiveMatrixInverse = () => {
     return inversePerspectiveMatrix;
-}
+};

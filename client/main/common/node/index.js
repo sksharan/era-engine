@@ -1,7 +1,4 @@
-export {
-    convertSceneNodeToRenderNode,
-    convertSceneNodesToRenderNodes,
-} from './node-converter'
+export {convertSceneNodeToRenderNode, convertSceneNodesToRenderNodes} from './node-converter';
 
-import {RefNodeCache} from './reference-node-cache'
+import {RefNodeCache} from './reference-node-cache';
 export const ReferenceNodeCache = new RefNodeCache();

@@ -45,8 +45,8 @@ include React, Redux, Webpack, and WebGL. It is broken up into the following maj
 
 ### Commands
 Run these commands from the `client` directory:
-- `npm run dev`: Runs the development version of the client (accessible at `http://localhost:8080/dist`)
-- `npm run prod`: Runs the production version of the client (accessible at `http://localhost:8080/dist`)
+- `npm run dev`: Runs the development version of the client (accessible at `http://localhost:8080`)
+- `npm run prod`: Runs the production version of the client (accessible at `http://localhost:8080`)
 - `npm test`: Runs the unit tests with [Karma](https://karma-runner.github.io/2.0/index.html) (Google Chrome required)
 
 ### Configuration

@@ -1,10 +1,10 @@
-import {assert} from 'chai'
-import {mat4, vec3} from 'gl-matrix'
-import {testBoundingBoxIntersection} from '../intersection'
-import {Ray} from '../ray'
-import {Material} from '../../../material/index'
-import {BoundingBox} from '../../../mesh/index'
-import {GeometryNode, RenderNode} from '../../../node/index'
+import {assert} from 'chai';
+import {mat4, vec3} from 'gl-matrix';
+import {testBoundingBoxIntersection} from '../intersection';
+import {Ray} from '../ray';
+import {Material} from '../../../material/index';
+import {BoundingBox} from '../../../mesh/index';
+import {GeometryNode, RenderNode} from '../../../node/index';
 
 describe('Bounding box intersection test', () => {
     let node = null;
@@ -18,14 +18,17 @@ describe('Bounding box intersection test', () => {
     });
 
     it('should return distance if ray intersects bounding box', () => {
-        assert.equal(testBoundingBoxIntersection(
-            new Ray(vec3.fromValues(0, 5, 0), vec3.fromValues(0, -1, 0)), node), 3);
-        assert.equal(testBoundingBoxIntersection(
-            new Ray(vec3.fromValues(2, 10, 2), vec3.fromValues(0, -1, 0)), node), 8);
+        assert.equal(
+            testBoundingBoxIntersection(new Ray(vec3.fromValues(0, 5, 0), vec3.fromValues(0, -1, 0)), node),
+            3
+        );
+        assert.equal(
+            testBoundingBoxIntersection(new Ray(vec3.fromValues(2, 10, 2), vec3.fromValues(0, -1, 0)), node),
+            8
+        );
     });
     it('should return null if ray does not intersect bounding box', () => {
-        assert.isNull(testBoundingBoxIntersection(
-            new Ray(vec3.fromValues(0, 5, 3), vec3.fromValues(0, -1, 0)), node));
+        assert.isNull(testBoundingBoxIntersection(new Ray(vec3.fromValues(0, 5, 3), vec3.fromValues(0, -1, 0)), node));
     });
     it('should account for basic translation', () => {
         const ray = new Ray(vec3.fromValues(0, 5, 0), vec3.fromValues(0, -1, 0));
@@ -38,11 +41,11 @@ describe('Bounding box intersection test', () => {
     });
     it('should account for basic rotation', () => {
         const ray = new Ray(vec3.fromValues(1.99, 5, 1.99), vec3.fromValues(0, -1, 0));
-        node.localMatrix = mat4.fromRotation(mat4.create(), Math.PI/4, vec3.fromValues(0, 1, 0));
+        node.localMatrix = mat4.fromRotation(mat4.create(), Math.PI / 4, vec3.fromValues(0, 1, 0));
         assert.isNull(testBoundingBoxIntersection(ray, node));
-        node.localMatrix = mat4.fromRotation(mat4.create(), Math.PI/2, vec3.fromValues(0, 1, 0));
+        node.localMatrix = mat4.fromRotation(mat4.create(), Math.PI / 2, vec3.fromValues(0, 1, 0));
         assert.equal(testBoundingBoxIntersection(ray, node), 3);
-        node.localMatrix = mat4.fromRotation(mat4.create(), 3*Math.PI/4, vec3.fromValues(0, 1, 0));
+        node.localMatrix = mat4.fromRotation(mat4.create(), (3 * Math.PI) / 4, vec3.fromValues(0, 1, 0));
         assert.isNull(testBoundingBoxIntersection(ray, node));
         node.localMatrix = mat4.fromRotation(mat4.create(), Math.PI, vec3.fromValues(0, 1, 0));
         assert.equal(testBoundingBoxIntersection(ray, node), 3);
@@ -64,8 +67,10 @@ describe('Bounding box intersection test', () => {
             assert.throws(() => testBoundingBoxIntersection('bad ray', node), 'Must specify a valid Ray');
         });
         it('should validate bounding box node type', () => {
-            assert.throws(() => testBoundingBoxIntersection(new Ray(vec3.create(), vec3.create()),
-                new RenderNode()), 'Node must be a GeometryNode');
+            assert.throws(
+                () => testBoundingBoxIntersection(new Ray(vec3.create(), vec3.create()), new RenderNode()),
+                'Node must be a GeometryNode'
+            );
         });
         it('should validate bounding box node mesh type', () => {
             node = new GeometryNode({
@@ -73,8 +78,10 @@ describe('Bounding box intersection test', () => {
                 mesh: new RenderNode(),
                 material: new Material()
             });
-            assert.throws(() => testBoundingBoxIntersection(new Ray(vec3.create(), vec3.create()), node),
-                    'Node must have a BoundingBox mesh');
+            assert.throws(
+                () => testBoundingBoxIntersection(new Ray(vec3.create(), vec3.create()), node),
+                'Node must have a BoundingBox mesh'
+            );
         });
     });
-})
+});

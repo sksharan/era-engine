@@ -1,12 +1,12 @@
-import {sceneNodesEndpoint, getSceneNodeEndpoint, refNodePrefix} from '../../../config'
-import {RenderNodeType} from '../../../engine/index'
-import {ReferenceNodeCache, convertSceneNodesToRenderNodes} from '../../../common/index'
+import {sceneNodesEndpoint, getSceneNodeEndpoint, refNodePrefix} from '../../../config';
+import {RenderNodeType} from '../../../engine/index';
+import {ReferenceNodeCache, convertSceneNodesToRenderNodes} from '../../../common/index';
 
 export const FETCH_NODES_REQUEST = 'FETCH_NODES_REQUEST';
 export const FETCH_NODES_SUCCESS = 'FETCH_NODES_SUCCESS';
 export const FETCH_NODES_FAILURE = 'FETCH_NODES_FAILURE';
 
-const pathRegex = `^${refNodePrefix}`
+const pathRegex = `^${refNodePrefix}`;
 
 export const fetchSceneNodes = () => {
     return dispatch => {
@@ -28,11 +28,12 @@ export const fetchSceneNodes = () => {
             .catch(error => {
                 dispatch({type: FETCH_NODES_FAILURE, payload: error});
             });
-    }
-}
+    };
+};
 
 function populateRefCache(sceneNodes) {
-    let promises = [], sceneNodeIds = [];
+    let promises = [],
+        sceneNodeIds = [];
     for (let sceneNode of sceneNodes) {
         if (sceneNode.type !== RenderNodeType.REFERENCE) {
             continue;
@@ -72,7 +73,7 @@ function fetchReferencedNodeAndChildren(sceneNodeRefId, referencedNode) {
             ReferenceNodeCache.updateReference({
                 referenceId: sceneNodeRefId,
                 sceneNodes: json,
-                renderNodes: convertSceneNodesToRenderNodes(json),
+                renderNodes: convertSceneNodesToRenderNodes(json)
             });
         })
         .catch(error => {

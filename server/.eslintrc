@@ -2,7 +2,8 @@
     "extends": [
         "eslint:recommended",
         "plugin:import/errors",
-        "plugin:import/warnings"
+        "plugin:import/warnings",
+        "plugin:prettier/recommended"
     ],
     "parserOptions": {
         "ecmaVersion": 8,
@@ -21,6 +22,7 @@
     },
     "rules": {
         "no-console": 0,
-        "import/no-extraneous-dependencies": 0
+        "import/no-extraneous-dependencies": 0,
+        "prettier/prettier": "error"
     }
 }

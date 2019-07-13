@@ -1,17 +1,20 @@
-import * as path from 'path'
-import * as express from 'express'
-import * as bodyParser from 'body-parser'
-import * as graphqlHTTP from 'express-graphql'
-import * as exphbs from 'express-handlebars'
-import * as cors from 'cors'
-import {GraphQLSchema, GraphQLObjectType, GraphQLString} from 'graphql'
-import {appConfig, isTest} from './config/index'
-import {connectDb} from './database/index'
+import * as path from 'path';
+import * as express from 'express';
+import * as bodyParser from 'body-parser';
+import * as graphqlHTTP from 'express-graphql';
+import * as exphbs from 'express-handlebars';
+import * as cors from 'cors';
+import {GraphQLSchema, GraphQLObjectType, GraphQLString} from 'graphql';
+import {appConfig, isTest} from './config/index';
+import {connectDb} from './database/index';
 import {
-    FileRouter, FileRouterEndpoint,
-    ObjectRouter, ObjectRouterEndpoint,
-    SceneNodeRouter, SceneNodeRouterEndpoint
-} from './router/index'
+    FileRouter,
+    FileRouterEndpoint,
+    ObjectRouter,
+    ObjectRouterEndpoint,
+    SceneNodeRouter,
+    SceneNodeRouterEndpoint
+} from './router/index';
 
 export let app = express();
 
@@ -25,22 +28,25 @@ connectDb().then(() => {
     app.use(SceneNodeRouterEndpoint, SceneNodeRouter);
 
     // TODO: add GraphQL API
-    app.use('/graphql', graphqlHTTP({
-        schema: new GraphQLSchema({
-            query: new GraphQLObjectType({
-                name: 'PlaceholderType',
-                fields: {
-                    foo: {
-                        type: GraphQLString,
-                        resolve() {
-                            return 'foo';
+    app.use(
+        '/graphql',
+        graphqlHTTP({
+            schema: new GraphQLSchema({
+                query: new GraphQLObjectType({
+                    name: 'PlaceholderType',
+                    fields: {
+                        foo: {
+                            type: GraphQLString,
+                            resolve() {
+                                return 'foo';
+                            }
                         }
                     }
-                }
-            })
-        }),
-        graphiql: true
-    }));
+                })
+            }),
+            graphiql: true
+        })
+    );
 
     const viewDir = path.join(__dirname, 'view');
     app.set('views', viewDir);

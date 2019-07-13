@@ -1,9 +1,9 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import {connect} from 'react-redux'
-import FontAwesome from 'react-fontawesome'
-import {NoNodeSelected} from './no-node-selected'
-import {NodeProperties} from './node-properties'
+import React from 'react';
+import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
+import FontAwesome from 'react-fontawesome';
+import {NoNodeSelected} from './no-node-selected';
+import {NodeProperties} from './node-properties';
 
 class PropertiesPanel extends React.Component {
     constructor(props) {
@@ -17,11 +17,7 @@ class PropertiesPanel extends React.Component {
                     <FontAwesome name='search' />
                     <span>Properties</span>
                 </div>
-                {
-                    this.props.selectedNode
-                        ? <NodeProperties node={this.props.selectedNode} />
-                        : <NoNodeSelected />
-                }
+                {this.props.selectedNode ? <NodeProperties node={this.props.selectedNode} /> : <NoNodeSelected />}
             </div>
         );
     }
@@ -31,15 +27,17 @@ const mapStateToProps = state => ({
     selectedNode: state['common.selection'].selectedNode
 });
 
-const mapDispatchToProps = () => ({
-});
+const mapDispatchToProps = () => ({});
 
-export const PropertiesPanelWithData = connect(mapStateToProps, mapDispatchToProps)(PropertiesPanel);
+export const PropertiesPanelWithData = connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(PropertiesPanel);
 
 PropertiesPanel.propTypes = {
     selectedNode: PropTypes.shape({
         renderNode: PropTypes.shape({
-            nodeType: PropTypes.string.isRequired,
-        }),
-    }),
-}
+            nodeType: PropTypes.string.isRequired
+        })
+    })
+};

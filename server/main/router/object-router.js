@@ -1,14 +1,14 @@
-import * as express from 'express'
-import * as multer from 'multer'
-import * as path from 'path'
-import {ObjectService} from '../service/index'
+import * as express from 'express';
+import * as multer from 'multer';
+import * as path from 'path';
+import {ObjectService} from '../service/index';
 
 const router = express.Router();
 const upload = multer({
     storage: multer.diskStorage({})
 });
 
-export const ObjectRouterEndpoint = "/objects";
+export const ObjectRouterEndpoint = '/objects';
 export const ObjectRouter = router;
 
 router.get('/view', (req, res) => {

@@ -1,1 +1,1 @@
-export {Objects} from './objects'
+export {Objects} from './objects';

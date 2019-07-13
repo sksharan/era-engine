@@ -1,1 +1,1 @@
-export {ToolPanel} from './tool-panel'
+export {ToolPanel} from './tool-panel';

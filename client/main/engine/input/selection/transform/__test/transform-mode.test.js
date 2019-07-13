@@ -1,5 +1,5 @@
-import {assert} from 'chai'
-import {TRANSLATE, SCALE, ROTATE, CurrentTransformMode} from '../transform-mode'
+import {assert} from 'chai';
+import {TRANSLATE, SCALE, ROTATE, CurrentTransformMode} from '../transform-mode';
 
 describe('Current transform mode', () => {
     it('can be set to translate', () => {

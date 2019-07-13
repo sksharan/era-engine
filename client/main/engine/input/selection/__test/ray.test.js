@@ -1,6 +1,6 @@
-import {assert} from 'chai'
-import {Ray, toRay} from '../ray'
-import {vec3} from 'gl-matrix'
+import {assert} from 'chai';
+import {Ray, toRay} from '../ray';
+import {vec3} from 'gl-matrix';
 
 describe('Ray constructor', () => {
     it('should validate origin type', () => {
@@ -15,12 +15,12 @@ describe('Ray constructor', () => {
         const ray = new Ray(origin, direction);
         assert.equal(ray.origin, origin);
         assert.equal(ray.direction, direction);
-    })
+    });
 });
 describe('toRay', () => {
     it('should return a valid Ray object', () => {
         const mouseX = 0;
         const mouseY = 0;
         assert.instanceOf(toRay(mouseX, mouseY), Ray);
-    })
-})
+    });
+});

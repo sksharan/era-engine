@@ -1,4 +1,1 @@
-export {
-    appConfig,
-    isTest,
-} from './config'
+export {appConfig, isTest} from './config';

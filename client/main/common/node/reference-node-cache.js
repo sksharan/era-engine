@@ -32,7 +32,7 @@ export class RefNodeCache {
         }
         this.cache[referenceId] = {
             sceneNodes,
-            renderNodes,
+            renderNodes
         };
     }
 }

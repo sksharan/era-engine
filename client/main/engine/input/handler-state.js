@@ -1,6 +1,6 @@
-import {NoneSelectedState} from './selection/index'
-import {RootSceneNode} from '../index'
-import {subscribeToNodeSelectedEvent} from '../../common/index'
+import {NoneSelectedState} from './selection/index';
+import {RootSceneNode} from '../index';
+import {subscribeToNodeSelectedEvent} from '../../common/index';
 
 class HandlerState {
     constructor() {
@@ -22,7 +22,7 @@ class HandlerState {
             return;
         }
         this._listenersInitialized = true;
-        subscribeToNodeSelectedEvent((selectedObjectBaseNode) => {
+        subscribeToNodeSelectedEvent(selectedObjectBaseNode => {
             const nextState = this._selectionState.onNodeSelectedEvent(selectedObjectBaseNode);
             this.selectionState = nextState;
         });

@@ -58,7 +58,7 @@ export default class ShaderBuilder {
             shaderString += `${func}\n`;
         }
 
-        shaderString += 'void main() {\n'
+        shaderString += 'void main() {\n';
         for (let data of this._main) {
             shaderString += `\t${data}\n`;
         }

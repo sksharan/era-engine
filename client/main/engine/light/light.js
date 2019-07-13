@@ -1,7 +1,16 @@
 export default class Light {
-    constructor({id, type, direction, ambient, diffuse, specular, specularTerm,
-        quadraticAttenuation, linearAttenuation, constantAttenuation}) {
-
+    constructor({
+        id,
+        type,
+        direction,
+        ambient,
+        diffuse,
+        specular,
+        specularTerm,
+        quadraticAttenuation,
+        linearAttenuation,
+        constantAttenuation
+    }) {
         this._id = id;
         this._type = type;
         this._direction = direction;
@@ -67,12 +76,12 @@ export default class Light {
         this._specularTerm = specularTerm;
     }
     set quadraticAttenuation(quadraticAttenuation) {
-        return this._quadraticAttenuation = quadraticAttenuation;
+        return (this._quadraticAttenuation = quadraticAttenuation);
     }
     set linearAttenuation(linearAttenuation) {
-        return this._linearAttenuation = linearAttenuation;
+        return (this._linearAttenuation = linearAttenuation);
     }
     set constantAttenuation(constantAttenuation) {
-        return this._constantAttenuation = constantAttenuation;
+        return (this._constantAttenuation = constantAttenuation);
     }
 }

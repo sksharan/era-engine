@@ -24,10 +24,10 @@ export const createHierarchyFromNodes = ({sceneNodes, renderNodes}) => {
     }
     const hierarchy = {};
     for (let i = 0; i < sceneNodes.length; i++) {
-        addNodeToHierarchy(sceneNodes[i], renderNodes[i], hierarchy, "/");
+        addNodeToHierarchy(sceneNodes[i], renderNodes[i], hierarchy, '/');
     }
     return hierarchy;
-}
+};
 
 function addNodeToHierarchy(sceneNode, renderNode, hierarchy, separator) {
     const pathFragments = sceneNode.path.split(separator);

@@ -1,1 +1,1 @@
-export {PropertiesPanel} from './view/index'
+export {PropertiesPanel} from './view/index';

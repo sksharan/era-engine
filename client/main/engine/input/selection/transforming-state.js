@@ -1,8 +1,8 @@
-import {SelectionState} from './selection-state'
-import {SelectedState} from './selected-state'
-import {RootSceneNode} from '../../index'
-import {CurrentTransformOrientation} from '../../global/index'
-import {mat4, vec3} from 'gl-matrix'
+import {SelectionState} from './selection-state';
+import {SelectedState} from './selected-state';
+import {RootSceneNode} from '../../index';
+import {CurrentTransformOrientation} from '../../global/index';
+import {mat4, vec3} from 'gl-matrix';
 
 export class TransformingState extends SelectionState {
     constructor(selectedObjectNode, transformBoundingBoxNode) {
@@ -24,8 +24,10 @@ export class TransformingState extends SelectionState {
         this._transformBoundingBoxNode.addChild(this._transformBoundingPlaneNode);
         if (CurrentTransformOrientation.isGlobal()) {
             // To compute global rotation correctly, keep the bounding planes aligned with the world axes
-            this._transformBoundingPlaneNode.localMatrix =
-                    mat4.invert(mat4.create(), this._transformBoundingPlaneNode.parent.localMatrix);
+            this._transformBoundingPlaneNode.localMatrix = mat4.invert(
+                mat4.create(),
+                this._transformBoundingPlaneNode.parent.localMatrix
+            );
         }
 
         // Also attach an axis-line visualization
@@ -33,8 +35,11 @@ export class TransformingState extends SelectionState {
         if (CurrentTransformOrientation.isGlobal()) {
             // Attach to root node so the axis lines are unaffected by transformations applied to the object
             RootSceneNode.addChild(this._transformAxisLineNode);
-            this._transformAxisLineNode.localMatrix = mat4.translate(mat4.create(), mat4.create(),
-                    mat4.getTranslation(mat4.create(), this._selectedObjectNode.localMatrix));
+            this._transformAxisLineNode.localMatrix = mat4.translate(
+                mat4.create(),
+                mat4.create(),
+                mat4.getTranslation(mat4.create(), this._selectedObjectNode.localMatrix)
+            );
         } else if (CurrentTransformOrientation.isLocal()) {
             // Define the axis lines relative to the selected object local space
             this._selectedObjectNode.addChild(this._transformAxisLineNode);

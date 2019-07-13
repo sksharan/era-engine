@@ -1,9 +1,8 @@
-import Mesh from './mesh'
-import {gl} from '../gl'
+import Mesh from './mesh';
+import {gl} from '../gl';
 
 export default class Tile extends Mesh {
-    constructor(radius=5.0, height=5.0, includeTop=true, includeSides=true) {
-
+    constructor(radius = 5.0, height = 5.0, includeTop = true, includeSides = true) {
         let positions = [];
         let normals = [];
         let texcoords = [];
@@ -41,6 +40,7 @@ export default class Tile extends Mesh {
 
 function getTop(radius) {
     return {
+        // prettier-ignore
         positions: [
             radius,         0,  0,
             0,              0,  0,
@@ -56,6 +56,7 @@ function getTop(radius) {
             0,              0,  0,
             radius,         0,  0,
         ],
+        // prettier-ignore
         normals: [
             0, 1, 0,
             0, 1, 0,
@@ -71,6 +72,7 @@ function getTop(radius) {
             0, 1, 0,
             0, 1, 0,
         ],
+        // prettier-ignore
         texcoords: [
             1.0,  0.5,
             0.5,  0.5,
@@ -86,11 +88,12 @@ function getTop(radius) {
             0.5,  0.5,
             1.0,  0.5,
         ]
-    }
+    };
 }
 
 function getSides(radius, height) {
     return {
+        // prettier-ignore
         positions: [
              radius,         0,        0,
              radius,         -height,  0,
@@ -122,6 +125,7 @@ function getSides(radius, height) {
              radius,         0,        0,
              radius,         -height,  0,
         ],
+        // prettier-ignore
         normals: [
             0.866, 0, 0.5,
             0.866, 0, 0.5,
@@ -154,6 +158,7 @@ function getSides(radius, height) {
             0.866, 0, -0.5,
         ],
         // TODO
+        // prettier-ignore
         texcoords: [
             0.0, 0.0,
             0.0, 0.0,
@@ -185,5 +190,5 @@ function getSides(radius, height) {
             0.0, 0.0,
             0.0, 0.0,
         ]
-    }
+    };
 }

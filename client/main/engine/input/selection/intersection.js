@@ -1,7 +1,7 @@
-import {mat4, vec3} from 'gl-matrix'
-import {Ray} from './ray'
-import {BoundingBox} from '../../mesh/index'
-import {GeometryNode} from '../../node/index'
+import {mat4, vec3} from 'gl-matrix';
+import {Ray} from './ray';
+import {BoundingBox} from '../../mesh/index';
+import {GeometryNode} from '../../node/index';
 
 /* Determines if the ray intersects the given bounding box. Returns the distance from
  * the origin to the intersection point if one exists, otherwise returns null.
@@ -14,20 +14,33 @@ export const testBoundingBoxIntersection = (ray, boundingBoxNode) => {
     const scaling = mat4.getScaling(vec3.create(), boundingBoxNode.worldMatrix);
     const x = {
         halfLength: scaling[0] * Math.abs((boundingBoxNode.mesh.maxX - boundingBoxNode.mesh.minX) / 2),
-        axis: vec3.fromValues(boundingBoxNode.worldMatrix[0], boundingBoxNode.worldMatrix[1], boundingBoxNode.worldMatrix[2])
+        axis: vec3.fromValues(
+            boundingBoxNode.worldMatrix[0],
+            boundingBoxNode.worldMatrix[1],
+            boundingBoxNode.worldMatrix[2]
+        )
     };
     const y = {
         halfLength: scaling[1] * Math.abs((boundingBoxNode.mesh.maxY - boundingBoxNode.mesh.minY) / 2),
-        axis: vec3.fromValues(boundingBoxNode.worldMatrix[4], boundingBoxNode.worldMatrix[5], boundingBoxNode.worldMatrix[6])
+        axis: vec3.fromValues(
+            boundingBoxNode.worldMatrix[4],
+            boundingBoxNode.worldMatrix[5],
+            boundingBoxNode.worldMatrix[6]
+        )
     };
     const z = {
         halfLength: scaling[2] * Math.abs((boundingBoxNode.mesh.maxZ - boundingBoxNode.mesh.minZ) / 2),
-        axis: vec3.fromValues(boundingBoxNode.worldMatrix[8], boundingBoxNode.worldMatrix[9], boundingBoxNode.worldMatrix[10])
+        axis: vec3.fromValues(
+            boundingBoxNode.worldMatrix[8],
+            boundingBoxNode.worldMatrix[9],
+            boundingBoxNode.worldMatrix[10]
+        )
     };
     const boxCenterPositionWorld = vec3.fromValues(
-            (boundingBoxNode.mesh.minX + boundingBoxNode.mesh.maxX) / 2,
-            (boundingBoxNode.mesh.minY + boundingBoxNode.mesh.maxY) / 2,
-            (boundingBoxNode.mesh.minZ + boundingBoxNode.mesh.maxZ) / 2);
+        (boundingBoxNode.mesh.minX + boundingBoxNode.mesh.maxX) / 2,
+        (boundingBoxNode.mesh.minY + boundingBoxNode.mesh.maxY) / 2,
+        (boundingBoxNode.mesh.minZ + boundingBoxNode.mesh.maxZ) / 2
+    );
     vec3.transformMat4(boxCenterPositionWorld, boxCenterPositionWorld, boundingBoxNode.worldMatrix);
     const delta = vec3.subtract(vec3.create(), boxCenterPositionWorld, ray.origin);
 
@@ -66,7 +79,7 @@ export const testBoundingBoxIntersection = (ray, boundingBoxNode) => {
         }
     }
     return tMin;
-}
+};
 
 function validateArgs(ray, boundingBoxNode) {
     if (!(ray instanceof Ray)) {

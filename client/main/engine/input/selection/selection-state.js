@@ -1,7 +1,7 @@
-import {testBoundingBoxIntersection} from './intersection'
-import {toRay} from './ray'
-import {NodeAnalyzer} from '../../node/index'
-import {vec3} from 'gl-matrix'
+import {testBoundingBoxIntersection} from './intersection';
+import {toRay} from './ray';
+import {NodeAnalyzer} from '../../node/index';
+import {vec3} from 'gl-matrix';
 
 export class SelectionState {
     constructor() {
@@ -69,8 +69,11 @@ export class SelectionState {
             }
         }
 
-        const intersectionPoint = vec3.add(vec3.create(), ray.origin,
-                vec3.scale(vec3.create(), ray.direction, closestDistance));
+        const intersectionPoint = vec3.add(
+            vec3.create(),
+            ray.origin,
+            vec3.scale(vec3.create(), ray.direction, closestDistance)
+        );
 
         return {
             boundingBoxNode: closestSelectedNode,

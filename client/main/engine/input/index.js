@@ -1,4 +1,4 @@
-export {KeyboardHandler} from './keyboard-handler'
-export {MouseHandler} from './mouse-handler'
+export {KeyboardHandler} from './keyboard-handler';
+export {MouseHandler} from './mouse-handler';
 
-export {CurrentTransformMode} from './selection/index'
+export {CurrentTransformMode} from './selection/index';

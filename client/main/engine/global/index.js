@@ -1,1 +1,1 @@
-export {CurrentTransformOrientation} from './transform-orientation'
+export {CurrentTransformOrientation} from './transform-orientation';

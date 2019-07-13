@@ -1,10 +1,10 @@
-import {RenderNode} from './render-node'
-import {Light} from '../light/index'
-import {RenderNodeType} from './render-node-type'
-import {mat4} from 'gl-matrix'
+import {RenderNode} from './render-node';
+import {Light} from '../light/index';
+import {RenderNodeType} from './render-node-type';
+import {mat4} from 'gl-matrix';
 
 export class LightNode extends RenderNode {
-    constructor({id, localMatrix=mat4.create(), light}) {
+    constructor({id, localMatrix = mat4.create(), light}) {
         if (!light) {
             throw new TypeError('Light is required');
         }

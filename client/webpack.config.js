@@ -4,8 +4,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const extractSass = new ExtractTextPlugin({
-    filename: "styles.css",
-    disable: process.env.NODE_ENV !== "production"
+    filename: 'styles.css',
+    disable: process.env.NODE_ENV !== 'production'
 });
 
 module.exports = {
@@ -55,11 +55,9 @@ module.exports = {
                         {
                             loader: 'postcss-loader', // Run post css actions
                             options: {
-                                plugins: function () { // post css plugins, can be exported to postcss.config.js
-                                    return [
-                                        require('precss'),
-                                        require('autoprefixer')
-                                    ];
+                                plugins: function() {
+                                    // post css plugins, can be exported to postcss.config.js
+                                    return [require('precss'), require('autoprefixer')];
                                 }
                             }
                         },
@@ -68,7 +66,7 @@ module.exports = {
                         }
                     ],
                     // Use style-loader in development
-                    fallback: 'style-loader', // inject CSS to page
+                    fallback: 'style-loader' // inject CSS to page
                 }),
                 test: /\.(scss)$/
             }

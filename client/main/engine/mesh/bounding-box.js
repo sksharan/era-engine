@@ -1,10 +1,11 @@
-import Mesh from './mesh'
-import {gl} from '../gl'
+import Mesh from './mesh';
+import {gl} from '../gl';
 
 export default class BoundingBox extends Mesh {
     constructor(objectPositions) {
         let {minX, minY, minZ, maxX, maxY, maxZ} = computeMinMax(objectPositions);
 
+        // prettier-ignore
         const positions = [
             minX, minY, minZ,
             maxX, minY, minZ,
@@ -15,6 +16,7 @@ export default class BoundingBox extends Mesh {
             maxX, maxY, maxZ,
             minX, maxY, maxZ,
         ];
+        // prettier-ignore
         const normals = [
             0, 0, 0,
             0, 0, 0,
@@ -25,6 +27,7 @@ export default class BoundingBox extends Mesh {
             0, 0, 0,
             0, 0, 0,
         ];
+        // prettier-ignore
         const texcoords = [
             0, 0,
             0, 0,
@@ -35,6 +38,7 @@ export default class BoundingBox extends Mesh {
             0, 0,
             0, 0,
         ];
+        // prettier-ignore
         const indices = [
             0, 1,
             1, 2,
@@ -101,7 +105,7 @@ function computeMinMax(objectPositions) {
     let maxY = Number.NEGATIVE_INFINITY;
     let maxZ = Number.NEGATIVE_INFINITY;
 
-    for (let i = 0; i < objectPositions.length; i+=3) {
+    for (let i = 0; i < objectPositions.length; i += 3) {
         let x = objectPositions[i];
         let y = objectPositions[i + 1];
         let z = objectPositions[i + 2];

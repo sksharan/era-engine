@@ -1,11 +1,11 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import {Matrix3x3} from './matrix-3x3'
-import {Matrix4x4} from './matrix-4x4'
-import {DefaultNodeProperties} from './default-node-properties'
-import {ObjectNodeProperties} from './object-node-properties'
-import {RenderNodeType} from '../../../engine/index'
-import tableScss from '../scss/table.scss'
+import React from 'react';
+import PropTypes from 'prop-types';
+import {Matrix3x3} from './matrix-3x3';
+import {Matrix4x4} from './matrix-4x4';
+import {DefaultNodeProperties} from './default-node-properties';
+import {ObjectNodeProperties} from './object-node-properties';
+import {RenderNodeType} from '../../../engine/index';
+import tableScss from '../scss/table.scss';
 
 export class NodeProperties extends React.Component {
     constructor(props) {
@@ -19,15 +19,11 @@ export class NodeProperties extends React.Component {
                 <tbody>
                     <tr>
                         <td className={`${tableScss.key}`}>ID</td>
-                        <td>
-                            {this.props.node.renderNode.id}
-                        </td>
+                        <td>{this.props.node.renderNode.id}</td>
                     </tr>
                     <tr>
                         <td className={`${tableScss.key}`}>Name</td>
-                        <td>
-                            {this.props.node.sceneNode.name}
-                        </td>
+                        <td>{this.props.node.sceneNode.name}</td>
                     </tr>
                     <tr>
                         <td className={`${tableScss.key}`}>Type</td>
@@ -62,9 +58,9 @@ export class NodeProperties extends React.Component {
     _getNodeTypeSpecificProperties() {
         switch (this.props.node.renderNode.nodeType) {
             case RenderNodeType.BASE:
-                return <DefaultNodeProperties node={this.props.node} />
+                return <DefaultNodeProperties node={this.props.node} />;
             case RenderNodeType.GEOMETRY:
-                return <ObjectNodeProperties node={this.props.node} />
+                return <ObjectNodeProperties node={this.props.node} />;
             default:
                 return <div></div>;
         }
@@ -75,14 +71,14 @@ NodeProperties.propTypes = {
     node: PropTypes.shape({
         sceneNode: PropTypes.shape({
             name: PropTypes.string.isRequired,
-            type: PropTypes.string.isRequired,
+            type: PropTypes.string.isRequired
         }),
         renderNode: PropTypes.shape({
             id: PropTypes.string.isRequired,
             nodeType: PropTypes.string.isRequired,
             localMatrix: PropTypes.object.isRequired, // Float32Array
             worldMatrix: PropTypes.object.isRequired, // Float32Array
-            normalMatrix: PropTypes.object.isRequired, // Float32Array
-        }),
-    }),
-}
+            normalMatrix: PropTypes.object.isRequired // Float32Array
+        })
+    })
+};

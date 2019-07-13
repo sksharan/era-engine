@@ -1,1 +1,1 @@
-export {FileMetadataReducer} from './file-metadata-reducer'
+export {FileMetadataReducer} from './file-metadata-reducer';

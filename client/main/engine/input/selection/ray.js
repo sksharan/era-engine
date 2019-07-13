@@ -1,6 +1,6 @@
-import {Camera, getDefaultPerspectiveMatrixInverse} from '../../camera/index'
-import {gl} from '../../gl'
-import {vec4} from 'gl-matrix'
+import {Camera, getDefaultPerspectiveMatrixInverse} from '../../camera/index';
+import {gl} from '../../gl';
+import {vec4} from 'gl-matrix';
 
 export class Ray {
     constructor(origin, direction) {
@@ -40,4 +40,4 @@ export const toRay = (mouseX, mouseY) => {
     let origin = Camera.getPosition();
     let direction = vec4.normalize(vec4.create(), rayWorld);
     return new Ray(origin, direction);
-}
+};

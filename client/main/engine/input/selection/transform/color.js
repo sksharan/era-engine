@@ -1,4 +1,4 @@
-import {vec4} from 'gl-matrix'
+import {vec4} from 'gl-matrix';
 
 export const blackColor = vec4.fromValues(0, 0, 0, 1);
 export const redColor = vec4.fromValues(1, 0, 0, 1);

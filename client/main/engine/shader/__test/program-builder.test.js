@@ -1,9 +1,8 @@
-import ProgramBuilderInjector from 'inject-loader!../program-builder'
-import {assert} from 'chai'
+import ProgramBuilderInjector from 'inject-loader!../program-builder';
+import {assert} from 'chai';
 
 // Setup WebGL
-document.body.insertAdjacentHTML('beforeend',
-        '<canvas id="canvas" height="720" width="1080"></canvas>');
+document.body.insertAdjacentHTML('beforeend', '<canvas id="canvas" height="720" width="1080"></canvas>');
 const gl = document.getElementById('canvas').getContext('webgl');
 
 const ProgramBuilder = ProgramBuilderInjector({
@@ -13,7 +12,6 @@ const ProgramBuilder = ProgramBuilderInjector({
 }).default;
 
 describe('Program builder build', () => {
-
     let builder = null;
 
     beforeEach(() => {
@@ -51,62 +49,102 @@ describe('Program builder build', () => {
     });
 
     it('should succeed with position and normal enabled', () => {
-        builder.addPosition().addNormal().build();
+        builder
+            .addPosition()
+            .addNormal()
+            .build();
     });
     it('should set correct program data when position and normal enabled', () => {
-        const programData = builder.addPosition().addNormal().build();
+        const programData = builder
+            .addPosition()
+            .addNormal()
+            .build();
         assertPositionData(programData);
         assertNormalData(programData);
     });
 
     it('should succeed with sphere clipping', () => {
-        builder.addPosition({scaleFactor: 0.5}).addSphereClipping({sphereRadius: 0.5}).build();
+        builder
+            .addPosition({scaleFactor: 0.5})
+            .addSphereClipping({sphereRadius: 0.5})
+            .build();
     });
     it('should succeed with sphere outlining', () => {
-        builder.addPosition().addNormal().addSphereOutlining({epsilon: 0.10}).build();
-    })
+        builder
+            .addPosition()
+            .addNormal()
+            .addSphereOutlining({epsilon: 0.1})
+            .build();
+    });
 
     it('should succeed with position and texcoord enabled', () => {
-        builder.addPosition().addTexcoord().build();
+        builder
+            .addPosition()
+            .addTexcoord()
+            .build();
     });
     it('should set correct program data when position and texcoord enabled', () => {
-        const programData = builder.addPosition().addTexcoord().build();
+        const programData = builder
+            .addPosition()
+            .addTexcoord()
+            .build();
         assertPositionData(programData);
         assertTexcoordData(programData);
     });
 
     it('should succeed with position and color enabled', () => {
-        builder.addPosition().addColor().build();
+        builder
+            .addPosition()
+            .addColor()
+            .build();
     });
     it('should succeed with position, texcoord, and color enabled', () => {
-        builder.addPosition().addTexcoord().addColor().build();
+        builder
+            .addPosition()
+            .addTexcoord()
+            .addColor()
+            .build();
     });
     it('should set correct program data when position, texcoord, and color enabled', () => {
-        const programData = builder.addPosition().addTexcoord().addColor().build();
+        const programData = builder
+            .addPosition()
+            .addTexcoord()
+            .addColor()
+            .build();
         assertPositionData(programData);
         assertTexcoordData(programData);
         assertColorData(programData);
     });
 
     it('should succeed with position, normal, and lighting enabled', () => {
-        builder.addPosition().addNormal().enableLighting().build();
+        builder
+            .addPosition()
+            .addNormal()
+            .enableLighting()
+            .build();
     });
     it('should set correct program data when position, normal, and lighting enabled', () => {
-        const programData = builder.addPosition().addNormal().enableLighting().build();
+        const programData = builder
+            .addPosition()
+            .addNormal()
+            .enableLighting()
+            .build();
         assertPositionData(programData);
         assertNormalData(programData);
     });
 
     it('should succeed when adding point lights', () => {
-        builder.addPosition()
-               .addNormal()
-               .enableLighting()
-               .addPointLight('light1')
-               .addPointLight('light2')
-               .build();
+        builder
+            .addPosition()
+            .addNormal()
+            .enableLighting()
+            .addPointLight('light1')
+            .addPointLight('light2')
+            .build();
     });
     it('should set correct program data when adding point lights', () => {
-        const programData = builder.addPosition()
+        const programData = builder
+            .addPosition()
             .addNormal()
             .enableLighting()
             .addPointLight('light1')
@@ -125,12 +163,17 @@ describe('Program builder build', () => {
     });
 
     it('should build program data with light enabled if enableLighting() is called', () => {
-        assert.isTrue(builder.addPosition().addNormal().enableLighting().build().lightEnabled);
+        assert.isTrue(
+            builder
+                .addPosition()
+                .addNormal()
+                .enableLighting()
+                .build().lightEnabled
+        );
     });
     it('should not build program data with light enabled if enableLighting() is never called', () => {
         assert.isFalse(builder.build().lightEnabled);
     });
-
 });
 
 function assertPositionData(programData) {

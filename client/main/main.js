@@ -1,21 +1,11 @@
-import React from 'react'
-import FontAwesome from 'react-fontawesome'
+import React from 'react';
+import FontAwesome from 'react-fontawesome';
 
-import {
-    ContentPanel,
-    PropertiesPanel,
-    NodePanel,
-    ToolPanel
-} from './interface/index'
+import {ContentPanel, PropertiesPanel, NodePanel, ToolPanel} from './interface/index';
 
-import {
-    KeyboardHandler,
-    MouseHandler,
-    RootSceneNode,
-    Renderer,
-} from './engine/index'
+import {KeyboardHandler, MouseHandler, RootSceneNode, Renderer} from './engine/index';
 
-import css from './scss/main.scss'
+import css from './scss/main.scss';
 
 class Main extends React.Component {
     constructor(props) {
@@ -27,13 +17,13 @@ class Main extends React.Component {
             frames: 0,
             // The calculated FPS
             fps: 0
-        }
+        };
     }
     render() {
         return (
             <div>
                 <nav className='navbar navbar-expand-sm navbar-dark bg-dark'>
-                    <a className='navbar-brand' href="#">
+                    <a className='navbar-brand' href='#'>
                         <FontAwesome name='gamepad' />
                     </a>
                 </nav>
@@ -62,11 +52,12 @@ class Main extends React.Component {
         function updateFPS() {
             const currTime = Date.now();
             const millisElapsed = currTime - this.state.prevTime;
-            this.setState((prevState) => ({
+            this.setState(prevState => ({
                 frames: prevState.frames + 1
             }));
-            if (millisElapsed >= 1000) { // Update FPS approximately every second
-                this.setState((prevState) => ({
+            if (millisElapsed >= 1000) {
+                // Update FPS approximately every second
+                this.setState(prevState => ({
                     prevTime: currTime,
                     frames: 0,
                     // Note: display as ms/frame instead with console.log(millisElapsed / frames)

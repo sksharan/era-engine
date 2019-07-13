@@ -1,7 +1,7 @@
-import {SelectionState} from './selection-state'
-import {SelectedState} from './selected-state'
-import {findNearestBaseNodeForBoundingBoxNode} from './node-finder'
-import {triggerNodeSelectedEvent} from '../../../common/index'
+import {SelectionState} from './selection-state';
+import {SelectedState} from './selected-state';
+import {findNearestBaseNodeForBoundingBoxNode} from './node-finder';
+import {triggerNodeSelectedEvent} from '../../../common/index';
 
 export class NoneSelectedState extends SelectionState {
     onEnter() {

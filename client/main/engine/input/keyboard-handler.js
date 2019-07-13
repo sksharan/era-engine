@@ -1,7 +1,7 @@
-import camera from '../camera/camera'
-import {MouseHandler} from './mouse-handler'
-import {CurrentHandlerState} from './handler-state'
-import {RootSceneNode} from '../index'
+import camera from '../camera/camera';
+import {MouseHandler} from './mouse-handler';
+import {CurrentHandlerState} from './handler-state';
+import {RootSceneNode} from '../index';
 
 // Maps key codes to boolean values indicating if key is pressed
 const pressedKeys = {};
@@ -43,4 +43,4 @@ export const KeyboardHandler = {
             camera.moveRight();
         }
     }
-}
+};

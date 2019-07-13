@@ -1,7 +1,7 @@
-import {Camera, getDefaultPerspectiveMatrix} from '../camera/index'
-import {ProgramBuilder} from '../shader/index'
-import {gl} from '../gl'
-import {mat4, vec3} from 'gl-matrix'
+import {Camera, getDefaultPerspectiveMatrix} from '../camera/index';
+import {ProgramBuilder} from '../shader/index';
+import {gl} from '../gl';
+import {mat4, vec3} from 'gl-matrix';
 
 export default class ProgramDataManager {
     initCameraUniforms(programData) {
@@ -28,25 +28,50 @@ export default class ProgramDataManager {
 
         for (let lightNode of lightNodes) {
             const light = lightNode.light;
-            gl.uniform3fv(gl.getUniformLocation(programData.program, `point${light.id}PositionWorld`),
-                    mat4.getTranslation(vec3.create(), lightNode.worldMatrix));
+            gl.uniform3fv(
+                gl.getUniformLocation(programData.program, `point${light.id}PositionWorld`),
+                mat4.getTranslation(vec3.create(), lightNode.worldMatrix)
+            );
 
-            gl.uniform4fv(gl.getUniformLocation(programData.program, `point${light.id}Ambient`),
-                    [light.ambient.r, light.ambient.g, light.ambient.b, light.ambient.a]);
+            gl.uniform4fv(gl.getUniformLocation(programData.program, `point${light.id}Ambient`), [
+                light.ambient.r,
+                light.ambient.g,
+                light.ambient.b,
+                light.ambient.a
+            ]);
 
-            gl.uniform4fv(gl.getUniformLocation(programData.program, `point${light.id}Diffuse`),
-                    [light.diffuse.r, light.diffuse.g, light.diffuse.b, light.diffuse.a]);
+            gl.uniform4fv(gl.getUniformLocation(programData.program, `point${light.id}Diffuse`), [
+                light.diffuse.r,
+                light.diffuse.g,
+                light.diffuse.b,
+                light.diffuse.a
+            ]);
 
-            gl.uniform4fv(gl.getUniformLocation(programData.program, `point${light.id}Specular`),
-                    [light.specular.r, light.specular.g, light.specular.b, light.specular.a]);
+            gl.uniform4fv(gl.getUniformLocation(programData.program, `point${light.id}Specular`), [
+                light.specular.r,
+                light.specular.g,
+                light.specular.b,
+                light.specular.a
+            ]);
 
-            gl.uniform1f(gl.getUniformLocation(programData.program, `point${light.id}SpecularTerm`), light.specularTerm);
-            gl.uniform1f(gl.getUniformLocation(programData.program, `point${light.id}ConstantAttenuation`), light.constantAttenuation);
-            gl.uniform1f(gl.getUniformLocation(programData.program, `point${light.id}LinearAttenuation`), light.linearAttenuation);
-            gl.uniform1f(gl.getUniformLocation(programData.program, `point${light.id}QuadraticAttenuation`), light.quadraticAttenuation);
+            gl.uniform1f(
+                gl.getUniformLocation(programData.program, `point${light.id}SpecularTerm`),
+                light.specularTerm
+            );
+            gl.uniform1f(
+                gl.getUniformLocation(programData.program, `point${light.id}ConstantAttenuation`),
+                light.constantAttenuation
+            );
+            gl.uniform1f(
+                gl.getUniformLocation(programData.program, `point${light.id}LinearAttenuation`),
+                light.linearAttenuation
+            );
+            gl.uniform1f(
+                gl.getUniformLocation(programData.program, `point${light.id}QuadraticAttenuation`),
+                light.quadraticAttenuation
+            );
         }
     }
-
 }
 
 function updateProgramData(programData, lightNodes) {

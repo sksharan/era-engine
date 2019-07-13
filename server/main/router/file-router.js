@@ -1,11 +1,11 @@
-import * as express from 'express'
-import * as multer from 'multer'
-import {FileService} from '../service/index'
+import * as express from 'express';
+import * as multer from 'multer';
+import {FileService} from '../service/index';
 
 const router = express.Router();
 const upload = multer({});
 
-export const FileRouterEndpoint = "/files";
+export const FileRouterEndpoint = '/files';
 export const FileRouter = router;
 
 router.get('/metadata', async (req, res) => {

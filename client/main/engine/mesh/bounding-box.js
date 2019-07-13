@@ -5,35 +5,57 @@ export default class BoundingBox extends Mesh {
     constructor(objectPositions) {
         let {minX, minY, minZ, maxX, maxY, maxZ} = computeMinMax(objectPositions);
 
+        // prettier-ignore
         const positions = [
-            minX,
-            minY,
-            minZ,
-            maxX,
-            minY,
-            minZ,
-            maxX,
-            maxY,
-            minZ,
-            minX,
-            maxY,
-            minZ,
-            minX,
-            minY,
-            maxZ,
-            maxX,
-            minY,
-            maxZ,
-            maxX,
-            maxY,
-            maxZ,
-            minX,
-            maxY,
-            maxZ
+            minX, minY, minZ,
+            maxX, minY, minZ,
+            maxX, maxY, minZ,
+            minX, maxY, minZ,
+            minX, minY, maxZ,
+            maxX, minY, maxZ,
+            maxX, maxY, maxZ,
+            minX, maxY, maxZ,
         ];
-        const normals = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-        const texcoords = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-        const indices = [0, 1, 1, 2, 2, 3, 3, 0, 0, 4, 3, 7, 1, 5, 2, 6, 4, 5, 5, 6, 6, 7, 7, 4];
+        // prettier-ignore
+        const normals = [
+            0, 0, 0,
+            0, 0, 0,
+            0, 0, 0,
+            0, 0, 0,
+            0, 0, 0,
+            0, 0, 0,
+            0, 0, 0,
+            0, 0, 0,
+        ];
+        // prettier-ignore
+        const texcoords = [
+            0, 0,
+            0, 0,
+            0, 0,
+            0, 0,
+            0, 0,
+            0, 0,
+            0, 0,
+            0, 0,
+        ];
+        // prettier-ignore
+        const indices = [
+            0, 1,
+            1, 2,
+            2, 3,
+            3, 0,
+
+            0, 4,
+            3, 7,
+
+            1, 5,
+            2, 6,
+
+            4, 5,
+            5, 6,
+            6, 7,
+            7, 4,
+        ];
 
         super({
             drawMode: gl.LINES,

@@ -10,6 +10,8 @@ class ScaleMesh extends TransformMesh {
         const shaftLength = 75.0;
         const shaftSize = 1.0;
         const pointerSize = 3.0;
+
+        // prettier-ignore
         const positions = [
             // shaft
             0,
@@ -77,6 +79,7 @@ class ScaleMesh extends TransformMesh {
         // Texcoords not needed
         const texcoords = new Array((positions.length * 2) / 3).fill(0);
 
+        // prettier-ignore
         const indices = [
             // shaft
             4,

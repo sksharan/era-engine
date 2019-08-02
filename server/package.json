@@ -9,7 +9,8 @@
   "scripts": {
     "start": "nodemon --ignore dist/ --exec \"npm run init\"",
     "init": "rimraf dist/ && tsc && copyfiles -u 1 \"main/view/**\" dist && node dist/app.js",
-    "test": "cross-env NODE_ENV=test mocha --exit --reporter spec --require ts-node/register main/**/**.test.js"
+    "test": "cross-env NODE_ENV=test mocha --exit --reporter spec --require ts-node/register main/**/**.test.js",
+    "fix": "eslint --fix main"
   },
   "dependencies": {
     "adm-zip": "^0.4.7",

@@ -48,7 +48,7 @@ Run these commands from the `client` directory:
 - `npm run dev`: Runs the development version of the client (accessible at `http://localhost:8080`)
 - `npm run prod`: Runs the production version of the client (accessible at `http://localhost:8080`)
 - `npm test`: Runs the unit tests with [Karma](https://karma-runner.github.io/2.0/index.html) (Google Chrome required)
-- `npm run lint`: Fix linting errors in the client source code
+- `npm run fix`: Fix linting errors in the client source code
 
 ### Configuration
 The client configuration file is located at `client/main/config.js` and defines the URL of the server to
@@ -66,7 +66,7 @@ Run these commands from the `server` directory:
   - Requires connection to `mongodb://localhost/app`
 - `npm test`: Runs the integration tests
   - Requires connection to `mongodb://localhost/test`
--  `npm run lint`: Fix linting errors in the server source code
+-  `npm run fix`: Fix linting errors in the server source code
 
 ### Configuration
 The server configuration file is located at `server/main/config.js` and allows modification of the following values:

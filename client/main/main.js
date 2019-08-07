@@ -1,5 +1,4 @@
 import React from 'react';
-import FontAwesome from 'react-fontawesome';
 
 import {ContentPanel, PropertiesPanel, NodePanel, ToolPanel} from './interface/index';
 
@@ -25,11 +24,6 @@ class Main extends React.Component {
         document.getElementById('canvas').setAttribute('style', 'z-index: 0;');
         return (
             <div>
-                <nav className='navbar navbar-expand-sm navbar-dark bg-dark'>
-                    <a className='navbar-brand' href='#'>
-                        <FontAwesome name='gamepad' />
-                    </a>
-                </nav>
                 <div className='container-fluid'>
                     <div className='row'>
                         <div className={`col-md-3 pl-0 pr-0 ${css.contents}`}>

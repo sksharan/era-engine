@@ -8,7 +8,20 @@ class Login extends Component {
     render() {
         return (
             <div>
-                <h1>Login</h1>
+                <img src='/main/img/login-background.jpg' className='account-background' />
+                <div className='account-div'>
+                    <form className='account-form'>
+                        <p>
+                            <input type='text' placeholder='username' />
+                        </p>
+                        <p>
+                            <input type='password' placeholder='password' />
+                        </p>
+                        <p>
+                            <input type='submit' value='login' />
+                        </p>
+                    </form>
+                </div>
             </div>
         );
     }

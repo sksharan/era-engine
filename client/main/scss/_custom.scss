@@ -12,7 +12,7 @@ $dark: #424a52;
     vertical-align: unset !important;
 }
 
-$card-bg: rgba(30, 30, 30, 0.80);
+$card-bg: rgba(30, 30, 30, 0.8);
 $card-border-color: #5f5f5f;
 $card-cap-bg: #383838;
 $card-spacer-x: $spacer * 3;
@@ -32,9 +32,9 @@ $card-spacer-y: $spacer / 1.5;
 $list-group-bg: rgba(0, 0, 0, 0); // No color
 $nav-link-padding-y: 0.25rem;
 
-$navbar-padding-x: 1.0rem;
+$navbar-padding-x: 1rem;
 
-$table-cell-padding-sm: .1rem;
+$table-cell-padding-sm: 0.1rem;
 $table-dark-bg: $card-bg;
 
 // File upload
@@ -77,13 +77,13 @@ $custom-file-border-radius: 0;
     }
 }
 :local(.contents) {
-    @include allow-canvas-click
+    @include allow-canvas-click;
 }
 :local(.nodes) {
-    @include allow-canvas-click
+    @include allow-canvas-click;
 }
 :local(.tools) {
-    @include allow-canvas-click
+    @include allow-canvas-click;
 }
 
 // Stylize buttons that appear on tools panel
@@ -92,4 +92,78 @@ $custom-file-border-radius: 0;
     line-height: 1.25;
     // Space out adjacent buttons
     margin-right: $spacer * 2;
+}
+
+.account-background {
+    width: 100vw;
+    height: auto;
+    max-width: none;
+    max-height: 100vh;
+    object-fit: fill;
+}
+
+.account-div {
+    background: rgb(156, 156, 156);
+    background: radial-gradient(circle, rgba(156, 156, 156, 0.7497373949579832) 0%, rgba(223, 223, 223, 0.53125) 100%);
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    /* bring your own prefixes */
+    transform: translate(-50%, -50%);
+    width: 500px;
+    height: auto;
+    text-align: center;
+    color: black;
+}
+
+.account-form {
+    padding: 45px;
+}
+
+input[type='email'],
+select {
+    font-family: 'Roboto', sans-serif;
+    outline: 0;
+    background: #f2f2f2;
+    width: 75%;
+    border: 0;
+    padding: 15px;
+    box-sizing: border-box;
+    font-size: 14px;
+}
+
+input[type='password'],
+select {
+    font-family: 'Roboto', sans-serif;
+    outline: 0;
+    background: #f2f2f2;
+    width: 75%;
+    border: 0;
+    padding: 15px;
+    box-sizing: border-box;
+    font-size: 14px;
+}
+
+input[type='submit'] {
+    width: 75%;
+    background-color: #4caf50;
+    color: white;
+    padding: 14px 20px;
+    cursor: pointer;
+}
+
+input[type='submit']:hover {
+    background-color: #45a049;
+}
+
+input[type='text'],
+select {
+    font-family: 'Roboto', sans-serif;
+    outline: 0;
+    background: #f2f2f2;
+    width: 75%;
+    border: 0;
+    padding: 15px;
+    box-sizing: border-box;
+    font-size: 14px;
 }

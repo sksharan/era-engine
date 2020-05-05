@@ -4,4 +4,10 @@ export {
     connectDb
 } from './database';
 
-export {FileMetadataCollection, FileChunkCollection, LightCollection, SceneNodeCollection} from './collection';
+export {
+    FileMetadataCollection,
+    FileChunkCollection,
+    LightCollection,
+    SceneNodeCollection,
+    UserCollection
+} from './collection';

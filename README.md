@@ -29,6 +29,12 @@ This project is still very early in development, so some features are incomplete
 ## Usage
 *This section is still under development*
 
+This project requires Docker to be installed on your machine. Run the
+following command to start Mongo and Redis:
+```
+docker-compose up
+```
+
 Because the UI does not yet support deletion, data must be deleted by entering the following in a MongoDB shell:
 ```
 > use app

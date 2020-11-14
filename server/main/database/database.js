@@ -13,11 +13,11 @@ export const connectDb = () => {
             resolve();
         }
         mongodb.MongoClient.connect(appConfig.database.url)
-            .then(database => {
+            .then(client => {
                 if (!isTest) {
-                    console.log('Connected to database ' + appConfig.database.url);
+                    console.log('Connected to database ');
                 }
-                db = database;
+                db = client.db(appConfig.database.dbName);
                 bucket = new mongodb.GridFSBucket(db);
                 resolve();
             })

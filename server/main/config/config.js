@@ -3,7 +3,7 @@ export const isTest = process.env.NODE_ENV === 'test';
 export const appConfig = {
     port: isTest ? 3001 : 3000,
     database: {
-        url: isTest ? 'mongodb://steven:Hunt3r#kitty@localhost/' : 'mongodb://steven:Hunt3r#kitty@localhost/',
+        url: isTest ? 'mongodb://root:password@localhost/' : 'mongodb://root:password@localhost/',
         dbName: isTest ? 'test' : 'app'
     },
     redis: {

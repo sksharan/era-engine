@@ -48,10 +48,7 @@ const mapDispatchToProps = dispatch => ({
     }
 });
 
-export const ObjectNodeWithData = connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(ObjectNode);
+export const ObjectNodeWithData = connect(mapStateToProps, mapDispatchToProps)(ObjectNode);
 
 ObjectNode.propTypes = {
     sceneNode: PropTypes.shape({

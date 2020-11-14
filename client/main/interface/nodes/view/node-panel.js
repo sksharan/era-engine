@@ -68,10 +68,7 @@ const mapDispatchToProps = dispatch => ({
     }
 });
 
-export const NodePanelWithData = connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(NodePanel);
+export const NodePanelWithData = connect(mapStateToProps, mapDispatchToProps)(NodePanel);
 
 NodePanel.propTypes = {
     isFetching: PropTypes.bool.isRequired,

@@ -2,7 +2,7 @@ import * as mongodb from 'mongodb';
 import {appConfig, isTest} from '../config/index';
 
 let db: mongodb.Db = null;
-let bucket = null;
+let bucket: mongodb.GridFSBucket = null;
 
 export const getDb = () => db;
 export const getBucket = () => bucket;

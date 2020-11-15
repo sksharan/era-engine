@@ -1,8 +1,9 @@
+import * as stream from 'stream';
 import {getBucket, getDb, FileMetadataCollection} from '../database/index';
 import {ObjectId} from 'mongodb';
 
-interface Anything {
-    foo: string,
+interface Metadata {
+    filename: string,
 }
 
 export const getAllFileMetadata = async () => {
@@ -17,9 +18,9 @@ export const getFileContentStream = fileId => {
     return getBucket().openDownloadStream(new ObjectId(fileId));
 };
 
-export const getFileMetadata = fileId => {
+export const getFileMetadata = (fileId: string | number | ObjectId) => {
     return getDb()
-        .collection<Anything>(FileMetadataCollection)
+        .collection<Metadata>(FileMetadataCollection)
         .findOne({_id: new ObjectId(fileId)})
         .then(document => {
             return document;
@@ -29,14 +30,14 @@ export const getFileMetadata = fileId => {
         });
 };
 
-export const uploadFile = (fileReadStream, filename) => {
+export const uploadFile = (fileReadStream: stream.Readable, filename: string) => {
     return new Promise((resolve, reject) => {
         fileReadStream
             .pipe(getBucket().openUploadStream(filename))
             .on('error', error => {
                 reject(error);
             })
-            .on('finish', document => {
+            .on('finish', (document) => {
                 resolve(document);
             });
     });

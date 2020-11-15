@@ -1,6 +1,10 @@
 import {getBucket, getDb, FileMetadataCollection} from '../database/index';
 import {ObjectId} from 'mongodb';
 
+interface Anything {
+    foo: string,
+}
+
 export const getAllFileMetadata = async () => {
     const cursor = await getDb()
         .collection(FileMetadataCollection)
@@ -15,7 +19,7 @@ export const getFileContentStream = fileId => {
 
 export const getFileMetadata = fileId => {
     return getDb()
-        .collection(FileMetadataCollection)
+        .collection<Anything>(FileMetadataCollection)
         .findOne({_id: new ObjectId(fileId)})
         .then(document => {
             return document;

@@ -1,7 +1,7 @@
 import * as mongodb from 'mongodb';
 import {appConfig, isTest} from '../config/index';
 
-let db = null;
+let db: mongodb.Db = null;
 let bucket = null;
 
 export const getDb = () => db;
@@ -12,7 +12,7 @@ export const connectDb = () => {
         if (db !== null) {
             resolve();
         }
-        mongodb.MongoClient.connect(appConfig.database.url)
+        mongodb.MongoClient.connect(appConfig.database.url, {useUnifiedTopology: true})
             .then(client => {
                 if (!isTest) {
                     console.log('Connected to database ');

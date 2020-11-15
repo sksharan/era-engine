@@ -77,10 +77,7 @@ const mapDispatchToProps = dispatch => ({
     }
 });
 
-export const UploadFileWithData = connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(UploadFile);
+export const UploadFileWithData = connect(mapStateToProps, mapDispatchToProps)(UploadFile);
 
 UploadFile.propTypes = {
     getFileMetadata: PropTypes.func.isRequired

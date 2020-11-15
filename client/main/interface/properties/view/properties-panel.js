@@ -29,10 +29,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = () => ({});
 
-export const PropertiesPanelWithData = connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(PropertiesPanel);
+export const PropertiesPanelWithData = connect(mapStateToProps, mapDispatchToProps)(PropertiesPanel);
 
 PropertiesPanel.propTypes = {
     selectedNode: PropTypes.shape({

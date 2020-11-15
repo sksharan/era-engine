@@ -4,10 +4,8 @@ import * as session from 'express-session';
 import * as redis from 'redis';
 import * as connectRedis from 'connect-redis';
 import * as bodyParser from 'body-parser';
-import * as graphqlHTTP from 'express-graphql';
 import * as exphbs from 'express-handlebars';
 import * as cors from 'cors';
-import {GraphQLSchema, GraphQLObjectType, GraphQLString} from 'graphql';
 import {appConfig, isTest} from './config/index';
 import {connectDb} from './database/index';
 import {
@@ -56,27 +54,6 @@ connectDb().then(() => {
         app.use(ObjectRouterEndpoint, ObjectRouter);
         app.use(SceneNodeRouterEndpoint, SceneNodeRouter);
         app.use(UserRouterEndpoint, UserRouter);
-
-        // TODO: add GraphQL API
-        app.use(
-            '/graphql',
-            graphqlHTTP({
-                schema: new GraphQLSchema({
-                    query: new GraphQLObjectType({
-                        name: 'PlaceholderType',
-                        fields: {
-                            foo: {
-                                type: GraphQLString,
-                                resolve() {
-                                    return 'foo';
-                                }
-                            }
-                        }
-                    })
-                }),
-                graphiql: true
-            })
-        );
 
         const viewDir = path.join(__dirname, 'view');
         app.set('views', viewDir);

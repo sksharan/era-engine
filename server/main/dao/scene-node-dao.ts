@@ -22,14 +22,14 @@ export const saveSceneNode = async sceneNode => {
         .collection(SceneNodeCollection)
         .findOneAndUpdate({_id: sceneNode._id}, {$set: sceneNode}, {upsert: true, returnOriginal: false});
 
-    const cursor = await getDb()
+    const cursor = getDb()
         .collection(SceneNodeCollection)
         .find({_id: sceneNode._id});
     return cursor.next();
 };
 
 export const deleteSceneNodes = async pathRegex => {
-    const cursor = await getDb()
+    const cursor = getDb()
         .collection(SceneNodeCollection)
         .find({path: pathRegex});
     if (!(await cursor.hasNext())) {

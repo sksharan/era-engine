@@ -5,16 +5,19 @@ import {ObjectId} from 'mongodb';
 interface Metadata {
     filename: string,
 }
+/*interface FileId {
+    fileId: string | number | ObjectId,
+}*/
 
 export const getAllFileMetadata = async () => {
-    const cursor = await getDb()
-        .collection(FileMetadataCollection)
+    const cursor = getDb()
+        .collection<Metadata>(FileMetadataCollection)
         .find()
         .sort({uploadDate: -1});
     return cursor.toArray();
 };
 
-export const getFileContentStream = fileId => {
+export const getFileContentStream = (fileId: string | number | ObjectId) => {
     return getBucket().openDownloadStream(new ObjectId(fileId));
 };
 

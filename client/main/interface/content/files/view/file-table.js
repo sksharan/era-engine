@@ -43,10 +43,7 @@ const mapDispatchToProps = dispatch => ({
     }
 });
 
-export const FileTableWithData = connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(FileTable);
+export const FileTableWithData = connect(mapStateToProps, mapDispatchToProps)(FileTable);
 
 FileTable.propTypes = {
     isFetching: PropTypes.bool.isRequired,

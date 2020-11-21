@@ -77,10 +77,7 @@ const mapDispatchToProps = dispatch => ({
     }
 });
 
-export const ObjectRowWithData = connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(ObjectRow);
+export const ObjectRowWithData = connect(mapStateToProps, mapDispatchToProps)(ObjectRow);
 
 ObjectRow.propTypes = {
     object: PropTypes.shape({

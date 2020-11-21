@@ -78,10 +78,7 @@ const mapDispatchToProps = dispatch => ({
     }
 });
 
-export const UploadObjectWithData = connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(UploadObject);
+export const UploadObjectWithData = connect(mapStateToProps, mapDispatchToProps)(UploadObject);
 
 UploadObject.propTypes = {
     getObjects: PropTypes.func.isRequired

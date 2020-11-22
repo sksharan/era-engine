@@ -1,4 +1,5 @@
 import * as AdmZip from 'adm-zip';
+import * as stream from 'stream';
 import * as streamifier from 'streamifier';
 import * as path from 'path';
 import {uploadFile} from './file-service';
@@ -13,7 +14,7 @@ export const createFromZip = async (zipFile, objectNodePrefix) => {
 
     for (let zipEntry of zipEntries) {
         const name = zipEntry.entryName;
-        const bufferStream = streamifier.createReadStream(zip.readFile(zipEntry));
+        const bufferStream = streamifier.createReadStream(zip.readFile(zipEntry)) as stream.Readable;
         const savedFile = await uploadFile(bufferStream, name);
 
         if (path.extname(name) === '.json') {
@@ -23,6 +24,7 @@ export const createFromZip = async (zipFile, objectNodePrefix) => {
             assimpJson = JSON.parse(zip.readAsText(zipEntry));
         } else {
             // Treat all other files as textures
+            // @ts-ignore
             textures[name] = savedFile._id;
         }
     }

@@ -36,7 +36,6 @@
         "prettier": "^1.18.2",
         "prop-types": "^15.6.0",
         "react": "^16.1.1",
-        "react-color": "^2.13.8",
         "react-dom": "^16.1.1",
         "react-fontawesome": "^1.6.1",
         "react-immutable-proptypes": "^2.1.0",

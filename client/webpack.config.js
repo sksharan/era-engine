@@ -65,12 +65,6 @@ module.exports = {
               }
         ]
     },
-    externals: {
-        // For Enzyme with React 15: http://airbnb.io/enzyme/docs/guides/webpack.html
-        'react/addons': true,
-        'react/lib/ExecutionEnvironment': true,
-        'react/lib/ReactContext': true
-    },
     devServer: {
         historyApiFallback: {
             index: '/dist/'

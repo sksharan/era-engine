@@ -15,24 +15,12 @@ module.exports = {
             template: 'main/index.html'
         }),
     ],
-    resolve: {
-        extensions: ['.js', '.jsx']
-    },
     module: {
         rules: [
             {
-                enforce: 'pre',
-                loader: 'eslint-loader',
-                test: /\.jsx?$/,
-                exclude: /node_modules/
-            },
-            {
-                loader: 'babel-loader',
-                test: /\.jsx?$/,
+                test: /\.(js|tsx?)$/,
+                loader: 'ts-loader',
                 exclude: /node_modules/,
-                options: {
-                    presets: ['@babel/preset-env', '@babel/preset-react']
-                }
             },
             // https://v5.getbootstrap.com/docs/5.0/getting-started/webpack/#importing-precompiled-sass
             {

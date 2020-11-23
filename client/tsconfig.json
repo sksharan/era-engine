@@ -3,17 +3,16 @@
   "compilerOptions": {
     "rootDir": ".",
     "outDir": "dist",
-    "allowJs": true,
     "esModuleInterop": true,
+    // Adding dom so we can reference `document` in our code
+    "lib": ["es2018", "dom"],
     "jsx": "react",
   },
   "include": [
     // Source code
-    "main/**/*.js",
-    "main/**/*.ts",
-    "main/**/*.tsx",
+    "src/**/*.ts",
+    "src/**/*.tsx",
     // Test code (TODO: add tests)
-    "test/**/*.js",
     "test/**/*.ts",
     "test/**/*.tsx",
   ]

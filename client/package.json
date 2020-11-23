@@ -22,7 +22,6 @@
     "gts": "^3.0.2",
     "html-webpack-plugin": "^4.5.0",
     "immutable": "^3.8.2",
-    "inject-loader": "^4.0.1",
     "node-sass": "^4.7.2",
     "popper.js": "^1.16.1",
     "postcss-loader": "^4.1.0",

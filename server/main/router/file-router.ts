@@ -42,7 +42,7 @@ router.post('/', upload.any(), async (req, res) => {
         return;
     }
     let files = [];
-    for (let file of FileService.uploadFiles(req.files)) {
+    for (let file of FileService.uploadFiles(req.files as Express.Multer.File[])) {
         files.push(await file);
     }
     res.status(201).send(files);

@@ -19,7 +19,9 @@ router.post('/login', async (req, res) => {
     if (user === null) {
         res.status(400).json(`{"error": "Invalid username or password given."}`);
     } else {
+        // @ts-ignore
         req.session.userId = user._id;
+        // @ts-ignore
         console.warn(req.session.userId);
         res.status(200).send();
     }
@@ -27,6 +29,7 @@ router.post('/login', async (req, res) => {
 
 router.get('/verify', async (req, res) => {
     console.warn(req.session);
+    // @ts-ignore
     if (req.session.userId) {
         return res.status(200).send();
     }
